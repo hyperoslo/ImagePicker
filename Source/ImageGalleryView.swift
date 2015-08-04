@@ -19,7 +19,12 @@ class ImageGalleryView: UIView {
     }()
 
   lazy var collectionViewLayout: UICollectionViewLayout = {
-    let layout = UICollectionViewLayout()
+    let layout = UICollectionViewFlowLayout()
+    layout.scrollDirection = .Horizontal
+    layout.minimumInteritemSpacing = self.configuration.cellSpacing
+    layout.minimumLineSpacing = 0
+    layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
+
     return layout
     }()
 
@@ -49,6 +54,13 @@ class ImageGalleryView: UIView {
     return images
     }()
 
+  lazy var configuration: PickerConfiguration = {
+    let configuration = PickerConfiguration()
+    return configuration
+    }()
+
+  var collectionSize: CGSize!
+
   // MARK: - Initializers
 
   override init(frame: CGRect) {
@@ -57,8 +69,11 @@ class ImageGalleryView: UIView {
     [collectionView, topSeparator].map { self.addSubview($0) }
     topSeparator.addSubview(indicator)
 
+    collectionSize = CGSizeMake(85, 85)
     collectionView.dataSource = self
-    collectionView.registerClass(ImageGalleryViewCell.classForCoder(), forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
+    collectionView.delegate = self
+    collectionView.registerClass(ImageGalleryViewCell.self,
+      forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
     setupConstraints()
     fetchPhotos(0)
@@ -142,5 +157,14 @@ class ImageGalleryView: UIView {
     if index == 3 {
       collectionView.reloadData()
     }
+  }
+}
+
+extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
+
+  func collectionView(collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+      return collectionSize
   }
 }

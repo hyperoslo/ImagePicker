@@ -11,7 +11,8 @@ extension ImageGalleryView: UICollectionViewDataSource {
   }
 
   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-    let cell = ImageGalleryViewCell()
+    let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CollectionView.reusableIdentifier,
+      forIndexPath: indexPath) as! ImageGalleryViewCell
 
     cell.configureCell(images[indexPath.row] as! UIImage)
 

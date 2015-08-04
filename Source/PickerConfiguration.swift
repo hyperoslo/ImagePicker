@@ -15,4 +15,8 @@ public class PickerConfiguration {
 
   public var cancelButtonTitle = "Cancel"
   public var doneButtonTitle = "Done"
+
+  // MARK: Dimensions
+
+  public var cellSpacing: CGFloat = 2
 }

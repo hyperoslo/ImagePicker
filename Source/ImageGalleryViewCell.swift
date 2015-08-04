@@ -2,9 +2,11 @@ import UIKit
 
 class ImageGalleryViewCell: UICollectionViewCell {
 
-  lazy var imageView: UIImageView = {
+  lazy var imageView: UIImageView = { [unowned self] in
     let imageView = UIImageView()
     imageView.contentMode = .ScaleAspectFill
+    imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+    self.contentView.addSubview(imageView)
 
     return imageView
     }()
@@ -14,9 +16,12 @@ class ImageGalleryViewCell: UICollectionViewCell {
   // MARK: - Configuration
 
   func configureCell(image: UIImage) {
-    addSubview(imageView)
     imageView.image = image
+    setupConstraints()
+  }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
     setupConstraints()
   }
 
@@ -24,21 +29,13 @@ class ImageGalleryViewCell: UICollectionViewCell {
 
   func setupConstraints() {
     if !constraintsAdded {
-      addConstraint(NSLayoutConstraint(item: imageView, attribute: .Width,
-        relatedBy: .Equal, toItem: self, attribute: .Width,
-        multiplier: 1, constant: -2))
+      let attributes: [NSLayoutAttribute] = [.Width, .Height, .CenterX, .CenterY]
 
-      addConstraint(NSLayoutConstraint(item: imageView, attribute: .Height,
-        relatedBy: .Equal, toItem: self, attribute: .Height,
-        multiplier: 1, constant: 0))
-
-      addConstraint(NSLayoutConstraint(item: imageView, attribute: .CenterX,
-        relatedBy: .Equal, toItem: self, attribute: .CenterX,
-        multiplier: 1, constant: 0))
-
-      addConstraint(NSLayoutConstraint(item: imageView, attribute: .CenterY,
-        relatedBy: .Equal, toItem: self, attribute: .CenterY,
-        multiplier: 1, constant: 0))
+      attributes.map {
+        self.addConstraint(NSLayoutConstraint(item: self.imageView, attribute: $0,
+          relatedBy: .Equal, toItem: self, attribute: $0,
+          multiplier: 1, constant: 0))
+      }
 
       constraintsAdded = true
     }
