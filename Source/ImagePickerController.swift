@@ -24,6 +24,7 @@ public class ImagePickerController: UIViewController {
 
   lazy var pickerButton: ButtonPicker = {
     let pickerButton = ButtonPicker()
+    pickerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
     pickerButton.setTranslatesAutoresizingMaskIntoConstraints(false)
     pickerButton.delegate = self
 
@@ -34,6 +35,7 @@ public class ImagePickerController: UIViewController {
     let button = UIButton()
     button.setTitle(self.configuration.cancelButtonTitle, forState: .Normal)
     button.addTarget(self, action: "doneButtonDidPress:", forControlEvents: .TouchUpInside)
+    button.setTranslatesAutoresizingMaskIntoConstraints(false)
 
     return button
     }()
@@ -63,7 +65,7 @@ public class ImagePickerController: UIViewController {
     super.viewDidLoad()
 
     [bottomContainer].map { self.view.addSubview($0) }
-    [borderPickerButton, pickerButton].map { self.bottomContainer.addSubview($0) }
+    [borderPickerButton, pickerButton, doneButton].map { self.bottomContainer.addSubview($0) }
 
     setupConstraints()
   }
@@ -96,11 +98,11 @@ public class ImagePickerController: UIViewController {
         multiplier: 1, constant: 0))
     }
 
-    view.addConstraint(NSLayoutConstraint(item: self.pickerButton, attribute: .Width,
+    view.addConstraint(NSLayoutConstraint(item: pickerButton, attribute: .Width,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
 
-    view.addConstraint(NSLayoutConstraint(item: self.pickerButton, attribute: .Height,
+    view.addConstraint(NSLayoutConstraint(item: pickerButton, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
 
@@ -110,13 +112,21 @@ public class ImagePickerController: UIViewController {
         multiplier: 1, constant: 0))
     }
 
-    view.addConstraint(NSLayoutConstraint(item: self.borderPickerButton, attribute: .Width,
+    view.addConstraint(NSLayoutConstraint(item: borderPickerButton, attribute: .Width,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
 
-    view.addConstraint(NSLayoutConstraint(item: self.borderPickerButton, attribute: .Height,
+    view.addConstraint(NSLayoutConstraint(item: borderPickerButton, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
+
+    view.addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterY,
+      relatedBy: .Equal, toItem: bottomContainer, attribute: .CenterY,
+      multiplier: 1, constant: 0))
+
+    view.addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterX,
+      relatedBy: .Equal, toItem: bottomContainer, attribute: .Right,
+      multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
   }
 }
 
