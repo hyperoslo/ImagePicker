@@ -5,6 +5,7 @@ protocol BottomContainerViewDelegate {
   func pickerButtonDidPress()
   func doneButtonDidPress()
   func cancelButtonDidPress()
+  func imageWrapperDidPress()
 }
 
 class BottomContainerView: UIView {
@@ -38,6 +39,13 @@ class BottomContainerView: UIView {
     return button
     }()
 
+  lazy var imageWrapper: ImageWrapper = {
+    let view = ImageWrapper()
+    view.setTranslatesAutoresizingMaskIntoConstraints(false)
+
+    return view
+    }()
+
   lazy var configuration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
@@ -50,7 +58,7 @@ class BottomContainerView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    [borderPickerButton, pickerButton, doneButton].map { self.addSubview($0) }
+    [borderPickerButton, pickerButton, doneButton, imageWrapper].map { self.addSubview($0) }
 
     setupConstraints()
   }
@@ -99,6 +107,22 @@ class BottomContainerView: UIView {
     addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .Right,
       multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
+
+    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .Width,
+      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+      multiplier: 1, constant: ImageWrapper.Dimensions.imageSize))
+
+    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .Height,
+      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+      multiplier: 1, constant: ImageWrapper.Dimensions.imageSize))
+
+    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .CenterY,
+      relatedBy: .Equal, toItem: self, attribute: .CenterY,
+      multiplier: 1, constant: 0))
+
+    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .CenterX,
+      relatedBy: .Equal, toItem: self, attribute: .Left,
+      multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/4))
   }
 
   // MARK: - Action methods
@@ -118,5 +142,14 @@ extension BottomContainerView: ButtonPickerDelegate {
 
   func buttonDidPress() {
     delegate?.pickerButtonDidPress()
+  }
+}
+
+// MARK: - ImageWrapperDelegate methods
+
+extension BottomContainerView: ImageWrapperDelegate {
+
+  func imageWrapperDidPress() {
+    delegate?.imageWrapperDidPress()
   }
 }
