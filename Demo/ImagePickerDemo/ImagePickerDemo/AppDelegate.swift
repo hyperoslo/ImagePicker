@@ -5,7 +5,7 @@ import ImagePicker
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   lazy var imagePickerController: ImagePickerController = {
-    let imagePickerController = imagePickerController()
+    let imagePickerController = ImagePickerController()
     return imagePickerController
     }()
 

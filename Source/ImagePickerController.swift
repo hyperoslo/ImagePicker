@@ -1,10 +1,10 @@
 import UIKit
 
-class ImagePickerController: UIViewController {
+public class ImagePickerController: UIViewController {
 
   // MARK: - View lifecycle
 
-  override func viewDidLoad() {
+  override public func viewDidLoad() {
       super.viewDidLoad()
   }
 
