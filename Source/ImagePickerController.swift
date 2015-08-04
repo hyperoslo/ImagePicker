@@ -30,9 +30,17 @@ public class ImagePickerController: UIViewController {
     return pickerButton
     }()
 
-  lazy var doneButton: UIButton = {
+  lazy var doneButton: UIButton = { [unowned self] in
     let button = UIButton()
+    button.setTitle(self.configuration.cancelButtonTitle, forState: .Normal)
+    button.addTarget(self, action: "doneButtonDidPress:", forControlEvents: .TouchUpInside)
+
     return button
+    }()
+
+  lazy var configuration: PickerConfiguration = {
+    let configuration = PickerConfiguration()
+    return configuration
     }()
 
   lazy var bottomContainer: UIView = {
@@ -111,6 +119,21 @@ public class ImagePickerController: UIViewController {
       multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
   }
 }
+
+// MARK: - Action methods
+
+extension ImagePickerController {
+
+  func doneButtonDidPress(button: UIButton) {
+    if button.currentTitle == self.configuration.cancelButtonTitle {
+      dismissViewControllerAnimated(true, completion: nil)
+    } else {
+      // TODO: Show lightbox with all the images
+    }
+  }
+}
+
+// MARK: - ButtonPickerDelegate methods
 
 extension ImagePickerController: ButtonPickerDelegate {
 
