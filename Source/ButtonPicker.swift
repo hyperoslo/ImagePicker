@@ -13,24 +13,23 @@ class ButtonPicker: UIButton {
     static let buttonBorderSize: CGFloat = 82
   }
 
-  lazy var numberLabel: UILabel = {
+  lazy var numberLabel: UILabel = { [unowned self] in
     let label = UILabel()
     label.text = ""
     label.setTranslatesAutoresizingMaskIntoConstraints(false)
+    label.font = self.configuration.numberLabelFont
 
     return label
     }()
 
+  lazy var configuration: PickerConfiguration = {
+    let configuration = PickerConfiguration()
+    return configuration
+  }()
+
   internal var photoNumber: Int = 0 {
     didSet {
       numberLabel.text = "\(photoNumber)"
-    }
-  }
-
-  internal var numberFont: UIFont = UIFont(name: "Helvetica-Bold", size: 19)! {
-    didSet {
-      numberLabel.font = numberFont
-      numberLabel.sizeToFit()
     }
   }
 
@@ -74,6 +73,8 @@ class ButtonPicker: UIButton {
   // MARK: - Actions
 
   func pickerButtonDidPress(button: UIButton) {
+    photoNumber = photoNumber + 1
+    numberLabel.sizeToFit()
     delegate?.buttonDidPress()
   }
 }
