@@ -6,6 +6,7 @@ class ImageGalleryViewCell: UICollectionViewCell {
     let imageView = UIImageView()
     imageView.contentMode = .ScaleAspectFill
     imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+    imageView.clipsToBounds = true
     self.contentView.addSubview(imageView)
 
     return imageView

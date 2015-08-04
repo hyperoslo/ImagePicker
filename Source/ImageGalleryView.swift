@@ -18,11 +18,11 @@ class ImageGalleryView: UIView {
     return collectionView
     }()
 
-  lazy var collectionViewLayout: UICollectionViewLayout = {
+  lazy var collectionViewLayout: UICollectionViewLayout = { [unowned self] in
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .Horizontal
     layout.minimumInteritemSpacing = self.configuration.cellSpacing
-    layout.minimumLineSpacing = 0
+    layout.minimumLineSpacing = 2
     layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
 
     return layout
@@ -69,7 +69,7 @@ class ImageGalleryView: UIView {
     [collectionView, topSeparator].map { self.addSubview($0) }
     topSeparator.addSubview(indicator)
 
-    collectionSize = CGSizeMake(85, 85)
+    collectionSize = CGSizeMake(126, 126)
     collectionView.dataSource = self
     collectionView.delegate = self
     collectionView.registerClass(ImageGalleryViewCell.self,
