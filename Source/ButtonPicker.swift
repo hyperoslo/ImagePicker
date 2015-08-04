@@ -16,18 +16,9 @@ class ButtonPicker: UIButton {
   lazy var numberLabel: UILabel = {
     let label = UILabel()
     label.text = ""
+    label.setTranslatesAutoresizingMaskIntoConstraints(false)
 
     return label
-    }()
-
-  lazy var border: UIView = {
-    let view = UIView()
-    view.backgroundColor = UIColor.clearColor()
-    view.layer.borderColor = UIColor.whiteColor().CGColor
-    view.layer.borderWidth = Dimensions.borderWidth
-    view.layer.cornerRadius = Dimensions.buttonBorderSize / 2
-
-    return view
     }()
 
   internal var photoNumber: Int = 0 {
@@ -50,6 +41,8 @@ class ButtonPicker: UIButton {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
+    [numberLabel].map { self.addSubview($0) }
+
     setupButton()
     setupConstraints()
   }
@@ -62,7 +55,7 @@ class ButtonPicker: UIButton {
 
   func setupButton() {
     backgroundColor = UIColor.whiteColor()
-    frame = superview!.frame
+    layer.cornerRadius = Dimensions.buttonSize / 2
     addTarget(self, action: "pickerButtonDidPress:", forControlEvents: .TouchUpInside)
   }
 
@@ -73,12 +66,6 @@ class ButtonPicker: UIButton {
 
     attributes.map {
       self.addConstraint(NSLayoutConstraint(item: self.numberLabel, attribute: $0,
-        relatedBy: .Equal, toItem: self, attribute: $0,
-        multiplier: 1, constant: 0))
-    }
-
-    attributes.map {
-      self.addConstraint(NSLayoutConstraint(item: self.border, attribute: $0,
         relatedBy: .Equal, toItem: self, attribute: $0,
         multiplier: 1, constant: 0))
     }

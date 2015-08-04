@@ -9,10 +9,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return imagePickerController
     }()
 
-  var window: UIWindow?
+  lazy var window: UIWindow? = {
+    let window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    return window
+    }()
 
   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     window?.rootViewController = imagePickerController
+    imagePickerController.view.backgroundColor = UIColor.whiteColor()
     window?.makeKeyAndVisible()
     
     return true
