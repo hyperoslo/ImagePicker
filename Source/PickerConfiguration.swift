@@ -2,10 +2,14 @@ import UIKit
 
 public class PickerConfiguration {
 
+  // MARK: Colors
+
+  public var backgroundColor = UIColor(red:0.15, green:0.19, blue:0.24, alpha:1)
+
   // MARK: Fonts
 
-  public var numberLabelFont = UIFont(name: "Helvetica-Bold", size: 19)!
-  public var doneButton = UIFont(name: "Helvetica", size: 19)!
+  public var numberLabelFont = UIFont(name: "HelveticaNeue-Bold", size: 19)!
+  public var doneButton = UIFont(name: "HelveticaNeue-Medium", size: 19)!
 
   // MARK: Titles
 

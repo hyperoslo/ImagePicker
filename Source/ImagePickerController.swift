@@ -13,7 +13,7 @@ public class ImagePickerController: UIViewController {
 
   lazy var bottomContainer: BottomContainerView = {
     let view = BottomContainerView()
-    view.backgroundColor = UIColor.blackColor()
+    view.backgroundColor = UIColor(red:0.09, green:0.11, blue:0.13, alpha:1)
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
     view.delegate = self
 
@@ -36,6 +36,8 @@ public class ImagePickerController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
 
+    view.backgroundColor = configuration.backgroundColor
+    
     [bottomContainer].map { self.view.addSubview($0) }
 
     setupConstraints()
