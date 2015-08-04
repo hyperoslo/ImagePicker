@@ -6,8 +6,10 @@ public class ImagePickerController: UIViewController {
     static let bottomContainerHeight: CGFloat = 108
   }
 
-  lazy var galleryView: ImageGalleryView = {
+  lazy var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
+    galleryView.backgroundColor = self.configuration.backgroundColor
+
     return galleryView
     }()
 
@@ -60,9 +62,19 @@ public class ImagePickerController: UIViewController {
         multiplier: 1, constant: 0))
     }
 
-    view.addConstraint(NSLayoutConstraint(item: self.bottomContainer, attribute: .Height,
+    attributes.map {
+      self.view.addConstraint(NSLayoutConstraint(item: self.galleryView, attribute: $0,
+        relatedBy: .Equal, toItem: self.view, attribute: $0,
+        multiplier: 1, constant: 0))
+    }
+
+    view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: Dimensions.bottomContainerHeight))
+
+    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Height,
+      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+      multiplier: 1, constant: ImageGalleryView.Dimensions.galleryHeight))
   }
 }
 
