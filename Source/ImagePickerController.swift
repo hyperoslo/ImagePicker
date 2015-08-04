@@ -9,6 +9,7 @@ public class ImagePickerController: UIViewController {
   lazy var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
     galleryView.backgroundColor = self.configuration.backgroundColor
+    galleryView.setTranslatesAutoresizingMaskIntoConstraints(false)
 
     return galleryView
     }()
@@ -38,9 +39,9 @@ public class ImagePickerController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
 
-    view.backgroundColor = configuration.backgroundColor
+    view.backgroundColor = UIColor.whiteColor()
     
-    [bottomContainer].map { self.view.addSubview($0) }
+    [bottomContainer, galleryView].map { self.view.addSubview($0) }
 
     setupConstraints()
   }
@@ -62,19 +63,25 @@ public class ImagePickerController: UIViewController {
         multiplier: 1, constant: 0))
     }
 
-    attributes.map {
-      self.view.addConstraint(NSLayoutConstraint(item: self.galleryView, attribute: $0,
-        relatedBy: .Equal, toItem: self.view, attribute: $0,
-        multiplier: 1, constant: 0))
-    }
-
     view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: Dimensions.bottomContainerHeight))
 
+    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Width,
+      relatedBy: .Equal, toItem: view, attribute: .Width,
+      multiplier: 1, constant: 0))
+
     view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: ImageGalleryView.Dimensions.galleryHeight))
+
+    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Right,
+      relatedBy: .Equal, toItem: view, attribute: .Right,
+      multiplier: 1, constant: 0))
+
+    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Bottom,
+      relatedBy: .Equal, toItem: bottomContainer, attribute: .Top,
+      multiplier: 1, constant: 0))
   }
 }
 
