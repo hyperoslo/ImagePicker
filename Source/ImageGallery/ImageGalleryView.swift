@@ -114,14 +114,12 @@ class ImageGalleryView: UIView {
     if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
       imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
         self.images.addObject(image)
-        if index < 3 {
+        if index < fetchResult.count - 1 {
           self.fetchPhotos(index+1)
+        } else {
+          self.collectionView.reloadData()
         }
       })
-    }
-
-    if index == 3 {
-      collectionView.reloadData()
     }
   }
 
