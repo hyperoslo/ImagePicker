@@ -1,6 +1,13 @@
 import UIKit
 import Photos
 
+protocol ImageGalleryPanGestureDelegate {
+
+  func panGestureDidStart()
+  func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
+  func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
+}
+
 class ImageGalleryView: UIView {
 
   struct Dimensions {
@@ -63,9 +70,8 @@ class ImageGalleryView: UIView {
     return configuration
     }()
 
-  var topSeparatorCenter: CGPoint!
   var collectionSize: CGSize!
-  var initialFrame: CGRect!
+  var delegate: ImageGalleryPanGestureDelegate?
 
   // MARK: - Initializers
 
@@ -131,54 +137,11 @@ class ImageGalleryView: UIView {
     let velocity = gesture.velocityInView(superview!)
 
     if gesture.state == UIGestureRecognizerState.Began {
-      topSeparatorCenter = topSeparator.center
-      initialFrame = frame
+      delegate?.panGestureDidStart()
     } else if gesture.state == UIGestureRecognizerState.Changed {
-      frame.size.height = initialFrame.height - translation.y
-      frame.origin.y = initialFrame.origin.y + translation.y
-      topSeparator.frame.origin.y = 0
-
-      if frame.size.height - topSeparator.frame.height > 100 {
-        collectionViewLayout.invalidateLayout()
-        collectionView.frame.size.height = frame.size.height - topSeparator.frame.height
-        collectionSize = CGSizeMake(frame.size.height - topSeparator.frame.height, frame.size.height - topSeparator.frame.height)
-        collectionView.reloadData()
-      } else {
-        collectionView.frame.origin.y = topSeparator.frame.height
-      }
-
-      if location.y - 25 >= initialFrame.origin.y + initialFrame.height - topSeparator.frame.height {
-        frame.size.height = topSeparator.frame.height
-        frame.origin.y = initialFrame.origin.y + initialFrame.height - topSeparator.frame.height
-      } else if collectionView.frame.height >= Dimensions.galleryHeight {
-        frame.size.height = Dimensions.galleryHeight + topSeparator.frame.height
-        frame.origin.y = initialFrame.origin.y + initialFrame.height - topSeparator.frame.height - Dimensions.galleryHeight
-        collectionView.frame.size.height = Dimensions.galleryHeight
-        collectionSize = CGSizeMake(collectionView.frame.height, collectionView.frame.height)
-        collectionView.reloadData()
-      }
+      delegate?.panGestureDidChange(translation, location: location, velocity: velocity)
     } else if gesture.state == UIGestureRecognizerState.Ended {
-      if velocity.y < -100 {
-        UIView.animateWithDuration(0.2, animations: { [unowned self] in
-          self.frame.size.height = Dimensions.galleryHeight + self.topSeparator.frame.height
-          self.frame.origin.y = self.initialFrame.origin.y + self.initialFrame.height - self.topSeparator.frame.height - Dimensions.galleryHeight
-          self.collectionViewLayout.invalidateLayout()
-          self.collectionView.frame.size.height = Dimensions.galleryHeight
-          self.collectionSize = CGSizeMake(self.collectionView.frame.height, self.collectionView.frame.height)
-          }, completion: { finished in
-            self.collectionView.reloadData()
-        })
-      } else if velocity.y > 100 || frame.size.height - topSeparator.frame.height < 100 {
-        UIView.animateWithDuration(0.2, animations: { [unowned self] in
-          self.frame.size.height = self.topSeparator.frame.height
-          self.frame.origin.y = self.initialFrame.origin.y + self.initialFrame.height - self.topSeparator.frame.height
-          self.collectionViewLayout.invalidateLayout()
-          self.collectionView.frame.size.height = 100
-          self.collectionSize = CGSizeMake(self.collectionView.frame.height, self.collectionView.frame.height)
-          }, completion: { finished in
-            self.collectionView.reloadData()
-        })
-      }
+      delegate?.panGestureDidEnd(translation, location: location, velocity: velocity)
     }
   }
 }
