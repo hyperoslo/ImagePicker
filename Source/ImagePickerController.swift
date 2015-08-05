@@ -1,5 +1,11 @@
 import UIKit
 
+protocol ImagePickerDelegate {
+
+  func wrapperDidPress()
+  func doneButtonDidPress()
+}
+
 public class ImagePickerController: UIViewController {
 
   struct Dimensions {
@@ -46,6 +52,7 @@ public class ImagePickerController: UIViewController {
   var initialFrame: CGRect!
   var selectedImages: NSMutableArray!
   var images: NSMutableArray!
+  var delegate: ImagePickerDelegate?
 
   public var doneButtonTitle: String? {
     didSet {
@@ -121,13 +128,17 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() { }
 
-  func doneButtonDidPress() { }
+  func doneButtonDidPress() {
+    delegate?.doneButtonDidPress()
+  }
 
   func cancelButtonDidPress() {
     dismissViewControllerAnimated(true, completion: nil)
   }
 
-  func imageWrapperDidPress() { }
+  func imageWrapperDidPress() {
+    delegate?.wrapperDidPress()
+  }
 }
 
 // MARK: - TopView delegate methods
@@ -152,6 +163,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     // TODO: Add taken images
     images = array
     bottomContainer.updateWrapperImages(images)
+    let title = images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
+    bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
 
   func panGestureDidStart() {
