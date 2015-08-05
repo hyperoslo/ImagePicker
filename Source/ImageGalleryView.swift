@@ -28,9 +28,11 @@ class ImageGalleryView: UIView {
     return layout
     }()
 
-  lazy var topSeparator: UIView = {
+  lazy var topSeparator: UIView = { [unowned self] in
     let view = UIView()
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
+    view.addGestureRecognizer(self.panGestureRecognizer)
+    view.backgroundColor = self.configuration.backgroundColor
 
     return view
     }()
@@ -46,6 +48,8 @@ class ImageGalleryView: UIView {
 
   lazy var panGestureRecognizer: UIPanGestureRecognizer = {
     let gesture = UIPanGestureRecognizer()
+    gesture.addTarget(self, action: "handlePanGestureRecognizer:")
+
     return gesture
     }()
 
@@ -59,23 +63,21 @@ class ImageGalleryView: UIView {
     return configuration
     }()
 
+  var topSeparatorCenter: CGPoint!
   var collectionSize: CGSize!
+  var initialFrame: CGRect!
 
   // MARK: - Initializers
 
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    [collectionView, topSeparator].map { self.addSubview($0) }
-    topSeparator.addSubview(indicator)
-
-    collectionSize = CGSizeMake(126, 126)
-    collectionView.dataSource = self
-    collectionView.delegate = self
     collectionView.registerClass(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
-    setupConstraints()
+    [collectionView, topSeparator].map { self.addSubview($0) }
+    topSeparator.addSubview(indicator)
+
     fetchPhotos(0)
   }
 
@@ -85,51 +87,15 @@ class ImageGalleryView: UIView {
 
   // MARK: - Layout
 
-  func setupConstraints() {
-    let attributes: [NSLayoutAttribute] = [.Top, .Right, .Width]
+  func updateFrames() {
+    collectionView.dataSource = self
+    collectionView.delegate = self
 
-    attributes.map {
-      self.addConstraint(NSLayoutConstraint(item: self.topSeparator, attribute: $0,
-      relatedBy: .Equal, toItem: self, attribute: $0,
-      multiplier: 1, constant: 0))
-    }
-
-    addConstraint(NSLayoutConstraint(item: topSeparator, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: Dimensions.galleryBarHeight))
-
-    addConstraint(NSLayoutConstraint(item: indicator, attribute: .CenterX,
-      relatedBy: .Equal, toItem: topSeparator, attribute: .CenterX,
-      multiplier: 1, constant: 0))
-
-    addConstraint(NSLayoutConstraint(item: indicator, attribute: .CenterY,
-      relatedBy: .Equal, toItem: topSeparator, attribute: .CenterY,
-      multiplier: 1, constant: 0))
-
-    addConstraint(NSLayoutConstraint(item: indicator, attribute: .Width,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: Dimensions.indicatorWidth))
-
-    addConstraint(NSLayoutConstraint(item: indicator, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: Dimensions.indicatorHeight))
-
-    addConstraint(NSLayoutConstraint(item: collectionView, attribute: .Width,
-      relatedBy: .Equal, toItem: self, attribute: .Width,
-      multiplier: 1, constant: 0))
-
-    addConstraint(NSLayoutConstraint(item: collectionView, attribute: .Height,
-      relatedBy: .Equal, toItem: self, attribute: .Height,
-      multiplier: 1, constant: -Dimensions.galleryBarHeight))
-
-    addConstraint(NSLayoutConstraint(item: collectionView, attribute: .Top,
-      relatedBy: .Equal, toItem: topSeparator, attribute: .Bottom,
-      multiplier: 1, constant: 0))
-
-    addConstraint(NSLayoutConstraint(item: collectionView, attribute: .CenterX,
-      relatedBy: .Equal, toItem: self, attribute: .CenterX,
-      multiplier: 1, constant: 0))
-
+    topSeparator.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, Dimensions.galleryBarHeight)
+    indicator.frame = CGRectMake(UIScreen.mainScreen().bounds.width / 2 - Dimensions.indicatorWidth / 2, topSeparator.frame.height / 2 - Dimensions.indicatorHeight / 2, Dimensions.indicatorWidth, Dimensions.indicatorHeight)
+    indicator.frame.size = CGSizeMake(Dimensions.indicatorWidth, Dimensions.indicatorHeight)
+    collectionView.frame = CGRectMake(0, topSeparator.frame.height, UIScreen.mainScreen().bounds.width, frame.height - topSeparator.frame.height)
+    collectionSize = CGSizeMake(frame.height - topSeparator.frame.height, frame.height - topSeparator.frame.height)
   }
 
   // MARK: - Photos handler
@@ -156,6 +122,46 @@ class ImageGalleryView: UIView {
 
     if index == 3 {
       collectionView.reloadData()
+    }
+  }
+
+  // MARK: - Pan gesture recognizer
+
+  func handlePanGestureRecognizer(gesture: UIPanGestureRecognizer) {
+    let translation = gesture.translationInView(superview!)
+
+    if gesture.state == UIGestureRecognizerState.Began {
+      topSeparatorCenter = topSeparator.center
+      initialFrame = frame
+    } else if gesture.state == UIGestureRecognizerState.Changed {
+      frame.size.height = initialFrame.height - translation.y
+      frame.origin.y = initialFrame.origin.y + translation.y
+      topSeparator.frame.origin.y = 0
+
+      if frame.size.height - topSeparator.frame.height > 100 {
+        collectionViewLayout.invalidateLayout()
+        collectionView.frame.size.height = frame.size.height - topSeparator.frame.height
+        collectionSize = CGSizeMake(frame.size.height - topSeparator.frame.height, frame.size.height - topSeparator.frame.height)
+        collectionView.reloadData()
+      } else {
+        collectionView.frame.origin.y = topSeparator.frame.height
+      }
+
+      if frame.height <= topSeparator.frame.height {
+        frame.size.height = topSeparator.frame.height
+        frame.origin.y = initialFrame.origin.y + initialFrame.height - topSeparator.frame.height
+        gesture.enabled = false
+      } else if collectionView.frame.height >= Dimensions.galleryHeight {
+        frame.size.height = Dimensions.galleryHeight + topSeparator.frame.height
+        frame.origin.y = initialFrame.origin.y + initialFrame.height - topSeparator.frame.height - Dimensions.galleryHeight
+        collectionView.frame.size.height = Dimensions.galleryHeight
+        collectionSize = CGSizeMake(collectionView.frame.height, collectionView.frame.height)
+        collectionView.reloadData()
+      }
+    } else if gesture.state == UIGestureRecognizerState.Ended {
+
+    } else if gesture.state == UIGestureRecognizerState.Cancelled {
+      gesture.enabled = true
     }
   }
 }

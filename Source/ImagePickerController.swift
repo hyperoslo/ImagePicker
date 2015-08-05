@@ -41,7 +41,7 @@ public class ImagePickerController: UIViewController {
 
     view.backgroundColor = UIColor.whiteColor()
     
-    [bottomContainer, galleryView].map { self.view.addSubview($0) }
+    [galleryView, bottomContainer].map { self.view.addSubview($0) }
 
     setupConstraints()
   }
@@ -50,6 +50,15 @@ public class ImagePickerController: UIViewController {
     super.viewWillAppear(animated)
 
     UIApplication.sharedApplication().statusBarHidden = true
+  }
+
+  public override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    galleryView.frame = CGRectMake(0,
+      UIScreen.mainScreen().bounds.height - bottomContainer.frame.height - ImageGalleryView.Dimensions.galleryHeight,
+      UIScreen.mainScreen().bounds.width,
+      ImageGalleryView.Dimensions.galleryHeight)
+    galleryView.updateFrames()
   }
 
   // MARK: - Autolayout
@@ -66,22 +75,6 @@ public class ImagePickerController: UIViewController {
     view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: Dimensions.bottomContainerHeight))
-
-    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Width,
-      relatedBy: .Equal, toItem: view, attribute: .Width,
-      multiplier: 1, constant: 0))
-
-    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ImageGalleryView.Dimensions.galleryHeight))
-
-    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Right,
-      relatedBy: .Equal, toItem: view, attribute: .Right,
-      multiplier: 1, constant: 0))
-
-    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .Bottom,
-      relatedBy: .Equal, toItem: bottomContainer, attribute: .Top,
-      multiplier: 1, constant: 0))
   }
 }
 
