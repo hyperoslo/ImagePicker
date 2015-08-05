@@ -10,11 +10,21 @@ class TopView: UIView {
 
   lazy var flashButton: UIButton = {
     let button = UIButton()
+    let file = NSBundle.mainBundle().pathForResource("flashIcon", ofType: "png")!
+    let image = UIImage(contentsOfFile: file)
+
+    button.setImage(image, forState: .Normal)
+
     return button
     }()
 
   lazy var rotateCamera: UIButton = {
     let button = UIButton()
+    let file = NSBundle.mainBundle().pathForResource("cameraIcon", ofType: "png")!
+    let image = UIImage(contentsOfFile: file)
+
+    button.setImage(image, forState: .Normal)
+
     return button
     }()
 
