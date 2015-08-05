@@ -160,22 +160,22 @@ class ImageGalleryView: UIView {
         collectionView.reloadData()
       }
     } else if gesture.state == UIGestureRecognizerState.Ended {
-      if translation.y > 35 {
-        UIView.animateWithDuration(0.2, animations: { [unowned self] in
-          self.frame.size.height = self.topSeparator.frame.height
-          self.frame.origin.y = self.initialFrame.origin.y + self.initialFrame.height - self.topSeparator.frame.height
-          self.collectionViewLayout.invalidateLayout()
-          self.collectionView.frame.size.height = 100
-          self.collectionSize = CGSizeMake(self.collectionView.frame.height, self.collectionView.frame.height)
-          }, completion: { finished in
-            self.collectionView.reloadData()
-        })
-      } else if translation.y < -35 {
+      if velocity.y < -100 {
         UIView.animateWithDuration(0.2, animations: { [unowned self] in
           self.frame.size.height = Dimensions.galleryHeight + self.topSeparator.frame.height
           self.frame.origin.y = self.initialFrame.origin.y + self.initialFrame.height - self.topSeparator.frame.height - Dimensions.galleryHeight
           self.collectionViewLayout.invalidateLayout()
           self.collectionView.frame.size.height = Dimensions.galleryHeight
+          self.collectionSize = CGSizeMake(self.collectionView.frame.height, self.collectionView.frame.height)
+          }, completion: { finished in
+            self.collectionView.reloadData()
+        })
+      } else if velocity.y > 100 || frame.size.height - topSeparator.frame.height < 100 {
+        UIView.animateWithDuration(0.2, animations: { [unowned self] in
+          self.frame.size.height = self.topSeparator.frame.height
+          self.frame.origin.y = self.initialFrame.origin.y + self.initialFrame.height - self.topSeparator.frame.height
+          self.collectionViewLayout.invalidateLayout()
+          self.collectionView.frame.size.height = 100
           self.collectionSize = CGSizeMake(self.collectionView.frame.height, self.collectionView.frame.height)
           }, completion: { finished in
             self.collectionView.reloadData()
