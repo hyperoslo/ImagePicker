@@ -12,6 +12,16 @@ class ImageGalleryViewCell: UICollectionViewCell {
     return imageView
     }()
 
+  lazy var selectedImageView: UIImageView = { [unowned self] in
+    let imageView = UIImageView()
+    imageView.contentMode = .ScaleAspectFill
+    imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+    imageView.clipsToBounds = true
+    self.contentView.addSubview(imageView)
+
+    return imageView
+    }()
+
   var constraintsAdded = false
 
   // MARK: - Configuration
@@ -34,6 +44,12 @@ class ImageGalleryViewCell: UICollectionViewCell {
 
       attributes.map {
         self.addConstraint(NSLayoutConstraint(item: self.imageView, attribute: $0,
+          relatedBy: .Equal, toItem: self, attribute: $0,
+          multiplier: 1, constant: 0))
+      }
+
+      attributes.map {
+        self.addConstraint(NSLayoutConstraint(item: self.selectedImageView, attribute: $0,
           relatedBy: .Equal, toItem: self, attribute: $0,
           multiplier: 1, constant: 0))
       }

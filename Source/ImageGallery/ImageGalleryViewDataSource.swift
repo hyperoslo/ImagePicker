@@ -14,7 +14,15 @@ extension ImageGalleryView: UICollectionViewDataSource {
     let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CollectionView.reusableIdentifier,
       forIndexPath: indexPath) as! ImageGalleryViewCell
 
-    cell.configureCell(images[indexPath.row] as! UIImage)
+    let image = images[indexPath.row] as! UIImage
+    
+    cell.configureCell(image)
+
+    if selectedImages.containsObject(image) {
+      cell.selectedImageView.image = getImage("selectedImageGallery")
+    } else {
+      cell.selectedImageView.image = nil
+    }
 
     return cell
   }

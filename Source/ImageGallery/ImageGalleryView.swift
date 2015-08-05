@@ -74,12 +74,14 @@ class ImageGalleryView: UIView {
 
   var collectionSize: CGSize!
   var delegate: ImageGalleryPanGestureDelegate?
+  var selectedImages: NSMutableArray!
 
   // MARK: - Initializers
 
   override init(frame: CGRect) {
     super.init(frame: frame)
 
+    selectedImages = NSMutableArray()
     collectionView.registerClass(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
@@ -146,7 +148,20 @@ class ImageGalleryView: UIView {
       delegate?.panGestureDidEnd(translation, location: location, velocity: velocity)
     }
   }
+
+  // MARK: - Private helpers
+
+  func getImage(name: String) -> UIImage {
+    let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
+    let bundle = NSBundle(path: bundlePath!)
+    let traitCollection = UITraitCollection(displayScale: 3)
+    let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
+
+    return image!
+  }
 }
+
+// MARK: CollectionViewFlowLayout delegate methods
 
 extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 
@@ -154,5 +169,23 @@ extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
       return collectionSize
+  }
+}
+
+// MARK: CollectionView delegate methods
+
+extension ImageGalleryView: UICollectionViewDelegate {
+
+  func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageGalleryViewCell
+    let image = images[indexPath.row] as! UIImage
+
+    if cell.selectedImageView.image != nil {
+      cell.selectedImageView.image = nil
+      selectedImages.removeObject(image)
+    } else {
+      cell.selectedImageView.image = getImage("selectedImageGallery")
+      selectedImages.addObject(image)
+    }
   }
 }
