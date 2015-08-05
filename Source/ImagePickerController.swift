@@ -151,7 +151,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.collectionView.frame.origin.y = galleryView.topSeparator.frame.height
     }
 
-    if location.y - 25 >= initialFrame.origin.y + initialFrame.height - galleryView.topSeparator.frame.height {
+    if location.y >= initialFrame.origin.y + initialFrame.height - galleryView.topSeparator.frame.height {
       galleryView.frame.size.height = galleryView.topSeparator.frame.height
       galleryView.frame.origin.y = initialFrame.origin.y + initialFrame.height - galleryView.topSeparator.frame.height
     } else if galleryView.collectionView.frame.height >= ImageGalleryView.Dimensions.galleryHeight {
@@ -161,6 +161,9 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.collectionSize = CGSizeMake(galleryView.collectionView.frame.height, galleryView.collectionView.frame.height)
       galleryView.collectionView.reloadData()
     }
+
+    cameraController.view.frame.size.height = galleryView.frame.origin.y - topView.frame.height
+    cameraController.view.frame.origin.y = topView.frame.height
   }
 
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint) {
@@ -171,6 +174,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.collectionViewLayout.invalidateLayout()
         self.galleryView.collectionView.frame.size.height = ImageGalleryView.Dimensions.galleryHeight
         self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
+        self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
+        self.cameraController.view.frame.origin.y = self.topView.frame.height
         }, completion: { finished in
           self.galleryView.collectionView.reloadData()
       })
@@ -181,6 +186,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.collectionViewLayout.invalidateLayout()
         self.galleryView.collectionView.frame.size.height = 100
         self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
+        self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
+        self.cameraController.view.frame.origin.y = self.topView.frame.height
         }, completion: { finished in
           self.galleryView.collectionView.reloadData()
       })
