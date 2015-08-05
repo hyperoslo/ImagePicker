@@ -65,7 +65,7 @@ public class ImagePickerController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
 
-    view.backgroundColor = UIColor.whiteColor()
+    view.backgroundColor = .whiteColor()
     
     [topView, cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
 
