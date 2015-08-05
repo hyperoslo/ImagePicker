@@ -6,6 +6,7 @@ protocol ImageGalleryPanGestureDelegate {
   func panGestureDidStart()
   func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
+  func imageSelected(array: NSMutableArray)
 }
 
 class ImageGalleryView: UIView {
@@ -92,7 +93,7 @@ class ImageGalleryView: UIView {
   }
 
   required init(coder aDecoder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
+    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: - Layout
@@ -187,5 +188,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
       cell.selectedImageView.image = getImage("selectedImageGallery")
       selectedImages.addObject(image)
     }
+
+    delegate?.imageSelected(selectedImages)
   }
 }

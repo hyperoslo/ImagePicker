@@ -29,7 +29,7 @@ class ButtonPicker: UIButton {
 
   internal var photoNumber: Int = 0 {
     didSet {
-      numberLabel.text = "\(photoNumber)"
+      numberLabel.text = photoNumber == 0 ? "" : "\(photoNumber)"
     }
   }
 

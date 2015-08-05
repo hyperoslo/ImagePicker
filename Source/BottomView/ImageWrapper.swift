@@ -19,7 +19,21 @@ class ImageWrapper: UIView {
   lazy var secondImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.alpha = 0
-    
+
+    return imageView
+    }()
+
+  lazy var thirdImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.alpha = 0
+
+    return imageView
+    }()
+
+  lazy var fourthImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.alpha = 0
+
     return imageView
     }()
 
@@ -48,24 +62,25 @@ class ImageWrapper: UIView {
   // MARK: - Configuration
 
   func setupConfigureImageViews() {
-    [firstImageView, secondImageView].map { $0.layer.cornerRadius = 3 }
-    [firstImageView, secondImageView].map { $0.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.2).CGColor }
-    [firstImageView, secondImageView].map { $0.layer.borderWidth = 1 }
-    [firstImageView, secondImageView].map { $0.contentMode = .ScaleAspectFill }
-    [firstImageView, secondImageView].map { $0.setTranslatesAutoresizingMaskIntoConstraints(false) }
-    [firstImageView, secondImageView].map { self.addSubview($0) }
-    [firstImageView, secondImageView].map { $0.addGestureRecognizer(self.tapGestureRecognizer) }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.layer.cornerRadius = 3 }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.2).CGColor }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.layer.borderWidth = 1 }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.contentMode = .ScaleAspectFill }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.clipsToBounds = true }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.setTranslatesAutoresizingMaskIntoConstraints(false) }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { self.addSubview($0) }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.addGestureRecognizer(self.tapGestureRecognizer) }
   }
 
   // MARK: - Autolayout
 
   func setupConstraints() {
-    [firstImageView, secondImageView].map { self.addConstraint(NSLayoutConstraint(item: $0, attribute: .Height,
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { self.addConstraint(NSLayoutConstraint(item: $0, attribute: .Height,
       relatedBy: .Equal, toItem: self, attribute: .Height,
       multiplier: 1, constant: 0))
     }
 
-    [firstImageView, secondImageView].map { self.addConstraint(NSLayoutConstraint(item: $0, attribute: .Width,
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { self.addConstraint(NSLayoutConstraint(item: $0, attribute: .Width,
       relatedBy: .Equal, toItem: self, attribute: .Width,
       multiplier: 1, constant: 0))
     }
@@ -80,11 +95,27 @@ class ImageWrapper: UIView {
 
     addConstraint(NSLayoutConstraint(item: secondImageView, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: -5))
+      multiplier: 1, constant: -2.5))
 
     addConstraint(NSLayoutConstraint(item: secondImageView, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .CenterX,
+      multiplier: 1, constant: -2.5))
+
+    addConstraint(NSLayoutConstraint(item: thirdImageView, attribute: .CenterY,
+      relatedBy: .Equal, toItem: self, attribute: .CenterY,
       multiplier: 1, constant: -5))
+
+    addConstraint(NSLayoutConstraint(item: thirdImageView, attribute: .CenterX,
+      relatedBy: .Equal, toItem: self, attribute: .CenterX,
+      multiplier: 1, constant: -5))
+
+    addConstraint(NSLayoutConstraint(item: fourthImageView, attribute: .CenterY,
+      relatedBy: .Equal, toItem: self, attribute: .CenterY,
+      multiplier: 1, constant: -7.5))
+
+    addConstraint(NSLayoutConstraint(item: fourthImageView, attribute: .CenterX,
+      relatedBy: .Equal, toItem: self, attribute: .CenterX,
+      multiplier: 1, constant: -7.5))
   }
 
   // MARK: - Actions

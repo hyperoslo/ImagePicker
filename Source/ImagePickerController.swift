@@ -44,6 +44,8 @@ public class ImagePickerController: UIViewController {
 
   var topSeparatorCenter: CGPoint!
   var initialFrame: CGRect!
+  var selectedImages: NSMutableArray!
+  var images: NSMutableArray!
 
   public var doneButtonTitle: String? {
     didSet {
@@ -145,6 +147,13 @@ extension ImagePickerController: TopViewDelegate {
 
 extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
+  func imageSelected(array: NSMutableArray) {
+    selectedImages = array
+    // TODO: Add taken images
+    images = array
+    bottomContainer.updateWrapperImages(images)
+  }
+
   func panGestureDidStart() {
     topSeparatorCenter = galleryView.topSeparator.center
     initialFrame = galleryView.frame
@@ -205,6 +214,5 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
           self.galleryView.collectionView.reloadData()
       })
     }
-
   }
 }
