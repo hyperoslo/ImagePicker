@@ -128,6 +128,19 @@ extension ImagePickerController: BottomContainerViewDelegate {
   func imageWrapperDidPress() { }
 }
 
+// MARK: - TopView delegate methods
+
+extension ImagePickerController: TopViewDelegate {
+
+  func flashButtonDidPress(title: String) {
+    cameraController.flashCamera(title)
+  }
+
+  func rotateDeviceDidPress() {
+    cameraController.rotateCamera()
+  }
+}
+
 // MARK: - Pan gesture handler
 
 extension ImagePickerController: ImageGalleryPanGestureDelegate {

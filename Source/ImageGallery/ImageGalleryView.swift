@@ -21,6 +21,8 @@ class ImageGalleryView: UIView {
     let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
       collectionViewLayout: self.collectionViewLayout)
     collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+    collectionView.backgroundColor = self.configuration.mainColor
+    collectionView.showsHorizontalScrollIndicator = false
 
     return collectionView
     }()

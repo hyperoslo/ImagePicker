@@ -25,6 +25,16 @@ class CameraView: UIViewController {
     view.backgroundColor = UIColor.redColor()
   }
 
+  // MARK: - Camera actions
+
+  func rotateCamera() {
+
+  }
+
+  func flashCamera(title: String) {
+
+  }
+
   // MARK: - Camera methods
 
   func focusTo(value : Float) {
