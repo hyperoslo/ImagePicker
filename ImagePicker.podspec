@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.requires_arc = true
   s.source_files = 'Source/**/*'
-# s.frameworks = 'UIKit', 'MapKit'
+  s.resource_bundles = { 'ImagePicker' => ['Images/*.{png}'] }
+  s.frameworks = 'AVFoundation'
 # s.dependency 'AFNetworking', '~> 2.3'
 end

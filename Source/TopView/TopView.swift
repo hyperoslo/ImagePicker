@@ -10,20 +10,27 @@ class TopView: UIView {
 
   lazy var flashButton: UIButton = {
     let button = UIButton()
-    let file = NSBundle.mainBundle().pathForResource("flashIcon", ofType: "png")!
-    let image = UIImage(contentsOfFile: file)
+    let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
+    let bundle = NSBundle(path: bundlePath!)
+    let traitCollection = UITraitCollection(displayScale: 2)
+    let image = UIImage(named: "flashIcon", inBundle: bundle, compatibleWithTraitCollection: traitCollection)
 
     button.setImage(image, forState: .Normal)
+    button.setTitle("AUTO", forState: .Normal)
+    button.setTranslatesAutoresizingMaskIntoConstraints(false)
 
     return button
     }()
 
   lazy var rotateCamera: UIButton = {
     let button = UIButton()
-    let file = NSBundle.mainBundle().pathForResource("cameraIcon", ofType: "png")!
-    let image = UIImage(contentsOfFile: file)
+    let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
+    let bundle = NSBundle(path: bundlePath!)
+    let traitCollection = UITraitCollection(displayScale: 2)
+    let image = UIImage(named: "cameraIcon", inBundle: bundle, compatibleWithTraitCollection: traitCollection)
 
     button.setImage(image, forState: .Normal)
+    button.setTranslatesAutoresizingMaskIntoConstraints(false)
 
     return button
     }()

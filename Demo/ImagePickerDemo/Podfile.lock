@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: ../../
 
 SPEC CHECKSUMS:
-  ImagePicker: 1ed5022e28822e85d18c5de7e68bb56851c8bd7a
+  ImagePicker: 32becfa25b8e9179e60c45411b577340d35e3e32
 
 COCOAPODS: 0.37.2
