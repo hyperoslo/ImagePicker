@@ -71,9 +71,9 @@ public class ImagePickerController: UIViewController {
   public override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     galleryView.frame = CGRectMake(0,
-      UIScreen.mainScreen().bounds.height - bottomContainer.frame.height - ImageGalleryView.Dimensions.galleryHeight,
+      UIScreen.mainScreen().bounds.height - bottomContainer.frame.height - 134,
       UIScreen.mainScreen().bounds.width,
-      ImageGalleryView.Dimensions.galleryHeight)
+      134)
     galleryView.updateFrames()
     cameraController.view.frame = CGRectMake(0, 32,
       UIScreen.mainScreen().bounds.width, galleryView.frame.origin.y - 32)
