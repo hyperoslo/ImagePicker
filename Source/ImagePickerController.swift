@@ -2,8 +2,8 @@ import UIKit
 
 protocol ImagePickerDelegate {
 
-  func wrapperDidPress()
-  func doneButtonDidPress()
+  func wrapperDidPress(images: [UIImage])
+  func doneButtonDidPress(images: [UIImage])
 }
 
 public class ImagePickerController: UIViewController {
@@ -129,7 +129,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   func pickerButtonDidPress() { }
 
   func doneButtonDidPress() {
-    delegate?.doneButtonDidPress()
+    delegate?.doneButtonDidPress(images.mutableCopy() as! [UIImage])
   }
 
   func cancelButtonDidPress() {
@@ -137,7 +137,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageWrapperDidPress() {
-    delegate?.wrapperDidPress()
+    delegate?.wrapperDidPress(images.mutableCopy() as! [UIImage])
   }
 }
 
