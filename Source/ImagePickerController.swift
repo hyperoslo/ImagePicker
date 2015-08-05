@@ -46,7 +46,7 @@ public class ImagePickerController: UIViewController {
 
     view.backgroundColor = UIColor.whiteColor()
     
-    [galleryView, bottomContainer, cameraController.view].map { self.view.addSubview($0) }
+    [cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
 
     setupConstraints()
   }
