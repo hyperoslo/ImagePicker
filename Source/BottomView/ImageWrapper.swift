@@ -63,7 +63,7 @@ class ImageWrapper: UIView {
 
   func setupConfigureImageViews() {
     [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.layer.cornerRadius = 3 }
-    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.2).CGColor }
+    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.layer.borderColor = UIColor(white: 1, alpha: 0.2).CGColor }
     [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.layer.borderWidth = 1 }
     [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.contentMode = .ScaleAspectFill }
     [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.clipsToBounds = true }
