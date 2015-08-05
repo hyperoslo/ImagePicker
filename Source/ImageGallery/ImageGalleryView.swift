@@ -123,14 +123,16 @@ class ImageGalleryView: UIView {
     let size = CGSizeMake(UIScreen.mainScreen().bounds.width, UIScreen.mainScreen().bounds.height - 150)
 
     if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
-      imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-        self.images.addObject(image)
-        if index < fetchResult.count - 1 {
-          self.fetchPhotos(index+1)
-        } else {
-          self.collectionView.reloadData()
-        }
-      })
+      if fetchResult.count != 0 {
+        imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
+          self.images.addObject(image)
+          if index < fetchResult.count - 1 {
+            self.fetchPhotos(index+1)
+          } else {
+            self.collectionView.reloadData()
+          }
+        })
+      }
     }
   }
 
