@@ -128,7 +128,7 @@ class BottomContainerView: UIView {
   // MARK: - Action methods
 
   func doneButtonDidPress(button: UIButton) {
-    if button.currentTitle == self.configuration.cancelButtonTitle {
+    if button.currentTitle == configuration.cancelButtonTitle {
       delegate?.cancelButtonDidPress()
     } else {
       delegate?.doneButtonDidPress()
@@ -138,25 +138,26 @@ class BottomContainerView: UIView {
   // MARK: - Wrapper methods
 
   func updateWrapperImages(array: NSMutableArray) {
-    if array.count == 1 {
+    switch array.count {
+    case 1:
       imageWrapper.firstImageView.image = array.firstObject as? UIImage
       imageWrapper.secondImageView.image = nil
       imageWrapper.secondImageView.alpha = 0
-    } else if array.count == 0 {
+    case 0:
       imageWrapper.firstImageView.image = nil
       imageWrapper.secondImageView.image = nil
-    } else if array.count == 2 {
+    case 2:
       imageWrapper.firstImageView.image = array[0] as? UIImage
       imageWrapper.secondImageView.image = array[1] as? UIImage
       imageWrapper.secondImageView.alpha = 1
       imageWrapper.thirdImageView.alpha = 0
-    } else if array.count == 3 {
+    case 3:
       imageWrapper.firstImageView.image = array[0] as? UIImage
       imageWrapper.secondImageView.image = array[1] as? UIImage
       imageWrapper.thirdImageView.image = array[2] as? UIImage
       imageWrapper.thirdImageView.alpha = 1
       imageWrapper.fourthImageView.alpha = 0
-    } else {
+    default:
       imageWrapper.fourthImageView.alpha = 1
       imageWrapper.firstImageView.image = array[array.count - 4] as? UIImage
       imageWrapper.secondImageView.image = array[array.count - 3] as? UIImage

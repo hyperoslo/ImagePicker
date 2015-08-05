@@ -11,7 +11,6 @@ class CameraView: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     captureSession.sessionPreset = AVCaptureSessionPreset640x480
-
     for device in devices {
       if device.hasMediaType(AVMediaTypeVideo) {
         captureDevice = device as? AVCaptureDevice
@@ -73,11 +72,11 @@ class CameraView: UIViewController {
 
   func beginSession() {
     configureDevice()
-    var err : NSError? = nil
-    captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &err))
+    var error: NSError? = nil
+    captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &error))
 
-    if err != nil {
-      println("error: \(err?.localizedDescription)")
+    if error != nil {
+      println("error: \(error?.localizedDescription)")
     }
 
     previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
