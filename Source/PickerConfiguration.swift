@@ -10,6 +10,7 @@ public class PickerConfiguration {
 
   public var numberLabelFont = UIFont(name: "HelveticaNeue-Bold", size: 19)!
   public var doneButton = UIFont(name: "HelveticaNeue-Medium", size: 19)!
+  public var flashButton = UIFont(name: "HelveticaNeue-Medium", size: 12)!
 
   // MARK: Titles
 
