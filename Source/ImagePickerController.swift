@@ -189,7 +189,19 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint) {
-    if velocity.y < -100 {
+    if galleryView.frame.height < 134 && velocity.y < 0 {
+      UIView.animateWithDuration(0.2, animations: { [unowned self] in
+        self.galleryView.frame.size.height = 134
+        self.galleryView.frame.origin.y = self.initialFrame.origin.y + self.initialFrame.height - self.galleryView.topSeparator.frame.height - 100
+        self.galleryView.collectionViewLayout.invalidateLayout()
+        self.galleryView.collectionView.frame.size.height = 134 - self.galleryView.topSeparator.frame.height
+        self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
+        self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
+        self.cameraController.view.frame.origin.y = self.topView.frame.height
+        }, completion: { finished in
+          self.galleryView.collectionView.reloadData()
+      })
+    } else if velocity.y < -100 {
       UIView.animateWithDuration(0.2, animations: { [unowned self] in
         self.galleryView.frame.size.height = ImageGalleryView.Dimensions.galleryHeight + self.galleryView.topSeparator.frame.height
         self.galleryView.frame.origin.y = self.initialFrame.origin.y + self.initialFrame.height - self.galleryView.topSeparator.frame.height - ImageGalleryView.Dimensions.galleryHeight
