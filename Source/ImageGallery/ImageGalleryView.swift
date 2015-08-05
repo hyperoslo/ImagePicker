@@ -126,7 +126,9 @@ class ImageGalleryView: UIView {
       if fetchResult.count != 0 {
         imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
           self.images.addObject(image)
-          if index < fetchResult.count - 1 {
+          if index > 35 {
+            self.collectionView.reloadData()
+          } else if index < fetchResult.count - 1 {
             self.fetchPhotos(index+1)
           } else {
             self.collectionView.reloadData()
