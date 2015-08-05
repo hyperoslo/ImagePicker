@@ -23,6 +23,14 @@ public class ImagePickerController: UIViewController {
     return view
     }()
 
+  lazy var topView: TopView = {
+    let view = TopView()
+    view.backgroundColor = UIColor(red:0.09, green:0.11, blue:0.13, alpha:1)
+    view.setTranslatesAutoresizingMaskIntoConstraints(false)
+
+    return view
+    }()
+
   lazy var configuration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
@@ -46,14 +54,13 @@ public class ImagePickerController: UIViewController {
 
     view.backgroundColor = UIColor.whiteColor()
     
-    [cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
+    [topView, cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
 
     setupConstraints()
   }
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
-
     UIApplication.sharedApplication().statusBarHidden = true
   }
 
@@ -72,6 +79,7 @@ public class ImagePickerController: UIViewController {
 
   func setupConstraints() {
     let attributes: [NSLayoutAttribute] = [.Bottom, .Right, .Width]
+    let topViewAttributes: [NSLayoutAttribute] = [.Left, .Top, .Width]
 
     attributes.map {
       self.view.addConstraint(NSLayoutConstraint(item: self.bottomContainer, attribute: $0,
@@ -82,6 +90,22 @@ public class ImagePickerController: UIViewController {
     view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: Dimensions.bottomContainerHeight))
+
+    topViewAttributes.map {
+      self.view.addConstraint(NSLayoutConstraint(item: self.topView, attribute: $0,
+        relatedBy: .Equal, toItem: self.view, attribute: $0,
+        multiplier: 1, constant: 0))
+    }
+
+    view.addConstraint(NSLayoutConstraint(item: topView, attribute: .Height,
+      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+      multiplier: 1, constant: TopView.Dimensions.height))
+  }
+
+  // MARK: - Helpers
+
+  public override func prefersStatusBarHidden() -> Bool {
+    return true
   }
 }
 

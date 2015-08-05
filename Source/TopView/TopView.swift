@@ -5,6 +5,7 @@ class TopView: UIView {
   struct Dimensions {
     static let leftOffset: CGFloat = 11
     static let rightOffset: CGFloat = 11
+    static let height: CGFloat = 34
   }
 
   lazy var flashButton: UIButton = {
