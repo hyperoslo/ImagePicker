@@ -53,7 +53,7 @@ class ButtonPicker: UIButton {
   // MARK: - Configuration
 
   func setupButton() {
-    backgroundColor = UIColor.whiteColor()
+    backgroundColor = .whiteColor()
     layer.cornerRadius = Dimensions.buttonSize / 2
     addTarget(self, action: "pickerButtonDidPress:", forControlEvents: .TouchUpInside)
   }

@@ -22,7 +22,7 @@ class CameraView: UIViewController {
       beginSession()
     }
 
-    view.backgroundColor = UIColor.redColor()
+    view.backgroundColor = .redColor()
   }
 
   // MARK: - Camera actions
