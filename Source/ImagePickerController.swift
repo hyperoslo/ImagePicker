@@ -28,6 +28,11 @@ public class ImagePickerController: UIViewController {
     return configuration
     }()
 
+  lazy var cameraController: CameraView = {
+    let controller = CameraView()
+    return controller
+    }()
+
   public var doneButtonTitle: String? {
     didSet {
       bottomContainer.doneButton.setTitle(doneButtonTitle!, forState: .Normal)
@@ -41,7 +46,7 @@ public class ImagePickerController: UIViewController {
 
     view.backgroundColor = UIColor.whiteColor()
     
-    [galleryView, bottomContainer].map { self.view.addSubview($0) }
+    [galleryView, bottomContainer, cameraController.view].map { self.view.addSubview($0) }
 
     setupConstraints()
   }
@@ -59,6 +64,8 @@ public class ImagePickerController: UIViewController {
       UIScreen.mainScreen().bounds.width,
       ImageGalleryView.Dimensions.galleryHeight)
     galleryView.updateFrames()
+    cameraController.view.frame = CGRectMake(0, 32,
+      UIScreen.mainScreen().bounds.width, galleryView.frame.origin.y - 32)
   }
 
   // MARK: - Autolayout
