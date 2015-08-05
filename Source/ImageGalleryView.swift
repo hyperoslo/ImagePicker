@@ -129,6 +129,7 @@ class ImageGalleryView: UIView {
 
   func handlePanGestureRecognizer(gesture: UIPanGestureRecognizer) {
     let translation = gesture.translationInView(superview!)
+    let location = gesture.locationInView(superview!)
 
     if gesture.state == UIGestureRecognizerState.Began {
       topSeparatorCenter = topSeparator.center
@@ -147,10 +148,9 @@ class ImageGalleryView: UIView {
         collectionView.frame.origin.y = topSeparator.frame.height
       }
 
-      if frame.height <= topSeparator.frame.height {
+      if location.y - 25 >= initialFrame.origin.y + initialFrame.height - topSeparator.frame.height {
         frame.size.height = topSeparator.frame.height
         frame.origin.y = initialFrame.origin.y + initialFrame.height - topSeparator.frame.height
-        gesture.enabled = false
       } else if collectionView.frame.height >= Dimensions.galleryHeight {
         frame.size.height = Dimensions.galleryHeight + topSeparator.frame.height
         frame.origin.y = initialFrame.origin.y + initialFrame.height - topSeparator.frame.height - Dimensions.galleryHeight
