@@ -56,7 +56,6 @@ class BottomContainerView: UIView {
     let view = UIView()
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
     view.backgroundColor = self.configuration.backgroundColor
-    self.addSubview(view)
 
     return view
     }()
@@ -69,7 +68,7 @@ class BottomContainerView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    [borderPickerButton, pickerButton, doneButton, imageWrapper].map { self.addSubview($0) }
+    [borderPickerButton, pickerButton, doneButton, imageWrapper, topSeparator].map { self.addSubview($0) }
     backgroundColor = self.configuration.backgroundColor
 
     setupConstraints()
