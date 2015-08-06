@@ -53,9 +53,10 @@ class ButtonPicker: UIButton {
   // MARK: - Configuration
 
   func setupButton() {
-    backgroundColor = UIColor.whiteColor()
+    backgroundColor = .whiteColor()
     layer.cornerRadius = Dimensions.buttonSize / 2
     addTarget(self, action: "pickerButtonDidPress:", forControlEvents: .TouchUpInside)
+    addTarget(self, action: "pickerButtonDidHighlight:", forControlEvents: .TouchDown)
   }
 
   // MARK: - Layout
@@ -73,8 +74,15 @@ class ButtonPicker: UIButton {
   // MARK: - Actions
 
   func pickerButtonDidPress(button: UIButton) {
+    backgroundColor = .whiteColor()
+    numberLabel.textColor = .blackColor()
     photoNumber = photoNumber + 1
     numberLabel.sizeToFit()
     delegate?.buttonDidPress()
+  }
+
+  func pickerButtonDidHighlight(button: UIButton) {
+    numberLabel.textColor = .whiteColor()
+    backgroundColor = UIColor(red:0.3, green:0.3, blue:0.3, alpha:1)
   }
 }
