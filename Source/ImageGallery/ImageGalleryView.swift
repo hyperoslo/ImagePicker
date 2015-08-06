@@ -192,7 +192,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
       selectedImages.removeObject(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
-      selectedImages.addObject(image)
+      selectedImages.insertObject(image, atIndex: 0)
     }
 
     delegate?.imageSelected(selectedImages)

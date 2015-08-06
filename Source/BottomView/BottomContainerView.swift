@@ -152,17 +152,17 @@ class BottomContainerView: UIView {
     case 0:
       imageWrapper.firstImageView.image = nil
     case 2:
-      imageWrapper.firstImageView.image = array[0] as? UIImage
-      imageWrapper.secondImageView.image = array[1] as? UIImage
+      imageWrapper.firstImageView.image = array[1] as? UIImage
+      imageWrapper.secondImageView.image = array[0] as? UIImage
       imageWrapper.secondImageView.alpha = 1
       imageWrapper.thirdImageView.alpha = 0
       if pastCount < 2 {
         animateImageView(imageWrapper.secondImageView)
       }
     case 3:
-      imageWrapper.firstImageView.image = array[0] as? UIImage
+      imageWrapper.firstImageView.image = array[2] as? UIImage
       imageWrapper.secondImageView.image = array[1] as? UIImage
-      imageWrapper.thirdImageView.image = array[2] as? UIImage
+      imageWrapper.thirdImageView.image = array[0] as? UIImage
       imageWrapper.thirdImageView.alpha = 1
       imageWrapper.fourthImageView.alpha = 0
       if pastCount < 3 {
@@ -170,10 +170,10 @@ class BottomContainerView: UIView {
       }
     default:
       imageWrapper.fourthImageView.alpha = 1
-      imageWrapper.firstImageView.image = array[array.count - 4] as? UIImage
-      imageWrapper.secondImageView.image = array[array.count - 3] as? UIImage
-      imageWrapper.thirdImageView.image = array[array.count - 2] as? UIImage
-      imageWrapper.fourthImageView.image = array.lastObject as? UIImage
+      imageWrapper.firstImageView.image = array.lastObject as? UIImage
+      imageWrapper.secondImageView.image = array[array.count - 2] as? UIImage
+      imageWrapper.thirdImageView.image = array[array.count - 3] as? UIImage
+      imageWrapper.fourthImageView.image = array[array.count - 4] as? UIImage
       if pastCount < array.count {
         animateImageView(imageWrapper.fourthImageView)
       }
