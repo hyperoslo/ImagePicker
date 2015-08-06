@@ -1,5 +1,6 @@
 import UIKit
 import Photos
+import AssetsLibrary
 
 protocol ImageGalleryPanGestureDelegate {
 
@@ -7,6 +8,10 @@ protocol ImageGalleryPanGestureDelegate {
   func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
   func imageSelected(array: NSMutableArray)
+  func presentViewController(controller: UIAlertController)
+  func dismissViewController(controller: UIAlertController)
+  func permissionGranted()
+  func hideViews()
 }
 
 class ImageGalleryView: UIView {
@@ -24,6 +29,7 @@ class ImageGalleryView: UIView {
     collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
     collectionView.backgroundColor = self.configuration.mainColor
     collectionView.showsHorizontalScrollIndicator = false
+    collectionView.layer.anchorPoint = CGPointMake(0.5, 0.5)
 
     return collectionView
     }()
@@ -73,9 +79,23 @@ class ImageGalleryView: UIView {
     return configuration
     }()
 
+  lazy var noImagesLabel: UILabel = { [unowned self] in
+    let label = UILabel()
+    label.font = self.configuration.noImagesFont
+    label.textColor = self.configuration.noImagesColor
+    label.text = self.configuration.noImagesTitle
+    label.alpha = 0
+    label.sizeToFit()
+    self.addSubview(label)
+    
+    return label
+    }()
+
   var collectionSize: CGSize!
   var delegate: ImageGalleryPanGestureDelegate?
   var selectedImages: NSMutableArray!
+  var shouldTransform = false
+  var imagesBeforeLoading = 0
 
   // MARK: - Initializers
 
@@ -88,7 +108,9 @@ class ImageGalleryView: UIView {
 
     [collectionView, topSeparator].map { self.addSubview($0) }
     topSeparator.addSubview(indicator)
+    backgroundColor = self.configuration.mainColor
 
+    imagesBeforeLoading = 0
     fetchPhotos(0)
   }
 
@@ -107,6 +129,10 @@ class ImageGalleryView: UIView {
     indicator.frame.size = CGSizeMake(Dimensions.indicatorWidth, Dimensions.indicatorHeight)
     collectionView.frame = CGRectMake(0, topSeparator.frame.height, UIScreen.mainScreen().bounds.width, frame.height - topSeparator.frame.height)
     collectionSize = CGSizeMake(frame.height - topSeparator.frame.height, frame.height - topSeparator.frame.height)
+    if collectionSize.width == 0 {
+      collectionSize = CGSizeMake(100, 100)
+    }
+    noImagesLabel.center = collectionView.center
   }
 
   // MARK: - Photos handler
@@ -120,20 +146,30 @@ class ImageGalleryView: UIView {
     let fetchOptions = PHFetchOptions()
     fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
 
-    let size = CGSizeMake(UIScreen.mainScreen().bounds.width, UIScreen.mainScreen().bounds.height - 150)
+    let authorizationStatus = ALAssetsLibrary.authorizationStatus()
 
-    if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
-      if fetchResult.count != 0 {
-        imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-          self.images.addObject(image)
-          if index > 35 {
-            self.collectionView.reloadData()
-          } else if index < fetchResult.count - 1 {
-            self.fetchPhotos(index+1)
-          } else {
-            self.collectionView.reloadData()
-          }
-        })
+    let size = CGSizeMake(100, 150)
+
+    if authorizationStatus == .Authorized {
+      if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
+        if fetchResult.count != 0 && index < fetchResult.count {
+          imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
+            dispatch_async(dispatch_get_main_queue()) {
+              if !self.images.containsObject(image) {
+                self.images.addObject(image)
+                if index > self.imagesBeforeLoading + 10 {
+                  self.collectionView.reloadSections(NSIndexSet(index: 0))
+                } else if index < fetchResult.count - 1 {
+                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    self.fetchPhotos(index+1)
+                  }
+                } else {
+                  self.collectionView.reloadSections(NSIndexSet(index: 0))
+                }
+              }
+            }
+          })
+        }
       }
     }
   }
@@ -164,6 +200,42 @@ class ImageGalleryView: UIView {
 
     return image!
   }
+
+  func displayNoImagesMessage(hideCollectionView: Bool) {
+    collectionView.alpha = hideCollectionView ? 0 : 1
+    noImagesLabel.alpha = hideCollectionView ? 1 : 0
+  }
+
+  func checkStatus() {
+    let currentStatus = PHPhotoLibrary.authorizationStatus()
+
+    if currentStatus == .NotDetermined {
+      self.delegate?.hideViews()
+    }
+
+    PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
+      dispatch_async(dispatch_get_main_queue(), {
+        if authorizationStatus == .Denied {
+          let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
+
+          let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
+            let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString)
+            UIApplication.sharedApplication().openURL(settingsURL!)
+          })
+
+          let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { _ in
+            delegate?.dismissViewController(alertController)
+          })
+
+          alertController.addAction(alertAction)
+          alertController.addAction(cancelAction)
+          self.delegate?.presentViewController(alertController)
+        } else if authorizationStatus == .Authorized {
+          self.delegate?.permissionGranted()
+        }
+      })
+    }
+  }
 }
 
 // MARK: CollectionViewFlowLayout delegate methods
@@ -186,13 +258,30 @@ extension ImageGalleryView: UICollectionViewDelegate {
     let image = images[indexPath.row] as! UIImage
 
     if cell.selectedImageView.image != nil {
-      cell.selectedImageView.image = nil
+      UIView.animateWithDuration(0.2, animations: { [unowned self] in
+        cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+        }, completion: { _ in
+          cell.selectedImageView.image = nil
+      })
       selectedImages.removeObject(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
-      selectedImages.addObject(image)
+      cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+      UIView.animateWithDuration(0.2, animations: { _ in
+        cell.selectedImageView.transform = CGAffineTransformIdentity
+        })
+      selectedImages.insertObject(image, atIndex: 0)
     }
 
     delegate?.imageSelected(selectedImages)
+  }
+
+  func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    if indexPath.row + 10 >= images.count {
+      imagesBeforeLoading = images.count
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        self.fetchPhotos(self.images.count)
+      }
+    }
   }
 }
