@@ -188,10 +188,18 @@ extension ImageGalleryView: UICollectionViewDelegate {
     let image = images[indexPath.row] as! UIImage
 
     if cell.selectedImageView.image != nil {
-      cell.selectedImageView.image = nil
+      UIView.animateWithDuration(0.2, animations: { [unowned self] in
+        cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+        }, completion: { _ in
+          cell.selectedImageView.image = nil
+      })
       selectedImages.removeObject(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
+      cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+      UIView.animateWithDuration(0.2, animations: { _ in
+        cell.selectedImageView.transform = CGAffineTransformIdentity
+        })
       selectedImages.insertObject(image, atIndex: 0)
     }
 
