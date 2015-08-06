@@ -1,5 +1,6 @@
 import UIKit
 import Photos
+import AssetsLibrary
 
 protocol ImageGalleryPanGestureDelegate {
 
@@ -137,29 +138,30 @@ class ImageGalleryView: UIView {
     let fetchOptions = PHFetchOptions()
     fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
 
+    let authorizationStatus = ALAssetsLibrary.authorizationStatus()
+
     let size = CGSizeMake(100, 150)
 
-    if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
-      if fetchResult.count != 0 {
-        imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-          dispatch_async(dispatch_get_main_queue()) {
-            if !self.images.containsObject(image) {
-              self.images.addObject(image)
-              if index > self.imagesBeforeLoading + 10 {
-                println("1. Reloading: \(self.images.count)")
-                self.collectionView.reloadSections(NSIndexSet(index: 0))
-              } else if index < fetchResult.count - 1 {
-                println("Fetching")
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                  self.fetchPhotos(index+1)
+    if authorizationStatus != .Authorized {
+      if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
+        if fetchResult.count != 0 {
+          imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
+            dispatch_async(dispatch_get_main_queue()) {
+              if !self.images.containsObject(image) {
+                self.images.addObject(image)
+                if index > self.imagesBeforeLoading + 10 {
+                  self.collectionView.reloadSections(NSIndexSet(index: 0))
+                } else if index < fetchResult.count - 1 {
+                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    self.fetchPhotos(index+1)
+                  }
+                } else {
+                  self.collectionView.reloadSections(NSIndexSet(index: 0))
                 }
-              } else {
-                println("2. Reloading")
-                self.collectionView.reloadSections(NSIndexSet(index: 0))
               }
             }
-          }
-        })
+          })
+        }
       }
     }
   }
