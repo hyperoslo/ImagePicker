@@ -90,7 +90,6 @@ class ImageGalleryView: UIView {
   var selectedImages: NSMutableArray!
   var shouldTransform = false
   var imagesBeforeLoading = 0
-  var isFetching = false
 
   // MARK: - Initializers
 
@@ -143,18 +142,22 @@ class ImageGalleryView: UIView {
     if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
       if fetchResult.count != 0 {
         imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-          self.images.addObject(image)
-          if index > self.imagesBeforeLoading + 10 {
-            println("1. Reloading")
-            self.collectionView.reloadSections(NSIndexSet(index: 0))
-            self.isFetching = false
-          } else if index < fetchResult.count - 1 {
-            println("Fetching")
-            self.fetchPhotos(index+1)
-          } else {
-            println("2. Reloading")
-            self.collectionView.reloadData()
-            self.isFetching = false
+          dispatch_async(dispatch_get_main_queue()) {
+            if !self.images.containsObject(image) {
+              self.images.addObject(image)
+              if index > self.imagesBeforeLoading + 10 {
+                println("1. Reloading: \(self.images.count)")
+                self.collectionView.reloadSections(NSIndexSet(index: 0))
+              } else if index < fetchResult.count - 1 {
+                println("Fetching")
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                  self.fetchPhotos(index+1)
+                }
+              } else {
+                println("2. Reloading")
+                self.collectionView.reloadSections(NSIndexSet(index: 0))
+              }
+            }
           }
         })
       }
@@ -233,10 +236,11 @@ extension ImageGalleryView: UICollectionViewDelegate {
   }
 
   func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    if indexPath.row + 6 >= images.count && !isFetching {
+    if indexPath.row + 10 >= images.count {
       imagesBeforeLoading = images.count
-      fetchPhotos(images.count)
-      isFetching = true
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        self.fetchPhotos(self.images.count)
+      }
     }
   }
 }
