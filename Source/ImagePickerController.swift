@@ -89,6 +89,7 @@ public class ImagePickerController: UIViewController {
       UIScreen.mainScreen().bounds.width, galleryView.frame.origin.y - 32)
     cameraController.previewLayer?.frame = CGRectMake(0, 0,
       UIScreen.mainScreen().bounds.width, cameraController.view.frame.height)
+    galleryView.checkStatus()
   }
 
   // MARK: - Autolayout
@@ -193,6 +194,14 @@ extension ImagePickerController: TopViewDelegate {
 // MARK: - Pan gesture handler
 
 extension ImagePickerController: ImageGalleryPanGestureDelegate {
+
+  func presentViewController(controller: UIAlertController) {
+    presentViewController(controller, animated: true, completion: nil)
+  }
+
+  func dismissViewController(controller: UIAlertController) {
+    dismissViewControllerAnimated(true, completion: nil)
+  }
 
   func imageSelected(array: NSMutableArray) {
     bottomContainer.updateWrapperImages(galleryView.selectedImages)

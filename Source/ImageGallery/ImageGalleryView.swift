@@ -8,6 +8,8 @@ protocol ImageGalleryPanGestureDelegate {
   func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
   func imageSelected(array: NSMutableArray)
+  func presentViewController(controller: UIAlertController)
+  func dismissViewController(controller: UIAlertController)
 }
 
 class ImageGalleryView: UIView {
@@ -196,6 +198,27 @@ class ImageGalleryView: UIView {
   func displayNoImagesMessage(hideCollectionView: Bool) {
     collectionView.alpha = hideCollectionView ? 0 : 1
     noImagesLabel.alpha = hideCollectionView ? 1 : 0
+  }
+
+  func checkStatus() {
+    let authorizationStatus = ALAssetsLibrary.authorizationStatus()
+
+    if authorizationStatus == .Denied {
+      let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
+
+      let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
+        let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString)
+        UIApplication.sharedApplication().openURL(settingsURL!)
+      })
+
+      let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { _ in
+        delegate?.dismissViewController(alertController)
+      })
+
+      alertController.addAction(alertAction)
+      alertController.addAction(cancelAction)
+      delegate?.presentViewController(alertController)
+    }
   }
 }
 

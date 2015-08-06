@@ -63,6 +63,15 @@ class CameraView: UIViewController {
         && authorizationStatus == .Authorized {
         captureDevice = device as? AVCaptureDevice
         capturedDevices?.addObject(device as! AVCaptureDevice)
+      } else if device.hasMediaType(AVMediaTypeVideo)
+        && authorizationStatus == .NotDetermined {
+          AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo,
+            completionHandler: { (granted: Bool) -> Void in
+              if granted {
+                self.captureDevice = device as? AVCaptureDevice
+                self.capturedDevices?.addObject(device as! AVCaptureDevice)
+              }
+          })
       }
     }
 
