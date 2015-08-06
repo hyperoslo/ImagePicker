@@ -23,6 +23,18 @@ class CameraView: UIViewController {
     return blurView
     }()
 
+  lazy var focusImageView: UIImageView = { [unowned self] in
+    let imageView = UIImageView()
+    imageView.image = self.getImage("focusIcon")
+    imageView.backgroundColor = UIColor.clearColor()
+    imageView.transform = CGAffineTransformMakeScale(2, 2)
+    imageView.alpha = 0
+    imageView.frame = CGRectMake(0, 0, 140, 140)
+    self.view.addSubview(imageView)
+
+    return imageView
+    }()
+
   lazy var containerView: UIView = {
     let view = UIView()
     view.alpha = 0
@@ -37,6 +49,7 @@ class CameraView: UIViewController {
   var previewLayer: AVCaptureVideoPreviewLayer?
   var delegate: CameraViewDelegate?
   var stillImageOutput: AVCaptureStillImageOutput?
+  var focusIconDisplayed = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -130,24 +143,50 @@ class CameraView: UIViewController {
 
   func focusTo(point: CGPoint) {
     if let device = captureDevice {
-      if device.lockForConfiguration(nil) && device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
-        device.focusPointOfInterest = point
-        device.unlockForConfiguration()
+      if device.lockForConfiguration(nil)
+        && device.isFocusModeSupported(AVCaptureFocusMode.Locked)
+        && !focusIconDisplayed {
+          focusIconDisplayed = true
+          device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
+          device.unlockForConfiguration()
+          focusImageView.center = point
+
+          UIView.animateWithDuration(0.5, animations: { [unowned self] in
+            self.focusImageView.transform = CGAffineTransformIdentity
+            self.focusImageView.alpha = 1
+            }, completion: { _ in
+              let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.7 * Double(NSEC_PER_SEC)))
+              dispatch_after(delayTime, dispatch_get_main_queue()) {
+                if self.focusIconDisplayed {
+                  UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    self.focusImageView.alpha = 0
+                    }, completion: { _ in
+                      if self.focusIconDisplayed {
+                        self.focusImageView.transform = CGAffineTransformMakeScale(2, 2)
+                        self.focusIconDisplayed = false
+                      }
+                  })
+                }
+              }
+          })
       }
     }
   }
 
   override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
     let anyTouch = touches.first as! UITouch
-    let touchX = anyTouch.locationInView(view).x / UIScreen.mainScreen().bounds.size.width
-    let touchY = anyTouch.locationInView(view).y / UIScreen.mainScreen().bounds.size.height
+    let touchX = anyTouch.locationInView(view).x
+    let touchY = anyTouch.locationInView(view).y
+    focusImageView.transform = CGAffineTransformMakeScale(2, 2)
+    focusImageView.alpha = 0
+    focusIconDisplayed = false
     focusTo(CGPointMake(touchX, touchY))
   }
 
   override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
     let anyTouch = touches.first as! UITouch
-    let touchX = anyTouch.locationInView(view).x / UIScreen.mainScreen().bounds.size.width
-    let touchY = anyTouch.locationInView(view).y / UIScreen.mainScreen().bounds.size.height
+    let touchX = anyTouch.locationInView(view).x
+    let touchY = anyTouch.locationInView(view).y
     focusTo(CGPointMake(touchX, touchY))
   }
 
@@ -178,5 +217,16 @@ class CameraView: UIViewController {
     stillImageOutput = AVCaptureStillImageOutput()
     stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
     captureSession.addOutput(stillImageOutput)
+  }
+
+  // MARK: - Private helpers
+
+  func getImage(name: String) -> UIImage {
+    let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
+    let bundle = NSBundle(path: bundlePath!)
+    let traitCollection = UITraitCollection(displayScale: 3)
+    let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
+
+    return image!
   }
 }
