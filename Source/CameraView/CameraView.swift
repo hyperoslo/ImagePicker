@@ -36,29 +36,29 @@ class CameraView: UIViewController {
 
   // MARK: - Camera methods
 
-  func focusTo(value : Float) {
-    if let device = captureDevice {
-      if(device.lockForConfiguration(nil)) {
-        device.setFocusModeLockedWithLensPosition(value, completionHandler: { (time) -> Void in
-          //
-        })
-        device.unlockForConfiguration()
-      }
-    }
-  }
+//  func focusTo(value : Float) {
+//    if let device = captureDevice {
+//      if(device.lockForConfiguration(nil)) {
+//        device.setFocusModeLockedWithLensPosition(value, completionHandler: { (time) -> Void in
+//          //
+//        })
+//        device.unlockForConfiguration()
+//      }
+//    }
+//  }
 
   let screenWidth = UIScreen.mainScreen().bounds.size.width
 
   override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
     var anyTouch = touches.first as! UITouch
     var touchPercent = anyTouch.locationInView(self.view).x / screenWidth
-    focusTo(Float(touchPercent))
+    //focusTo(Float(touchPercent))
   }
 
   override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
     var anyTouch = touches.first as! UITouch
     var touchPercent = anyTouch.locationInView(self.view).x / screenWidth
-    focusTo(Float(touchPercent))
+    //focusTo(Float(touchPercent))
   }
 
   func configureDevice() {
@@ -79,8 +79,9 @@ class CameraView: UIViewController {
     }
 
     previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-    self.view.layer.addSublayer(previewLayer)
-    previewLayer?.frame = self.view.layer.frame
+    previewLayer?.autoreverses = true
+    view.layer.addSublayer(previewLayer)
+    previewLayer?.frame = view.layer.frame
     captureSession.startRunning()
   }
 }

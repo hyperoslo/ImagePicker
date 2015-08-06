@@ -86,6 +86,8 @@ public class ImagePickerController: UIViewController {
     galleryView.updateFrames()
     cameraController.view.frame = CGRectMake(0, 32,
       UIScreen.mainScreen().bounds.width, galleryView.frame.origin.y - 32)
+    cameraController.previewLayer?.frame = CGRectMake(0, 0,
+      UIScreen.mainScreen().bounds.width, cameraController.view.frame.height)
   }
 
   // MARK: - Autolayout
@@ -199,6 +201,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
     cameraController.view.frame.size.height = galleryView.frame.origin.y - topView.frame.height
     cameraController.view.frame.origin.y = topView.frame.height
+    cameraController.previewLayer?.frame.size = cameraController.view.frame.size
   }
 
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint) {
@@ -211,6 +214,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
         self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
         self.cameraController.view.frame.origin.y = self.topView.frame.height
+        self.cameraController.previewLayer?.frame = CGRectMake(0, 0,
+          self.cameraController.view.frame.width, self.cameraController.view.frame.height)
         }, completion: { finished in
           self.galleryView.collectionView.reloadData()
       })
@@ -223,6 +228,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
         self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
         self.cameraController.view.frame.origin.y = self.topView.frame.height
+        self.cameraController.previewLayer?.frame.size = self.cameraController.view.frame.size
         }, completion: { finished in
           self.galleryView.collectionView.reloadData()
       })
@@ -235,6 +241,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
         self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
         self.cameraController.view.frame.origin.y = self.topView.frame.height
+        self.cameraController.previewLayer?.frame.size = self.cameraController.view.frame.size
         }, completion: { finished in
           self.galleryView.collectionView.reloadData()
       })
