@@ -53,6 +53,16 @@ class CameraView: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    initializeCamera()
+    
+    view.backgroundColor = self.configuration.mainColor
+    previewLayer?.backgroundColor = self.configuration.mainColor.CGColor
+  }
+
+  // MARK: - Initialize camera
+
+  func initializeCamera() {
     captureSession.sessionPreset = AVCaptureSessionPreset640x480
     capturedDevices = NSMutableArray()
 
@@ -61,8 +71,8 @@ class CameraView: UIViewController {
     for device in devices {
       if device.hasMediaType(AVMediaTypeVideo)
         && authorizationStatus == .Authorized {
-        captureDevice = device as? AVCaptureDevice
-        capturedDevices?.addObject(device as! AVCaptureDevice)
+          captureDevice = device as? AVCaptureDevice
+          capturedDevices?.addObject(device as! AVCaptureDevice)
       } else if device.hasMediaType(AVMediaTypeVideo)
         && authorizationStatus == .NotDetermined {
           AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo,
@@ -78,9 +88,6 @@ class CameraView: UIViewController {
     if captureDevice != nil {
       beginSession()
     }
-
-    view.backgroundColor = self.configuration.mainColor
-    previewLayer?.backgroundColor = self.configuration.mainColor.CGColor
   }
 
   // MARK: - Camera actions

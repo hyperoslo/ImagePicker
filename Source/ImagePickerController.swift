@@ -69,6 +69,7 @@ public class ImagePickerController: UIViewController {
     view.backgroundColor = .whiteColor()
     
     [topView, cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
+    view.backgroundColor = self.configuration.mainColor
 
     setupConstraints()
   }
@@ -194,6 +195,24 @@ extension ImagePickerController: TopViewDelegate {
 // MARK: - Pan gesture handler
 
 extension ImagePickerController: ImageGalleryPanGestureDelegate {
+
+  func hideViews() {
+    galleryView.alpha = 0
+    bottomContainer.pickerButton.enabled = false
+    bottomContainer.imageWrapper.tapGestureRecognizer.enabled = false
+    topView.flashButton.enabled = false
+    topView.rotateCamera.enabled = false
+  }
+
+  func permissionGranted() {
+    galleryView.fetchPhotos(0)
+    cameraController.initializeCamera()
+    galleryView.alpha = 1
+    bottomContainer.pickerButton.enabled = true
+    bottomContainer.imageWrapper.tapGestureRecognizer.enabled = true
+    topView.flashButton.enabled = true
+    topView.rotateCamera.enabled = true
+  }
 
   func presentViewController(controller: UIAlertController) {
     presentViewController(controller, animated: true, completion: nil)

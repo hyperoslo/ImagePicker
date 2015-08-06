@@ -10,6 +10,8 @@ protocol ImageGalleryPanGestureDelegate {
   func imageSelected(array: NSMutableArray)
   func presentViewController(controller: UIAlertController)
   func dismissViewController(controller: UIAlertController)
+  func permissionGranted()
+  func hideViews()
 }
 
 class ImageGalleryView: UIView {
@@ -146,7 +148,7 @@ class ImageGalleryView: UIView {
 
     if authorizationStatus == .Authorized {
       if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
-        if fetchResult.count != 0 {
+        if fetchResult.count != 0 && index < fetchResult.count {
           imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
             dispatch_async(dispatch_get_main_queue()) {
               if !self.images.containsObject(image) {
@@ -201,23 +203,33 @@ class ImageGalleryView: UIView {
   }
 
   func checkStatus() {
-    let authorizationStatus = ALAssetsLibrary.authorizationStatus()
+    let currentStatus = PHPhotoLibrary.authorizationStatus()
 
-    if authorizationStatus == .Denied {
-      let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
+    if currentStatus == .NotDetermined {
+      self.delegate?.hideViews()
+    }
 
-      let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
-        let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString)
-        UIApplication.sharedApplication().openURL(settingsURL!)
+    PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
+      dispatch_async(dispatch_get_main_queue(), {
+        if authorizationStatus == .Denied {
+          let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
+
+          let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
+            let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString)
+            UIApplication.sharedApplication().openURL(settingsURL!)
+          })
+
+          let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { _ in
+            delegate?.dismissViewController(alertController)
+          })
+
+          alertController.addAction(alertAction)
+          alertController.addAction(cancelAction)
+          self.delegate?.presentViewController(alertController)
+        } else if authorizationStatus == .Authorized {
+          self.delegate?.permissionGranted()
+        }
       })
-
-      let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { _ in
-        delegate?.dismissViewController(alertController)
-      })
-
-      alertController.addAction(alertAction)
-      alertController.addAction(cancelAction)
-      delegate?.presentViewController(alertController)
     }
   }
 }
