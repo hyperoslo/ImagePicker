@@ -201,7 +201,10 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
     cameraController.view.frame.size.height = galleryView.frame.origin.y - topView.frame.height
     cameraController.view.frame.origin.y = topView.frame.height
-    cameraController.previewLayer?.frame.size = cameraController.view.frame.size
+    CATransaction.begin()
+    CATransaction.setDisableActions(true)
+    cameraController.previewLayer?.frame.size.height = galleryView.frame.origin.y - topView.frame.height
+    CATransaction.commit()
   }
 
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint) {

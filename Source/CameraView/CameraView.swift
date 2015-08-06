@@ -3,6 +3,11 @@ import AVFoundation
 
 class CameraView: UIViewController {
 
+  lazy var configuration: PickerConfiguration = {
+    let configuration = PickerConfiguration()
+    return configuration
+    }()
+
   let captureSession = AVCaptureSession()
   let devices = AVCaptureDevice.devices()
   var captureDevice: AVCaptureDevice?
@@ -21,7 +26,7 @@ class CameraView: UIViewController {
       beginSession()
     }
 
-    view.backgroundColor = .redColor()
+    view.backgroundColor = self.configuration.backgroundColor
   }
 
   // MARK: - Camera actions
