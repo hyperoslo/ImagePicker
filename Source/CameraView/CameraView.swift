@@ -220,23 +220,25 @@ class CameraView: UIViewController {
   func beginSession() {
     configureDevice()
     var error: NSError? = nil
-    captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &error))
+    if captureSession.inputs.count == 0 {
+      captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &error))
 
-    if error != nil {
-      println("error: \(error?.localizedDescription)")
+      if error != nil {
+        println("error: \(error?.localizedDescription)")
+      }
+
+      previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+      previewLayer?.autoreverses = true
+      previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+      view.clipsToBounds = true
+      view.layer.addSublayer(previewLayer)
+      previewLayer?.frame = view.layer.frame
+      captureSession.startRunning()
+      delegate?.handleFlashButton(captureDevice?.position == .Front)
+      stillImageOutput = AVCaptureStillImageOutput()
+      stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+      captureSession.addOutput(stillImageOutput)
     }
-
-    previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-    previewLayer?.autoreverses = true
-    previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-    view.clipsToBounds = true
-    view.layer.addSublayer(previewLayer)
-    previewLayer?.frame = view.layer.frame
-    captureSession.startRunning()
-    delegate?.handleFlashButton(captureDevice?.position == .Front)
-    stillImageOutput = AVCaptureStillImageOutput()
-    stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-    captureSession.addOutput(stillImageOutput)
   }
 
   // MARK: - Private helpers
