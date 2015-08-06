@@ -56,7 +56,7 @@ class CameraView: UIViewController {
     captureSession.sessionPreset = AVCaptureSessionPreset640x480
     capturedDevices = NSMutableArray()
 
-    let authorizationStatus = ALAssetsLibrary.authorizationStatus()
+    let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 
     for device in devices {
       if device.hasMediaType(AVMediaTypeVideo)
