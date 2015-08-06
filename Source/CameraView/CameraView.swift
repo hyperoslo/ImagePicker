@@ -128,27 +128,27 @@ class CameraView: UIViewController {
 
   // MARK: - Camera methods
 
-//  func focusTo(value : Float) {
-//    if let device = captureDevice {
-//      if(device.lockForConfiguration(nil)) {
-//        device.setFocusModeLockedWithLensPosition(value, completionHandler: { (time) -> Void in
-//          //
-//        })
-//        device.unlockForConfiguration()
-//      }
-//    }
-//  }
+  func focusTo(point: CGPoint) {
+    if let device = captureDevice {
+      if device.lockForConfiguration(nil) && device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
+        device.focusPointOfInterest = point
+        device.unlockForConfiguration()
+      }
+    }
+  }
 
   override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-    var anyTouch = touches.first as! UITouch
-    var touchPercent = anyTouch.locationInView(self.view).x / UIScreen.mainScreen().bounds.size.width
-    //focusTo(Float(touchPercent))
+    let anyTouch = touches.first as! UITouch
+    let touchX = anyTouch.locationInView(view).x / UIScreen.mainScreen().bounds.size.width
+    let touchY = anyTouch.locationInView(view).y / UIScreen.mainScreen().bounds.size.height
+    focusTo(CGPointMake(touchX, touchY))
   }
 
   override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-    var anyTouch = touches.first as! UITouch
-    var touchPercent = anyTouch.locationInView(self.view).x / UIScreen.mainScreen().bounds.size.width
-    //focusTo(Float(touchPercent))
+    let anyTouch = touches.first as! UITouch
+    let touchX = anyTouch.locationInView(view).x / UIScreen.mainScreen().bounds.size.width
+    let touchY = anyTouch.locationInView(view).y / UIScreen.mainScreen().bounds.size.height
+    focusTo(CGPointMake(touchX, touchY))
   }
 
   func configureDevice() {
