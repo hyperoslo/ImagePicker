@@ -142,7 +142,7 @@ class ImageGalleryView: UIView {
 
     let size = CGSizeMake(100, 150)
 
-    if authorizationStatus != .Authorized {
+    if authorizationStatus == .Authorized {
       if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
         if fetchResult.count != 0 {
           imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
