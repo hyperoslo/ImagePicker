@@ -73,6 +73,18 @@ class ImageGalleryView: UIView {
     return configuration
     }()
 
+  lazy var noImagesLabel: UILabel = { [unowned self] in
+    let label = UILabel()
+    label.font = self.configuration.noImagesFont
+    label.textColor = self.configuration.noImagesColor
+    label.text = self.configuration.noImagesTitle
+    label.alpha = 0
+    label.sizeToFit()
+    self.addSubview(label)
+    
+    return label
+    }()
+
   var collectionSize: CGSize!
   var delegate: ImageGalleryPanGestureDelegate?
   var selectedImages: NSMutableArray!
@@ -109,6 +121,7 @@ class ImageGalleryView: UIView {
     indicator.frame.size = CGSizeMake(Dimensions.indicatorWidth, Dimensions.indicatorHeight)
     collectionView.frame = CGRectMake(0, topSeparator.frame.height, UIScreen.mainScreen().bounds.width, frame.height - topSeparator.frame.height)
     collectionSize = CGSizeMake(frame.height - topSeparator.frame.height, frame.height - topSeparator.frame.height)
+    noImagesLabel.center = collectionView.center
   }
 
   // MARK: - Photos handler
@@ -165,6 +178,11 @@ class ImageGalleryView: UIView {
     let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
 
     return image!
+  }
+
+  func displayNoImagesMessage(hideCollectionView: Bool) {
+    collectionView.alpha = hideCollectionView ? 0 : 1
+    noImagesLabel.alpha = hideCollectionView ? 1 : 0
   }
 }
 

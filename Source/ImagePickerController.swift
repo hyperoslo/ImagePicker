@@ -236,6 +236,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     CATransaction.setDisableActions(true)
     cameraController.previewLayer?.frame.size.height = galleryView.frame.origin.y - topView.frame.height
     CATransaction.commit()
+    galleryView.noImagesLabel.center = galleryView.collectionView.center
   }
 
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint) {
@@ -250,6 +251,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.cameraController.view.frame.origin.y = self.topView.frame.height
         self.cameraController.previewLayer?.frame = CGRectMake(0, 0,
           self.cameraController.view.frame.width, self.cameraController.view.frame.height)
+        self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
         }, completion: { finished in
           self.galleryView.collectionView.reloadData()
       })
@@ -263,6 +265,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
         self.cameraController.view.frame.origin.y = self.topView.frame.height
         self.cameraController.previewLayer?.frame.size = self.cameraController.view.frame.size
+        self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
         }, completion: { finished in
           self.galleryView.collectionView.reloadData()
       })
@@ -276,6 +279,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
         self.cameraController.view.frame.origin.y = self.topView.frame.height
         self.cameraController.previewLayer?.frame.size = self.cameraController.view.frame.size
+        self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
         }, completion: { finished in
           self.galleryView.collectionView.reloadData()
       })

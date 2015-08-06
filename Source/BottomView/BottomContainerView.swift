@@ -52,6 +52,15 @@ class BottomContainerView: UIView {
     return configuration
     }()
 
+  lazy var topSeparator: UIView = { [unowned self] in
+    let view = UIView()
+    view.setTranslatesAutoresizingMaskIntoConstraints(false)
+    view.backgroundColor = self.configuration.backgroundColor
+    self.addSubview(view)
+
+    return view
+    }()
+
   var delegate: BottomContainerViewDelegate?
   var pastCount = 0
 
@@ -74,6 +83,7 @@ class BottomContainerView: UIView {
 
   func setupConstraints() {
     let attributesBorder: [NSLayoutAttribute] = [.CenterX, .CenterY]
+    let attributesSeparator: [NSLayoutAttribute] = [.Width, .Left, .Top]
 
     attributesBorder.map {
       self.addConstraint(NSLayoutConstraint(item: self.pickerButton, attribute: $0,
@@ -126,6 +136,16 @@ class BottomContainerView: UIView {
     addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .Left,
       multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/4))
+
+    attributesSeparator.map {
+      self.addConstraint(NSLayoutConstraint(item: self.topSeparator, attribute: $0,
+        relatedBy: .Equal, toItem: self, attribute: $0,
+        multiplier: 1, constant: 0))
+    }
+
+    addConstraint(NSLayoutConstraint(item: topSeparator, attribute: .Height,
+      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+      multiplier: 1, constant: 1))
   }
 
   // MARK: - Action methods
