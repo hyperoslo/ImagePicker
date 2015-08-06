@@ -172,7 +172,7 @@ class BottomContainerView: UIView {
       imageWrapper.firstImageView.image = nil
     case 2:
       imageWrapper.firstImageView.image = array[1] as? UIImage
-      imageWrapper.secondImageView.image = array[0] as? UIImage
+      imageWrapper.secondImageView.image = array.firstObject as? UIImage
       imageWrapper.secondImageView.alpha = 1
       imageWrapper.thirdImageView.alpha = 0
       if pastCount < 2 {
@@ -181,7 +181,7 @@ class BottomContainerView: UIView {
     case 3:
       imageWrapper.firstImageView.image = array[2] as? UIImage
       imageWrapper.secondImageView.image = array[1] as? UIImage
-      imageWrapper.thirdImageView.image = array[0] as? UIImage
+      imageWrapper.thirdImageView.image = array.firstObject as? UIImage
       imageWrapper.thirdImageView.alpha = 1
       imageWrapper.fourthImageView.alpha = 0
       if pastCount < 3 {

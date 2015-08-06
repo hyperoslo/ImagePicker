@@ -55,6 +55,7 @@ public class ImagePickerController: UIViewController {
   var initialFrame: CGRect!
   var delegate: ImagePickerDelegate?
   var targetIndexPath: NSIndexPath!
+  
 
   public var doneButtonTitle: String? {
     didSet {
