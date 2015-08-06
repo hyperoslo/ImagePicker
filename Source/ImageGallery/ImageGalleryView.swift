@@ -89,6 +89,8 @@ class ImageGalleryView: UIView {
   var delegate: ImageGalleryPanGestureDelegate?
   var selectedImages: NSMutableArray!
   var shouldTransform = false
+  var imagesBeforeLoading = 0
+  var isFetching = false
 
   // MARK: - Initializers
 
@@ -103,6 +105,7 @@ class ImageGalleryView: UIView {
     topSeparator.addSubview(indicator)
     backgroundColor = self.configuration.mainColor
 
+    imagesBeforeLoading = 0
     fetchPhotos(0)
   }
 
@@ -135,18 +138,23 @@ class ImageGalleryView: UIView {
     let fetchOptions = PHFetchOptions()
     fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
 
-    let size = CGSizeMake(UIScreen.mainScreen().bounds.width, UIScreen.mainScreen().bounds.height - 150)
+    let size = CGSizeMake(100, 150)
 
     if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
       if fetchResult.count != 0 {
         imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
           self.images.addObject(image)
-          if index > 35 {
-            self.collectionView.reloadData()
+          if index > self.imagesBeforeLoading + 10 {
+            println("1. Reloading")
+            self.collectionView.reloadSections(NSIndexSet(index: 0))
+            self.isFetching = false
           } else if index < fetchResult.count - 1 {
+            println("Fetching")
             self.fetchPhotos(index+1)
           } else {
+            println("2. Reloading")
             self.collectionView.reloadData()
+            self.isFetching = false
           }
         })
       }
@@ -222,5 +230,13 @@ extension ImageGalleryView: UICollectionViewDelegate {
     }
 
     delegate?.imageSelected(selectedImages)
+  }
+
+  func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    if indexPath.row + 6 >= images.count && !isFetching {
+      imagesBeforeLoading = images.count
+      fetchPhotos(images.count)
+      isFetching = true
+    }
   }
 }
