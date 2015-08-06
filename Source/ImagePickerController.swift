@@ -46,6 +46,8 @@ public class ImagePickerController: UIViewController {
 
   lazy var cameraController: CameraView = {
     let controller = CameraView()
+    controller.delegate = self
+
     return controller
     }()
 
@@ -129,7 +131,9 @@ public class ImagePickerController: UIViewController {
 
 extension ImagePickerController: BottomContainerViewDelegate {
 
-  func pickerButtonDidPress() { }
+  func pickerButtonDidPress() {
+    cameraController.takePicture()
+  }
 
   func doneButtonDidPress() {
     delegate?.doneButtonDidPress(images.mutableCopy() as! [UIImage])
@@ -141,6 +145,16 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func imageWrapperDidPress() {
     delegate?.wrapperDidPress(images.mutableCopy() as! [UIImage])
+  }
+}
+
+extension ImagePickerController: CameraViewDelegate {
+
+  func handleFlashButton(hide: Bool) {
+    let alpha: CGFloat = hide ? 0 : 1
+    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+      self.topView.flashButton.alpha = alpha
+    })
   }
 }
 

@@ -1,6 +1,11 @@
 import UIKit
 import AVFoundation
 
+protocol CameraViewDelegate {
+
+  func handleFlashButton(hide: Bool)
+}
+
 class CameraView: UIViewController {
 
   lazy var configuration: PickerConfiguration = {
@@ -28,6 +33,7 @@ class CameraView: UIViewController {
   var captureDevice: AVCaptureDevice?
   var capturedDevices: NSMutableArray?
   var previewLayer: AVCaptureVideoPreviewLayer?
+  var delegate: CameraViewDelegate?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -68,6 +74,8 @@ class CameraView: UIViewController {
     captureDevice = capturedDevices?.objectAtIndex(newDeviceIndex) as? AVCaptureDevice
     configureDevice()
 
+    delegate?.handleFlashButton(captureDevice?.position == .Front)
+
     var error: NSError? = nil
 
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
@@ -77,16 +85,29 @@ class CameraView: UIViewController {
         self.captureSession.removeInput(currentDeviceInput)
         self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice, error: &error))
         self.captureSession.commitConfiguration()
-        UIView.animateWithDuration(0.8, animations: { [unowned self] in
+        UIView.animateWithDuration(1.3, animations: { [unowned self] in
           self.containerView.alpha = 0
-          }, completion: { finished in
-            
-        })
+          })
     })
   }
 
   func flashCamera(title: String) {
+    if captureDevice!.hasFlash {
+      captureDevice?.lockForConfiguration(nil)
+      switch title {
+      case "ON":
+        captureDevice?.flashMode = .On
+      case "OFF":
+        captureDevice?.flashMode = .Off
+      default:
+        captureDevice?.flashMode = .Auto
+        
+      }
+    }
+  }
 
+  func takePicture() {
+    
   }
 
   // MARK: - Camera methods
@@ -137,5 +158,6 @@ class CameraView: UIViewController {
     view.layer.addSublayer(previewLayer)
     previewLayer?.frame = view.layer.frame
     captureSession.startRunning()
+    delegate?.handleFlashButton(captureDevice?.position == .Front)
   }
 }
