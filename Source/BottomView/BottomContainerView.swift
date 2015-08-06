@@ -53,6 +53,7 @@ class BottomContainerView: UIView {
     }()
 
   var delegate: BottomContainerViewDelegate?
+  var pastCount = 0
 
   // MARK: Initializers
 
@@ -145,29 +146,53 @@ class BottomContainerView: UIView {
       imageWrapper.firstImageView.image = array.firstObject as? UIImage
       imageWrapper.secondImageView.image = nil
       imageWrapper.secondImageView.alpha = 0
+      if pastCount < 1 {
+        animateImageView(imageWrapper.firstImageView)
+      }
     case 0:
       imageWrapper.firstImageView.image = nil
-      imageWrapper.secondImageView.image = nil
     case 2:
       imageWrapper.firstImageView.image = array[0] as? UIImage
       imageWrapper.secondImageView.image = array[1] as? UIImage
       imageWrapper.secondImageView.alpha = 1
       imageWrapper.thirdImageView.alpha = 0
+      if pastCount < 2 {
+        animateImageView(imageWrapper.secondImageView)
+      }
     case 3:
       imageWrapper.firstImageView.image = array[0] as? UIImage
       imageWrapper.secondImageView.image = array[1] as? UIImage
       imageWrapper.thirdImageView.image = array[2] as? UIImage
       imageWrapper.thirdImageView.alpha = 1
       imageWrapper.fourthImageView.alpha = 0
+      if pastCount < 3 {
+        animateImageView(imageWrapper.thirdImageView)
+      }
     default:
       imageWrapper.fourthImageView.alpha = 1
       imageWrapper.firstImageView.image = array[array.count - 4] as? UIImage
       imageWrapper.secondImageView.image = array[array.count - 3] as? UIImage
       imageWrapper.thirdImageView.image = array[array.count - 2] as? UIImage
       imageWrapper.fourthImageView.image = array.lastObject as? UIImage
+      if pastCount < array.count {
+        animateImageView(imageWrapper.fourthImageView)
+      }
     }
 
+    pastCount = array.count
     pickerButton.photoNumber = array.count
+  }
+
+  private func animateImageView(imageView: UIImageView) {
+    imageView.transform = CGAffineTransformMakeScale(0, 0)
+
+    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+      imageView.transform = CGAffineTransformMakeScale(1.05, 1.05)
+      }, completion: { _ in
+        UIView.animateWithDuration(0.2, animations: { _ in
+          imageView.transform = CGAffineTransformIdentity
+        })
+    })
   }
 }
 
