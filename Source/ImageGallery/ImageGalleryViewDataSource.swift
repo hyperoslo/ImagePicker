@@ -18,6 +18,16 @@ extension ImageGalleryView: UICollectionViewDataSource {
     
     cell.configureCell(image)
 
+    if indexPath.row == 0 && shouldTransform {
+      cell.transform = CGAffineTransformMakeScale(0, 0)
+
+      UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseInOut, animations: { [unowned self] in
+        cell.transform = CGAffineTransformIdentity
+        }, completion: nil)
+
+      shouldTransform = false
+    }
+
     if selectedImages.containsObject(image) {
       cell.selectedImageView.image = getImage("selectedImageGallery")
     } else {

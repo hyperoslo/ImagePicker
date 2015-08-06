@@ -60,6 +60,7 @@ class BottomContainerView: UIView {
     super.init(frame: frame)
 
     [borderPickerButton, pickerButton, doneButton, imageWrapper].map { self.addSubview($0) }
+    backgroundColor = self.configuration.backgroundColor
 
     setupConstraints()
   }

@@ -76,6 +76,7 @@ class ImageGalleryView: UIView {
   var collectionSize: CGSize!
   var delegate: ImageGalleryPanGestureDelegate?
   var selectedImages: NSMutableArray!
+  var shouldTransform = false
 
   // MARK: - Initializers
 
@@ -88,6 +89,7 @@ class ImageGalleryView: UIView {
 
     [collectionView, topSeparator].map { self.addSubview($0) }
     topSeparator.addSubview(indicator)
+    backgroundColor = self.configuration.mainColor
 
     fetchPhotos(0)
   }

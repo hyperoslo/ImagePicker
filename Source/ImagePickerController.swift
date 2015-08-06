@@ -14,7 +14,7 @@ public class ImagePickerController: UIViewController {
 
   lazy var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
-    galleryView.backgroundColor = self.configuration.backgroundColor
+    galleryView.backgroundColor = self.configuration.mainColor
     galleryView.setTranslatesAutoresizingMaskIntoConstraints(false)
     galleryView.delegate = self
 
@@ -160,7 +160,14 @@ extension ImagePickerController: CameraViewDelegate {
   func imageToLibrary(image: UIImage) {
     galleryView.images.insertObject(image, atIndex: 0)
     galleryView.selectedImages.insertObject(image, atIndex: 0)
-    galleryView.collectionView.reloadData()
+    galleryView.shouldTransform = true
+
+    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+      self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
+      }, completion: { _ in
+        self.galleryView.collectionView.transform = CGAffineTransformIdentity
+        self.galleryView.collectionView.reloadData()
+    })
   }
 }
 
