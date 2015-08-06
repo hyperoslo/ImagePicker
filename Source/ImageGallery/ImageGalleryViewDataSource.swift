@@ -31,6 +31,8 @@ extension ImageGalleryView: UICollectionViewDataSource {
 
     if selectedImages.containsObject(image) {
       cell.selectedImageView.image = getImage("selectedImageGallery")
+      cell.selectedImageView.alpha = 1
+      cell.selectedImageView.transform = CGAffineTransformIdentity
     } else {
       cell.selectedImageView.image = nil
     }
