@@ -47,17 +47,15 @@ class CameraView: UIViewController {
 //    }
 //  }
 
-  let screenWidth = UIScreen.mainScreen().bounds.size.width
-
   override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
     var anyTouch = touches.first as! UITouch
-    var touchPercent = anyTouch.locationInView(self.view).x / screenWidth
+    var touchPercent = anyTouch.locationInView(self.view).x / UIScreen.mainScreen().bounds.size.width
     //focusTo(Float(touchPercent))
   }
 
   override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
     var anyTouch = touches.first as! UITouch
-    var touchPercent = anyTouch.locationInView(self.view).x / screenWidth
+    var touchPercent = anyTouch.locationInView(self.view).x / UIScreen.mainScreen().bounds.size.width
     //focusTo(Float(touchPercent))
   }
 
@@ -80,6 +78,8 @@ class CameraView: UIViewController {
 
     previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     previewLayer?.autoreverses = true
+    previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+    view.clipsToBounds = true
     view.layer.addSublayer(previewLayer)
     previewLayer?.frame = view.layer.frame
     captureSession.startRunning()
