@@ -27,9 +27,8 @@ class CameraView: UIViewController {
     let imageView = UIImageView()
     imageView.image = self.getImage("focusIcon")
     imageView.backgroundColor = UIColor.clearColor()
-    imageView.transform = CGAffineTransformMakeScale(2, 2)
+    imageView.frame = CGRectMake(0, 0, 110, 110)
     imageView.alpha = 0
-    imageView.frame = CGRectMake(0, 0, 140, 140)
     self.view.addSubview(imageView)
 
     return imageView
@@ -49,7 +48,7 @@ class CameraView: UIViewController {
   var previewLayer: AVCaptureVideoPreviewLayer?
   var delegate: CameraViewDelegate?
   var stillImageOutput: AVCaptureStillImageOutput?
-  var focusIconDisplayed = false
+  var animationTimer: NSTimer?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -159,35 +158,31 @@ class CameraView: UIViewController {
     })
   }
 
+  // MARK: - Timer methods
+
+  func timerDidFire() {
+    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+      self.focusImageView.alpha = 0
+      }, completion: { _ in
+        self.focusImageView.transform = CGAffineTransformIdentity
+    })
+  }
+
   // MARK: - Camera methods
 
   func focusTo(point: CGPoint) {
     if let device = captureDevice {
       if device.lockForConfiguration(nil)
-        && device.isFocusModeSupported(AVCaptureFocusMode.Locked)
-        && !focusIconDisplayed {
-          focusIconDisplayed = true
+        && device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
           device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
           device.unlockForConfiguration()
           focusImageView.center = point
-
           UIView.animateWithDuration(0.5, animations: { [unowned self] in
-            self.focusImageView.transform = CGAffineTransformIdentity
             self.focusImageView.alpha = 1
+            self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
             }, completion: { _ in
-              let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.7 * Double(NSEC_PER_SEC)))
-              dispatch_after(delayTime, dispatch_get_main_queue()) {
-                if self.focusIconDisplayed {
-                  UIView.animateWithDuration(0.3, animations: { () -> Void in
-                    self.focusImageView.alpha = 0
-                    }, completion: { _ in
-                      if self.focusIconDisplayed {
-                        self.focusImageView.transform = CGAffineTransformMakeScale(2, 2)
-                        self.focusIconDisplayed = false
-                      }
-                  })
-                }
-              }
+              self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
+                selector: "timerDidFire", userInfo: nil, repeats: false)
           })
       }
     }
@@ -197,16 +192,8 @@ class CameraView: UIViewController {
     let anyTouch = touches.first as! UITouch
     let touchX = anyTouch.locationInView(view).x
     let touchY = anyTouch.locationInView(view).y
-    focusImageView.transform = CGAffineTransformMakeScale(2, 2)
-    focusImageView.alpha = 0
-    focusIconDisplayed = false
-    focusTo(CGPointMake(touchX, touchY))
-  }
-
-  override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-    let anyTouch = touches.first as! UITouch
-    let touchX = anyTouch.locationInView(view).x
-    let touchY = anyTouch.locationInView(view).y
+    focusImageView.transform = CGAffineTransformIdentity
+    animationTimer?.invalidate()
     focusTo(CGPointMake(touchX, touchY))
   }
 

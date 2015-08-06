@@ -128,6 +128,9 @@ class ImageGalleryView: UIView {
     indicator.frame.size = CGSizeMake(Dimensions.indicatorWidth, Dimensions.indicatorHeight)
     collectionView.frame = CGRectMake(0, topSeparator.frame.height, UIScreen.mainScreen().bounds.width, frame.height - topSeparator.frame.height)
     collectionSize = CGSizeMake(frame.height - topSeparator.frame.height, frame.height - topSeparator.frame.height)
+    if collectionSize.width == 0 {
+      collectionSize = CGSizeMake(100, 100)
+    }
     noImagesLabel.center = collectionView.center
   }
 
