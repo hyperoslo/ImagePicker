@@ -156,6 +156,12 @@ extension ImagePickerController: CameraViewDelegate {
       self.topView.flashButton.alpha = alpha
     })
   }
+
+  func imageToLibrary(image: UIImage) {
+    galleryView.images.insertObject(image, atIndex: 0)
+    galleryView.selectedImages.insertObject(image, atIndex: 0)
+    galleryView.collectionView.reloadData()
+  }
 }
 
 // MARK: - TopView delegate methods

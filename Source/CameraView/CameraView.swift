@@ -1,9 +1,11 @@
 import UIKit
 import AVFoundation
+import AssetsLibrary
 
 protocol CameraViewDelegate {
 
   func handleFlashButton(hide: Bool)
+  func imageToLibrary(image: UIImage)
 }
 
 class CameraView: UIViewController {
@@ -34,6 +36,7 @@ class CameraView: UIViewController {
   var capturedDevices: NSMutableArray?
   var previewLayer: AVCaptureVideoPreviewLayer?
   var delegate: CameraViewDelegate?
+  var stillImageOutput: AVCaptureStillImageOutput?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -107,7 +110,20 @@ class CameraView: UIViewController {
   }
 
   func takePicture() {
-    
+    let queue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL)
+    let videoOrientation = previewLayer?.connection.videoOrientation
+    stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation!
+
+    dispatch_async(queue, { [unowned self] in
+      self.stillImageOutput!.captureStillImageAsynchronouslyFromConnection(self.stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo), completionHandler: { (buffer, error) -> Void in
+        let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
+        let image = UIImage(data: imageData)
+        self.delegate?.imageToLibrary(image!)
+        let orientation = ALAssetOrientation(rawValue: image!.imageOrientation.rawValue)
+        let assetsLibrary = ALAssetsLibrary()
+        assetsLibrary.writeImageToSavedPhotosAlbum(image!.CGImage, orientation: orientation!, completionBlock: nil)
+      })
+    })
   }
 
   // MARK: - Camera methods
@@ -159,5 +175,8 @@ class CameraView: UIViewController {
     previewLayer?.frame = view.layer.frame
     captureSession.startRunning()
     delegate?.handleFlashButton(captureDevice?.position == .Front)
+    stillImageOutput = AVCaptureStillImageOutput()
+    stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+    captureSession.addOutput(stillImageOutput)
   }
 }

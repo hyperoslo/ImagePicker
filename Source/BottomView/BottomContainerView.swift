@@ -14,6 +14,7 @@ class BottomContainerView: UIView {
     let pickerButton = ButtonPicker()
     pickerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
     pickerButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+    pickerButton.delegate = self
 
     return pickerButton
     }()
