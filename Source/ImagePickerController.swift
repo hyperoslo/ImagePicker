@@ -52,7 +52,7 @@ public class ImagePickerController: UIViewController {
     return controller
     }()
 
-  public var delegate: ImagePickerDelegate?
+  public weak var delegate: ImagePickerDelegate?
   var topSeparatorCenter: CGPoint!
   var initialFrame: CGRect!
   var targetIndexPath: NSIndexPath!
@@ -144,7 +144,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    delegate?.doneButtonDidPress(galleryView.selectedImages.mutableCopy() as! [UIImage])
+    delegate?.doneButtonDidPress?(galleryView.selectedImages.mutableCopy() as! [UIImage])
   }
 
   func cancelButtonDidPress() {
@@ -152,7 +152,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageWrapperDidPress() {
-    delegate?.wrapperDidPress(galleryView.selectedImages.mutableCopy() as! [UIImage])
+    delegate?.wrapperDidPress?(galleryView.selectedImages.mutableCopy() as! [UIImage])
   }
 }
 
