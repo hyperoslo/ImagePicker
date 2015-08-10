@@ -261,7 +261,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
 
     if cell.selectedImageView.image != nil {
       UIView.animateWithDuration(0.2, animations: { [unowned self] in
-        cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+        cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
         }, completion: { _ in
           cell.selectedImageView.image = nil
       })
