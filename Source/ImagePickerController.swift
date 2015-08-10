@@ -5,6 +5,7 @@ public protocol ImagePickerDelegate {
 
   optional func wrapperDidPress(images: [UIImage])
   optional func doneButtonDidPress(images: [UIImage])
+  optional func cancelButtonDidPress()
 }
 
 public class ImagePickerController: UIViewController {
@@ -149,6 +150,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func cancelButtonDidPress() {
     dismissViewControllerAnimated(true, completion: nil)
+    delegate?.cancelButtonDidPress?()
   }
 
   func imageWrapperDidPress() {
