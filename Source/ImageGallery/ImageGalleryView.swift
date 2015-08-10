@@ -23,6 +23,8 @@ class ImageGalleryView: UIView {
     static let indicatorHeight: CGFloat = 8
   }
 
+  var stack: ImageStack = ImageStack()
+
   lazy var collectionView: UICollectionView = { [unowned self] in
     let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
       collectionViewLayout: self.collectionViewLayout)
@@ -263,14 +265,14 @@ extension ImageGalleryView: UICollectionViewDelegate {
         }, completion: { _ in
           cell.selectedImageView.image = nil
       })
-      selectedImages.removeObject(image)
+      stack.dropImage(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
       cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
       UIView.animateWithDuration(0.2, animations: { _ in
         cell.selectedImageView.transform = CGAffineTransformIdentity
         })
-      selectedImages.insertObject(image, atIndex: 0)
+      stack.pushImage(image)
     }
 
     delegate?.imageSelected(selectedImages)
