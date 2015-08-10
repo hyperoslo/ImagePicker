@@ -5,11 +5,19 @@ class ImageStack: UIView {
   static let sharedStack = ImageStack()
 
   var images: NSMutableArray = NSMutableArray()
-  var views: NSMutableArray = NSMutableArray()
+  var views: [UIImageView] = [UIImageView]()
 
   override init(frame: CGRect) {
     super.init(frame: frame)
 
+  }
+
+//let viewSize = CGSize(width: frame.size.width, height: frame.size.height)
+
+  func initializeViews() {
+    for i in 1...4 {
+
+    }
   }
 
   func pushImage(image: UIImage) {
