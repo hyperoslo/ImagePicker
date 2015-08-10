@@ -3,6 +3,7 @@ import UIKit
 class ImageStack: UIView {
 
   var images: NSMutableArray = NSMutableArray()
+  var views: NSMutableArray = NSMutableArray()
 
   override init(frame: CGRect) {
     super.init(frame: frame)
