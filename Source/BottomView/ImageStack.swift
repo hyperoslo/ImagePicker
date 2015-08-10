@@ -1,24 +1,10 @@
 import UIKit
 
-class ImageStack: UIView {
+struct ImageStack {
 
   static let sharedStack = ImageStack()
 
   var images: NSMutableArray = NSMutableArray()
-  var views: [UIImageView] = [UIImageView]()
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-
-  }
-
-//let viewSize = CGSize(width: frame.size.width, height: frame.size.height)
-
-  func initializeViews() {
-    for i in 1...4 {
-
-    }
-  }
 
   func pushImage(image: UIImage) {
     images.insertObject(image, atIndex: 0)
@@ -34,9 +20,5 @@ class ImageStack: UIView {
 
   func containsImage(image: UIImage) -> Bool {
     return images.containsObject(image)
-  }
-
-  required init(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 }
