@@ -2,6 +2,8 @@ import UIKit
 
 class ImageStack: UIView {
 
+  static let sharedStack = ImageStack()
+
   var images: NSMutableArray = NSMutableArray()
   var views: NSMutableArray = NSMutableArray()
 
@@ -20,6 +22,10 @@ class ImageStack: UIView {
     images.removeObject(image)
     println("Image dropped")
     println(images)
+  }
+
+  func containsImage(image: UIImage) -> Bool {
+    return images.containsObject(image)
   }
 
   required init(coder aDecoder: NSCoder) {
