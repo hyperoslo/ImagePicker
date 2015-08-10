@@ -1,9 +1,10 @@
 import UIKit
 
-protocol ImagePickerDelegate {
+@objc
+public protocol ImagePickerDelegate {
 
-  func wrapperDidPress(images: [UIImage])
-  func doneButtonDidPress(images: [UIImage])
+  optional func wrapperDidPress(images: [UIImage])
+  optional func doneButtonDidPress(images: [UIImage])
 }
 
 public class ImagePickerController: UIViewController {
@@ -51,11 +52,10 @@ public class ImagePickerController: UIViewController {
     return controller
     }()
 
+  public var delegate: ImagePickerDelegate?
   var topSeparatorCenter: CGPoint!
   var initialFrame: CGRect!
-  var delegate: ImagePickerDelegate?
   var targetIndexPath: NSIndexPath!
-  
 
   public var doneButtonTitle: String? {
     didSet {
