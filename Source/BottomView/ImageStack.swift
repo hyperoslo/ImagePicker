@@ -1,7 +1,8 @@
 import UIKit
 
 protocol ImageStackDelegate {
-   func imageStackDidReload()
+  func imageDidPush(image: UIImage)
+  func imageStackDidDrop(image: UIImage)
 }
 
 struct ImageStack {
@@ -13,14 +14,14 @@ struct ImageStack {
 
   mutating func pushImage(image: UIImage) {
     images.append(image)
-    delegate?.imageStackDidReload()
-    println("Image pushed")
+    delegate?.imageDidPush(image)
+    println("Image push")
     println(images)
   }
 
   mutating func dropImage(image: UIImage) {
     images = images.filter() {$0 != image}
-    delegate?.imageStackDidReload()
+    delegate?.imageStackDidDrop(image)
     println("Image dropped")
     println(images)
   }

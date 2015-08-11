@@ -49,9 +49,22 @@ class StackView: UIView {
 }
 
 extension StackView: ImageStackDelegate {
-  func imageStackDidReload() {
+  func imageDidPush(image: UIImage) {
+renderViews()
+  }
+
+  func imageStackDidDrop(image: UIImage) {
+renderViews()
+  }
+
+  func renderViews() {
     let photos = ImageStack.sharedStack.images
-    let size = min(photos.count - 1, 3)
+    if photos.isEmpty {
+      return
+    }
+    //TODO: Find better way to limit value to bounds
+    var size = min(photos.count - 1, 3)
+    size = max(size, 0)
     let lastFour = photos.reverse()[0...size].reverse()
     Array(map(enumerate(lastFour)) { (index, image) in
       self.views[index].image = image
