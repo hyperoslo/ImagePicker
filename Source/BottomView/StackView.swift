@@ -1,7 +1,7 @@
 import UIKit
 
-protocol ImageWrapperDelegate {
-  func imageWrapperDidPress()
+protocol StackViewDelegate {
+  func stackViewDidPress()
 }
 
 class StackView: UIView {
@@ -10,7 +10,7 @@ class StackView: UIView {
     static let imageSize: CGFloat = 52
   }
 
-  var delegate: ImageWrapperDelegate?
+  var delegate: StackViewDelegate?
 
   var views: [UIImageView] = {
     var array = [UIImageView]()
@@ -54,7 +54,7 @@ class StackView: UIView {
   }
 
   func handleTapGestureRecognizer(gesture: UITapGestureRecognizer) {
-    delegate?.imageWrapperDidPress()
+    delegate?.stackViewDidPress()
   }
 
   required init(coder aDecoder: NSCoder) {

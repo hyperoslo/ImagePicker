@@ -5,7 +5,7 @@ protocol BottomContainerViewDelegate {
   func pickerButtonDidPress()
   func doneButtonDidPress()
   func cancelButtonDidPress()
-  func imageWrapperDidPress()
+  func stackViewDidPress()
 }
 
 class BottomContainerView: UIView {
@@ -178,11 +178,11 @@ extension BottomContainerView: ButtonPickerDelegate {
   }
 }
 
-// MARK: - ImageWrapperDelegate methods
+// MARK: - StackViewDelegate methods
 
-extension BottomContainerView: ImageWrapperDelegate {
+extension BottomContainerView: StackViewDelegate {
 
-  func imageWrapperDidPress() {
-    delegate?.imageWrapperDidPress()
+  func stackViewDidPress() {
+    delegate?.stackViewDidPress()
   }
 }
