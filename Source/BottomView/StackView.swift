@@ -11,7 +11,7 @@ class StackView: UIView {
       view.layer.borderWidth = 1
       view.contentMode = .ScaleAspectFill
       view.clipsToBounds = true
-//      view.addGestureRecognizer(self.tapGestureRecognizer)
+      //      view.addGestureRecognizer(self.tapGestureRecognizer)
       array.append(view)
     }
     return array
@@ -27,11 +27,11 @@ class StackView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    backgroundColor = UIColor.blueColor()
     views.map{ self.addSubview($0) }
 
     layoutSubviews()
     ImageStack.sharedStack.delegate = self
+    renderViews()
   }
 
   override func layoutSubviews() {
@@ -50,24 +50,26 @@ class StackView: UIView {
 
 extension StackView: ImageStackDelegate {
   func imageDidPush(image: UIImage) {
-renderViews()
+    renderViews()
   }
 
   func imageStackDidDrop(image: UIImage) {
-renderViews()
+    renderViews()
   }
 
   func renderViews() {
     let photos = ImageStack.sharedStack.images
-    if photos.isEmpty {
-      return
-    }
     //TODO: Find better way to limit value to bounds
     var size = min(photos.count - 1, 3)
-    size = max(size, 0)
-    let lastFour = photos.reverse()[0...size].reverse()
-    Array(map(enumerate(lastFour)) { (index, image) in
-      self.views[index].image = image
-      })
+
+    for (index, view) in enumerate(views.reverse()) {
+      if index <= size {
+        view.image = photos.reverse()[index]
+        view.alpha = 1
+      } else {
+        view.image = nil
+        view.alpha = 0
+      }
+    }
   }
 }
