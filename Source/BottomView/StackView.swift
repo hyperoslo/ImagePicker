@@ -40,8 +40,8 @@ extension StackView: ImageStackDelegate {
     let photos = ImageStack.sharedStack.images
     let size = min(photos.count - 1, 3)
     let lastFour = photos.reverse()[0...size].reverse()
-    for (index, image) in enumerate(lastFour) {
-        views[index].image = image
-    }
+    Array(map(enumerate(lastFour)) { (index, image) in
+      self.views[index].image = image
+      })
   }
 }
