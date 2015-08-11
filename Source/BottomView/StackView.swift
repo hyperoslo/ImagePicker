@@ -15,7 +15,6 @@ class StackView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     backgroundColor = UIColor.blueColor()
-    println(views.count)
     views.map{ self.addSubview($0) }
 
     layoutSubviews()
@@ -25,13 +24,9 @@ class StackView: UIView {
   override func layoutSubviews() {
     let step = -4
     for (i, view) in enumerate(views) {
-      println("a")
       var side = i * step
       var frame = CGRect(origin: CGPoint(x: side, y: side), size: viewSize)
       view.frame = frame
-      view.backgroundColor = UIColor.redColor()
-      view.layer.borderColor = UIColor.blackColor().CGColor
-      view.layer.borderWidth = 1
     }
   }
 
@@ -42,10 +37,11 @@ class StackView: UIView {
 
 extension StackView: ImageStackDelegate {
   func imageStackDidReload() {
-    for (index, image) in enumerate(ImageStack.sharedStack.images) {
-      if index < 4 {
+    let photos = ImageStack.sharedStack.images
+    let size = min(photos.count - 1, 3)
+    let lastFour = photos.reverse()[0...size].reverse()
+    for (index, image) in enumerate(lastFour) {
         views[index].image = image
-      }
     }
   }
 }
