@@ -4,12 +4,25 @@ class StackView: UIView {
 
   var views: [UIImageView] = {
     var array = [UIImageView]()
-    for i in 1...4 {
-      array.append(UIImageView())
+    for i in 0...3 {
+      let view = UIImageView()
+      view.layer.cornerRadius = 3
+      view.layer.borderColor = UIColor(white: 1, alpha: 0.2).CGColor
+      view.layer.borderWidth = 1
+      view.contentMode = .ScaleAspectFill
+      view.clipsToBounds = true
+//      view.addGestureRecognizer(self.tapGestureRecognizer)
+      array.append(view)
     }
     return array
     }()
 
+  lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+    let gesture = UITapGestureRecognizer()
+    gesture.addTarget(self, action: "handleTapGestureRecognizer:")
+
+    return gesture
+    }()
   lazy var viewSize: CGSize = CGSize(width: self.frame.width * 0.6, height: self.frame.height * 0.6)
 
   override init(frame: CGRect) {
