@@ -1,10 +1,14 @@
 import UIKit
 
-//protocol ImageWrapperDelegate {
-//  func imageWrapperDidPress()
-//}
+protocol ImageWrapperDelegate {
+  func imageWrapperDidPress()
+}
 
 class StackView: UIView {
+
+  struct Dimensions {
+    static let imageSize: CGFloat = 52
+  }
 
   var delegate: ImageWrapperDelegate?
 
@@ -34,7 +38,6 @@ class StackView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     views.map{ self.addSubview($0) }
-//    views.map{ $0.addGestureRecognizer(self.tapGestureRecognizer) }
     self.addGestureRecognizer(tapGestureRecognizer)
     layoutSubviews()
     ImageStack.sharedStack.delegate = self
@@ -51,7 +54,6 @@ class StackView: UIView {
   }
 
   func handleTapGestureRecognizer(gesture: UITapGestureRecognizer) {
-    println("asdas")
     delegate?.imageWrapperDidPress()
   }
 

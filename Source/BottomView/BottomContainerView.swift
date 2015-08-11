@@ -40,7 +40,7 @@ class BottomContainerView: UIView {
     return button
     }()
 
-  lazy var imageWrapper: StackView = {
+  lazy var stackView: StackView = {
     let view = StackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
 
@@ -67,7 +67,7 @@ class BottomContainerView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    [borderPickerButton, pickerButton, doneButton, imageWrapper, topSeparator].map { self.addSubview($0) }
+    [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].map { self.addSubview($0) }
     backgroundColor = self.configuration.backgroundColor
 
     setupConstraints()
@@ -119,19 +119,19 @@ class BottomContainerView: UIView {
       relatedBy: .Equal, toItem: self, attribute: .Right,
       multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
 
-    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .Width,
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .Width,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ImageWrapper.Dimensions.imageSize))
+      multiplier: 1, constant: StackView.Dimensions.imageSize))
 
-    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .Height,
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ImageWrapper.Dimensions.imageSize))
+      multiplier: 1, constant: StackView.Dimensions.imageSize))
 
-    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .CenterY,
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
       multiplier: 1, constant: 0))
 
-    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .CenterX,
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .Left,
       multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/4))
 
