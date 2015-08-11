@@ -205,7 +205,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   func hideViews() {
     galleryView.alpha = 0
     bottomContainer.pickerButton.enabled = false
-    bottomContainer.imageWrapper.tapGestureRecognizer.enabled = false
+    bottomContainer.tapGestureRecognizer.enabled = false
     topView.flashButton.enabled = false
     topView.rotateCamera.enabled = false
   }
@@ -215,7 +215,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     cameraController.initializeCamera()
     galleryView.alpha = 1
     bottomContainer.pickerButton.enabled = true
-    bottomContainer.imageWrapper.tapGestureRecognizer.enabled = true
+    bottomContainer.tapGestureRecognizer.enabled = true
     topView.flashButton.enabled = true
     topView.rotateCamera.enabled = true
   }

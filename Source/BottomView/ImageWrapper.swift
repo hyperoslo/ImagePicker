@@ -1,10 +1,5 @@
 import UIKit
 
-protocol ImageWrapperDelegate {
-
-  func imageWrapperDidPress()
-}
-
 class ImageWrapper: UIView {
 
   struct Dimensions {
@@ -37,15 +32,6 @@ class ImageWrapper: UIView {
     return imageView
     }()
 
-  lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-    let gesture = UITapGestureRecognizer()
-    gesture.addTarget(self, action: "handleTapGestureRecognizer:")
-
-    return gesture
-    }()
-
-  var delegate: ImageWrapperDelegate?
-
   // MARK: - Initializers
 
   override init(frame: CGRect) {
@@ -69,7 +55,6 @@ class ImageWrapper: UIView {
     [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.clipsToBounds = true }
     [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.setTranslatesAutoresizingMaskIntoConstraints(false) }
     [firstImageView, secondImageView, thirdImageView, fourthImageView].map { self.addSubview($0) }
-    [firstImageView, secondImageView, thirdImageView, fourthImageView].map { $0.addGestureRecognizer(self.tapGestureRecognizer) }
   }
 
   // MARK: - Autolayout
@@ -116,11 +101,5 @@ class ImageWrapper: UIView {
     addConstraint(NSLayoutConstraint(item: fourthImageView, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .CenterX,
       multiplier: 1, constant: -7.5))
-  }
-
-  // MARK: - Actions
-
-  func handleTapGestureRecognizer(gesture: UITapGestureRecognizer) {
-    delegate?.imageWrapperDidPress()
   }
 }

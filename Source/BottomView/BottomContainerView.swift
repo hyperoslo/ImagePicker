@@ -60,6 +60,13 @@ class BottomContainerView: UIView {
     return view
     }()
 
+  lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+    let gesture = UITapGestureRecognizer()
+    gesture.addTarget(self, action: "handleTapGestureRecognizer:")
+
+    return gesture
+    }()
+
   var delegate: BottomContainerViewDelegate?
   var pastCount = 0
 
@@ -70,6 +77,7 @@ class BottomContainerView: UIView {
 
     [borderPickerButton, pickerButton, doneButton, imageWrapper, topSeparator].map { self.addSubview($0) }
     backgroundColor = self.configuration.backgroundColor
+    imageWrapper.addGestureRecognizer(self.tapGestureRecognizer)
 
     setupConstraints()
   }
@@ -157,6 +165,10 @@ class BottomContainerView: UIView {
     }
   }
 
+  func handleTapGestureRecognizer(gesture: UITapGestureRecognizer) {
+    delegate?.imageWrapperDidPress()
+  }
+
   // MARK: - Wrapper methods
 
   func updateWrapperImages(array: NSMutableArray) {
@@ -221,14 +233,5 @@ extension BottomContainerView: ButtonPickerDelegate {
 
   func buttonDidPress() {
     delegate?.pickerButtonDidPress()
-  }
-}
-
-// MARK: - ImageWrapperDelegate methods
-
-extension BottomContainerView: ImageWrapperDelegate {
-
-  func imageWrapperDidPress() {
-    delegate?.imageWrapperDidPress()
   }
 }
