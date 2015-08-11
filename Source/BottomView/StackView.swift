@@ -2,8 +2,6 @@ import UIKit
 
 class StackView: UIView {
 
-  let stack: ImageStack = ImageStack.sharedStack
-  var images: [UIImage] = [UIImage]()
   var views: [UIImageView] = {
     var array = [UIImageView]()
     for i in 1...4 {
@@ -17,21 +15,18 @@ class StackView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     backgroundColor = UIColor.blueColor()
+    println(views.count)
+    views.map{ self.addSubview($0) }
 
-    addViews()
     layoutSubviews()
     ImageStack.sharedStack.delegate = self
   }
 
-  func addViews() {
-    views.map{ self.addSubview($0) }
-  }
-
   override func layoutSubviews() {
-    let stride = -4
+    let step = -4
     for (i, view) in enumerate(views) {
       println("a")
-      var side = i * stride
+      var side = i * step
       var frame = CGRect(origin: CGPoint(x: side, y: side), size: viewSize)
       view.frame = frame
       view.backgroundColor = UIColor.redColor()
@@ -47,7 +42,7 @@ class StackView: UIView {
 
 extension StackView: ImageStackDelegate {
   func imageStackDidReload() {
-    for (index, image) in enumerate(stack.getImages()) {
+    for (index, image) in enumerate(ImageStack.sharedStack.images) {
       if index < 4 {
         views[index].image = image
       }
