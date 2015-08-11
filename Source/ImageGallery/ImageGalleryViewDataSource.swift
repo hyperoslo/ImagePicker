@@ -6,12 +6,12 @@ extension ImageGalleryView: UICollectionViewDataSource {
     static let reusableIdentifier = "imagesReusableIdentifier"
   }
 
-  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     displayNoImagesMessage(images.count == 0)
     return images.count
   }
 
-  func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+  public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CollectionView.reusableIdentifier,
       forIndexPath: indexPath) as! ImageGalleryViewCell
 
