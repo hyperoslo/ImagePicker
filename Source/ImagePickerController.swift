@@ -14,7 +14,7 @@ public class ImagePickerController: UIViewController {
     static let bottomContainerHeight: CGFloat = 108
   }
 
-  lazy var galleryView: ImageGalleryView = { [unowned self] in
+  lazy public var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
     galleryView.backgroundColor = self.configuration.mainColor
     galleryView.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -215,6 +215,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     galleryView.alpha = 1
     bottomContainer.pickerButton.enabled = true
     bottomContainer.stackView.tapGestureRecognizer.enabled = true
+    bottomContainer.tapGestureRecognizer.enabled = true
     topView.flashButton.enabled = true
     topView.rotateCamera.enabled = true
   }

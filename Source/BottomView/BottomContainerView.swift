@@ -59,6 +59,13 @@ class BottomContainerView: UIView {
     return view
     }()
 
+  lazy var tapGestureRecognizer: UITapGestureRecognizer = {
+    let gesture = UITapGestureRecognizer()
+    gesture.addTarget(self, action: "handleTapGestureRecognizer:")
+
+    return gesture
+    }()
+
   var delegate: BottomContainerViewDelegate?
   var pastCount = 0
 
@@ -69,6 +76,7 @@ class BottomContainerView: UIView {
 
     [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].map { self.addSubview($0) }
     backgroundColor = self.configuration.backgroundColor
+      stackView.addGestureRecognizer(self.tapGestureRecognizer)
 
     setupConstraints()
   }

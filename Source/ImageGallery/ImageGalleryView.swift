@@ -14,7 +14,7 @@ protocol ImageGalleryPanGestureDelegate {
   func hideViews()
 }
 
-class ImageGalleryView: UIView {
+public class ImageGalleryView: UIView {
 
   struct Dimensions {
     static let galleryHeight: CGFloat = 160
@@ -23,7 +23,7 @@ class ImageGalleryView: UIView {
     static let indicatorHeight: CGFloat = 8
   }
 
-  lazy var collectionView: UICollectionView = { [unowned self] in
+  lazy public var collectionView: UICollectionView = { [unowned self] in
     let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
       collectionViewLayout: self.collectionViewLayout)
     collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -91,9 +91,9 @@ class ImageGalleryView: UIView {
     return label
     }()
 
+  public var selectedImages: NSMutableArray!
   var collectionSize: CGSize!
   var delegate: ImageGalleryPanGestureDelegate?
-  var selectedImages: NSMutableArray!
   var shouldTransform = false
   var imagesBeforeLoading = 0
 
@@ -114,7 +114,7 @@ class ImageGalleryView: UIView {
     fetchPhotos(0)
   }
 
-  required init(coder aDecoder: NSCoder) {
+  required public init(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -242,7 +242,7 @@ class ImageGalleryView: UIView {
 
 extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 
-  func collectionView(collectionView: UICollectionView,
+  public func collectionView(collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
       return collectionSize
@@ -253,7 +253,7 @@ extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 
 extension ImageGalleryView: UICollectionViewDelegate {
 
-  func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+  public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
     let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageGalleryViewCell
     let image = images[indexPath.row] as! UIImage
 
@@ -276,7 +276,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
     delegate?.imageSelected(selectedImages)
   }
 
-  func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+  public func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
     if indexPath.row + 10 >= images.count {
       imagesBeforeLoading = images.count
       dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
