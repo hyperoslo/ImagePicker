@@ -259,18 +259,18 @@ extension ImageGalleryView: UICollectionViewDelegate {
 
     if cell.selectedImageView.image != nil {
       UIView.animateWithDuration(0.2, animations: { [unowned self] in
-        cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+        cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
         }, completion: { _ in
           cell.selectedImageView.image = nil
       })
-      selectedImages.removeObject(image)
+      ImageStack.sharedStack.dropImage(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
       cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
       UIView.animateWithDuration(0.2, animations: { _ in
         cell.selectedImageView.transform = CGAffineTransformIdentity
         })
-      selectedImages.insertObject(image, atIndex: 0)
+      ImageStack.sharedStack.pushImage(image)
     }
 
     delegate?.imageSelected(selectedImages)
