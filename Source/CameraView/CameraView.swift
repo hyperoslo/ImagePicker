@@ -150,6 +150,7 @@ class CameraView: UIViewController {
       self.stillImageOutput!.captureStillImageAsynchronouslyFromConnection(self.stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo), completionHandler: { (buffer, error) -> Void in
         let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
         let image = UIImage(data: imageData)
+        ImageStack.sharedStack.pushImage(image!)
         self.delegate?.imageToLibrary(image!)
         let orientation = ALAssetOrientation(rawValue: image!.imageOrientation.rawValue)
         let assetsLibrary = ALAssetsLibrary()
