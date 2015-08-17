@@ -78,7 +78,7 @@ extension StackView: ImageStackDelegate {
 
     for (index, view) in enumerate(views.reverse()) {
       if index <= size {
-        view.image = photos.reverse()[index]
+        view.image = photos[index]
         view.alpha = 1
       } else {
         view.image = nil
