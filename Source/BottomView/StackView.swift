@@ -75,7 +75,7 @@ extension StackView: ImageStackDelegate {
     let photos = ImageStack.sharedStack.images
     //TODO: Find better way to limit value to bounds
     var size = min(photos.count - 1, 3)
-
+    //TODO: This can be done in functional-style
     for (index, view) in enumerate(views.reverse()) {
       if index <= size {
         view.image = photos[index]
