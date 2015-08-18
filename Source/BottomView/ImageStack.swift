@@ -13,7 +13,7 @@ struct ImageStack {
   var delegate: ImageStackDelegate?
 
   mutating func pushImage(image: UIImage) {
-    images.insert(image, atIndex: 0)
+    images.append(image)
     delegate?.imageDidPush(image)
   }
 
