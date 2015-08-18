@@ -71,7 +71,6 @@ extension StackView: ImageStackDelegate {
     let emptyView = views.filter( {$0.image == nil} ).first
 
     if let emptyView = emptyView {
-      println("Animating")
       animateImageView(emptyView)
     }
     renderViews()
