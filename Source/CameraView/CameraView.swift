@@ -127,7 +127,8 @@ class CameraView: UIViewController {
   }
 
   func flashCamera(title: String) {
-    if captureDevice!.hasFlash {
+
+    if (captureDevice?.hasFlash != nil) {
       captureDevice?.lockForConfiguration(nil)
       switch title {
       case "ON":
