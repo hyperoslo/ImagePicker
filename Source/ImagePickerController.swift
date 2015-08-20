@@ -70,7 +70,7 @@ public class ImagePickerController: UIViewController {
     super.viewDidLoad()
 
     view.backgroundColor = .whiteColor()
-    
+
     [topView, cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
     view.backgroundColor = self.configuration.mainColor
 
@@ -164,7 +164,7 @@ extension ImagePickerController: CameraViewDelegate {
     let alpha: CGFloat = hide ? 0 : 1
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.topView.flashButton.alpha = alpha
-    })
+      })
   }
 
   func imageToLibrary(image: UIImage) {
@@ -237,9 +237,10 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   func panGestureDidStart() {
     topSeparatorCenter = galleryView.topSeparator.center
     initialFrame = galleryView.frame
-    let cell = galleryView.collectionView.visibleCells().last as! ImageGalleryViewCell
-    targetIndexPath = galleryView.collectionView.indexPathForCell(cell)
-    galleryView.collectionView.scrollToItemAtIndexPath(targetIndexPath!, atScrollPosition: .CenteredHorizontally, animated: true)
+    if let cell = galleryView.collectionView.visibleCells().last as? ImageGalleryViewCell {
+      targetIndexPath = galleryView.collectionView.indexPathForCell(cell)
+      galleryView.collectionView.scrollToItemAtIndexPath(targetIndexPath!, atScrollPosition: .CenteredHorizontally, animated: true)
+    }
   }
 
   func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint) {
@@ -274,7 +275,9 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     cameraController.previewLayer?.frame.size.height = galleryView.frame.origin.y - topView.frame.height
     CATransaction.commit()
     galleryView.noImagesLabel.center = galleryView.collectionView.center
-    galleryView.collectionView.scrollToItemAtIndexPath(targetIndexPath!, atScrollPosition: .CenteredHorizontally, animated: false)
+    if let targetIndexPath = targetIndexPath {
+      galleryView.collectionView.scrollToItemAtIndexPath(targetIndexPath, atScrollPosition: .CenteredHorizontally, animated: false)
+    }
   }
 
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint) {
@@ -292,7 +295,9 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
         }, completion: { finished in
           self.galleryView.collectionView.reloadSections(NSIndexSet(index: 0))
-          self.galleryView.collectionView.scrollToItemAtIndexPath(self.targetIndexPath!, atScrollPosition: .CenteredHorizontally, animated: true)
+          if let targetIndexPath = self.targetIndexPath {
+            self.galleryView.collectionView.scrollToItemAtIndexPath(self.targetIndexPath!, atScrollPosition: .CenteredHorizontally, animated: true)
+          }
       })
     } else if velocity.y < -100 {
       UIView.animateWithDuration(0.2, animations: { [unowned self] in
@@ -307,7 +312,9 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
         }, completion: { finished in
           self.galleryView.collectionView.reloadSections(NSIndexSet(index: 0))
-          self.galleryView.collectionView.scrollToItemAtIndexPath(self.targetIndexPath!, atScrollPosition: .CenteredHorizontally, animated: true)
+          if let targetIndexPath = self.targetIndexPath {
+            self.galleryView.collectionView.scrollToItemAtIndexPath(targetIndexPath, atScrollPosition: .CenteredHorizontally, animated: true)
+          }
       })
     } else if velocity.y > 100 || galleryView.frame.size.height - galleryView.topSeparator.frame.height < 100 {
       UIView.animateWithDuration(0.2, animations: { [unowned self] in
