@@ -41,7 +41,6 @@ class StackView: UIView {
     views[0].alpha = 1
     self.addGestureRecognizer(tapGestureRecognizer)
     layoutSubviews()
-    //renderViews()
   }
 
   deinit {
@@ -103,21 +102,12 @@ extension StackView {
   func imageStackDidDrop(notification: NSNotification) {
     if let sender = notification.object as? ImageStack {
       if let userInfo = notification.userInfo as? [String : UIImage] {
-        // // Uncomment if you want fancy animations
-        //      let image = userInfo[ImageStack.Notifications.imageKey]
-        //      let viewToEmpty = views.filter( {$0.image == image} ).first
-        //
-        //      if let viewToEmpty = viewToEmpty {
-        //        animateImageView(viewToEmpty)
-        //      }
-        
         renderViews(sender.images)
       }
     }
   }
 
   func renderViews(images: [UIImage]) {
-    //because Swift is not functional language
     if images.count < 1 {
       views.map { $0.image = nil}
       return
@@ -125,7 +115,6 @@ extension StackView {
 
     let photos = suffix(images, 4)
 
-    //TODO: This can be done in functional-style
     for (index, view) in enumerate(views) {
       if index <= photos.count - 1 {
         view.image = photos[index]
