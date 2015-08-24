@@ -34,10 +34,9 @@ class ButtonPicker: UIButton {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    subscribe()
-
     [numberLabel].map { self.addSubview($0) }
-
+    
+    subscribe()
     setupButton()
     setupConstraints()
   }
