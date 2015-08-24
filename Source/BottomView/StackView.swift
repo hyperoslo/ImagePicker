@@ -41,8 +41,7 @@ class StackView: UIView {
     views[0].alpha = 1
     self.addGestureRecognizer(tapGestureRecognizer)
     layoutSubviews()
-    renderViews()
-
+    //renderViews()
   }
 
   deinit {
@@ -51,13 +50,13 @@ class StackView: UIView {
 
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "imageDidPush",
-      name: ImageStack.sharedStack.imageDidPushNotification,
+      selector: "imageDidPush:",
+      name: ImageStack.Notifications.imageDidPushNotification,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "imageStackDidDrop:",
-      name: ImageStack.sharedStack.imageDidDropNotification,
+      name: ImageStack.Notifications.imageDidDropNotification,
       object: nil)
   }
 
@@ -88,7 +87,7 @@ class StackView: UIView {
 }
 
 extension StackView {
-  func imageDidPush() {
+  func imageDidPush(notification: NSNotification) {
 
     //TODO indexOf in swift 2
     let emptyView = views.filter( {$0.image == nil} ).first
@@ -96,31 +95,35 @@ extension StackView {
     if let emptyView = emptyView {
       animateImageView(emptyView)
     }
-    renderViews()
-  }
-
-  func imageStackDidDrop(notification: NSNotification) {
-    if let userInfo = notification.userInfo as? [String : UIImage] {
-      // // Uncomment if you want fancy animations
-//      let image = userInfo[ImageStack.sharedStack.imageKey]
-//      let viewToEmpty = views.filter( {$0.image == image} ).first
-//
-//      if let viewToEmpty = viewToEmpty {
-//        animateImageView(viewToEmpty)
-//      }
-
-      renderViews()
+    if let sender = notification.object as? ImageStack {
+      renderViews(sender.images)
     }
   }
 
-  func renderViews() {
+  func imageStackDidDrop(notification: NSNotification) {
+    if let sender = notification.object as? ImageStack {
+      if let userInfo = notification.userInfo as? [String : UIImage] {
+        // // Uncomment if you want fancy animations
+        //      let image = userInfo[ImageStack.Notifications.imageKey]
+        //      let viewToEmpty = views.filter( {$0.image == image} ).first
+        //
+        //      if let viewToEmpty = viewToEmpty {
+        //        animateImageView(viewToEmpty)
+        //      }
+        
+        renderViews(sender.images)
+      }
+    }
+  }
+
+  func renderViews(images: [UIImage]) {
     //because Swift is not functional language
-    if ImageStack.sharedStack.images.count < 1 {
+    if images.count < 1 {
       views.map { $0.image = nil}
       return
     }
 
-    let photos = suffix(ImageStack.sharedStack.images, 4)
+    let photos = suffix(images, 4)
 
     //TODO: This can be done in functional-style
     for (index, view) in enumerate(views) {

@@ -47,13 +47,13 @@ class ButtonPicker: UIButton {
 
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "recalculatePhotosCount",
-      name: ImageStack.sharedStack.imageDidPushNotification,
+      selector: "recalculatePhotosCount:",
+      name: ImageStack.Notifications.imageDidPushNotification,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "recalculatePhotosCount",
-      name: ImageStack.sharedStack.imageDidDropNotification,
+      selector: "recalculatePhotosCount:",
+      name: ImageStack.Notifications.imageDidDropNotification,
       object: nil)
   }
 
@@ -84,9 +84,11 @@ class ButtonPicker: UIButton {
 
   // MARK: - Actions
 
-  func recalculatePhotosCount() {
-    let photoNumber = ImageStack.sharedStack.images.count
-    numberLabel.text = photoNumber == 0 ? "" : String(photoNumber)
+  func recalculatePhotosCount(notification: NSNotification) {
+    if let sender = notification.object as? ImageStack {
+      let photoNumber = sender.images.count
+      numberLabel.text = photoNumber == 0 ? "" : String(photoNumber)
+    }
   }
 
   func pickerButtonDidPress(button: UIButton) {
