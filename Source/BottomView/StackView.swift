@@ -36,18 +36,36 @@ class StackView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
+    subscribe()
     views.map{ self.addSubview($0) }
     views[0].alpha = 1
     self.addGestureRecognizer(tapGestureRecognizer)
     layoutSubviews()
-    ImageStack.sharedStack.delegate = self
     renderViews()
+
+  }
+
+  deinit {
+    NSNotificationCenter.defaultCenter().removeObserver(self)
+  }
+
+  func subscribe() {
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "imageDidPush",
+      name: ImageStack.sharedStack.imageDidPushNotification,
+      object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "imageStackDidDrop:",
+      name: ImageStack.sharedStack.imageDidDropNotification,
+      object: nil)
   }
 
   override func layoutSubviews() {
     let step: CGFloat = -3.0
-    let viewSize = CGSize(width: self.frame.width * 0.8,
-                        height: self.frame.height * 0.8)
+    let scale: CGFloat = 0.8
+    let viewSize = CGSize(width: self.frame.width * scale,
+                        height: self.frame.height * scale)
 
     let offset = -step * CGFloat(views.count)
     var origin = CGPoint(x: offset, y: offset)
@@ -69,8 +87,8 @@ class StackView: UIView {
   }
 }
 
-extension StackView: ImageStackDelegate {
-  func imageDidPush(image: UIImage) {
+extension StackView {
+  func imageDidPush() {
 
     //TODO indexOf in swift 2
     let emptyView = views.filter( {$0.image == nil} ).first
@@ -81,15 +99,18 @@ extension StackView: ImageStackDelegate {
     renderViews()
   }
 
-  func imageStackDidDrop(image: UIImage) {
-    // Uncomment if you want fancy animations
-//    let viewToEmpty = views.filter( {$0.image == image} ).first
+  func imageStackDidDrop(notification: NSNotification) {
+    if let userInfo = notification.userInfo as? [String : UIImage] {
+      // // Uncomment if you want fancy animations
+//      let image = userInfo[ImageStack.sharedStack.imageKey]
+//      let viewToEmpty = views.filter( {$0.image == image} ).first
 //
-//    if let viewToEmpty = viewToEmpty {
-//      animateImageView(viewToEmpty)
-//    }
+//      if let viewToEmpty = viewToEmpty {
+//        animateImageView(viewToEmpty)
+//      }
 
-    renderViews()
+      renderViews()
+    }
   }
 
   func renderViews() {
