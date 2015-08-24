@@ -27,12 +27,6 @@ class ButtonPicker: UIButton {
     return configuration
   }()
 
-  internal var photoNumber: Int = 0 {
-    didSet {
-      numberLabel.text = photoNumber == 0 ? "" : "\(photoNumber)"
-    }
-  }
-
   var delegate: ButtonPickerDelegate?
 
   // MARK: - Initializers
@@ -40,10 +34,28 @@ class ButtonPicker: UIButton {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
+    subscribe()
+
     [numberLabel].map { self.addSubview($0) }
 
     setupButton()
     setupConstraints()
+  }
+
+  deinit {
+    NSNotificationCenter.defaultCenter().removeObserver(self)
+  }
+
+  func subscribe() {
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "recalculatePhotosCount",
+      name: ImageStack.sharedStack.imageDidPushNotification,
+      object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "recalculatePhotosCount",
+      name: ImageStack.sharedStack.imageDidDropNotification,
+      object: nil)
   }
 
   required init(coder aDecoder: NSCoder) {
@@ -73,10 +85,14 @@ class ButtonPicker: UIButton {
 
   // MARK: - Actions
 
+  func recalculatePhotosCount() {
+    let photoNumber = ImageStack.sharedStack.images.count
+    numberLabel.text = photoNumber == 0 ? "" : String(photoNumber)
+  }
+
   func pickerButtonDidPress(button: UIButton) {
     backgroundColor = .whiteColor()
     numberLabel.textColor = .blackColor()
-    photoNumber = photoNumber + 1
     numberLabel.sizeToFit()
     delegate?.buttonDidPress()
   }

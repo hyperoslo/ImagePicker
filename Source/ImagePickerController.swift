@@ -140,7 +140,6 @@ extension ImagePickerController: BottomContainerViewDelegate {
     cameraController.takePicture()
     let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
-    bottomContainer.pickerButton.photoNumber = ImageStack.sharedStack.images.count
   }
 
   func doneButtonDidPress() {
@@ -173,7 +172,6 @@ extension ImagePickerController: CameraViewDelegate {
     galleryView.shouldTransform = true
     let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
-    bottomContainer.pickerButton.photoNumber = ImageStack.sharedStack.images.count
 
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
