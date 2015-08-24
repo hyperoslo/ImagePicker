@@ -168,7 +168,6 @@ extension ImagePickerController: CameraViewDelegate {
   func imageToLibrary(image: UIImage) {
     ImageStack.sharedStack.pushImage(image)
     galleryView.images.insertObject(image, atIndex: 0)
-    ImageStack.sharedStack.pushImage(image)
     galleryView.shouldTransform = true
     let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
