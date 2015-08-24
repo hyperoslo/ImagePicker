@@ -7,7 +7,7 @@ protocol StackViewDelegate {
 class StackView: UIView {
 
   struct Dimensions {
-    static let imageSize: CGFloat = 52
+    static let imageSize: CGFloat = 70
   }
 
   var delegate: StackViewDelegate?
@@ -45,12 +45,17 @@ class StackView: UIView {
   }
 
   override func layoutSubviews() {
-    let step = -4
-    let viewSize = CGSize(width: self.frame.width * 0.6, height: self.frame.height * 0.6)
-    
+    let step: CGFloat = -3.0
+    let viewSize = CGSize(width: self.frame.width * 0.8,
+                        height: self.frame.height * 0.8)
+
+    let offset = -step * CGFloat(views.count)
+    var origin = CGPoint(x: offset, y: offset)
+
     for (i, view) in enumerate(views) {
-      var side = i * step
-      var frame = CGRect(origin: CGPoint(x: side, y: side), size: viewSize)
+      origin.x += step
+      origin.y += step
+      var frame = CGRect(origin: origin, size: viewSize)
       view.frame = frame
     }
   }
