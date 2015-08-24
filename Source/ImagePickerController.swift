@@ -14,11 +14,14 @@ public class ImagePickerController: UIViewController {
     static let bottomContainerHeight: CGFloat = 108
   }
 
+  var stack = ImageStack()
+
   lazy public var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
     galleryView.backgroundColor = self.configuration.mainColor
     galleryView.setTranslatesAutoresizingMaskIntoConstraints(false)
     galleryView.delegate = self
+    galleryView.selectedStack = self.stack
 
     return galleryView
     }()
@@ -152,7 +155,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func stackViewDidPress() {
-    delegate?.stackViewDidPress?(ImageStack.sharedStack.images)
+    delegate?.stackViewDidPress?(stack.images)
   }
 }
 
@@ -166,8 +169,8 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   func imageToLibrary(image: UIImage) {
-    ImageStack.sharedStack.pushImage(image)
     galleryView.images.insertObject(image, atIndex: 0)
+    stack.pushImage(image)
     galleryView.shouldTransform = true
     let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
@@ -223,11 +226,6 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
   func dismissViewController(controller: UIAlertController) {
     dismissViewControllerAnimated(true, completion: nil)
-  }
-
-  func imageSelected(array: [UIImage]) {
-    let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
-    bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
 
   func panGestureDidStart() {
