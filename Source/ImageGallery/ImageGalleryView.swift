@@ -7,7 +7,7 @@ protocol ImageGalleryPanGestureDelegate {
   func panGestureDidStart()
   func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
-  func imageSelected(array: NSMutableArray)
+  func imageSelected(array: [UIImage])
   func presentViewController(controller: UIAlertController)
   func dismissViewController(controller: UIAlertController)
   func permissionGranted()
@@ -91,7 +91,6 @@ public class ImageGalleryView: UIView {
     return label
     }()
 
-  public var selectedImages: NSMutableArray!
   var collectionSize: CGSize!
   var delegate: ImageGalleryPanGestureDelegate?
   var shouldTransform = false
@@ -102,7 +101,6 @@ public class ImageGalleryView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    selectedImages = NSMutableArray()
     collectionView.registerClass(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
@@ -273,7 +271,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
       ImageStack.sharedStack.pushImage(image)
     }
 
-    delegate?.imageSelected(selectedImages)
+    delegate?.imageSelected(ImageStack.sharedStack.images)
   }
 
   public func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {

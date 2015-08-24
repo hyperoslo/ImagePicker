@@ -138,13 +138,13 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
     cameraController.takePicture()
-    let title = galleryView.selectedImages.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
+    let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
-    bottomContainer.pickerButton.photoNumber = galleryView.selectedImages.count
+    bottomContainer.pickerButton.photoNumber = ImageStack.sharedStack.images.count
   }
 
   func doneButtonDidPress() {
-    delegate?.doneButtonDidPress?(galleryView.selectedImages.mutableCopy() as! [UIImage])
+    delegate?.doneButtonDidPress?(ImageStack.sharedStack.images)
   }
 
   func cancelButtonDidPress() {
@@ -153,7 +153,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func stackViewDidPress() {
-    delegate?.stackViewDidPress?(galleryView.selectedImages.mutableCopy() as! [UIImage])
+    delegate?.stackViewDidPress?(ImageStack.sharedStack.images)
   }
 }
 
@@ -169,11 +169,11 @@ extension ImagePickerController: CameraViewDelegate {
   func imageToLibrary(image: UIImage) {
     ImageStack.sharedStack.pushImage(image)
     galleryView.images.insertObject(image, atIndex: 0)
-    galleryView.selectedImages.insertObject(image, atIndex: 0)
+    ImageStack.sharedStack.pushImage(image)
     galleryView.shouldTransform = true
-    let title = galleryView.selectedImages.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
+    let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
-    bottomContainer.pickerButton.photoNumber = galleryView.selectedImages.count
+    bottomContainer.pickerButton.photoNumber = ImageStack.sharedStack.images.count
 
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
@@ -228,8 +228,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     dismissViewControllerAnimated(true, completion: nil)
   }
 
-  func imageSelected(array: NSMutableArray) {
-    let title = galleryView.selectedImages.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
+  func imageSelected(array: [UIImage]) {
+    let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
 
