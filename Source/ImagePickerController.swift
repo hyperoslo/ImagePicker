@@ -73,7 +73,7 @@ public class ImagePickerController: UIViewController {
     super.viewDidLoad()
 
     view.backgroundColor = .whiteColor()
-    
+
     [topView, cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
     view.backgroundColor = self.configuration.mainColor
 
@@ -141,12 +141,12 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
     cameraController.takePicture()
-    let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
+    let title = stack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
 
   func doneButtonDidPress() {
-    delegate?.doneButtonDidPress?(ImageStack.sharedStack.images)
+    delegate?.doneButtonDidPress?(stack.images)
   }
 
   func cancelButtonDidPress() {
@@ -172,7 +172,7 @@ extension ImagePickerController: CameraViewDelegate {
     galleryView.images.insertObject(image, atIndex: 0)
     stack.pushImage(image)
     galleryView.shouldTransform = true
-    let title = ImageStack.sharedStack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
+    let title = stack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
 
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
