@@ -3,7 +3,7 @@ import UIKit
 @objc
 public protocol ImagePickerDelegate {
 
-  optional func stackViewDidPress(images: [UIImage])
+  optional func wrapperDidPress(images: [UIImage])
   optional func doneButtonDidPress(images: [UIImage])
   optional func cancelButtonDidPress()
 }
@@ -155,7 +155,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func stackViewDidPress() {
-    delegate?.stackViewDidPress?(stack.images)
+    delegate?.wrapperDidPress?(stack.images)
   }
 }
 
@@ -204,7 +204,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   func hideViews() {
     galleryView.alpha = 0
     bottomContainer.pickerButton.enabled = false
-    bottomContainer.stackView.tapGestureRecognizer.enabled = false
+    bottomContainer.tapGestureRecognizer.enabled = false
     topView.flashButton.enabled = false
     topView.rotateCamera.enabled = false
   }
@@ -214,7 +214,6 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     cameraController.initializeCamera()
     galleryView.alpha = 1
     bottomContainer.pickerButton.enabled = true
-    bottomContainer.stackView.tapGestureRecognizer.enabled = true
     bottomContainer.tapGestureRecognizer.enabled = true
     topView.flashButton.enabled = true
     topView.rotateCamera.enabled = true

@@ -27,19 +27,11 @@ class StackView: UIView {
     return array
     }()
 
-  lazy var tapGestureRecognizer: UITapGestureRecognizer = {
-    let gesture = UITapGestureRecognizer()
-    gesture.addTarget(self, action: "handleTapGestureRecognizer:")
-
-    return gesture
-    }()
-
   override init(frame: CGRect) {
     super.init(frame: frame)
     subscribe()
     views.map{ self.addSubview($0) }
     views[0].alpha = 1
-    self.addGestureRecognizer(tapGestureRecognizer)
     layoutSubviews()
   }
 
@@ -74,10 +66,6 @@ class StackView: UIView {
       var frame = CGRect(origin: origin, size: viewSize)
       view.frame = frame
     }
-  }
-
-  func handleTapGestureRecognizer(gesture: UITapGestureRecognizer) {
-    delegate?.stackViewDidPress()
   }
 
   required init(coder aDecoder: NSCoder) {

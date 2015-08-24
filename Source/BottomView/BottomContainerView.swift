@@ -164,6 +164,10 @@ class BottomContainerView: UIView {
     }
   }
 
+  func handleTapGestureRecognizer(recognizer: UITapGestureRecognizer) {
+    delegate?.stackViewDidPress()
+  }
+
   private func animateImageView(imageView: UIImageView) {
     imageView.transform = CGAffineTransformMakeScale(0, 0)
 
@@ -183,14 +187,5 @@ extension BottomContainerView: ButtonPickerDelegate {
 
   func buttonDidPress() {
     delegate?.pickerButtonDidPress()
-  }
-}
-
-// MARK: - StackViewDelegate methods
-
-extension BottomContainerView: StackViewDelegate {
-
-  func stackViewDidPress() {
-    delegate?.stackViewDidPress()
   }
 }
