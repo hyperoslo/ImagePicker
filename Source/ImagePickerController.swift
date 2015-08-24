@@ -14,7 +14,7 @@ public class ImagePickerController: UIViewController {
     static let bottomContainerHeight: CGFloat = 108
   }
 
-  var stack = ImageStack()
+  public var stack = ImageStack()
 
   lazy public var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
