@@ -25,7 +25,7 @@ class ButtonPicker: UIButton {
   lazy var configuration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
-  }()
+    }()
 
   var delegate: ButtonPickerDelegate?
 
@@ -35,7 +35,7 @@ class ButtonPicker: UIButton {
     super.init(frame: frame)
 
     [numberLabel].map { self.addSubview($0) }
-    
+
     subscribe()
     setupButton()
     setupConstraints()
@@ -58,7 +58,7 @@ class ButtonPicker: UIButton {
   }
 
   required init(coder aDecoder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
+    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: - Configuration
