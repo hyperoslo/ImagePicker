@@ -48,12 +48,12 @@ class ButtonPicker: UIButton {
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "recalculatePhotosCount:",
-      name: ImageStack.sharedStack.imageDidPushNotification,
+      name: ImageStack.Notifications.imageDidPushNotification,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "recalculatePhotosCount:",
-      name: ImageStack.sharedStack.imageDidDropNotification,
+      name: ImageStack.Notifications.imageDidDropNotification,
       object: nil)
   }
 

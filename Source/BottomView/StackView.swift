@@ -51,12 +51,12 @@ class StackView: UIView {
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "imageDidPush:",
-      name: ImageStack.sharedStack.imageDidPushNotification,
+      name: ImageStack.Notifications.imageDidPushNotification,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "imageStackDidDrop:",
-      name: ImageStack.sharedStack.imageDidDropNotification,
+      name: ImageStack.Notifications.imageDidDropNotification,
       object: nil)
   }
 
@@ -104,7 +104,7 @@ extension StackView {
     if let sender = notification.object as? ImageStack {
       if let userInfo = notification.userInfo as? [String : UIImage] {
         // // Uncomment if you want fancy animations
-        //      let image = userInfo[ImageStack.sharedStack.imageKey]
+        //      let image = userInfo[ImageStack.Notifications.imageKey]
         //      let viewToEmpty = views.filter( {$0.image == image} ).first
         //
         //      if let viewToEmpty = viewToEmpty {
