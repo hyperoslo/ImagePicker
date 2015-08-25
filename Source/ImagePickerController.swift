@@ -120,6 +120,11 @@ public class ImagePickerController: UIViewController {
       selector: "adjustButtonTitle:",
       name: ImageStack.Notifications.imageDidDropNotification,
       object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "adjustButtonTitle:",
+      name: ImageStack.Notifications.stackDidReload,
+      object: nil)
   }
 
   func adjustButtonTitle(notification: NSNotification) {

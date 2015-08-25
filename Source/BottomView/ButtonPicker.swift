@@ -55,6 +55,11 @@ class ButtonPicker: UIButton {
       selector: "recalculatePhotosCount:",
       name: ImageStack.Notifications.imageDidDropNotification,
       object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "recalculatePhotosCount:",
+      name: ImageStack.Notifications.stackDidReload,
+      object: nil)
   }
 
   required init(coder aDecoder: NSCoder) {

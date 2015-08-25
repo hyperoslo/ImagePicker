@@ -46,8 +46,13 @@ class StackView: UIView {
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "imageStackDidDrop:",
+      selector: "imageStackDidChangeContent:",
       name: ImageStack.Notifications.imageDidDropNotification,
+      object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "imageStackDidChangeContent:",
+      name: ImageStack.Notifications.stackDidReload,
       object: nil)
   }
 
@@ -87,11 +92,9 @@ extension StackView {
     }
   }
 
-  func imageStackDidDrop(notification: NSNotification) {
+  func imageStackDidChangeContent(notification: NSNotification) {
     if let sender = notification.object as? ImageStack {
-      if let userInfo = notification.userInfo as? [String : UIImage] {
-        renderViews(sender.images)
-      }
+      renderViews(sender.images)
     }
   }
 

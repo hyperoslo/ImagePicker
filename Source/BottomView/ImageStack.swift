@@ -5,10 +5,15 @@ public class ImageStack {
   public struct Notifications {
     public static let imageDidPushNotification = "imageDidPush:"
     public static let imageDidDropNotification = "imageDidDrop:"
+    public static let stackDidReload = "stackDidReload:"
     public static let imageKey = "image"
   }
 
-  public var images: [UIImage] = [UIImage]()
+  public var images: [UIImage] = [UIImage]() {
+    didSet {
+      NSNotificationCenter.defaultCenter().postNotificationName(Notifications.stackDidReload, object: self, userInfo: nil)
+    }
+  }
 
   public func pushImage(image: UIImage) {
     images.append(image)
