@@ -129,7 +129,7 @@ public class ImagePickerController: UIViewController {
 
   func adjustButtonTitle(notification: NSNotification) {
     if let sender = notification.object as? ImageStack {
-      let title = sender.images.count != 0 ?
+      let title = !sender.images.isEmpty ?
         self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
       bottomContainer.doneButton.setTitle(title, forState: .Normal)
     }
@@ -187,7 +187,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
     delegate?.cancelButtonDidPress?()
   }
 
-  func stackViewDidPress() {
+  func imageStackViewDidPress() {
     delegate?.wrapperDidPress?(stack.images)
   }
 }

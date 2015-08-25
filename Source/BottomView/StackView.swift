@@ -1,16 +1,16 @@
 import UIKit
 
-protocol StackViewDelegate {
-  func stackViewDidPress()
+protocol ImageStackViewDelegate {
+  func imageStackViewDidPress()
 }
 
-class StackView: UIView {
+class ImageStackView: UIView {
 
   struct Dimensions {
     static let imageSize: CGFloat = 70
   }
 
-  var delegate: StackViewDelegate?
+  var delegate: ImageStackViewDelegate?
 
   var views: [UIImageView] = {
     var array = [UIImageView]()
@@ -78,11 +78,11 @@ class StackView: UIView {
   }
 }
 
-extension StackView {
+extension ImageStackView {
   func imageDidPush(notification: NSNotification) {
 
     //TODO indexOf in swift 2
-    let emptyView = views.filter( {$0.image == nil} ).first
+    let emptyView = views.filter {$0.image == nil}.first
 
     if let emptyView = emptyView {
       animateImageView(emptyView)

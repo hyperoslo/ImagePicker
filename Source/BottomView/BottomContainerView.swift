@@ -5,7 +5,7 @@ protocol BottomContainerViewDelegate {
   func pickerButtonDidPress()
   func doneButtonDidPress()
   func cancelButtonDidPress()
-  func stackViewDidPress()
+  func imageStackViewDidPress()
 }
 
 class BottomContainerView: UIView {
@@ -40,8 +40,8 @@ class BottomContainerView: UIView {
     return button
     }()
 
-  lazy var stackView: StackView = {
-    let view = StackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+  lazy var stackView: ImageStackView = {
+    let view = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
 
     return view
@@ -129,11 +129,11 @@ class BottomContainerView: UIView {
 
     addConstraint(NSLayoutConstraint(item: stackView, attribute: .Width,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: StackView.Dimensions.imageSize))
+      multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
 
     addConstraint(NSLayoutConstraint(item: stackView, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: StackView.Dimensions.imageSize))
+      multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
 
     addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
@@ -165,7 +165,7 @@ class BottomContainerView: UIView {
   }
 
   func handleTapGestureRecognizer(recognizer: UITapGestureRecognizer) {
-    delegate?.stackViewDidPress()
+    delegate?.imageStackViewDidPress()
   }
 
   private func animateImageView(imageView: UIImageView) {
