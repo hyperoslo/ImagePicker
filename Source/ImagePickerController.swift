@@ -72,6 +72,8 @@ public class ImagePickerController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
 
+    subscribe()
+
     view.backgroundColor = .whiteColor()
 
     [topView, cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
@@ -79,6 +81,7 @@ public class ImagePickerController: UIViewController {
 
     setupConstraints()
   }
+
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
@@ -100,6 +103,33 @@ public class ImagePickerController: UIViewController {
       UIScreen.mainScreen().bounds.width, cameraController.view.frame.height)
     galleryView.checkStatus()
   }
+
+  // MARK: - Notifications
+
+  deinit {
+    NSNotificationCenter.defaultCenter().removeObserver(self)
+  }
+
+  func subscribe() {
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "adjustButtonTitle:",
+      name: ImageStack.Notifications.imageDidPushNotification,
+      object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "adjustButtonTitle:",
+      name: ImageStack.Notifications.imageDidDropNotification,
+      object: nil)
+  }
+
+  func adjustButtonTitle(notification: NSNotification) {
+    if let sender = notification.object as? ImageStack {
+      let title = sender.images.count != 0 ?
+        self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
+      bottomContainer.doneButton.setTitle(title, forState: .Normal)
+    }
+  }
+
 
   // MARK: - Autolayout
 
@@ -141,8 +171,6 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
     cameraController.takePicture()
-    let title = stack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
-    bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
 
   func doneButtonDidPress() {
@@ -172,8 +200,6 @@ extension ImagePickerController: CameraViewDelegate {
     galleryView.images.insertObject(image, atIndex: 0)
     stack.pushImage(image)
     galleryView.shouldTransform = true
-    let title = stack.images.count != 0 ? self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
-    bottomContainer.doneButton.setTitle(title, forState: .Normal)
 
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
