@@ -9,11 +9,7 @@ public class ImageStack {
     public static let imageKey = "image"
   }
 
-  public var images: [UIImage] = [UIImage]() {
-    didSet {
-      NSNotificationCenter.defaultCenter().postNotificationName(Notifications.stackDidReload, object: self, userInfo: nil)
-    }
-  }
+  public var images: [UIImage] = [UIImage]()
 
   public func pushImage(image: UIImage) {
     images.append(image)
@@ -23,6 +19,11 @@ public class ImageStack {
   public func dropImage(image: UIImage) {
     images = images.filter() {$0 != image}
     NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidDropNotification, object: self, userInfo: ["image" : image])
+  }
+
+  public func resetImages(newImages: [UIImage]) {
+    images = newImages
+    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.stackDidReload, object: self, userInfo: nil)
   }
 
   public func containsImage(image: UIImage) -> Bool {
