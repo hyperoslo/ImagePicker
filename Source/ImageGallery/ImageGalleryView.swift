@@ -117,6 +117,19 @@ public class ImageGalleryView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: - Notifications
+
+  deinit {
+    NSNotificationCenter.defaultCenter().removeObserver(collectionView)
+  }
+
+  func subscribe() {
+    NSNotificationCenter.defaultCenter().addObserver(collectionView,
+      selector: "reloadData",
+      name: ImageStack.Notifications.stackDidReload,
+      object: nil)
+  }
+
   // MARK: - Layout
 
   func updateFrames() {
