@@ -101,6 +101,7 @@ extension StackView {
   func renderViews(images: [UIImage]) {
     if images.count < 1 {
       views.map { $0.image = nil}
+      views[0].alpha = 1
       return
     }
 
