@@ -5,7 +5,6 @@ public protocol ImagePickerDelegate {
 
   optional func wrapperDidPress(images: [UIImage])
   optional func doneButtonDidPress(images: [UIImage])
-  optional func cancelButtonDidPress()
 }
 
 public class ImagePickerController: UIViewController {
@@ -72,8 +71,6 @@ public class ImagePickerController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
 
-    subscribe()
-
     view.backgroundColor = .whiteColor()
 
     [topView, cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
@@ -102,38 +99,6 @@ public class ImagePickerController: UIViewController {
       UIScreen.mainScreen().bounds.width, cameraController.view.frame.height)
     galleryView.checkStatus()
   }
-
-  // MARK: - Notifications
-
-  deinit {
-    NSNotificationCenter.defaultCenter().removeObserver(self)
-  }
-
-  func subscribe() {
-    NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
-      name: ImageStack.Notifications.imageDidPush,
-      object: nil)
-
-    NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
-      name: ImageStack.Notifications.imageDidDrop,
-      object: nil)
-
-    NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
-      name: ImageStack.Notifications.stackDidReload,
-      object: nil)
-  }
-
-  func adjustButtonTitle(notification: NSNotification) {
-    if let sender = notification.object as? ImageStack {
-      let title = !sender.images.isEmpty ?
-        configuration.doneButtonTitle : configuration.cancelButtonTitle
-      bottomContainer.doneButton.setTitle(title, forState: .Normal)
-    }
-  }
-
 
   // MARK: - Autolayout
 
@@ -179,11 +144,6 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func doneButtonDidPress() {
     delegate?.doneButtonDidPress?(stack.images)
-  }
-
-  func cancelButtonDidPress() {
-    dismissViewControllerAnimated(true, completion: nil)
-    delegate?.cancelButtonDidPress?()
   }
 
   func imageStackViewDidPress() {
