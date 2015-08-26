@@ -7,7 +7,6 @@ protocol ImageGalleryPanGestureDelegate {
   func panGestureDidStart()
   func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
-  func imageSelected(array: NSMutableArray)
   func presentViewController(controller: UIAlertController)
   func dismissViewController(controller: UIAlertController)
   func permissionGranted()
@@ -69,6 +68,8 @@ public class ImageGalleryView: UIView {
     return gesture
     }()
 
+  lazy var selectedStack = ImageStack()
+
   lazy var images: NSMutableArray = {
     let images = NSMutableArray()
     return images
@@ -91,7 +92,6 @@ public class ImageGalleryView: UIView {
     return label
     }()
 
-  public var selectedImages: NSMutableArray!
   var collectionSize: CGSize!
   var delegate: ImageGalleryPanGestureDelegate?
   var shouldTransform = false
@@ -102,7 +102,6 @@ public class ImageGalleryView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    selectedImages = NSMutableArray()
     collectionView.registerClass(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
@@ -259,21 +258,19 @@ extension ImageGalleryView: UICollectionViewDelegate {
 
     if cell.selectedImageView.image != nil {
       UIView.animateWithDuration(0.2, animations: { [unowned self] in
-        cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+        cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
         }, completion: { _ in
           cell.selectedImageView.image = nil
       })
-      selectedImages.removeObject(image)
+      selectedStack.dropImage(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
       cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
       UIView.animateWithDuration(0.2, animations: { _ in
         cell.selectedImageView.transform = CGAffineTransformIdentity
-        })
-      selectedImages.insertObject(image, atIndex: 0)
+      })
+      selectedStack.pushImage(image)
     }
-
-    delegate?.imageSelected(selectedImages)
   }
 
   public func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {

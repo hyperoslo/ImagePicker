@@ -1,6 +1,6 @@
 import UIKit
 
-protocol ButtonPickerDelegate {
+protocol ButtonPickerDelegate: class {
 
   func buttonDidPress()
 }
@@ -25,15 +25,9 @@ class ButtonPicker: UIButton {
   lazy var configuration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
-  }()
+    }()
 
-  internal var photoNumber: Int = 0 {
-    didSet {
-      numberLabel.text = photoNumber == 0 ? "" : "\(photoNumber)"
-    }
-  }
-
-  var delegate: ButtonPickerDelegate?
+  weak var delegate: ButtonPickerDelegate?
 
   // MARK: - Initializers
 
@@ -42,12 +36,34 @@ class ButtonPicker: UIButton {
 
     [numberLabel].map { self.addSubview($0) }
 
+    subscribe()
     setupButton()
     setupConstraints()
   }
 
+  deinit {
+    NSNotificationCenter.defaultCenter().removeObserver(self)
+  }
+
+  func subscribe() {
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "recalculatePhotosCount:",
+      name: ImageStack.Notifications.imageDidPush,
+      object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "recalculatePhotosCount:",
+      name: ImageStack.Notifications.imageDidDrop,
+      object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "recalculatePhotosCount:",
+      name: ImageStack.Notifications.stackDidReload,
+      object: nil)
+  }
+
   required init(coder aDecoder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
+    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: - Configuration
@@ -73,10 +89,15 @@ class ButtonPicker: UIButton {
 
   // MARK: - Actions
 
+  func recalculatePhotosCount(notification: NSNotification) {
+    if let sender = notification.object as? ImageStack {
+      numberLabel.text = sender.images.isEmpty ? "" : String(sender.images.count)
+    }
+  }
+
   func pickerButtonDidPress(button: UIButton) {
     backgroundColor = .whiteColor()
     numberLabel.textColor = .blackColor()
-    photoNumber = photoNumber + 1
     numberLabel.sizeToFit()
     delegate?.buttonDidPress()
   }

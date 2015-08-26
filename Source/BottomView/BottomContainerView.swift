@@ -5,7 +5,7 @@ protocol BottomContainerViewDelegate {
   func pickerButtonDidPress()
   func doneButtonDidPress()
   func cancelButtonDidPress()
-  func imageWrapperDidPress()
+  func imageStackViewDidPress()
 }
 
 class BottomContainerView: UIView {
@@ -40,13 +40,12 @@ class BottomContainerView: UIView {
     return button
     }()
 
-  lazy var imageWrapper: ImageWrapper = {
-    let view = ImageWrapper()
+  lazy var stackView: ImageStackView = {
+    let view = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
 
     return view
     }()
-
   lazy var configuration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
@@ -75,9 +74,9 @@ class BottomContainerView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    [borderPickerButton, pickerButton, doneButton, imageWrapper, topSeparator].map { self.addSubview($0) }
-    backgroundColor = self.configuration.backgroundColor
-    imageWrapper.addGestureRecognizer(self.tapGestureRecognizer)
+    [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].map { self.addSubview($0) }
+    backgroundColor = configuration.backgroundColor
+    stackView.addGestureRecognizer(tapGestureRecognizer)
 
     setupConstraints()
   }
@@ -128,19 +127,19 @@ class BottomContainerView: UIView {
       relatedBy: .Equal, toItem: self, attribute: .Right,
       multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
 
-    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .Width,
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .Width,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ImageWrapper.Dimensions.imageSize))
+      multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
 
-    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .Height,
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ImageWrapper.Dimensions.imageSize))
+      multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
 
-    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .CenterY,
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
       multiplier: 1, constant: 0))
 
-    addConstraint(NSLayoutConstraint(item: imageWrapper, attribute: .CenterX,
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .Left,
       multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/4))
 
@@ -165,53 +164,8 @@ class BottomContainerView: UIView {
     }
   }
 
-  func handleTapGestureRecognizer(gesture: UITapGestureRecognizer) {
-    delegate?.imageWrapperDidPress()
-  }
-
-  // MARK: - Wrapper methods
-
-  func updateWrapperImages(array: NSMutableArray) {
-    switch array.count {
-    case 1:
-      imageWrapper.firstImageView.image = array.firstObject as? UIImage
-      imageWrapper.secondImageView.image = nil
-      imageWrapper.secondImageView.alpha = 0
-      if pastCount < 1 {
-        animateImageView(imageWrapper.firstImageView)
-      }
-    case 0:
-      imageWrapper.firstImageView.image = nil
-    case 2:
-      imageWrapper.firstImageView.image = array[1] as? UIImage
-      imageWrapper.secondImageView.image = array.firstObject as? UIImage
-      imageWrapper.secondImageView.alpha = 1
-      imageWrapper.thirdImageView.alpha = 0
-      if pastCount < 2 {
-        animateImageView(imageWrapper.secondImageView)
-      }
-    case 3:
-      imageWrapper.firstImageView.image = array[2] as? UIImage
-      imageWrapper.secondImageView.image = array[1] as? UIImage
-      imageWrapper.thirdImageView.image = array.firstObject as? UIImage
-      imageWrapper.thirdImageView.alpha = 1
-      imageWrapper.fourthImageView.alpha = 0
-      if pastCount < 3 {
-        animateImageView(imageWrapper.thirdImageView)
-      }
-    default:
-      imageWrapper.fourthImageView.alpha = 1
-      imageWrapper.firstImageView.image = array.lastObject as? UIImage
-      imageWrapper.secondImageView.image = array[array.count - 2] as? UIImage
-      imageWrapper.thirdImageView.image = array[array.count - 3] as? UIImage
-      imageWrapper.fourthImageView.image = array[array.count - 4] as? UIImage
-      if pastCount < array.count {
-        animateImageView(imageWrapper.fourthImageView)
-      }
-    }
-
-    pastCount = array.count
-    pickerButton.photoNumber = array.count
+  func handleTapGestureRecognizer(recognizer: UITapGestureRecognizer) {
+    delegate?.imageStackViewDidPress()
   }
 
   private func animateImageView(imageView: UIImageView) {
