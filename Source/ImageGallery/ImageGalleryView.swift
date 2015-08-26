@@ -68,7 +68,7 @@ public class ImageGalleryView: UIView {
     return gesture
     }()
 
-  var selectedStack: ImageStack?
+  lazy var selectedStack = ImageStack()
 
   lazy var images: NSMutableArray = {
     let images = NSMutableArray()
@@ -262,14 +262,14 @@ extension ImageGalleryView: UICollectionViewDelegate {
         }, completion: { _ in
           cell.selectedImageView.image = nil
       })
-      selectedStack?.dropImage(image)
+      selectedStack.dropImage(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
       cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
       UIView.animateWithDuration(0.2, animations: { _ in
         cell.selectedImageView.transform = CGAffineTransformIdentity
       })
-      selectedStack?.pushImage(image)
+      selectedStack.pushImage(image)
     }
   }
 

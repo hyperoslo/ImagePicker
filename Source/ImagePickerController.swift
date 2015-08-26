@@ -82,7 +82,6 @@ public class ImagePickerController: UIViewController {
     setupConstraints()
   }
 
-
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
     UIApplication.sharedApplication().statusBarHidden = true
@@ -113,12 +112,12 @@ public class ImagePickerController: UIViewController {
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "adjustButtonTitle:",
-      name: ImageStack.Notifications.imageDidPushNotification,
+      name: ImageStack.Notifications.imageDidPush,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "adjustButtonTitle:",
-      name: ImageStack.Notifications.imageDidDropNotification,
+      name: ImageStack.Notifications.imageDidDrop,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
@@ -130,7 +129,7 @@ public class ImagePickerController: UIViewController {
   func adjustButtonTitle(notification: NSNotification) {
     if let sender = notification.object as? ImageStack {
       let title = !sender.images.isEmpty ?
-        self.configuration.doneButtonTitle : self.configuration.cancelButtonTitle
+        configuration.doneButtonTitle : configuration.cancelButtonTitle
       bottomContainer.doneButton.setTitle(title, forState: .Normal)
     }
   }

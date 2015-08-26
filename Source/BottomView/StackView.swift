@@ -1,6 +1,6 @@
 import UIKit
 
-protocol ImageStackViewDelegate {
+protocol ImageStackViewDelegate: class {
   func imageStackViewDidPress()
 }
 
@@ -10,7 +10,7 @@ class ImageStackView: UIView {
     static let imageSize: CGFloat = 70
   }
 
-  var delegate: ImageStackViewDelegate?
+  weak var delegate: ImageStackViewDelegate?
 
   var views: [UIImageView] = {
     var array = [UIImageView]()
@@ -42,12 +42,12 @@ class ImageStackView: UIView {
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "imageDidPush:",
-      name: ImageStack.Notifications.imageDidPushNotification,
+      name: ImageStack.Notifications.imageDidPush,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "imageStackDidChangeContent:",
-      name: ImageStack.Notifications.imageDidDropNotification,
+      name: ImageStack.Notifications.imageDidDrop,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
@@ -60,7 +60,7 @@ class ImageStackView: UIView {
     let step: CGFloat = -3.0
     let scale: CGFloat = 0.8
     let viewSize = CGSize(width: self.frame.width * scale,
-                        height: self.frame.height * scale)
+      height: self.frame.height * scale)
 
     let offset = -step * CGFloat(views.count)
     var origin = CGPoint(x: offset, y: offset)

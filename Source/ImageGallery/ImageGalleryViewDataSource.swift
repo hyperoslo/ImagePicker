@@ -29,7 +29,7 @@ extension ImageGalleryView: UICollectionViewDataSource {
       shouldTransform = false
     }
 
-    if selectedStack!.containsImage(image) {
+    if selectedStack.containsImage(image) {
       cell.selectedImageView.image = getImage("selectedImageGallery")
       cell.selectedImageView.alpha = 1
       cell.selectedImageView.transform = CGAffineTransformIdentity

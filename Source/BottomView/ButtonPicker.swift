@@ -1,6 +1,6 @@
 import UIKit
 
-protocol ButtonPickerDelegate {
+protocol ButtonPickerDelegate: class {
 
   func buttonDidPress()
 }
@@ -27,7 +27,7 @@ class ButtonPicker: UIButton {
     return configuration
     }()
 
-  var delegate: ButtonPickerDelegate?
+  weak var delegate: ButtonPickerDelegate?
 
   // MARK: - Initializers
 
@@ -48,12 +48,12 @@ class ButtonPicker: UIButton {
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "recalculatePhotosCount:",
-      name: ImageStack.Notifications.imageDidPushNotification,
+      name: ImageStack.Notifications.imageDidPush,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
       selector: "recalculatePhotosCount:",
-      name: ImageStack.Notifications.imageDidDropNotification,
+      name: ImageStack.Notifications.imageDidDrop,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,

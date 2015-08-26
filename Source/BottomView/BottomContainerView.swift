@@ -75,8 +75,8 @@ class BottomContainerView: UIView {
     super.init(frame: frame)
 
     [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].map { self.addSubview($0) }
-    backgroundColor = self.configuration.backgroundColor
-      stackView.addGestureRecognizer(self.tapGestureRecognizer)
+    backgroundColor = configuration.backgroundColor
+    stackView.addGestureRecognizer(tapGestureRecognizer)
 
     setupConstraints()
   }
