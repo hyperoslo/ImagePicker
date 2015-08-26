@@ -17,7 +17,6 @@ public class PickerConfiguration {
 
   // MARK: Titles
 
-  public var cancelButtonTitle = "Cancel"
   public var doneButtonTitle = "Done"
   public var noImagesTitle = "No images available"
 
