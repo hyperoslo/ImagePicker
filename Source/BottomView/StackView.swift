@@ -30,7 +30,7 @@ class ImageStackView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
     subscribe()
-    views.map{ self.addSubview($0) }
+    views.map { self.addSubview($0) }
     views[0].alpha = 1
     layoutSubviews()
   }
@@ -101,9 +101,12 @@ extension ImageStackView {
   func renderViews(images: [UIImage]) {
     if images.count < 1 {
       //TODO: subclass view and use setimage method here to automatically adjust alpha and NIL
-      views.map { $0.image = nil }
-      views.map { $0.alpha = 0 }
-      views[0].alpha = 1
+      for imageView in views {
+        imageView.image = nil
+        imageView.alpha = 0
+      }
+
+      views.first!.alpha = 1
       return
     }
 
