@@ -22,7 +22,6 @@ class TopView: UIView {
     button.setTitleColor(UIColor(red:0.98, green:0.98, blue:0.45, alpha:1), forState: .Normal)
     button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
     button.titleLabel?.font = self.configuration.flashButton
-    button.setTranslatesAutoresizingMaskIntoConstraints(false)
     button.addTarget(self, action: "flashButtonDidPress:", forControlEvents: .TouchUpInside)
     button.contentHorizontalAlignment = .Left
 
@@ -32,7 +31,6 @@ class TopView: UIView {
   lazy var rotateCamera: UIButton = { [unowned self] in
     let button = UIButton()
     button.setImage(self.getImage("cameraIcon"), forState: .Normal)
-    button.setTranslatesAutoresizingMaskIntoConstraints(false)
     button.addTarget(self, action: "rotateCameraButtonDidPress:", forControlEvents: .TouchUpInside)
 
     return button
@@ -53,8 +51,9 @@ class TopView: UIView {
     for button in [flashButton, rotateCamera] {
       button.layer.shadowColor = UIColor.blackColor().CGColor
       button.layer.shadowOpacity = 0.5
-      button.layer.shadowOffset = CGSize(width: 0, height: 10)
-      button.layer.shadowRadius = 10
+      button.layer.shadowOffset = CGSize(width: 0, height: 1)
+      button.layer.shadowRadius = 1
+      button.setTranslatesAutoresizingMaskIntoConstraints(false)
       addSubview(button)
     }
 
