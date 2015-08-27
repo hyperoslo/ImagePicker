@@ -19,26 +19,23 @@ public class ImagePickerController: UIViewController {
   lazy public var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
     galleryView.backgroundColor = self.configuration.mainColor
-    galleryView.setTranslatesAutoresizingMaskIntoConstraints(false)
     galleryView.delegate = self
     galleryView.selectedStack = self.stack
 
     return galleryView
     }()
 
-  lazy var bottomContainer: BottomContainerView = {
+  lazy var bottomContainer: BottomContainerView = { [unowned self] in
     let view = BottomContainerView()
     view.backgroundColor = UIColor(red:0.09, green:0.11, blue:0.13, alpha:1)
-    view.setTranslatesAutoresizingMaskIntoConstraints(false)
     view.delegate = self
 
     return view
     }()
 
-  lazy var topView: TopView = {
+  lazy var topView: TopView = { [unowned self] in
     let view = TopView()
     view.backgroundColor = .clearColor()
-    view.setTranslatesAutoresizingMaskIntoConstraints(false)
     view.delegate = self
 
     return view
@@ -49,7 +46,7 @@ public class ImagePickerController: UIViewController {
     return configuration
     }()
 
-  lazy var cameraController: CameraView = {
+  lazy var cameraController: CameraView = { [unowned self] in
     let controller = CameraView()
     controller.delegate = self
 
@@ -76,7 +73,11 @@ public class ImagePickerController: UIViewController {
 
     view.backgroundColor = .whiteColor()
 
-    [topView, cameraController.view, galleryView, bottomContainer].map { self.view.addSubview($0) }
+    for subview in [topView, cameraController.view, galleryView, bottomContainer] {
+      view.addSubview(subview)
+      subview.setTranslatesAutoresizingMaskIntoConstraints(false)
+    }
+
     view.backgroundColor = self.configuration.mainColor
 
     setupConstraints()

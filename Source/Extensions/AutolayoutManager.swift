@@ -17,6 +17,12 @@ extension BottomContainerView {
     }
 
     for attribute: NSLayoutAttribute in [.Width, .Left, .Top] {
+      addConstraint(NSLayoutConstraint(item: topSeparator, attribute: attribute,
+        relatedBy: .Equal, toItem: self, attribute: attribute,
+        multiplier: 1, constant: 0))
+    }
+
+    for attribute: NSLayoutAttribute in [.Width, .Height] {
       addConstraint(NSLayoutConstraint(item: pickerButton, attribute: attribute,
         relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
         multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
@@ -28,12 +34,6 @@ extension BottomContainerView {
       addConstraint(NSLayoutConstraint(item: stackView, attribute: attribute,
         relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
         multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
-    }
-
-    for attribute: NSLayoutAttribute in [.Width, .Height] {
-      addConstraint(NSLayoutConstraint(item: topSeparator, attribute: attribute,
-        relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
     }
 
     addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterY,
