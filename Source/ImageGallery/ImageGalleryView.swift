@@ -2,7 +2,7 @@ import UIKit
 import Photos
 import AssetsLibrary
 
-protocol ImageGalleryPanGestureDelegate {
+protocol ImageGalleryPanGestureDelegate: class {
 
   func panGestureDidStart()
   func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
@@ -93,7 +93,7 @@ public class ImageGalleryView: UIView {
     }()
 
   var collectionSize: CGSize!
-  var delegate: ImageGalleryPanGestureDelegate?
+  weak var delegate: ImageGalleryPanGestureDelegate?
   var shouldTransform = false
   var imagesBeforeLoading = 0
 

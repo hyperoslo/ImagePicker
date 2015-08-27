@@ -1,6 +1,6 @@
 import UIKit
 
-protocol TopViewDelegate {
+protocol TopViewDelegate: class {
 
   func flashButtonDidPress(title: String)
   func rotateDeviceDidPress()
@@ -43,7 +43,7 @@ class TopView: UIView {
     return configuration
     }()
 
-  var delegate: TopViewDelegate?
+  weak var delegate: TopViewDelegate?
 
   // MARK: - Initializers
 
