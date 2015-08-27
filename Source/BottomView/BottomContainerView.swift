@@ -1,6 +1,6 @@
 import UIKit
 
-protocol BottomContainerViewDelegate {
+protocol BottomContainerViewDelegate: class {
 
   func pickerButtonDidPress()
   func doneButtonDidPress()
@@ -66,7 +66,7 @@ class BottomContainerView: UIView {
     return gesture
     }()
 
-  var delegate: BottomContainerViewDelegate?
+  weak var delegate: BottomContainerViewDelegate?
   var pastCount = 0
 
   // MARK: Initializers
@@ -100,19 +100,19 @@ class BottomContainerView: UIView {
 
     attributesSize.map {
       self.addConstraint(NSLayoutConstraint(item: self.pickerButton, attribute: $0,
-        relatedBy: .Equal, toItem: self, attribute: .NotAnAttribute,
+        relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
         multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
     }
 
     attributesSize.map {
       self.addConstraint(NSLayoutConstraint(item: self.borderPickerButton, attribute: $0,
-        relatedBy: .Equal, toItem: self, attribute: .NotAnAttribute,
+        relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
         multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
     }
 
     attributesSize.map {
-      self.addConstraint(NSLayoutConstraint(item: self.borderPickerButton, attribute: $0,
-        relatedBy: .Equal, toItem: self, attribute: .NotAnAttribute,
+      self.addConstraint(NSLayoutConstraint(item: self.stackView, attribute: $0,
+        relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
         multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
     }
 
@@ -126,23 +126,23 @@ class BottomContainerView: UIView {
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
       multiplier: 1, constant: 0))
 
-    addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterX,
-      relatedBy: .Equal, toItem: self, attribute: .Right,
-      multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
-
     addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
-
-    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterX,
-      relatedBy: .Equal, toItem: self, attribute: .Left,
-      multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/4))
+      multiplier: 1, constant: -2))
 
     attributesSeparator.map {
       self.addConstraint(NSLayoutConstraint(item: self.topSeparator, attribute: $0,
         relatedBy: .Equal, toItem: self, attribute: $0,
         multiplier: 1, constant: 0))
     }
+
+    addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterX,
+      relatedBy: .Equal, toItem: self, attribute: .Right,
+      multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
+
+    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterX,
+      relatedBy: .Equal, toItem: self, attribute: .Left,
+      multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/4))
 
     addConstraint(NSLayoutConstraint(item: topSeparator, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
