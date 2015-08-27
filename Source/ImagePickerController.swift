@@ -37,7 +37,7 @@ public class ImagePickerController: UIViewController {
 
   lazy var topView: TopView = {
     let view = TopView()
-    view.backgroundColor = UIColor(red:0.09, green:0.11, blue:0.13, alpha:1)
+    view.backgroundColor = .clearColor()
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
     view.delegate = self
 
