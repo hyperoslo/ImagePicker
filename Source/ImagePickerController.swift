@@ -135,34 +135,6 @@ public class ImagePickerController: UIViewController {
     }
   }
 
-
-  // MARK: - Autolayout
-
-  func setupConstraints() {
-    let attributes: [NSLayoutAttribute] = [.Bottom, .Right, .Width]
-    let topViewAttributes: [NSLayoutAttribute] = [.Left, .Top, .Width]
-
-    attributes.map {
-      self.view.addConstraint(NSLayoutConstraint(item: self.bottomContainer, attribute: $0,
-        relatedBy: .Equal, toItem: self.view, attribute: $0,
-        multiplier: 1, constant: 0))
-    }
-
-    view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: Dimensions.bottomContainerHeight))
-
-    topViewAttributes.map {
-      self.view.addConstraint(NSLayoutConstraint(item: self.topView, attribute: $0,
-        relatedBy: .Equal, toItem: self.view, attribute: $0,
-        multiplier: 1, constant: 0))
-    }
-
-    view.addConstraint(NSLayoutConstraint(item: topView, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: TopView.Dimensions.height))
-  }
-
   // MARK: - Helpers
 
   public override func prefersStatusBarHidden() -> Bool {
