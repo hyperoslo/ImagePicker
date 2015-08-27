@@ -50,7 +50,13 @@ class TopView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    [flashButton, rotateCamera].map { self.addSubview($0) }
+    for button in [flashButton, rotateCamera] {
+      button.layer.shadowColor = UIColor.blackColor().CGColor
+      button.layer.shadowOpacity = 0.5
+      button.layer.shadowOffset = CGSize(width: 0, height: 10)
+      button.layer.shadowRadius = 10
+      addSubview(button)
+    }
 
     setupConstraints()
   }
