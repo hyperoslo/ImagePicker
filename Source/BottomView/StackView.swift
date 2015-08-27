@@ -27,6 +27,8 @@ class ImageStackView: UIView {
     return array
     }()
 
+  // MARK: - Initializers
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     subscribe()
@@ -35,9 +37,15 @@ class ImageStackView: UIView {
     layoutSubviews()
   }
 
+  required init(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   deinit {
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
+
+  // MARK: - Helpers
 
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
@@ -72,13 +80,10 @@ class ImageStackView: UIView {
       view.frame = frame
     }
   }
-
-  required init(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
 }
 
 extension ImageStackView {
+
   func imageDidPush(notification: NSNotification) {
 
     //TODO indexOf in swift 2
