@@ -47,14 +47,14 @@ public class ImageGalleryView: UIView {
     let view = UIView()
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
     view.addGestureRecognizer(self.panGestureRecognizer)
-    view.backgroundColor = self.configuration.backgroundColor.colorWithAlphaComponent(0.6)
+    view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
 
     return view
     }()
 
   lazy var indicator: UIView = {
     let view = UIView()
-    view.backgroundColor = UIColor(red:0.36, green:0.39, blue:0.42, alpha:1)
+    view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
     view.layer.cornerRadius = Dimensions.indicatorHeight / 2
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
     
@@ -107,7 +107,6 @@ public class ImageGalleryView: UIView {
 
     [collectionView, topSeparator].map { self.addSubview($0) }
     topSeparator.addSubview(indicator)
-    backgroundColor = self.configuration.mainColor
 
     imagesBeforeLoading = 0
     fetchPhotos(0)

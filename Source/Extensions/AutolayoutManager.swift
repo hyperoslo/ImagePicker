@@ -50,7 +50,7 @@ extension BottomContainerView {
 
     addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .Left,
-      multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/4))
+      multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/3))
 
     addConstraint(NSLayoutConstraint(item: topSeparator, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,

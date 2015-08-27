@@ -18,7 +18,7 @@ public class ImagePickerController: UIViewController {
 
   lazy public var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
-    galleryView.backgroundColor = self.configuration.mainColor
+    galleryView.backgroundColor = .clearColor()
     galleryView.delegate = self
     galleryView.selectedStack = self.stack
 
@@ -53,6 +53,8 @@ public class ImagePickerController: UIViewController {
     return controller
     }()
 
+  let totalHeight = UIScreen.mainScreen().bounds.size.height
+  let totalWidth = UIScreen.mainScreen().bounds.size.width
   public weak var delegate: ImagePickerDelegate?
   var topSeparatorCenter: CGPoint!
   var initialFrame: CGRect!
@@ -135,6 +137,19 @@ public class ImagePickerController: UIViewController {
   public override func prefersStatusBarHidden() -> Bool {
     return true
   }
+
+  public func collapseGalleryView(completion: (() -> Void)?) {
+    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+      self.galleryView.frame.size.height = self.galleryView.topSeparator.frame.height
+      self.galleryView.frame.origin.y = self.totalHeight - self.bottomContainer.frame.size.height - self.galleryView.topSeparator.frame.height
+      self.galleryView.collectionViewLayout.invalidateLayout()
+      self.galleryView.collectionView.frame.size.height = 100
+      self.galleryView.collectionSize = CGSize(width: 100, height: 100)
+      self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
+      }, completion: { finished in
+        completion?()
+    })
+  }
 }
 
 // MARK: - Action methods
@@ -142,7 +157,9 @@ public class ImagePickerController: UIViewController {
 extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
-    cameraController.takePicture()
+    collapseGalleryView({ [unowned self] in
+      self.cameraController.takePicture()
+    })
   }
 
   func doneButtonDidPress() {
@@ -295,17 +312,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
           }
       })
     } else if velocity.y > 100 || galleryView.frame.size.height - galleryView.topSeparator.frame.height < 100 {
-      UIView.animateWithDuration(0.2, animations: { [unowned self] in
-        self.galleryView.frame.size.height = self.galleryView.topSeparator.frame.height
-        self.galleryView.frame.origin.y = self.initialFrame.origin.y + self.initialFrame.height - self.galleryView.topSeparator.frame.height
-        self.galleryView.collectionViewLayout.invalidateLayout()
-        self.galleryView.collectionView.frame.size.height = 100
-        self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
-        self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
-        }, completion: { finished in
-          self.galleryView.collectionView.reloadSections(NSIndexSet(index: 0))
-          self.galleryView.collectionView.scrollToItemAtIndexPath(self.targetIndexPath!, atScrollPosition: .CenteredHorizontally, animated: true)
-      })
+      collapseGalleryView(nil)
     }
   }
 }
