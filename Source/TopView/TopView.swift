@@ -65,30 +65,6 @@ class TopView: UIView {
       fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: - Constraints
-
-  func setupConstraints() {
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Left,
-      relatedBy: .Equal, toItem: self, attribute: .Left,
-      multiplier: 1, constant: Dimensions.leftOffset))
-
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .CenterY,
-      relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
-
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Width,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: 55))
-
-    addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Right,
-      relatedBy: .Equal, toItem: self, attribute: .Right,
-      multiplier: 1, constant: -Dimensions.rightOffset))
-
-    addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .CenterY,
-      relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
-  }
-
   // MARK: - Action methods
 
   func flashButtonDidPress(button: UIButton) {
