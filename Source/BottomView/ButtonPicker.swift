@@ -9,8 +9,8 @@ class ButtonPicker: UIButton {
 
   struct Dimensions {
     static let borderWidth: CGFloat = 2
-    static let buttonSize: CGFloat = 72
-    static let buttonBorderSize: CGFloat = 82
+    static let buttonSize: CGFloat = 58
+    static let buttonBorderSize: CGFloat = 66
   }
 
   lazy var numberLabel: UILabel = { [unowned self] in

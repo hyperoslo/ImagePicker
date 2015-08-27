@@ -90,6 +90,7 @@ class BottomContainerView: UIView {
   func setupConstraints() {
     let attributesBorder: [NSLayoutAttribute] = [.CenterX, .CenterY]
     let attributesSeparator: [NSLayoutAttribute] = [.Width, .Left, .Top]
+    let attributesSize: [NSLayoutAttribute] = [.Width, .Height]
 
     attributesBorder.map {
       self.addConstraint(NSLayoutConstraint(item: self.pickerButton, attribute: $0,
@@ -97,27 +98,29 @@ class BottomContainerView: UIView {
         multiplier: 1, constant: 0))
     }
 
-    addConstraint(NSLayoutConstraint(item: pickerButton, attribute: .Width,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
+    attributesSize.map {
+      self.addConstraint(NSLayoutConstraint(item: self.pickerButton, attribute: $0,
+        relatedBy: .Equal, toItem: self, attribute: .NotAnAttribute,
+        multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
+    }
 
-    addConstraint(NSLayoutConstraint(item: pickerButton, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
+    attributesSize.map {
+      self.addConstraint(NSLayoutConstraint(item: self.borderPickerButton, attribute: $0,
+        relatedBy: .Equal, toItem: self, attribute: .NotAnAttribute,
+        multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
+    }
+
+    attributesSize.map {
+      self.addConstraint(NSLayoutConstraint(item: self.borderPickerButton, attribute: $0,
+        relatedBy: .Equal, toItem: self, attribute: .NotAnAttribute,
+        multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
+    }
 
     attributesBorder.map {
       self.addConstraint(NSLayoutConstraint(item: self.borderPickerButton, attribute: $0,
         relatedBy: .Equal, toItem: self, attribute: $0,
         multiplier: 1, constant: 0))
     }
-
-    addConstraint(NSLayoutConstraint(item: borderPickerButton, attribute: .Width,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
-
-    addConstraint(NSLayoutConstraint(item: borderPickerButton, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
 
     addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
@@ -126,14 +129,6 @@ class BottomContainerView: UIView {
     addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .Right,
       multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
-
-    addConstraint(NSLayoutConstraint(item: stackView, attribute: .Width,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
-
-    addConstraint(NSLayoutConstraint(item: stackView, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
 
     addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
