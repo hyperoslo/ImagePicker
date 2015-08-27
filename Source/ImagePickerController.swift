@@ -1,7 +1,7 @@
 import UIKit
 
 @objc
-public protocol ImagePickerDelegate {
+public protocol ImagePickerDelegate: class {
 
   optional func wrapperDidPress(images: [UIImage])
   optional func doneButtonDidPress(images: [UIImage])
@@ -96,10 +96,6 @@ public class ImagePickerController: UIViewController {
       UIScreen.mainScreen().bounds.width,
       galleryHeight)
     galleryView.updateFrames()
-    cameraController.view.frame = CGRectMake(0, 32,
-      UIScreen.mainScreen().bounds.width, galleryView.frame.origin.y - 32)
-    cameraController.previewLayer?.frame = CGRectMake(0, 0,
-      UIScreen.mainScreen().bounds.width, cameraController.view.frame.height)
     galleryView.checkStatus()
   }
 
@@ -263,12 +259,6 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.collectionView.reloadData()
     }
 
-    cameraController.view.frame.size.height = galleryView.frame.origin.y - topView.frame.height
-    cameraController.view.frame.origin.y = topView.frame.height
-    CATransaction.begin()
-    CATransaction.setDisableActions(true)
-    cameraController.previewLayer?.frame.size.height = galleryView.frame.origin.y - topView.frame.height
-    CATransaction.commit()
     galleryView.noImagesLabel.center = galleryView.collectionView.center
     if let targetIndexPath = targetIndexPath {
       galleryView.collectionView.scrollToItemAtIndexPath(targetIndexPath, atScrollPosition: .CenteredHorizontally, animated: false)
@@ -283,10 +273,6 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.collectionViewLayout.invalidateLayout()
         self.galleryView.collectionView.frame.size.height = 134 - self.galleryView.topSeparator.frame.height
         self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
-        self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
-        self.cameraController.view.frame.origin.y = self.topView.frame.height
-        self.cameraController.previewLayer?.frame = CGRectMake(0, 0,
-          self.cameraController.view.frame.width, self.cameraController.view.frame.height)
         self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
         }, completion: { finished in
           self.galleryView.collectionView.reloadSections(NSIndexSet(index: 0))
@@ -301,9 +287,6 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.collectionViewLayout.invalidateLayout()
         self.galleryView.collectionView.frame.size.height = ImageGalleryView.Dimensions.galleryHeight
         self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
-        self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
-        self.cameraController.view.frame.origin.y = self.topView.frame.height
-        self.cameraController.previewLayer?.frame.size = self.cameraController.view.frame.size
         self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
         }, completion: { finished in
           self.galleryView.collectionView.reloadSections(NSIndexSet(index: 0))
@@ -318,9 +301,6 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
         self.galleryView.collectionViewLayout.invalidateLayout()
         self.galleryView.collectionView.frame.size.height = 100
         self.galleryView.collectionSize = CGSizeMake(self.galleryView.collectionView.frame.height, self.galleryView.collectionView.frame.height)
-        self.cameraController.view.frame.size.height = self.galleryView.frame.origin.y - self.topView.frame.height
-        self.cameraController.view.frame.origin.y = self.topView.frame.height
-        self.cameraController.previewLayer?.frame.size = self.cameraController.view.frame.size
         self.galleryView.noImagesLabel.center = self.galleryView.collectionView.center
         }, completion: { finished in
           self.galleryView.collectionView.reloadSections(NSIndexSet(index: 0))

@@ -99,6 +99,16 @@ extension ImagePickerController {
         multiplier: 1, constant: 0))
     }
 
+    for attribute: NSLayoutAttribute in [.Left, .Top, .Width] {
+      view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: attribute,
+        relatedBy: .Equal, toItem: view, attribute: attribute,
+        multiplier: 1, constant: 0))
+
+      view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: attribute,
+        relatedBy: .Equal, toItem: view, attribute: attribute,
+        multiplier: 1, constant: 0))
+    }
+
     topViewAttributes.map {
       self.view.addConstraint(NSLayoutConstraint(item: self.topView, attribute: $0,
         relatedBy: .Equal, toItem: self.view, attribute: $0,
@@ -112,5 +122,9 @@ extension ImagePickerController {
     view.addConstraint(NSLayoutConstraint(item: topView, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: TopView.Dimensions.height))
+
+    view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: .Height,
+      relatedBy: .Equal, toItem: self, attribute: .Height,
+      multiplier: 1, constant: -Dimensions.bottomContainerHeight))
   }
 }
