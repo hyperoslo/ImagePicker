@@ -40,17 +40,13 @@ class ImageGalleryViewCell: UICollectionViewCell {
 
   func setupConstraints() {
     if !constraintsAdded {
-      let attributes: [NSLayoutAttribute] = [.Width, .Height, .CenterX, .CenterY]
-
-      attributes.map {
-        self.addConstraint(NSLayoutConstraint(item: self.imageView, attribute: $0,
-          relatedBy: .Equal, toItem: self, attribute: $0,
+      for attribute: NSLayoutAttribute in [.Width, .Height, .CenterX, .CenterY] {
+        addConstraint(NSLayoutConstraint(item: imageView, attribute: attribute,
+          relatedBy: .Equal, toItem: self, attribute: attribute,
           multiplier: 1, constant: 0))
-      }
 
-      attributes.map {
-        self.addConstraint(NSLayoutConstraint(item: self.selectedImageView, attribute: $0,
-          relatedBy: .Equal, toItem: self, attribute: $0,
+        addConstraint(NSLayoutConstraint(item: selectedImageView, attribute: attribute,
+          relatedBy: .Equal, toItem: self, attribute: attribute,
           multiplier: 1, constant: 0))
       }
 
