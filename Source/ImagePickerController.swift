@@ -11,7 +11,7 @@ public protocol ImagePickerDelegate {
 public class ImagePickerController: UIViewController {
 
   struct Dimensions {
-    static let bottomContainerHeight: CGFloat = 108
+    static let bottomContainerHeight: CGFloat = 101
   }
 
   public var stack = ImageStack()

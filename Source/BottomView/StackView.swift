@@ -7,7 +7,7 @@ protocol ImageStackViewDelegate: class {
 class ImageStackView: UIView {
 
   struct Dimensions {
-    static let imageSize: CGFloat = 60
+    static let imageSize: CGFloat = 58
   }
 
   weak var delegate: ImageStackViewDelegate?
