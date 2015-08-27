@@ -5,7 +5,7 @@ import AssetsLibrary
 protocol ImageGalleryPanGestureDelegate: class {
 
   func panGestureDidStart()
-  func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
+  func panGestureDidChange(translation: CGPoint)
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
   func presentViewController(controller: UIAlertController)
   func dismissViewController(controller: UIAlertController)
@@ -92,8 +92,8 @@ public class ImageGalleryView: UIView {
     return label
     }()
 
-  var collectionSize: CGSize!
   weak var delegate: ImageGalleryPanGestureDelegate?
+  var collectionSize: CGSize!
   var shouldTransform = false
   var imagesBeforeLoading = 0
 
@@ -119,17 +119,16 @@ public class ImageGalleryView: UIView {
   // MARK: - Layout
 
   func updateFrames() {
+    let totalWidth = UIScreen.mainScreen().bounds.width
+
     collectionView.dataSource = self
     collectionView.delegate = self
 
-    topSeparator.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, Dimensions.galleryBarHeight)
-    indicator.frame = CGRectMake(UIScreen.mainScreen().bounds.width / 2 - Dimensions.indicatorWidth / 2, topSeparator.frame.height / 2 - Dimensions.indicatorHeight / 2, Dimensions.indicatorWidth, Dimensions.indicatorHeight)
-    indicator.frame.size = CGSizeMake(Dimensions.indicatorWidth, Dimensions.indicatorHeight)
-    collectionView.frame = CGRectMake(0, topSeparator.frame.height, UIScreen.mainScreen().bounds.width, frame.height - topSeparator.frame.height)
-    collectionSize = CGSizeMake(frame.height - topSeparator.frame.height, frame.height - topSeparator.frame.height)
-    if collectionSize.width == 0 {
-      collectionSize = CGSizeMake(100, 100)
-    }
+    topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
+    indicator.frame = CGRect(x: (totalWidth - Dimensions.indicatorWidth) / 2, y: (topSeparator.frame.height - Dimensions.indicatorHeight) / 2,
+      width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
+    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: frame.height - topSeparator.frame.height)
+    collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
     noImagesLabel.center = collectionView.center
   }
 
@@ -182,7 +181,7 @@ public class ImageGalleryView: UIView {
     if gesture.state == UIGestureRecognizerState.Began {
       delegate?.panGestureDidStart()
     } else if gesture.state == UIGestureRecognizerState.Changed {
-      delegate?.panGestureDidChange(translation, location: location, velocity: velocity)
+      delegate?.panGestureDidChange(translation)
     } else if gesture.state == UIGestureRecognizerState.Ended {
       delegate?.panGestureDidEnd(translation, location: location, velocity: velocity)
     }
