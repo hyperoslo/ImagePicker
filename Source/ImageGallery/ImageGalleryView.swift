@@ -22,7 +22,7 @@ public class ImageGalleryView: UIView {
     static let indicatorHeight: CGFloat = 8
   }
 
-  lazy public var collectionView: UICollectionView = { [unowned self] in
+  lazy public var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
       collectionViewLayout: self.collectionViewLayout)
     collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -61,7 +61,7 @@ public class ImageGalleryView: UIView {
     return view
     }()
 
-  lazy var panGestureRecognizer: UIPanGestureRecognizer = {
+  lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
     let gesture = UIPanGestureRecognizer()
     gesture.addTarget(self, action: "handlePanGestureRecognizer:")
 
@@ -257,7 +257,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
     let image = images[indexPath.row] as! UIImage
 
     if cell.selectedImageView.image != nil {
-      UIView.animateWithDuration(0.2, animations: { [unowned self] in
+      UIView.animateWithDuration(0.2, animations: {
         cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
         }, completion: { _ in
           cell.selectedImageView.image = nil
