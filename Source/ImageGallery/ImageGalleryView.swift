@@ -17,7 +17,7 @@ public class ImageGalleryView: UIView {
 
   struct Dimensions {
     static let galleryHeight: CGFloat = 160
-    static let galleryBarHeight: CGFloat = 34
+    static let galleryBarHeight: CGFloat = 24
     static let indicatorWidth: CGFloat = 41
     static let indicatorHeight: CGFloat = 8
   }
@@ -47,7 +47,7 @@ public class ImageGalleryView: UIView {
     let view = UIView()
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
     view.addGestureRecognizer(self.panGestureRecognizer)
-    view.backgroundColor = self.configuration.backgroundColor
+    view.backgroundColor = self.configuration.backgroundColor.colorWithAlphaComponent(0.6)
 
     return view
     }()

@@ -17,7 +17,7 @@ class ImageStackView: UIView {
     for i in 0...3 {
       let view = UIImageView()
       view.layer.cornerRadius = 3
-      view.layer.borderColor = UIColor(white: 1, alpha: 0.2).CGColor
+      view.layer.borderColor = UIColor.whiteColor().CGColor
       view.layer.borderWidth = 1
       view.contentMode = .ScaleAspectFill
       view.clipsToBounds = true
