@@ -69,22 +69,21 @@ public class ImagePickerController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
 
-    subscribe()
-
-    view.backgroundColor = .whiteColor()
-
     for subview in [topView, cameraController.view, galleryView, bottomContainer] {
       view.addSubview(subview)
       subview.setTranslatesAutoresizingMaskIntoConstraints(false)
     }
 
+    view.backgroundColor = .whiteColor()
     view.backgroundColor = self.configuration.mainColor
 
+    subscribe()
     setupConstraints()
   }
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
+
     UIApplication.sharedApplication().statusBarHidden = true
   }
 
