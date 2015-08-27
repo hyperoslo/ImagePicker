@@ -2,23 +2,13 @@ import UIKit
 
 class ImageGalleryViewCell: UICollectionViewCell {
 
-  lazy var imageView: UIImageView = { [unowned self] in
+  lazy var imageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .ScaleAspectFill
-    imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-    imageView.clipsToBounds = true
-    self.contentView.addSubview(imageView)
-
     return imageView
     }()
 
-  lazy var selectedImageView: UIImageView = { [unowned self] in
+  lazy var selectedImageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .ScaleAspectFill
-    imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-    imageView.clipsToBounds = true
-    self.contentView.addSubview(imageView)
-
     return imageView
     }()
 
@@ -28,6 +18,16 @@ class ImageGalleryViewCell: UICollectionViewCell {
 
   func configureCell(image: UIImage) {
     imageView.image = image
+
+    if imageView.superview != contentView {
+      for view in [imageView, selectedImageView] {
+        view.contentMode = .ScaleAspectFill
+        view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.clipsToBounds = true
+        contentView.addSubview(view)
+      }
+    }
+
     setupConstraints()
   }
 
