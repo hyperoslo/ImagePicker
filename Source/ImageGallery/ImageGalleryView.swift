@@ -2,11 +2,11 @@ import UIKit
 import Photos
 import AssetsLibrary
 
-protocol ImageGalleryPanGestureDelegate {
+protocol ImageGalleryPanGestureDelegate: class {
 
   func panGestureDidStart()
-  func panGestureDidChange(translation: CGPoint, location: CGPoint, velocity: CGPoint)
-  func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
+  func panGestureDidChange(translation: CGPoint)
+  func panGestureDidEnd(translation: CGPoint, velocity: CGPoint)
   func presentViewController(controller: UIAlertController)
   func dismissViewController(controller: UIAlertController)
   func permissionGranted()
@@ -17,7 +17,7 @@ public class ImageGalleryView: UIView {
 
   struct Dimensions {
     static let galleryHeight: CGFloat = 160
-    static let galleryBarHeight: CGFloat = 34
+    static let galleryBarHeight: CGFloat = 24
     static let indicatorWidth: CGFloat = 41
     static let indicatorHeight: CGFloat = 8
   }
@@ -47,21 +47,21 @@ public class ImageGalleryView: UIView {
     let view = UIView()
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
     view.addGestureRecognizer(self.panGestureRecognizer)
-    view.backgroundColor = self.configuration.backgroundColor
+    view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
 
     return view
     }()
 
   lazy var indicator: UIView = {
     let view = UIView()
-    view.backgroundColor = UIColor(red:0.36, green:0.39, blue:0.42, alpha:1)
+    view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
     view.layer.cornerRadius = Dimensions.indicatorHeight / 2
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
     
     return view
     }()
 
-  lazy var panGestureRecognizer: UIPanGestureRecognizer = {
+  lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
     let gesture = UIPanGestureRecognizer()
     gesture.addTarget(self, action: "handlePanGestureRecognizer:")
 
@@ -92,8 +92,8 @@ public class ImageGalleryView: UIView {
     return label
     }()
 
+  weak var delegate: ImageGalleryPanGestureDelegate?
   var collectionSize: CGSize!
-  var delegate: ImageGalleryPanGestureDelegate?
   var shouldTransform = false
   var imagesBeforeLoading = 0
 
@@ -107,7 +107,6 @@ public class ImageGalleryView: UIView {
 
     [collectionView, topSeparator].map { self.addSubview($0) }
     topSeparator.addSubview(indicator)
-    backgroundColor = self.configuration.mainColor
 
     imagesBeforeLoading = 0
     fetchPhotos(0)
@@ -120,17 +119,16 @@ public class ImageGalleryView: UIView {
   // MARK: - Layout
 
   func updateFrames() {
+    let totalWidth = UIScreen.mainScreen().bounds.width
+
     collectionView.dataSource = self
     collectionView.delegate = self
 
-    topSeparator.frame = CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, Dimensions.galleryBarHeight)
-    indicator.frame = CGRectMake(UIScreen.mainScreen().bounds.width / 2 - Dimensions.indicatorWidth / 2, topSeparator.frame.height / 2 - Dimensions.indicatorHeight / 2, Dimensions.indicatorWidth, Dimensions.indicatorHeight)
-    indicator.frame.size = CGSizeMake(Dimensions.indicatorWidth, Dimensions.indicatorHeight)
-    collectionView.frame = CGRectMake(0, topSeparator.frame.height, UIScreen.mainScreen().bounds.width, frame.height - topSeparator.frame.height)
-    collectionSize = CGSizeMake(frame.height - topSeparator.frame.height, frame.height - topSeparator.frame.height)
-    if collectionSize.width == 0 {
-      collectionSize = CGSizeMake(100, 100)
-    }
+    topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
+    indicator.frame = CGRect(x: (totalWidth - Dimensions.indicatorWidth) / 2, y: (topSeparator.frame.height - Dimensions.indicatorHeight) / 2,
+      width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
+    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: frame.height - topSeparator.frame.height)
+    collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
     noImagesLabel.center = collectionView.center
   }
 
@@ -177,15 +175,14 @@ public class ImageGalleryView: UIView {
 
   func handlePanGestureRecognizer(gesture: UIPanGestureRecognizer) {
     let translation = gesture.translationInView(superview!)
-    let location = gesture.locationInView(superview!)
     let velocity = gesture.velocityInView(superview!)
 
     if gesture.state == UIGestureRecognizerState.Began {
       delegate?.panGestureDidStart()
     } else if gesture.state == UIGestureRecognizerState.Changed {
-      delegate?.panGestureDidChange(translation, location: location, velocity: velocity)
+      delegate?.panGestureDidChange(translation)
     } else if gesture.state == UIGestureRecognizerState.Ended {
-      delegate?.panGestureDidEnd(translation, location: location, velocity: velocity)
+      delegate?.panGestureDidEnd(translation, velocity: velocity)
     }
   }
 
@@ -257,7 +254,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
     let image = images[indexPath.row] as! UIImage
 
     if cell.selectedImageView.image != nil {
-      UIView.animateWithDuration(0.2, animations: { [unowned self] in
+      UIView.animateWithDuration(0.2, animations: {
         cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
         }, completion: { _ in
           cell.selectedImageView.image = nil

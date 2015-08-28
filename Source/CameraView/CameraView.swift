@@ -2,7 +2,7 @@ import UIKit
 import AVFoundation
 import AssetsLibrary
 
-protocol CameraViewDelegate {
+protocol CameraViewDelegate: class {
 
   func handleFlashButton(hide: Bool)
   func imageToLibrary(image: UIImage)
@@ -46,7 +46,7 @@ class CameraView: UIViewController {
   var captureDevice: AVCaptureDevice?
   var capturedDevices: NSMutableArray?
   var previewLayer: AVCaptureVideoPreviewLayer?
-  var delegate: CameraViewDelegate?
+  weak var delegate: CameraViewDelegate?
   var stillImageOutput: AVCaptureStillImageOutput?
   var animationTimer: NSTimer?
 

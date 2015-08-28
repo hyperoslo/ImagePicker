@@ -3,9 +3,9 @@ import UIKit
 public class ImageStack {
 
   public struct Notifications {
-    public static let imageDidPush = "imageDidPush:"
-    public static let imageDidDrop = "imageDidDrop:"
-    public static let stackDidReload = "stackDidReload:"
+    public static let imageDidPush = "imageDidPush"
+    public static let imageDidDrop = "imageDidDrop"
+    public static let stackDidReload = "stackDidReload"
     public static let imageKey = "image"
   }
 

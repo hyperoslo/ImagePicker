@@ -2,23 +2,13 @@ import UIKit
 
 class ImageGalleryViewCell: UICollectionViewCell {
 
-  lazy var imageView: UIImageView = { [unowned self] in
+  lazy var imageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .ScaleAspectFill
-    imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-    imageView.clipsToBounds = true
-    self.contentView.addSubview(imageView)
-
     return imageView
     }()
 
-  lazy var selectedImageView: UIImageView = { [unowned self] in
+  lazy var selectedImageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .ScaleAspectFill
-    imageView.setTranslatesAutoresizingMaskIntoConstraints(false)
-    imageView.clipsToBounds = true
-    self.contentView.addSubview(imageView)
-
     return imageView
     }()
 
@@ -28,33 +18,20 @@ class ImageGalleryViewCell: UICollectionViewCell {
 
   func configureCell(image: UIImage) {
     imageView.image = image
-    setupConstraints()
+
+    if imageView.superview != contentView {
+      for view in [imageView, selectedImageView] {
+        view.contentMode = .ScaleAspectFill
+        view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.clipsToBounds = true
+        contentView.addSubview(view)
+      }
+      setupConstraints()
+    }
   }
 
   override func layoutSubviews() {
     super.layoutSubviews()
     setupConstraints()
-  }
-
-  // MARK: - Autolayout
-
-  func setupConstraints() {
-    if !constraintsAdded {
-      let attributes: [NSLayoutAttribute] = [.Width, .Height, .CenterX, .CenterY]
-
-      attributes.map {
-        self.addConstraint(NSLayoutConstraint(item: self.imageView, attribute: $0,
-          relatedBy: .Equal, toItem: self, attribute: $0,
-          multiplier: 1, constant: 0))
-      }
-
-      attributes.map {
-        self.addConstraint(NSLayoutConstraint(item: self.selectedImageView, attribute: $0,
-          relatedBy: .Equal, toItem: self, attribute: $0,
-          multiplier: 1, constant: 0))
-      }
-
-      constraintsAdded = true
-    }
   }
 }

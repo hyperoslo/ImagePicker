@@ -9,13 +9,12 @@ class ButtonPicker: UIButton {
 
   struct Dimensions {
     static let borderWidth: CGFloat = 2
-    static let buttonSize: CGFloat = 72
-    static let buttonBorderSize: CGFloat = 82
+    static let buttonSize: CGFloat = 58
+    static let buttonBorderSize: CGFloat = 68
   }
 
   lazy var numberLabel: UILabel = { [unowned self] in
     let label = UILabel()
-    label.text = ""
     label.setTranslatesAutoresizingMaskIntoConstraints(false)
     label.font = self.configuration.numberLabelFont
 
