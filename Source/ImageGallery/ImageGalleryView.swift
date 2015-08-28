@@ -120,6 +120,7 @@ public class ImageGalleryView: UIView {
 
   func updateFrames() {
     let totalWidth = UIScreen.mainScreen().bounds.width
+    let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
 
     collectionView.dataSource = self
     collectionView.delegate = self
@@ -127,7 +128,7 @@ public class ImageGalleryView: UIView {
     topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
     indicator.frame = CGRect(x: (totalWidth - Dimensions.indicatorWidth) / 2, y: (topSeparator.frame.height - Dimensions.indicatorHeight) / 2,
       width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
-    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: frame.height - topSeparator.frame.height)
+    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
     noImagesLabel.center = collectionView.center
   }
