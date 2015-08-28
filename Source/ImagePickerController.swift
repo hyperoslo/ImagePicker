@@ -14,9 +14,10 @@ public class ImagePickerController: UIViewController {
     static let bottomContainerHeight: CGFloat = 101
   }
 
-  struct GestureOffsets {
+  struct GestureConstants {
     static let maximumHeight: CGFloat = 200
     static let minimumHeight: CGFloat = 125
+    static let velocity: CGFloat = 100
   }
 
   public var stack = ImageStack()
@@ -152,14 +153,14 @@ public class ImagePickerController: UIViewController {
 
   public func showGalleryView() {
     UIView.animateWithDuration(0.3, animations: {
-      self.updateGalleryViewFrames(GestureOffsets.minimumHeight)
+      self.updateGalleryViewFrames(GestureConstants.minimumHeight)
       self.updateCollectionViewFrames(false)
       })
   }
 
   public func expandGalleryView() {
     UIView.animateWithDuration(0.3, animations: {
-      self.updateGalleryViewFrames(GestureOffsets.maximumHeight)
+      self.updateGalleryViewFrames(GestureConstants.maximumHeight)
       self.updateCollectionViewFrames(true)
       })
   }
@@ -170,7 +171,7 @@ public class ImagePickerController: UIViewController {
   }
 
   func updateCollectionViewFrames(maximum: Bool) {
-    let constant = maximum ? GestureOffsets.maximumHeight : GestureOffsets.minimumHeight
+    let constant = maximum ? GestureConstants.maximumHeight : GestureConstants.minimumHeight
     galleryView.collectionViewLayout.invalidateLayout()
     galleryView.collectionView.frame.size.height = constant - galleryView.topSeparator.frame.height
     galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
@@ -279,19 +280,19 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
     if galleryHeight <= ImageGalleryView.Dimensions.galleryBarHeight {
       updateGalleryViewFrames(ImageGalleryView.Dimensions.galleryBarHeight)
-    } else if galleryHeight >= GestureOffsets.maximumHeight {
-      updateGalleryViewFrames(GestureOffsets.maximumHeight)
+    } else if galleryHeight >= GestureConstants.maximumHeight {
+      updateGalleryViewFrames(GestureConstants.maximumHeight)
     } else {
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y
     }
 
-    if galleryHeight > GestureOffsets.minimumHeight {
+    if galleryHeight > GestureConstants.minimumHeight {
       galleryView.collectionViewLayout.invalidateLayout()
       galleryView.collectionView.frame.size.height = galleryView.frame.size.height - ImageGalleryView.Dimensions.galleryBarHeight
       galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
 
-      if galleryHeight < GestureOffsets.maximumHeight {
+      if galleryHeight < GestureConstants.maximumHeight {
         galleryView.collectionView.contentOffset = CGPoint(x: initialContentOffset.x - (translation.y * CGFloat(numberOfCells)), y: 0)
       }
     }
@@ -302,11 +303,11 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint) {
     let galleryHeight = initialFrame.height - translation.y
 
-    if galleryView.frame.height < GestureOffsets.minimumHeight && velocity.y < 0 {
+    if galleryView.frame.height < GestureConstants.minimumHeight && velocity.y < 0 {
       showGalleryView()
-    } else if velocity.y < -100 {
+    } else if velocity.y < -GestureConstants.velocity {
       expandGalleryView()
-    } else if velocity.y > 100 || galleryHeight < GestureOffsets.minimumHeight {
+    } else if velocity.y > GestureConstants.velocity || galleryHeight < GestureConstants.minimumHeight {
       collapseGalleryView(nil)
     }
   }
