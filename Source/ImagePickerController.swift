@@ -142,38 +142,39 @@ public class ImagePickerController: UIViewController {
   }
 
   public func collapseGalleryView(completion: (() -> Void)?) {
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
-      self.updateCollectionViewFrames()
+      self.updateCollectionViewFrames(false)
       }, completion: { finished in
         completion?()
     })
   }
 
   public func showGalleryView() {
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(GestureOffsets.minimumHeight)
-      self.updateCollectionViewFrames()
+      self.updateCollectionViewFrames(false)
       })
   }
 
   public func expandGalleryView() {
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(GestureOffsets.maximumHeight)
-      self.updateCollectionViewFrames()
+      self.updateCollectionViewFrames(true)
       })
-  }
-
-  func updateCollectionViewFrames() {
-    galleryView.collectionViewLayout.invalidateLayout()
-    galleryView.collectionView.frame.size.height = GestureOffsets.minimumHeight - galleryView.topSeparator.frame.height
-    galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: GestureOffsets.minimumHeight)
-    galleryView.noImagesLabel.center = galleryView.collectionView.center
   }
 
   func updateGalleryViewFrames(constant: CGFloat) {
     galleryView.frame.origin.y = totalHeight - bottomContainer.frame.height - constant
     galleryView.frame.size.height = constant
+  }
+
+  func updateCollectionViewFrames(maximum: Bool) {
+    let constant = maximum ? GestureOffsets.maximumHeight : GestureOffsets.minimumHeight
+    galleryView.collectionViewLayout.invalidateLayout()
+    galleryView.collectionView.frame.size.height = constant - galleryView.topSeparator.frame.height
+    galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
+    galleryView.noImagesLabel.center = galleryView.collectionView.center
   }
 }
 
