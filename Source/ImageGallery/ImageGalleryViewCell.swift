@@ -26,9 +26,8 @@ class ImageGalleryViewCell: UICollectionViewCell {
         view.clipsToBounds = true
         contentView.addSubview(view)
       }
+      setupConstraints()
     }
-
-    setupConstraints()
   }
 
   override func layoutSubviews() {
