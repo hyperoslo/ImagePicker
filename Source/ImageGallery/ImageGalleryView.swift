@@ -16,7 +16,6 @@ protocol ImageGalleryPanGestureDelegate: class {
 public class ImageGalleryView: UIView {
 
   struct Dimensions {
-    static let galleryHeight: CGFloat = 160
     static let galleryBarHeight: CGFloat = 24
     static let indicatorWidth: CGFloat = 41
     static let indicatorHeight: CGFloat = 8
