@@ -7,7 +7,7 @@ protocol ImageStackViewDelegate: class {
 class ImageStackView: UIView {
 
   struct Dimensions {
-    static let imageSize: CGFloat = 70
+    static let imageSize: CGFloat = 58
   }
 
   weak var delegate: ImageStackViewDelegate?
@@ -17,7 +17,7 @@ class ImageStackView: UIView {
     for i in 0...3 {
       let view = UIImageView()
       view.layer.cornerRadius = 3
-      view.layer.borderColor = UIColor(white: 1, alpha: 0.2).CGColor
+      view.layer.borderColor = UIColor.whiteColor().CGColor
       view.layer.borderWidth = 1
       view.contentMode = .ScaleAspectFill
       view.clipsToBounds = true
@@ -27,17 +27,26 @@ class ImageStackView: UIView {
     return array
     }()
 
+  // MARK: - Initializers
+
   override init(frame: CGRect) {
     super.init(frame: frame)
+    
     subscribe()
     views.map { self.addSubview($0) }
     views[0].alpha = 1
     layoutSubviews()
   }
 
+  required init(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   deinit {
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
+
+  // MARK: - Helpers
 
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
@@ -72,13 +81,10 @@ class ImageStackView: UIView {
       view.frame = frame
     }
   }
-
-  required init(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
 }
 
 extension ImageStackView {
+
   func imageDidPush(notification: NSNotification) {
 
     //TODO indexOf in swift 2

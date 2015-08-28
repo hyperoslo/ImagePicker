@@ -1,6 +1,6 @@
 import UIKit
 
-protocol TopViewDelegate {
+protocol TopViewDelegate: class {
 
   func flashButtonDidPress(title: String)
   func rotateDeviceDidPress()
@@ -22,7 +22,6 @@ class TopView: UIView {
     button.setTitleColor(UIColor(red:0.98, green:0.98, blue:0.45, alpha:1), forState: .Normal)
     button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
     button.titleLabel?.font = self.configuration.flashButton
-    button.setTranslatesAutoresizingMaskIntoConstraints(false)
     button.addTarget(self, action: "flashButtonDidPress:", forControlEvents: .TouchUpInside)
     button.contentHorizontalAlignment = .Left
 
@@ -32,7 +31,6 @@ class TopView: UIView {
   lazy var rotateCamera: UIButton = { [unowned self] in
     let button = UIButton()
     button.setImage(self.getImage("cameraIcon"), forState: .Normal)
-    button.setTranslatesAutoresizingMaskIntoConstraints(false)
     button.addTarget(self, action: "rotateCameraButtonDidPress:", forControlEvents: .TouchUpInside)
 
     return button
@@ -43,44 +41,27 @@ class TopView: UIView {
     return configuration
     }()
 
-  var delegate: TopViewDelegate?
+  weak var delegate: TopViewDelegate?
 
   // MARK: - Initializers
 
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    [flashButton, rotateCamera].map { self.addSubview($0) }
+    for button in [flashButton, rotateCamera] {
+      button.layer.shadowColor = UIColor.blackColor().CGColor
+      button.layer.shadowOpacity = 0.5
+      button.layer.shadowOffset = CGSize(width: 0, height: 1)
+      button.layer.shadowRadius = 1
+      button.setTranslatesAutoresizingMaskIntoConstraints(false)
+      addSubview(button)
+    }
 
     setupConstraints()
   }
 
   required init(coder aDecoder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
-  }
-
-  // MARK: - Constraints
-
-  func setupConstraints() {
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Left,
-      relatedBy: .Equal, toItem: self, attribute: .Left,
-      multiplier: 1, constant: Dimensions.leftOffset))
-
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .CenterY,
-      relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
-
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Width,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: 55))
-
-    addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Right,
-      relatedBy: .Equal, toItem: self, attribute: .Right,
-      multiplier: 1, constant: -Dimensions.rightOffset))
-
-    addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .CenterY,
-      relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
+    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: - Action methods
