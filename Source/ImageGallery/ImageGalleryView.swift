@@ -16,10 +16,8 @@ protocol ImageGalleryPanGestureDelegate: class {
 public class ImageGalleryView: UIView {
 
   struct Dimensions {
-    static let galleryHeight: CGFloat = 160
     static let galleryBarHeight: CGFloat = 24
-    static let indicatorWidth: CGFloat = 41
-    static let indicatorHeight: CGFloat = 8
+    static let indicatorSize = CGSize(width: 41, height: 8)
   }
 
   lazy public var collectionView: UICollectionView = { [unowned self] in
@@ -55,8 +53,9 @@ public class ImageGalleryView: UIView {
   lazy var indicator: UIView = {
     let view = UIView()
     view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
-    view.layer.cornerRadius = Dimensions.indicatorHeight / 2
+    view.layer.cornerRadius = Dimensions.indicatorSize.height / 2
     view.setTranslatesAutoresizingMaskIntoConstraints(false)
+    view.frame.size = Dimensions.indicatorSize
     
     return view
     }()
@@ -126,10 +125,18 @@ public class ImageGalleryView: UIView {
     collectionView.delegate = self
 
     topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
-    indicator.frame = CGRect(x: (totalWidth - Dimensions.indicatorWidth) / 2, y: (topSeparator.frame.height - Dimensions.indicatorHeight) / 2,
-      width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
-    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
-    collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
+
+    indicator.center = topSeparator.center
+
+    collectionView.frame =
+      CGRect(x: 0,
+      y: topSeparator.frame.height,
+      width: totalWidth,
+      height: frame.height - topSeparator.frame.height)
+
+    let height = max(collectionView.frame.height, 100)
+    collectionSize = CGSize(width: height, height: height)
+
     noImagesLabel.center = collectionView.center
   }
 

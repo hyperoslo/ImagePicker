@@ -174,7 +174,9 @@ public class ImagePickerController: UIViewController {
     let constant = maximum ? GestureConstants.maximumHeight : GestureConstants.minimumHeight
     galleryView.collectionViewLayout.invalidateLayout()
     galleryView.collectionView.frame.size.height = constant - galleryView.topSeparator.frame.height
-    galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
+
+    let height = max(galleryView.collectionView.frame.height, 100)
+    galleryView.collectionSize = CGSize(width: height, height: height)
     galleryView.noImagesLabel.center = galleryView.collectionView.center
   }
 
@@ -290,7 +292,10 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     if galleryHeight > GestureConstants.minimumHeight {
       galleryView.collectionViewLayout.invalidateLayout()
       galleryView.collectionView.frame.size.height = galleryView.frame.size.height - ImageGalleryView.Dimensions.galleryBarHeight
-      galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
+
+      let height = max(galleryView.collectionView.frame.height, 100)
+      galleryView.collectionSize = CGSize(width: height, height: height)
+
 
       if galleryHeight < GestureConstants.maximumHeight {
         var realTranslation = translation.y < -GestureConstants.minimumHeight + ImageGalleryView.Dimensions.galleryBarHeight
