@@ -61,7 +61,7 @@ class TopView: UIView {
   }
 
   required init(coder aDecoder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
+    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: - Action methods
