@@ -300,7 +300,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     galleryView.noImagesLabel.center = galleryView.collectionView.center
   }
 
-  func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint) {
+  func panGestureDidEnd(translation: CGPoint, velocity: CGPoint) {
     let galleryHeight = initialFrame.height - translation.y
 
     if galleryView.frame.height < GestureConstants.minimumHeight && velocity.y < 0 {

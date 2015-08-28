@@ -31,6 +31,7 @@ class ImageStackView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
+    
     subscribe()
     views.map { self.addSubview($0) }
     views[0].alpha = 1

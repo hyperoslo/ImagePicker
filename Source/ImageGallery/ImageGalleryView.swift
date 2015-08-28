@@ -6,7 +6,7 @@ protocol ImageGalleryPanGestureDelegate: class {
 
   func panGestureDidStart()
   func panGestureDidChange(translation: CGPoint)
-  func panGestureDidEnd(translation: CGPoint, location: CGPoint, velocity: CGPoint)
+  func panGestureDidEnd(translation: CGPoint, velocity: CGPoint)
   func presentViewController(controller: UIAlertController)
   func dismissViewController(controller: UIAlertController)
   func permissionGranted()
@@ -175,7 +175,6 @@ public class ImageGalleryView: UIView {
 
   func handlePanGestureRecognizer(gesture: UIPanGestureRecognizer) {
     let translation = gesture.translationInView(superview!)
-    let location = gesture.locationInView(superview!)
     let velocity = gesture.velocityInView(superview!)
 
     if gesture.state == UIGestureRecognizerState.Began {
@@ -183,7 +182,7 @@ public class ImageGalleryView: UIView {
     } else if gesture.state == UIGestureRecognizerState.Changed {
       delegate?.panGestureDidChange(translation)
     } else if gesture.state == UIGestureRecognizerState.Ended {
-      delegate?.panGestureDidEnd(translation, location: location, velocity: velocity)
+      delegate?.panGestureDidEnd(translation, velocity: velocity)
     }
   }
 
