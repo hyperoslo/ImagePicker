@@ -177,6 +177,14 @@ public class ImagePickerController: UIViewController {
     galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
     galleryView.noImagesLabel.center = galleryView.collectionView.center
   }
+
+  func enableGestures(enabled: Bool) {
+    galleryView.alpha = enabled ? 1 : 0
+    bottomContainer.pickerButton.enabled = enabled
+    bottomContainer.tapGestureRecognizer.enabled = enabled
+    topView.flashButton.enabled = enabled
+    topView.rotateCamera.enabled = enabled
+  }
 }
 
 // MARK: - Action methods
@@ -207,7 +215,7 @@ extension ImagePickerController: CameraViewDelegate {
 
   func handleFlashButton(hide: Bool) {
     let alpha: CGFloat = hide ? 0 : 1
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animateWithDuration(0.3, animations: {
       self.topView.flashButton.alpha = alpha
       })
   }
@@ -217,7 +225,7 @@ extension ImagePickerController: CameraViewDelegate {
     stack.pushImage(image)
     galleryView.shouldTransform = true
 
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animateWithDuration(0.3, animations: {
       self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
       }, completion: { _ in
         self.galleryView.collectionView.transform = CGAffineTransformIdentity
@@ -244,21 +252,13 @@ extension ImagePickerController: TopViewDelegate {
 extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
   func hideViews() {
-    galleryView.alpha = 0
-    bottomContainer.pickerButton.enabled = false
-    bottomContainer.tapGestureRecognizer.enabled = false
-    topView.flashButton.enabled = false
-    topView.rotateCamera.enabled = false
+    enableGestures(false)
   }
 
   func permissionGranted() {
     galleryView.fetchPhotos(0)
     cameraController.initializeCamera()
-    galleryView.alpha = 1
-    bottomContainer.pickerButton.enabled = true
-    bottomContainer.tapGestureRecognizer.enabled = true
-    topView.flashButton.enabled = true
-    topView.rotateCamera.enabled = true
+    enableGestures(true)
   }
 
   func presentViewController(controller: UIAlertController) {
