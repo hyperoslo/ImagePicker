@@ -159,10 +159,10 @@ public class ImagePickerController: UIViewController {
   }
 
   public func expandGalleryView() {
-    UIView.animateWithDuration(0.3, animations: {
+    galleryView.collectionView.performBatchUpdates({
       self.updateGalleryViewFrames(GestureConstants.maximumHeight)
       self.updateCollectionViewFrames(true)
-      })
+      }, completion: nil)
   }
 
   func updateGalleryViewFrames(constant: CGFloat) {
