@@ -22,7 +22,7 @@ public class ImageGalleryView: UIView {
     static let indicatorHeight: CGFloat = 8
   }
 
-  lazy public var collectionView: UICollectionView = {
+  lazy public var collectionView: UICollectionView = { [unowned self] in
     let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
       collectionViewLayout: self.collectionViewLayout)
     collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
