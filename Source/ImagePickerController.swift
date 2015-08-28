@@ -293,7 +293,10 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
 
       if galleryHeight < GestureConstants.maximumHeight {
-        galleryView.collectionView.contentOffset = CGPoint(x: initialContentOffset.x - (translation.y * CGFloat(numberOfCells)), y: 0)
+        var realTranslation = translation.y < -GestureConstants.minimumHeight + ImageGalleryView.Dimensions.galleryBarHeight
+          ? translation.y + GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight
+          : translation.y
+        galleryView.collectionView.contentOffset = CGPoint(x: initialContentOffset.x - (realTranslation * CGFloat(numberOfCells)), y: 0)
       }
     }
 
