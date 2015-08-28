@@ -96,7 +96,8 @@ public class ImagePickerController: UIViewController {
   public override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
 
-    let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960 ? 34 : 134
+    let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
+      ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
 
     galleryView.frame = CGRectMake(0, totalHeight - bottomContainer.frame.height - galleryHeight,
       totalWidth, galleryHeight)

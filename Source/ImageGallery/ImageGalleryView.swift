@@ -119,6 +119,7 @@ public class ImageGalleryView: UIView {
 
   func updateFrames() {
     let totalWidth = UIScreen.mainScreen().bounds.width
+    let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
 
     collectionView.dataSource = self
     collectionView.delegate = self
@@ -131,7 +132,7 @@ public class ImageGalleryView: UIView {
 
     let height = max(collectionView.frame.height, 100)
     collectionSize = CGSize(width: height, height: height)
-    
+
     noImagesLabel.center = collectionView.center
   }
 
