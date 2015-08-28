@@ -128,7 +128,11 @@ public class ImageGalleryView: UIView {
 
     indicator.center = topSeparator.center
 
-    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: frame.height - topSeparator.frame.height)
+    collectionView.frame =
+      CGRect(x: 0,
+      y: topSeparator.frame.height,
+      width: totalWidth,
+      height: frame.height - topSeparator.frame.height)
 
     let height = max(collectionView.frame.height, 100)
     collectionSize = CGSize(width: height, height: height)
