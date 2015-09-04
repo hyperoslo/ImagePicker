@@ -116,12 +116,7 @@ class CameraView: UIViewController {
       }, completion: { finished in
         self.captureSession.beginConfiguration()
         self.captureSession.removeInput(currentDeviceInput)
-
-        let captureDeviceInput: AVCaptureDeviceInput?
-        do { try captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
-        } catch { }
-
-        self.captureSession.addInput(AVCaptureDeviceInput(device: captureDeviceInput))
+        do { try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice)) } catch {}
         self.captureSession.commitConfiguration()
         UIView.animateWithDuration(1.3, animations: { [unowned self] in
           self.containerView.alpha = 0
@@ -179,18 +174,19 @@ class CameraView: UIViewController {
 
   func focusTo(point: CGPoint) {
     if let device = captureDevice {
-      if device.lockForConfiguration()
-        && device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
-          device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
-          device.unlockForConfiguration()
-          focusImageView.center = point
-          UIView.animateWithDuration(0.5, animations: { [unowned self] in
-            self.focusImageView.alpha = 1
-            self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
-            }, completion: { _ in
-              self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
-                selector: "timerDidFire", userInfo: nil, repeats: false)
-          })
+
+      do { try device.lockForConfiguration() } catch { }
+      if device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
+        device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
+        device.unlockForConfiguration()
+        focusImageView.center = point
+        UIView.animateWithDuration(0.5, animations: { [unowned self] in
+          self.focusImageView.alpha = 1
+          self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
+          }, completion: { _ in
+            self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
+              selector: "timerDidFire", userInfo: nil, repeats: false)
+        })
       }
     }
   }
@@ -216,16 +212,15 @@ class CameraView: UIViewController {
 
   func beginSession() {
     configureDevice()
-    let error: NSError? = nil
     if captureSession.inputs.count == 0 {
       let captureDeviceInput: AVCaptureDeviceInput?
-      do { try captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
-      } catch { }
-      captureSession.addInput(captureDeviceInput)
-
-      if error != nil {
-        print("error: \(error?.localizedDescription)")
+      do { try
+        captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
+        captureSession.addInput(captureDeviceInput)
+      } catch {
+        print("failed to capture device")
       }
+
 
       previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
       previewLayer?.autoreverses = true

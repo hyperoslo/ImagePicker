@@ -149,10 +149,11 @@ public class ImageGalleryView: UIView {
     let size = CGSizeMake(100, 150)
 
     if authorizationStatus == .Authorized {
-      if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
-        if fetchResult.count != 0 && index < fetchResult.count {
-          imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-            dispatch_async(dispatch_get_main_queue()) {
+      let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
+      if fetchResult.count != 0 && index < fetchResult.count {
+        imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
+          dispatch_async(dispatch_get_main_queue()) {
+            if let image = image {
               if !self.images.containsObject(image) {
                 self.images.addObject(image)
                 if index > self.imagesBeforeLoading + 10 {
@@ -166,8 +167,8 @@ public class ImageGalleryView: UIView {
                 }
               }
             }
+          }
           })
-        }
       }
     }
   }
