@@ -38,7 +38,7 @@ class ImageStackView: UIView {
     layoutSubviews()
   }
 
-  required init(coder aDecoder: NSCoder) {
+  required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -74,10 +74,10 @@ class ImageStackView: UIView {
     let offset = -step * CGFloat(views.count)
     var origin = CGPoint(x: offset, y: offset)
 
-    for (i, view) in enumerate(views) {
+    for (i, view) in views.enumerate() {
       origin.x += step
       origin.y += step
-      var frame = CGRect(origin: origin, size: viewSize)
+      let frame = CGRect(origin: origin, size: viewSize)
       view.frame = frame
     }
   }
@@ -116,9 +116,9 @@ extension ImageStackView {
       return
     }
 
-    let photos = suffix(images, 4)
+    let photos = images.suffix(4)
 
-    for (index, view) in enumerate(views) {
+    for (index, view) in views.enumerate() {
       if index <= photos.count - 1 {
         view.image = photos[index]
         view.alpha = 1

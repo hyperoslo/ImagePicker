@@ -27,6 +27,6 @@ public class ImageStack {
   }
 
   public func containsImage(image: UIImage) -> Bool {
-    return contains(images, image)
+    return images.contains(image)
   }
 }

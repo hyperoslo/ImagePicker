@@ -53,14 +53,14 @@ class TopView: UIView {
       button.layer.shadowOpacity = 0.5
       button.layer.shadowOffset = CGSize(width: 0, height: 1)
       button.layer.shadowRadius = 1
-      button.setTranslatesAutoresizingMaskIntoConstraints(false)
+      button.translatesAutoresizingMaskIntoConstraints = false
       addSubview(button)
     }
 
     setupConstraints()
   }
 
-  required init(coder aDecoder: NSCoder) {
+  required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

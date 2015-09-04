@@ -15,7 +15,7 @@ class ButtonPicker: UIButton {
 
   lazy var numberLabel: UILabel = { [unowned self] in
     let label = UILabel()
-    label.setTranslatesAutoresizingMaskIntoConstraints(false)
+    label.translatesAutoresizingMaskIntoConstraints = false
     label.font = self.configuration.numberLabelFont
 
     return label
@@ -61,7 +61,7 @@ class ButtonPicker: UIButton {
       object: nil)
   }
 
-  required init(coder aDecoder: NSCoder) {
+  required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

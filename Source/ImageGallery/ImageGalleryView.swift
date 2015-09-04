@@ -25,7 +25,7 @@ public class ImageGalleryView: UIView {
   lazy public var collectionView: UICollectionView = { [unowned self] in
     let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
       collectionViewLayout: self.collectionViewLayout)
-    collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+    collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.backgroundColor = self.configuration.mainColor
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.layer.anchorPoint = CGPointMake(0.5, 0.5)
@@ -45,7 +45,7 @@ public class ImageGalleryView: UIView {
 
   lazy var topSeparator: UIView = { [unowned self] in
     let view = UIView()
-    view.setTranslatesAutoresizingMaskIntoConstraints(false)
+    view.translatesAutoresizingMaskIntoConstraints = false
     view.addGestureRecognizer(self.panGestureRecognizer)
     view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
 
@@ -56,7 +56,7 @@ public class ImageGalleryView: UIView {
     let view = UIView()
     view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
     view.layer.cornerRadius = Dimensions.indicatorHeight / 2
-    view.setTranslatesAutoresizingMaskIntoConstraints(false)
+    view.translatesAutoresizingMaskIntoConstraints = false
     
     return view
     }()
@@ -112,7 +112,7 @@ public class ImageGalleryView: UIView {
     fetchPhotos(0)
   }
 
-  required public init(coder aDecoder: NSCoder) {
+  required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
