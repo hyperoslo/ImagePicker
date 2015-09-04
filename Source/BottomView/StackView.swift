@@ -33,7 +33,11 @@ class ImageStackView: UIView {
     super.init(frame: frame)
     
     subscribe()
-    views.map { self.addSubview($0) }
+
+    for view in views {
+      addSubview(view)
+    }
+    
     views[0].alpha = 1
     layoutSubviews()
   }
@@ -74,7 +78,7 @@ class ImageStackView: UIView {
     let offset = -step * CGFloat(views.count)
     var origin = CGPoint(x: offset, y: offset)
 
-    for (i, view) in views.enumerate() {
+    for (_, view) in views.enumerate() {
       origin.x += step
       origin.y += step
       let frame = CGRect(origin: origin, size: viewSize)
@@ -132,7 +136,7 @@ extension ImageStackView {
   private func animateImageView(imageView: UIImageView) {
     imageView.transform = CGAffineTransformMakeScale(0, 0)
 
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animateWithDuration(0.3, animations: {
       imageView.transform = CGAffineTransformMakeScale(1.05, 1.05)
       }, completion: { _ in
         UIView.animateWithDuration(0.2, animations: { _ in

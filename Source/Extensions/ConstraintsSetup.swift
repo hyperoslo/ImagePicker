@@ -93,9 +93,9 @@ extension ImagePickerController {
     let attributes: [NSLayoutAttribute] = [.Bottom, .Right, .Width]
     let topViewAttributes: [NSLayoutAttribute] = [.Left, .Top, .Width]
 
-    attributes.map {
-      self.view.addConstraint(NSLayoutConstraint(item: self.bottomContainer, attribute: $0,
-        relatedBy: .Equal, toItem: self.view, attribute: $0,
+    for attribute in attributes {
+      view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: attribute,
+        relatedBy: .Equal, toItem: view, attribute: attribute,
         multiplier: 1, constant: 0))
     }
 
@@ -109,9 +109,9 @@ extension ImagePickerController {
         multiplier: 1, constant: 0))
     }
 
-    topViewAttributes.map {
-      self.view.addConstraint(NSLayoutConstraint(item: self.topView, attribute: $0,
-        relatedBy: .Equal, toItem: self.view, attribute: $0,
+    for attribute in topViewAttributes {
+      view.addConstraint(NSLayoutConstraint(item: topView, attribute: attribute,
+        relatedBy: .Equal, toItem: self.view, attribute: attribute,
         multiplier: 1, constant: 0))
     }
 

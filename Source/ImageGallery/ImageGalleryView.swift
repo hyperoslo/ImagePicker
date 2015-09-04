@@ -105,7 +105,9 @@ public class ImageGalleryView: UIView {
     collectionView.registerClass(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
-    [collectionView, topSeparator].map { self.addSubview($0) }
+    for view in [collectionView, topSeparator] {
+      addSubview(view)
+    }
     topSeparator.addSubview(indicator)
 
     imagesBeforeLoading = 0

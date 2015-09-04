@@ -33,7 +33,7 @@ class ButtonPicker: UIButton {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    [numberLabel].map { self.addSubview($0) }
+    addSubview(numberLabel)
 
     subscribe()
     setupButton()
@@ -79,9 +79,9 @@ class ButtonPicker: UIButton {
   func setupConstraints() {
     let attributes: [NSLayoutAttribute] = [.CenterX, .CenterY]
 
-    attributes.map {
-      self.addConstraint(NSLayoutConstraint(item: self.numberLabel, attribute: $0,
-        relatedBy: .Equal, toItem: self, attribute: $0,
+    for attribute in attributes {
+      addConstraint(NSLayoutConstraint(item: numberLabel, attribute: attribute,
+        relatedBy: .Equal, toItem: self, attribute: attribute,
         multiplier: 1, constant: 0))
     }
   }
