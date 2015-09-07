@@ -50,6 +50,13 @@ public class ImagePickerController: UIViewController {
     return controller
     }()
 
+  lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
+    let gesture = UIPanGestureRecognizer()
+    gesture.addTarget(self, action: "panGestureRecognizerHandler:")
+
+    return gesture
+    }()
+
   lazy var configuration: PickerConfiguration = PickerConfiguration()
 
   public weak var delegate: ImagePickerDelegate?
@@ -269,6 +276,10 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
     numberOfCells = Int(initialContentOffset.x / galleryView.collectionSize.width)
+  }
+
+  func panGestureRecognizerHandler(gesture: UIPanGestureRecognizer) {
+
   }
 
   func panGestureDidChange(translation: CGPoint) {
