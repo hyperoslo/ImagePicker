@@ -84,6 +84,8 @@ class CameraView: UIViewController {
       }
     }
 
+    captureDevice = capturedDevices?.firstObject as? AVCaptureDevice
+
     if captureDevice != nil {
       beginSession()
     }

@@ -19,8 +19,6 @@ public class ImagePickerController: UIViewController {
     static let velocity: CGFloat = 100
   }
 
-  public var stack = ImageStack()
-
   lazy public var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
     galleryView.delegate = self
@@ -45,11 +43,6 @@ public class ImagePickerController: UIViewController {
     return view
     }()
 
-  lazy var configuration: PickerConfiguration = {
-    let configuration = PickerConfiguration()
-    return configuration
-    }()
-
   lazy var cameraController: CameraView = { [unowned self] in
     let controller = CameraView()
     controller.delegate = self
@@ -57,12 +50,15 @@ public class ImagePickerController: UIViewController {
     return controller
     }()
 
+  lazy var configuration: PickerConfiguration = PickerConfiguration()
+
+  public weak var delegate: ImagePickerDelegate?
+  public var stack = ImageStack()
   let totalHeight = UIScreen.mainScreen().bounds.size.height
   let totalWidth = UIScreen.mainScreen().bounds.size.width
   var initialFrame: CGRect!
   var initialContentOffset: CGPoint!
   var numberOfCells: Int!
-  public weak var delegate: ImagePickerDelegate?
 
   public var doneButtonTitle: String? {
     didSet {
