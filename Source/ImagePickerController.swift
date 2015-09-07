@@ -85,6 +85,7 @@ public class ImagePickerController: UIViewController {
 
     view.backgroundColor = .whiteColor()
     view.backgroundColor = self.configuration.mainColor
+    cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     subscribe()
     setupConstraints()
@@ -279,7 +280,18 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureRecognizerHandler(gesture: UIPanGestureRecognizer) {
+    if gesture.locationInView(view).y > galleryView.frame.origin.y - 25 {
+      let translation = gesture.translationInView(view)
+      let velocity = gesture.velocityInView(view)
 
+      if gesture.state == UIGestureRecognizerState.Began {
+        panGestureDidStart()
+      } else if gesture.state == UIGestureRecognizerState.Changed {
+        panGestureDidChange(translation)
+      } else if gesture.state == UIGestureRecognizerState.Ended {
+        panGestureDidEnd(translation, velocity: velocity)
+      }
+    }
   }
 
   func panGestureDidChange(translation: CGPoint) {
