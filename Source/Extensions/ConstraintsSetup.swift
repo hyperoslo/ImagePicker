@@ -77,11 +77,19 @@ extension TopView {
 
     addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Right,
       relatedBy: .Equal, toItem: self, attribute: .Right,
-      multiplier: 1, constant: -Dimensions.rightOffset))
+      multiplier: 1, constant: Dimensions.rightOffset))
 
     addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
       multiplier: 1, constant: 0))
+
+    addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Width,
+      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+      multiplier: 1, constant: 55))
+
+    addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Height,
+      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+      multiplier: 1, constant: 55))
   }
 }
 
