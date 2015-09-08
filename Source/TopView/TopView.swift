@@ -10,7 +10,7 @@ class TopView: UIView {
 
   struct Dimensions {
     static let leftOffset: CGFloat = 11
-    static let rightOffset: CGFloat = 11
+    static let rightOffset: CGFloat = 7
     static let height: CGFloat = 34
   }
 
@@ -32,6 +32,7 @@ class TopView: UIView {
     let button = UIButton()
     button.setImage(self.getImage("cameraIcon"), forState: .Normal)
     button.addTarget(self, action: "rotateCameraButtonDidPress:", forControlEvents: .TouchUpInside)
+    button.imageView?.contentMode = .Center
 
     return button
     }()

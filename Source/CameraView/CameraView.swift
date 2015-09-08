@@ -26,12 +26,21 @@ class CameraView: UIViewController {
   lazy var focusImageView: UIImageView = { [unowned self] in
     let imageView = UIImageView()
     imageView.image = self.getImage("focusIcon")
-    imageView.backgroundColor = UIColor.clearColor()
+    imageView.backgroundColor = .clearColor()
     imageView.frame = CGRectMake(0, 0, 110, 110)
     imageView.alpha = 0
     self.view.addSubview(imageView)
 
     return imageView
+    }()
+
+  lazy var capturedImageView: UIView = { [unowned self] in
+    let view = UIView()
+    view.backgroundColor = .blackColor()
+    view.alpha = 0
+    self.view.addSubview(view)
+
+    return view
     }()
 
   lazy var containerView: UIView = {
@@ -62,7 +71,7 @@ class CameraView: UIViewController {
   // MARK: - Initialize camera
 
   func initializeCamera() {
-    captureSession.sessionPreset = AVCaptureSessionPreset640x480
+    captureSession.sessionPreset = AVCaptureSessionPreset1280x720
     capturedDevices = NSMutableArray()
 
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
@@ -83,6 +92,8 @@ class CameraView: UIViewController {
           })
       }
     }
+
+    captureDevice = capturedDevices?.firstObject as? AVCaptureDevice
 
     if captureDevice != nil {
       beginSession()
@@ -118,7 +129,7 @@ class CameraView: UIViewController {
         self.captureSession.removeInput(currentDeviceInput)
         do { try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice)) } catch {}
         self.captureSession.commitConfiguration()
-        UIView.animateWithDuration(1.3, animations: { [unowned self] in
+        UIView.animateWithDuration(0.7, animations: { [unowned self] in
           self.containerView.alpha = 0
           })
     })
@@ -144,20 +155,38 @@ class CameraView: UIViewController {
   }
 
   func takePicture() {
+    capturedImageView.frame = view.bounds
+
+    UIView.animateWithDuration(0.1, animations: {
+      self.capturedImageView.alpha = 1
+      }, completion: { _ in
+        UIView.animateWithDuration(0.1, animations: {
+          self.capturedImageView.alpha = 0
+        })
+    })
+
     let queue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL)
     let videoOrientation = previewLayer?.connection.videoOrientation
+
     stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation!
 
     dispatch_async(queue, { [unowned self] in
       self.stillImageOutput!.captureStillImageAsynchronouslyFromConnection(self.stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo), completionHandler: { (buffer, error) -> Void in
         let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
-        let image = UIImage(data: imageData)
-        self.delegate?.imageToLibrary(image!)
-        let orientation = ALAssetOrientation(rawValue: image!.imageOrientation.rawValue)
+        let image = self.cropImage(UIImage(data: imageData)!)
+        let orientation = ALAssetOrientation(rawValue: 3)
         let assetsLibrary = ALAssetsLibrary()
-        assetsLibrary.writeImageToSavedPhotosAlbum(image!.CGImage, orientation: orientation!, completionBlock: nil)
+        self.delegate?.imageToLibrary(image)
+        assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation!, completionBlock: nil)
       })
     })
+  }
+
+  func cropImage(image: UIImage) -> UIImage {
+    let imageReference = CGImageCreateWithImageInRect(image.CGImage, CGRect(x: 0, y: 0, width: image.size.height - 200, height: image.size.width))
+    let normalizedImage = UIImage(CGImage: imageReference!, scale: 1, orientation: .Right)
+
+    return normalizedImage
   }
 
   // MARK: - Timer methods
