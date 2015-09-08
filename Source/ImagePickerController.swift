@@ -280,17 +280,15 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureRecognizerHandler(gesture: UIPanGestureRecognizer) {
-    if gesture.locationInView(view).y > galleryView.frame.origin.y - 25 {
-      let translation = gesture.translationInView(view)
-      let velocity = gesture.velocityInView(view)
+    let translation = gesture.translationInView(view)
+    let velocity = gesture.velocityInView(view)
 
-      if gesture.state == UIGestureRecognizerState.Began {
-        panGestureDidStart()
-      } else if gesture.state == UIGestureRecognizerState.Changed {
-        panGestureDidChange(translation)
-      } else if gesture.state == UIGestureRecognizerState.Ended {
-        panGestureDidEnd(translation, velocity: velocity)
-      }
+    if gesture.locationInView(view).y > galleryView.frame.origin.y - 25 {
+      gesture.state == .Began ? panGestureDidStart() : panGestureDidChange(translation)
+    }
+
+    if gesture.state == .Ended {
+      panGestureDidEnd(translation, velocity: velocity)
     }
   }
 
