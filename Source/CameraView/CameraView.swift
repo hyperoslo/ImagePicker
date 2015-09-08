@@ -71,7 +71,7 @@ class CameraView: UIViewController {
   // MARK: - Initialize camera
 
   func initializeCamera() {
-    captureSession.sessionPreset = AVCaptureSessionPreset640x480
+    captureSession.sessionPreset = AVCaptureSessionPreset1280x720
     capturedDevices = NSMutableArray()
 
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
@@ -156,13 +156,14 @@ class CameraView: UIViewController {
   func takePicture() {
     capturedImageView.frame = view.bounds
 
-    UIView.animateWithDuration(0.125, animations: {
+    UIView.animateWithDuration(0.1, animations: {
       self.capturedImageView.alpha = 1
       }, completion: { _ in
-        UIView.animateWithDuration(0.125, animations: {
+        UIView.animateWithDuration(0.1, animations: {
           self.capturedImageView.alpha = 0
         })
     })
+
     let queue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL)
     let videoOrientation = previewLayer?.connection.videoOrientation
 
@@ -171,25 +172,20 @@ class CameraView: UIViewController {
     dispatch_async(queue, { [unowned self] in
       self.stillImageOutput!.captureStillImageAsynchronouslyFromConnection(self.stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo), completionHandler: { (buffer, error) -> Void in
         let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
-        let image = UIImage(data: imageData)!
-        self.delegate?.imageToLibrary(image)
-        let orientation = ALAssetOrientation(rawValue: image.imageOrientation.rawValue)
+        let image = self.cropImage(UIImage(data: imageData)!)
+        let orientation = ALAssetOrientation(rawValue: 3)
         let assetsLibrary = ALAssetsLibrary()
+        self.delegate?.imageToLibrary(image)
         assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation!, completionBlock: nil)
       })
     })
   }
 
   func cropImage(image: UIImage) -> UIImage {
-    UIGraphicsBeginImageContext(view.frame.size)
-    let context = UIGraphicsGetCurrentContext()
-    CGContextTranslateCTM(context, view.frame.width / 2, view.frame.height / 2)
-    CGContextRotateCTM(context, 1.57)
-    CGContextDrawImage(context, view.bounds, image.CGImage)
-    let croppedImage = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
+    let imageReference = CGImageCreateWithImageInRect(image.CGImage, CGRect(x: 0, y: 0, width: image.size.height - 200, height: image.size.width))
+    let normalizedImage = UIImage(CGImage: imageReference, scale: 1, orientation: .Right)
 
-    return croppedImage
+    return normalizedImage!
   }
 
   // MARK: - Timer methods
