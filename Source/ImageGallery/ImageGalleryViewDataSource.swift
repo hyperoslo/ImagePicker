@@ -22,7 +22,7 @@ extension ImageGalleryView: UICollectionViewDataSource {
     if indexPath.row == 0 && shouldTransform {
       cell.transform = CGAffineTransformMakeScale(0, 0)
 
-      UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseInOut, animations: { [unowned self] in
+      UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseInOut, animations: {
         cell.transform = CGAffineTransformIdentity
         }, completion: nil)
 

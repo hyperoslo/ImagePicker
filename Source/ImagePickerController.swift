@@ -19,8 +19,6 @@ public class ImagePickerController: UIViewController {
     static let velocity: CGFloat = 100
   }
 
-  public var stack = ImageStack()
-
   lazy public var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
     galleryView.delegate = self
@@ -45,11 +43,6 @@ public class ImagePickerController: UIViewController {
     return view
     }()
 
-  lazy var configuration: PickerConfiguration = {
-    let configuration = PickerConfiguration()
-    return configuration
-    }()
-
   lazy var cameraController: CameraView = { [unowned self] in
     let controller = CameraView()
     controller.delegate = self
@@ -57,12 +50,22 @@ public class ImagePickerController: UIViewController {
     return controller
     }()
 
+  lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
+    let gesture = UIPanGestureRecognizer()
+    gesture.addTarget(self, action: "panGestureRecognizerHandler:")
+
+    return gesture
+    }()
+
+  lazy var configuration: PickerConfiguration = PickerConfiguration()
+
+  public weak var delegate: ImagePickerDelegate?
+  public var stack = ImageStack()
   let totalHeight = UIScreen.mainScreen().bounds.size.height
   let totalWidth = UIScreen.mainScreen().bounds.size.width
   var initialFrame: CGRect!
   var initialContentOffset: CGPoint!
   var numberOfCells: Int!
-  public weak var delegate: ImagePickerDelegate?
 
   public var doneButtonTitle: String? {
     didSet {
@@ -77,11 +80,12 @@ public class ImagePickerController: UIViewController {
 
     for subview in [cameraController.view, galleryView, bottomContainer, topView] {
       view.addSubview(subview)
-      subview.setTranslatesAutoresizingMaskIntoConstraints(false)
+      subview.translatesAutoresizingMaskIntoConstraints = false
     }
 
     view.backgroundColor = .whiteColor()
     view.backgroundColor = self.configuration.mainColor
+    cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     subscribe()
     setupConstraints()
@@ -275,6 +279,19 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     numberOfCells = Int(initialContentOffset.x / galleryView.collectionSize.width)
   }
 
+  func panGestureRecognizerHandler(gesture: UIPanGestureRecognizer) {
+    let translation = gesture.translationInView(view)
+    let velocity = gesture.velocityInView(view)
+
+    if gesture.locationInView(view).y > galleryView.frame.origin.y - 25 {
+      gesture.state == .Began ? panGestureDidStart() : panGestureDidChange(translation)
+    }
+
+    if gesture.state == .Ended {
+      panGestureDidEnd(translation, velocity: velocity)
+    }
+  }
+
   func panGestureDidChange(translation: CGPoint) {
     let galleryHeight = initialFrame.height - translation.y
 
@@ -293,7 +310,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
 
       if galleryHeight < GestureConstants.maximumHeight {
-        var realTranslation = translation.y < -GestureConstants.minimumHeight + ImageGalleryView.Dimensions.galleryBarHeight
+        let realTranslation = translation.y < -GestureConstants.minimumHeight + ImageGalleryView.Dimensions.galleryBarHeight
           ? translation.y + GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight
           : translation.y
         galleryView.collectionView.contentOffset = CGPoint(x: initialContentOffset.x - (realTranslation * CGFloat(numberOfCells)), y: 0)

@@ -22,7 +22,7 @@ class ImageGalleryViewCell: UICollectionViewCell {
     if imageView.superview != contentView {
       for view in [imageView, selectedImageView] {
         view.contentMode = .ScaleAspectFill
-        view.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         contentView.addSubview(view)
       }
