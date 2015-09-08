@@ -122,14 +122,12 @@ class CameraView: UIViewController {
 
     delegate?.handleFlashButton(captureDevice?.position == .Front)
 
-    var error: NSError? = nil
-
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.containerView.alpha = 1
       }, completion: { finished in
         self.captureSession.beginConfiguration()
         self.captureSession.removeInput(currentDeviceInput)
-        self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice, error: &error))
+        do { try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice)) } catch {}
         self.captureSession.commitConfiguration()
         UIView.animateWithDuration(0.7, animations: { [unowned self] in
           self.containerView.alpha = 0
@@ -140,7 +138,10 @@ class CameraView: UIViewController {
   func flashCamera(title: String) {
 
     if (captureDevice?.hasFlash != nil) {
-      captureDevice?.lockForConfiguration(nil)
+      do {
+        try captureDevice?.lockForConfiguration()
+      } catch _ {
+      }
       switch title {
       case "ON":
         captureDevice?.flashMode = .On
@@ -202,24 +203,25 @@ class CameraView: UIViewController {
 
   func focusTo(point: CGPoint) {
     if let device = captureDevice {
-      if device.lockForConfiguration(nil)
-        && device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
-          device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
-          device.unlockForConfiguration()
-          focusImageView.center = point
-          UIView.animateWithDuration(0.5, animations: { [unowned self] in
-            self.focusImageView.alpha = 1
-            self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
-            }, completion: { _ in
-              self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
-                selector: "timerDidFire", userInfo: nil, repeats: false)
-          })
+
+      do { try device.lockForConfiguration() } catch { }
+      if device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
+        device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
+        device.unlockForConfiguration()
+        focusImageView.center = point
+        UIView.animateWithDuration(0.5, animations: { [unowned self] in
+          self.focusImageView.alpha = 1
+          self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
+          }, completion: { _ in
+            self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
+              selector: "timerDidFire", userInfo: nil, repeats: false)
+        })
       }
     }
   }
 
-  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-    let anyTouch = touches.first as! UITouch
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    let anyTouch = touches.first!
     let touchX = anyTouch.locationInView(view).x
     let touchY = anyTouch.locationInView(view).y
     focusImageView.transform = CGAffineTransformIdentity
@@ -229,26 +231,31 @@ class CameraView: UIViewController {
 
   func configureDevice() {
     if let device = captureDevice {
-      device.lockForConfiguration(nil)
+      do {
+        try device.lockForConfiguration()
+      } catch _ {
+      }
       device.unlockForConfiguration()
     }
   }
 
   func beginSession() {
     configureDevice()
-    var error: NSError? = nil
     if captureSession.inputs.count == 0 {
-      captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &error))
-
-      if error != nil {
-        println("error: \(error?.localizedDescription)")
+      let captureDeviceInput: AVCaptureDeviceInput?
+      do { try
+        captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
+        captureSession.addInput(captureDeviceInput)
+      } catch {
+        print("failed to capture device")
       }
+
 
       previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
       previewLayer?.autoreverses = true
       previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
       view.clipsToBounds = true
-      view.layer.addSublayer(previewLayer)
+      view.layer.addSublayer(previewLayer!)
       previewLayer?.frame = view.layer.frame
       captureSession.startRunning()
       delegate?.handleFlashButton(captureDevice?.position == .Front)
