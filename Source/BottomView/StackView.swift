@@ -31,7 +31,7 @@ class ImageStackView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
+
     subscribe()
 
     for view in views {
@@ -120,7 +120,7 @@ extension ImageStackView {
       return
     }
 
-    let photos = images.suffix(4)
+    let photos = suffix(images, count: 4)
 
     for (index, view) in views.enumerate() {
       if index <= photos.count - 1 {
@@ -132,6 +132,19 @@ extension ImageStackView {
       }
     }
   }
+
+  func suffix<T>(source: [T], count: Int) -> [T] {
+    if source.count <= count {
+      return source
+    }
+
+    let range = (source.count - count)...(source.count - 1)
+    var result = [T]()
+    for index in range { result.append(source[index]) }
+
+    return result
+  }
+
 
   private func animateImageView(imageView: UIImageView) {
     imageView.transform = CGAffineTransformMakeScale(0, 0)
@@ -145,4 +158,3 @@ extension ImageStackView {
     })
   }
 }
-
