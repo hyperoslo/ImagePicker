@@ -139,12 +139,8 @@ extension ImageStackView {
     }
 
     let range = (source.count - count)...(source.count - 1)
-    var result = [T]()
-    for index in range { result.append(source[index]) }
-
-    return result
+    return Array(source[range])
   }
-
 
   private func animateImageView(imageView: UIImageView) {
     imageView.transform = CGAffineTransformMakeScale(0, 0)
