@@ -31,14 +31,18 @@ class ImageStackView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
+
     subscribe()
-    views.map { self.addSubview($0) }
+
+    for view in views {
+      addSubview(view)
+    }
+    
     views[0].alpha = 1
     layoutSubviews()
   }
 
-  required init(coder aDecoder: NSCoder) {
+  required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -74,10 +78,10 @@ class ImageStackView: UIView {
     let offset = -step * CGFloat(views.count)
     var origin = CGPoint(x: offset, y: offset)
 
-    for (i, view) in enumerate(views) {
+    for (_, view) in views.enumerate() {
       origin.x += step
       origin.y += step
-      var frame = CGRect(origin: origin, size: viewSize)
+      let frame = CGRect(origin: origin, size: viewSize)
       view.frame = frame
     }
   }
@@ -116,9 +120,9 @@ extension ImageStackView {
       return
     }
 
-    let photos = suffix(images, 4)
+    let photos = suffix(images, count: 4)
 
-    for (index, view) in enumerate(views) {
+    for (index, view) in views.enumerate() {
       if index <= photos.count - 1 {
         view.image = photos[index]
         view.alpha = 1
@@ -129,10 +133,23 @@ extension ImageStackView {
     }
   }
 
+  func suffix<T>(source: [T], count: Int) -> [T] {
+    if source.count <= count {
+      return source
+    }
+
+    let range = (source.count - count)...(source.count - 1)
+    var result = [T]()
+    for index in range { result.append(source[index]) }
+
+    return result
+  }
+
+
   private func animateImageView(imageView: UIImageView) {
     imageView.transform = CGAffineTransformMakeScale(0, 0)
 
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animateWithDuration(0.3, animations: {
       imageView.transform = CGAffineTransformMakeScale(1.05, 1.05)
       }, completion: { _ in
         UIView.animateWithDuration(0.2, animations: { _ in
@@ -141,4 +158,3 @@ extension ImageStackView {
     })
   }
 }
-
