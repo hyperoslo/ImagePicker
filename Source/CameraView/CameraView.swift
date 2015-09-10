@@ -174,10 +174,10 @@ class CameraView: UIViewController {
       self.stillImageOutput!.captureStillImageAsynchronouslyFromConnection(self.stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo), completionHandler: { (buffer, error) -> Void in
         let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
         let image = self.cropImage(UIImage(data: imageData)!)
-        let orientation = ALAssetOrientation(rawValue: 3)
+        let orientation = self.pictureOrientation()
         let assetsLibrary = ALAssetsLibrary()
         self.delegate?.imageToLibrary(image)
-        assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation!, completionBlock: nil)
+        assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: nil)
       })
     })
   }
@@ -187,6 +187,19 @@ class CameraView: UIViewController {
     let normalizedImage = UIImage(CGImage: imageReference!, scale: 1, orientation: .Right)
 
     return normalizedImage
+  }
+
+  func pictureOrientation() -> ALAssetOrientation {
+    switch UIDevice.currentDevice().orientation {
+    case .LandscapeLeft:
+      return .Up
+    case .LandscapeRight:
+      return .Down
+    case .PortraitUpsideDown:
+      return .Left
+    default:
+      return .Right
+    }
   }
 
   // MARK: - Timer methods
