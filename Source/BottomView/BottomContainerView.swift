@@ -70,7 +70,7 @@ class BottomContainerView: UIView {
 
     for view in [borderPickerButton, pickerButton, doneButton, stackView, topSeparator] {
       addSubview(view)
-      view.setTranslatesAutoresizingMaskIntoConstraints(false)
+      view.translatesAutoresizingMaskIntoConstraints = false
     }
 
     backgroundColor = configuration.backgroundColor
@@ -79,7 +79,7 @@ class BottomContainerView: UIView {
     setupConstraints()
   }
 
-  required init(coder aDecoder: NSCoder) {
+  required init?(coder aDecoder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
   }
 

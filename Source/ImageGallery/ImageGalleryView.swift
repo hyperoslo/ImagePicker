@@ -25,7 +25,7 @@ public class ImageGalleryView: UIView {
   lazy public var collectionView: UICollectionView = { [unowned self] in
     let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
       collectionViewLayout: self.collectionViewLayout)
-    collectionView.setTranslatesAutoresizingMaskIntoConstraints(false)
+    collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.backgroundColor = self.configuration.mainColor
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.layer.anchorPoint = CGPointMake(0.5, 0.5)
@@ -45,7 +45,7 @@ public class ImageGalleryView: UIView {
 
   lazy var topSeparator: UIView = { [unowned self] in
     let view = UIView()
-    view.setTranslatesAutoresizingMaskIntoConstraints(false)
+    view.translatesAutoresizingMaskIntoConstraints = false
     view.addGestureRecognizer(self.panGestureRecognizer)
     view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
 
@@ -56,7 +56,7 @@ public class ImageGalleryView: UIView {
     let view = UIView()
     view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
     view.layer.cornerRadius = Dimensions.indicatorHeight / 2
-    view.setTranslatesAutoresizingMaskIntoConstraints(false)
+    view.translatesAutoresizingMaskIntoConstraints = false
     
     return view
     }()
@@ -105,14 +105,16 @@ public class ImageGalleryView: UIView {
     collectionView.registerClass(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
-    [collectionView, topSeparator].map { self.addSubview($0) }
+    for view in [collectionView, topSeparator] {
+      addSubview(view)
+    }
     topSeparator.addSubview(indicator)
 
     imagesBeforeLoading = 0
     fetchPhotos(0)
   }
 
-  required public init(coder aDecoder: NSCoder) {
+  required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -149,10 +151,11 @@ public class ImageGalleryView: UIView {
     let size = CGSizeMake(100, 150)
 
     if authorizationStatus == .Authorized {
-      if let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions) {
-        if fetchResult.count != 0 && index < fetchResult.count {
-          imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-            dispatch_async(dispatch_get_main_queue()) {
+      let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
+      if fetchResult.count != 0 && index < fetchResult.count {
+        imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
+          dispatch_async(dispatch_get_main_queue()) {
+            if let image = image {
               if !self.images.containsObject(image) {
                 self.images.addObject(image)
                 if index > self.imagesBeforeLoading + 10 {
@@ -166,8 +169,8 @@ public class ImageGalleryView: UIView {
                 }
               }
             }
+          }
           })
-        }
       }
     }
   }
