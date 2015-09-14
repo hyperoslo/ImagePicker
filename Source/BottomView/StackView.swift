@@ -133,15 +133,6 @@ extension ImageStackView {
     }
   }
 
-  func suffix<T>(source: [T], count: Int) -> [T] {
-    if source.count <= count {
-      return source
-    }
-
-    let range = (source.count - count)...(source.count - 1)
-    return Array(source[range])
-  }
-
   private func animateImageView(imageView: UIImageView) {
     imageView.transform = CGAffineTransformMakeScale(0, 0)
 
