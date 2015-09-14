@@ -120,7 +120,7 @@ extension ImageStackView {
       return
     }
 
-    let photos = suffix(images, count: 4)
+    let photos = Array(images.suffix(4))
 
     for (index, view) in views.enumerate() {
       if index <= photos.count - 1 {
