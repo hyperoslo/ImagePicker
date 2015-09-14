@@ -127,7 +127,14 @@ class CameraView: UIViewController {
       }, completion: { finished in
         self.captureSession.beginConfiguration()
         self.captureSession.removeInput(currentDeviceInput)
-        do { try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice)) } catch {}
+
+        if self.captureDevice!.supportsAVCaptureSessionPreset(AVCaptureSessionPreset1280x720) {
+          self.captureSession.sessionPreset = AVCaptureSessionPreset1280x720
+        } else {
+          self.captureSession.sessionPreset = AVCaptureSessionPreset640x480
+        }
+
+        try! self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
         self.captureSession.commitConfiguration()
         UIView.animateWithDuration(0.7, animations: { [unowned self] in
           self.containerView.alpha = 0
