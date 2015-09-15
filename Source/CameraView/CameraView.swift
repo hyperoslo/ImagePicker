@@ -178,7 +178,6 @@ class CameraView: UIViewController {
         let assetsLibrary = ALAssetsLibrary()
         assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: nil)
 
-
         let rotatedImage = UIImage(CGImage: image.CGImage!,
           scale: 1.0,
           orientation: UIImageOrientation(rawValue: orientation.rawValue)!)
