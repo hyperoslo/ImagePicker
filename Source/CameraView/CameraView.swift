@@ -176,8 +176,13 @@ class CameraView: UIViewController {
         let image = self.cropImage(UIImage(data: imageData)!)
         let orientation = self.pictureOrientation()
         let assetsLibrary = ALAssetsLibrary()
-        self.delegate?.imageToLibrary(image)
         assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: nil)
+
+
+        let rotatedImage = UIImage(CGImage: image.CGImage!,
+          scale: 1.0,
+          orientation: UIImageOrientation(rawValue: orientation.rawValue)!)
+        self.delegate?.imageToLibrary(rotatedImage)
       })
     })
   }
