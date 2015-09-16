@@ -120,7 +120,7 @@ extension ImageStackView {
       return
     }
 
-    let photos = suffix(images, count: 4)
+    let photos = Array(images.suffix(4))
 
     for (index, view) in views.enumerate() {
       if index <= photos.count - 1 {
@@ -131,15 +131,6 @@ extension ImageStackView {
         view.alpha = 0
       }
     }
-  }
-
-  func suffix<T>(source: [T], count: Int) -> [T] {
-    if source.count <= count {
-      return source
-    }
-
-    let range = (source.count - count)...(source.count - 1)
-    return Array(source[range])
   }
 
   private func animateImageView(imageView: UIImageView) {
