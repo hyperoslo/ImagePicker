@@ -140,18 +140,18 @@ extension ImagePickerController {
 extension ImageGalleryViewCell {
 
   func setupConstraints() {
-    if !constraintsAdded {
-      for attribute: NSLayoutAttribute in [.Width, .Height, .CenterX, .CenterY] {
-        addConstraint(NSLayoutConstraint(item: imageView, attribute: attribute,
-          relatedBy: .Equal, toItem: self, attribute: attribute,
-          multiplier: 1, constant: 0))
+    guard !constraintsAdded else { return }
+    
+    for attribute: NSLayoutAttribute in [.Width, .Height, .CenterX, .CenterY] {
+      addConstraint(NSLayoutConstraint(item: imageView, attribute: attribute,
+        relatedBy: .Equal, toItem: self, attribute: attribute,
+        multiplier: 1, constant: 0))
 
-        addConstraint(NSLayoutConstraint(item: selectedImageView, attribute: attribute,
-          relatedBy: .Equal, toItem: self, attribute: attribute,
-          multiplier: 1, constant: 0))
-      }
-
-      constraintsAdded = true
+      addConstraint(NSLayoutConstraint(item: selectedImageView, attribute: attribute,
+        relatedBy: .Equal, toItem: self, attribute: attribute,
+        multiplier: 1, constant: 0))
     }
+
+    constraintsAdded = true
   }
 }
