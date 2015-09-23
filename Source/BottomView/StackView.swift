@@ -109,14 +109,13 @@ extension ImageStackView {
   }
 
   func renderViews(images: [UIImage]) {
-    if images.count < 1 {
-      //TODO: subclass view and use setimage method here to automatically adjust alpha and NIL
+    if let firstView = views.first where images.count < 1 {
       for imageView in views {
         imageView.image = nil
         imageView.alpha = 0
       }
 
-      views.first!.alpha = 1
+      firstView.alpha = 1
       return
     }
 
