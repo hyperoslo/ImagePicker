@@ -77,19 +77,20 @@ class CameraView: UIViewController {
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 
     for device in devices {
-      if device.hasMediaType(AVMediaTypeVideo)
-        && authorizationStatus == .Authorized {
-          captureDevice = device as? AVCaptureDevice
-          capturedDevices?.addObject(device as! AVCaptureDevice)
-      } else if device.hasMediaType(AVMediaTypeVideo)
-        && authorizationStatus == .NotDetermined {
+      if let device = device as? AVCaptureDevice {
+        if device.hasMediaType(AVMediaTypeVideo) && authorizationStatus == .Authorized {
+          captureDevice = device
+          capturedDevices?.addObject(device)
+        } else if device.hasMediaType(AVMediaTypeVideo) && authorizationStatus == .NotDetermined {
           AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo,
             completionHandler: { (granted: Bool) -> Void in
               if granted {
-                self.captureDevice = device as? AVCaptureDevice
-                self.capturedDevices?.addObject(device as! AVCaptureDevice)
+                self.captureDevice = device
+                self.capturedDevices?.addObject(device)
               }
           })
+        }
+
       }
     }
 
@@ -103,7 +104,8 @@ class CameraView: UIViewController {
   // MARK: - Camera actions
 
   func rotateCamera() {
-    let deviceIndex = capturedDevices?.indexOfObject(captureDevice!)
+    guard let captureDevice = captureDevice else { return }
+    let deviceIndex = capturedDevices?.indexOfObject(captureDevice)
     let currentDeviceInput = captureSession.inputs.first as! AVCaptureDeviceInput
     var newDeviceIndex = 0
 
@@ -117,18 +119,19 @@ class CameraView: UIViewController {
       }
     }
 
-    captureDevice = capturedDevices?.objectAtIndex(newDeviceIndex) as? AVCaptureDevice
+    self.captureDevice = capturedDevices?.objectAtIndex(newDeviceIndex) as? AVCaptureDevice
     configureDevice()
 
-    delegate?.handleFlashButton(captureDevice?.position == .Front)
+    delegate?.handleFlashButton(captureDevice.position == .Front)
 
+    guard let currentCaptureDevice = self.captureDevice else { return }
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.containerView.alpha = 1
       }, completion: { finished in
         self.captureSession.beginConfiguration()
         self.captureSession.removeInput(currentDeviceInput)
 
-        if self.captureDevice!.supportsAVCaptureSessionPreset(AVCaptureSessionPreset1280x720) {
+        if currentCaptureDevice.supportsAVCaptureSessionPreset(AVCaptureSessionPreset1280x720) {
           self.captureSession.sessionPreset = AVCaptureSessionPreset1280x720
         } else {
           self.captureSession.sessionPreset = AVCaptureSessionPreset640x480
@@ -173,29 +176,36 @@ class CameraView: UIViewController {
     })
 
     let queue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL)
-    let videoOrientation = previewLayer?.connection.videoOrientation
 
-    stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation!
+    if let videoOrientation = previewLayer?.connection.videoOrientation {
+      stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation
+    }
+
+    guard let stillImageOutput = self.stillImageOutput else { return }
 
     dispatch_async(queue, { [unowned self] in
-      self.stillImageOutput!.captureStillImageAsynchronouslyFromConnection(self.stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo), completionHandler: { (buffer, error) -> Void in
-        let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
-        let image = self.cropImage(UIImage(data: imageData)!)
-        let orientation = self.pictureOrientation()
-        let assetsLibrary = ALAssetsLibrary()
-        assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: nil)
+      stillImageOutput.captureStillImageAsynchronouslyFromConnection(stillImageOutput.connectionWithMediaType(AVMediaTypeVideo),
+        completionHandler: { (buffer, error) -> Void in
+          let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
+          guard let imageFromData = UIImage(data: imageData) else { return }
+          let image = self.cropImage(imageFromData)
+          let orientation = self.pictureOrientation()
+          let assetsLibrary = ALAssetsLibrary()
+          assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: nil)
 
-        let rotatedImage = UIImage(CGImage: image.CGImage!,
-          scale: 1.0,
-          orientation: UIImageOrientation(rawValue: orientation.rawValue)!)
-        self.delegate?.imageToLibrary(rotatedImage)
+          guard let imageCG = image.CGImage, realOrientation = UIImageOrientation(rawValue: orientation.rawValue) else { return }
+          let rotatedImage = UIImage(CGImage: imageCG,
+            scale: 1.0,
+            orientation: realOrientation)
+          self.delegate?.imageToLibrary(rotatedImage)
       })
-    })
+      })
   }
 
   func cropImage(image: UIImage) -> UIImage {
-    let imageReference = CGImageCreateWithImageInRect(image.CGImage, CGRect(x: 0, y: 0, width: image.size.height - 200, height: image.size.width))
-    let normalizedImage = UIImage(CGImage: imageReference!, scale: 1, orientation: .Right)
+    guard let imageReference = CGImageCreateWithImageInRect(image.CGImage,
+      CGRect(x: 0, y: 0, width: image.size.height - 200, height: image.size.width)) else { return UIImage() }
+    let normalizedImage = UIImage(CGImage: imageReference, scale: 1, orientation: .Right)
 
     return normalizedImage
   }
@@ -245,7 +255,8 @@ class CameraView: UIViewController {
   }
 
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    let anyTouch = touches.first!
+    guard let firstTouch = touches.first else { return }
+    let anyTouch = firstTouch
     let touchX = anyTouch.locationInView(view).x
     let touchY = anyTouch.locationInView(view).y
     focusImageView.transform = CGAffineTransformIdentity
@@ -274,13 +285,13 @@ class CameraView: UIViewController {
         print("failed to capture device")
       }
 
-
-      previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-      previewLayer?.autoreverses = true
-      previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+      guard let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) else { return }
+      self.previewLayer = previewLayer
+      previewLayer.autoreverses = true
+      previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+      view.layer.addSublayer(previewLayer)
+      previewLayer.frame = view.layer.frame
       view.clipsToBounds = true
-      view.layer.addSublayer(previewLayer!)
-      previewLayer?.frame = view.layer.frame
       captureSession.startRunning()
       delegate?.handleFlashButton(captureDevice?.position == .Front)
       stillImageOutput = AVCaptureStillImageOutput()
@@ -295,8 +306,9 @@ class CameraView: UIViewController {
     let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
     let bundle = NSBundle(path: bundlePath!)
     let traitCollection = UITraitCollection(displayScale: 3)
-    let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
 
-    return image!
+    guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection) else { return UIImage() }
+
+    return image
   }
 }
