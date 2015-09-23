@@ -96,6 +96,8 @@ public class ImageGalleryView: UIView {
   var collectionSize: CGSize!
   var shouldTransform = false
   var imagesBeforeLoading = 0
+  var fetchResult: PHFetchResult?
+  var canFetchImages = false
 
   // MARK: - Initializers
 
@@ -108,8 +110,8 @@ public class ImageGalleryView: UIView {
     for view in [collectionView, topSeparator] {
       addSubview(view)
     }
-    topSeparator.addSubview(indicator)
 
+    topSeparator.addSubview(indicator)
     imagesBeforeLoading = 0
     fetchPhotos(0)
   }
@@ -139,39 +141,42 @@ public class ImageGalleryView: UIView {
 
   func fetchPhotos(index: Int) {
     let imageManager = PHImageManager.defaultManager()
-
     let requestOptions = PHImageRequestOptions()
-    requestOptions.synchronous = true
-
     let fetchOptions = PHFetchOptions()
-    fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
-
     let authorizationStatus = ALAssetsLibrary.authorizationStatus()
-
     let size = CGSizeMake(100, 150)
 
-    if authorizationStatus == .Authorized {
-      let fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
-      if fetchResult.count != 0 && index < fetchResult.count {
-        imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-          dispatch_async(dispatch_get_main_queue()) {
-            if let image = image {
-              if !self.images.containsObject(image) {
-                self.images.addObject(image)
-                if index > self.imagesBeforeLoading + 10 {
-                  self.collectionView.reloadSections(NSIndexSet(index: 0))
-                } else if index < fetchResult.count - 1 {
-                  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                    self.fetchPhotos(index+1)
-                  }
-                } else {
-                  self.collectionView.reloadSections(NSIndexSet(index: 0))
-                }
-              }
+    requestOptions.synchronous = true
+    fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
+    canFetchImages = false
+
+    guard authorizationStatus == .Authorized else { return }
+
+    if self.fetchResult == nil {
+      self.fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
+    }
+
+    guard let fetchResult = self.fetchResult else { return }
+
+    if fetchResult.count != 0 && index < fetchResult.count {
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+      imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
+        if let image = image {
+          self.images.addObject(image)
+          if index > self.imagesBeforeLoading + 10 {
+            dispatch_async(dispatch_get_main_queue()) {
+              self.collectionView.reloadData()
+              self.canFetchImages = true
             }
+          } else {
+            self.fetchPhotos(index+1)
           }
-          })
+        }
+      })
       }
+    } else {
+      self.collectionView.reloadData()
+      canFetchImages = true
     }
   }
 
@@ -274,8 +279,8 @@ extension ImageGalleryView: UICollectionViewDelegate {
     }
   }
 
-  public func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    if indexPath.row + 10 >= images.count {
+  public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    if indexPath.row + 10 >= images.count && indexPath.row + 10 < fetchResult?.count && canFetchImages {
       imagesBeforeLoading = images.count
       dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
         self.fetchPhotos(self.images.count)

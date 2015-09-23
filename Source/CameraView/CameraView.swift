@@ -181,22 +181,25 @@ class CameraView: UIViewController {
       stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation
     }
 
-    dispatch_async(queue, { [unowned self] in
-      self.stillImageOutput!.captureStillImageAsynchronouslyFromConnection(self.stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo), completionHandler: { (buffer, error) -> Void in
-        let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
-        guard let imageFromData = UIImage(data: imageData) else { return }
-        let image = self.cropImage(imageFromData)
-        let orientation = self.pictureOrientation()
-        let assetsLibrary = ALAssetsLibrary()
-        assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: nil)
+    guard let stillImageOutput = self.stillImageOutput else { return }
 
-        guard let imageCG = image.CGImage, realOrientation = UIImageOrientation(rawValue: orientation.rawValue) else { return }
-        let rotatedImage = UIImage(CGImage: imageCG,
-          scale: 1.0,
-          orientation: realOrientation)
-        self.delegate?.imageToLibrary(rotatedImage)
+    dispatch_async(queue, { [unowned self] in
+      stillImageOutput.captureStillImageAsynchronouslyFromConnection(stillImageOutput.connectionWithMediaType(AVMediaTypeVideo),
+        completionHandler: { (buffer, error) -> Void in
+          let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
+          guard let imageFromData = UIImage(data: imageData) else { return }
+          let image = self.cropImage(imageFromData)
+          let orientation = self.pictureOrientation()
+          let assetsLibrary = ALAssetsLibrary()
+          assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: nil)
+
+          guard let imageCG = image.CGImage, realOrientation = UIImageOrientation(rawValue: orientation.rawValue) else { return }
+          let rotatedImage = UIImage(CGImage: imageCG,
+            scale: 1.0,
+            orientation: realOrientation)
+          self.delegate?.imageToLibrary(rotatedImage)
       })
-    })
+      })
   }
 
   func cropImage(image: UIImage) -> UIImage {
