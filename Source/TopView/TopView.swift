@@ -10,7 +10,7 @@ class TopView: UIView {
 
   struct Dimensions {
     static let leftOffset: CGFloat = 11
-    static let rightOffset: CGFloat = 11
+    static let rightOffset: CGFloat = 7
     static let height: CGFloat = 34
   }
 
@@ -32,6 +32,7 @@ class TopView: UIView {
     let button = UIButton()
     button.setImage(self.getImage("cameraIcon"), forState: .Normal)
     button.addTarget(self, action: "rotateCameraButtonDidPress:", forControlEvents: .TouchUpInside)
+    button.imageView?.contentMode = .Center
 
     return button
     }()
@@ -53,14 +54,14 @@ class TopView: UIView {
       button.layer.shadowOpacity = 0.5
       button.layer.shadowOffset = CGSize(width: 0, height: 1)
       button.layer.shadowRadius = 1
-      button.setTranslatesAutoresizingMaskIntoConstraints(false)
+      button.translatesAutoresizingMaskIntoConstraints = false
       addSubview(button)
     }
 
     setupConstraints()
   }
 
-  required init(coder aDecoder: NSCoder) {
+  required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
