@@ -113,6 +113,7 @@ public class ImageGalleryView: UIView {
 
     topSeparator.addSubview(indicator)
     imagesBeforeLoading = 0
+    fetchPhotos(0)
   }
 
   required public init?(coder aDecoder: NSCoder) {
@@ -212,6 +213,8 @@ public class ImageGalleryView: UIView {
 
   func checkStatus() {
     let currentStatus = PHPhotoLibrary.authorizationStatus()
+
+    guard currentStatus != .Authorized else { return }
 
     if currentStatus == .NotDetermined {
       self.delegate?.hideViews()
