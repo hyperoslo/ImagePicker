@@ -143,7 +143,7 @@ public class ImageGalleryView: UIView {
     let requestOptions = PHImageRequestOptions()
     let fetchOptions = PHFetchOptions()
     let authorizationStatus = ALAssetsLibrary.authorizationStatus()
-    let size = CGSizeMake(100, 150)
+    let size = CGSizeMake(720, 1280)
 
     canFetchImages = false
     requestOptions.synchronous = true
