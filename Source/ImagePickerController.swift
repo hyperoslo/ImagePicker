@@ -107,6 +107,9 @@ public class ImagePickerController: UIViewController {
       totalWidth, galleryHeight)
     galleryView.updateFrames()
     galleryView.checkStatus()
+
+    initialFrame = galleryView.frame
+    initialContentOffset = galleryView.collectionView.contentOffset
   }
 
   // MARK: - Notifications
