@@ -21,7 +21,7 @@ public class ImagePickerController: UIViewController {
 
   lazy public var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
-    //galleryView.delegate = self
+    galleryView.delegate = self
     galleryView.selectedStack = self.stack
 
     return galleryView
@@ -100,7 +100,7 @@ public class ImagePickerController: UIViewController {
   public override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
 
-    let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 10
+    let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
       ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
 
     galleryView.frame = CGRectMake(0, totalHeight - bottomContainer.frame.height - galleryHeight,
