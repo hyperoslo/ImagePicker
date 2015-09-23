@@ -71,7 +71,7 @@ class CameraView: UIViewController {
   // MARK: - Initialize camera
 
   func initializeCamera() {
-    captureSession.sessionPreset = AVCaptureSessionPreset1280x720
+    captureSession.sessionPreset = AVCaptureSessionPreset1920x1080
     capturedDevices = NSMutableArray()
 
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
