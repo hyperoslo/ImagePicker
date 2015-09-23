@@ -166,7 +166,7 @@ public class ImageGalleryView: UIView {
               self.canFetchImages = true
               self.collectionView.reloadData()
             } else {
-              self.fetchPhotos(index+1)
+              self.fetchPhotos(index + 1)
             }
           }
         })
