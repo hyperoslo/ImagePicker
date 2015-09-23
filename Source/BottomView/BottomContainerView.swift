@@ -4,7 +4,6 @@ protocol BottomContainerViewDelegate: class {
 
   func pickerButtonDidPress()
   func doneButtonDidPress()
-  func cancelButtonDidPress()
   func imageStackViewDidPress()
 }
 
@@ -86,11 +85,7 @@ class BottomContainerView: UIView {
   // MARK: - Action methods
 
   func doneButtonDidPress(button: UIButton) {
-    if button.currentTitle == configuration.cancelButtonTitle {
-      delegate?.cancelButtonDidPress()
-    } else {
-      delegate?.doneButtonDidPress()
-    }
+    delegate?.doneButtonDidPress()
   }
 
   func handleTapGestureRecognizer(recognizer: UITapGestureRecognizer) {

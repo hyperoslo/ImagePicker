@@ -1,10 +1,8 @@
 import UIKit
 
 public protocol ImagePickerDelegate: class {
-
   func wrapperDidPress(images: [UIImage])
   func doneButtonDidPress(images: [UIImage])
-  func cancelButtonDidPress()
 }
 
 public class ImagePickerController: UIViewController {
@@ -87,7 +85,6 @@ public class ImagePickerController: UIViewController {
     view.backgroundColor = self.configuration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
-    subscribe()
     setupConstraints()
   }
 
@@ -110,37 +107,6 @@ public class ImagePickerController: UIViewController {
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
-  }
-
-  // MARK: - Notifications
-
-  deinit {
-    NSNotificationCenter.defaultCenter().removeObserver(self)
-  }
-
-  func subscribe() {
-    NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
-      name: ImageStack.Notifications.imageDidPush,
-      object: nil)
-
-    NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
-      name: ImageStack.Notifications.imageDidDrop,
-      object: nil)
-
-    NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
-      name: ImageStack.Notifications.stackDidReload,
-      object: nil)
-  }
-
-  func adjustButtonTitle(notification: NSNotification) {
-    if let sender = notification.object as? ImageStack {
-      let title = !sender.images.isEmpty ?
-        configuration.doneButtonTitle : configuration.cancelButtonTitle
-      bottomContainer.doneButton.setTitle(title, forState: .Normal)
-    }
   }
 
   // MARK: - Helpers
@@ -206,11 +172,6 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func doneButtonDidPress() {
     delegate?.doneButtonDidPress(stack.images)
-  }
-
-  func cancelButtonDidPress() {
-    dismissViewControllerAnimated(true, completion: nil)
-    delegate?.cancelButtonDidPress()
   }
 
   func imageStackViewDidPress() {
