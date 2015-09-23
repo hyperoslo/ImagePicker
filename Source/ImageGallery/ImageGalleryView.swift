@@ -172,8 +172,10 @@ public class ImageGalleryView: UIView {
         })
       })
     } else {
-      self.canFetchImages = true
-      self.collectionView.reloadData()
+      dispatch_async(dispatch_get_main_queue(), {
+        self.canFetchImages = true
+        self.collectionView.reloadData()
+      })
     }
   }
 
