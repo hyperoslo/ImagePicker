@@ -113,7 +113,6 @@ public class ImageGalleryView: UIView {
 
     topSeparator.addSubview(indicator)
     imagesBeforeLoading = 0
-    fetchPhotos(0)
   }
 
   required public init?(coder aDecoder: NSCoder) {
@@ -146,9 +145,9 @@ public class ImageGalleryView: UIView {
     let authorizationStatus = ALAssetsLibrary.authorizationStatus()
     let size = CGSizeMake(100, 150)
 
+    canFetchImages = false
     requestOptions.synchronous = true
     fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
-    canFetchImages = false
 
     guard authorizationStatus == .Authorized else { return }
 
@@ -159,24 +158,22 @@ public class ImageGalleryView: UIView {
     guard let fetchResult = self.fetchResult else { return }
 
     if fetchResult.count != 0 && index < fetchResult.count {
-      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
       imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-        if let image = image {
-          self.images.addObject(image)
-          if index > self.imagesBeforeLoading + 10 {
-            dispatch_async(dispatch_get_main_queue()) {
-              self.collectionView.reloadData()
+        dispatch_async(dispatch_get_main_queue(), {
+          if let image = image {
+            self.images.addObject(image)
+            if index > self.imagesBeforeLoading + 10 {
               self.canFetchImages = true
+              self.collectionView.reloadData()
+            } else {
+              self.fetchPhotos(index + 1)
             }
-          } else {
-            self.fetchPhotos(index+1)
           }
-        }
+        })
       })
-      }
     } else {
+      self.canFetchImages = true
       self.collectionView.reloadData()
-      canFetchImages = true
     }
   }
 
@@ -280,11 +277,10 @@ extension ImageGalleryView: UICollectionViewDelegate {
   }
 
   public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    if indexPath.row + 10 >= images.count && indexPath.row + 10 < fetchResult?.count && canFetchImages {
+    if indexPath.row + 10 >= images.count && indexPath.row < fetchResult?.count && canFetchImages {
       imagesBeforeLoading = images.count
-      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-        self.fetchPhotos(self.images.count)
-      }
+      fetchPhotos(self.images.count)
+      canFetchImages = false
     }
   }
 }

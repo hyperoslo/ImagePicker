@@ -71,7 +71,7 @@ class CameraView: UIViewController {
   // MARK: - Initialize camera
 
   func initializeCamera() {
-    captureSession.sessionPreset = AVCaptureSessionPreset1280x720
+    captureSession.sessionPreset = AVCaptureSessionPreset1920x1080
     capturedDevices = NSMutableArray()
 
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
@@ -204,7 +204,7 @@ class CameraView: UIViewController {
 
   func cropImage(image: UIImage) -> UIImage {
     guard let imageReference = CGImageCreateWithImageInRect(image.CGImage,
-      CGRect(x: 0, y: 0, width: image.size.height - 200, height: image.size.width)) else { return UIImage() }
+      CGRect(x: 0, y: 0, width: image.size.height - 190, height: image.size.width)) else { return UIImage() }
     let normalizedImage = UIImage(CGImage: imageReference, scale: 1, orientation: .Right)
 
     return normalizedImage
