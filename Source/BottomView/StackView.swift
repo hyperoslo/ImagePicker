@@ -78,11 +78,10 @@ class ImageStackView: UIView {
     let offset = -step * CGFloat(views.count)
     var origin = CGPoint(x: offset, y: offset)
 
-    for (_, view) in views.enumerate() {
+    for view in views {
       origin.x += step
       origin.y += step
-      let frame = CGRect(origin: origin, size: viewSize)
-      view.frame = frame
+      view.frame = CGRect(origin: origin, size: viewSize)
     }
   }
 }
