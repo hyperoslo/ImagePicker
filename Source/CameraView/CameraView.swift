@@ -270,6 +270,7 @@ class CameraView: UIViewController {
       do {
         try device.lockForConfiguration()
       } catch _ {
+        print("Couldn't lock configuration")
       }
       device.unlockForConfiguration()
     }
