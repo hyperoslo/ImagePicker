@@ -277,28 +277,28 @@ class CameraView: UIViewController {
 
   func beginSession() {
     configureDevice()
-    if captureSession.inputs.count == 0 {
-      let captureDeviceInput: AVCaptureDeviceInput?
-      do { try
-        captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
-        captureSession.addInput(captureDeviceInput)
-      } catch {
-        print("failed to capture device")
-      }
+    guard captureSession.inputs.count == 0 else { return }
 
-      guard let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) else { return }
-      self.previewLayer = previewLayer
-      previewLayer.autoreverses = true
-      previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-      view.layer.addSublayer(previewLayer)
-      previewLayer.frame = view.layer.frame
-      view.clipsToBounds = true
-      captureSession.startRunning()
-      delegate?.handleFlashButton(captureDevice?.position == .Front)
-      stillImageOutput = AVCaptureStillImageOutput()
-      stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-      captureSession.addOutput(stillImageOutput)
+    let captureDeviceInput: AVCaptureDeviceInput?
+    do { try
+      captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
+      captureSession.addInput(captureDeviceInput)
+    } catch {
+      print("Failed to capture device")
     }
+
+    guard let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) else { return }
+    self.previewLayer = previewLayer
+    previewLayer.autoreverses = true
+    previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+    view.layer.addSublayer(previewLayer)
+    previewLayer.frame = view.layer.frame
+    view.clipsToBounds = true
+    captureSession.startRunning()
+    delegate?.handleFlashButton(captureDevice?.position == .Front)
+    stillImageOutput = AVCaptureStillImageOutput()
+    stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+    captureSession.addOutput(stillImageOutput)
   }
 
   // MARK: - Private helpers
