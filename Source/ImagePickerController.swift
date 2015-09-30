@@ -69,7 +69,9 @@ public class ImagePickerController: UIViewController {
 
   public var doneButtonTitle: String? {
     didSet {
-      bottomContainer.doneButton.setTitle(doneButtonTitle!, forState: .Normal)
+      if let doneButtonTitle = doneButtonTitle {
+        bottomContainer.doneButton.setTitle(doneButtonTitle, forState: .Normal)
+      }
     }
   }
 
