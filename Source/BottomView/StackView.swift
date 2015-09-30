@@ -72,8 +72,8 @@ class ImageStackView: UIView {
   override func layoutSubviews() {
     let step: CGFloat = -3.0
     let scale: CGFloat = 0.8
-    let viewSize = CGSize(width: self.frame.width * scale,
-      height: self.frame.height * scale)
+    let viewSize = CGSize(width: frame.width * scale,
+      height: frame.height * scale)
 
     let offset = -step * CGFloat(views.count)
     var origin = CGPoint(x: offset, y: offset)
