@@ -69,7 +69,9 @@ public class ImagePickerController: UIViewController {
 
   public var doneButtonTitle: String? {
     didSet {
-      bottomContainer.doneButton.setTitle(doneButtonTitle!, forState: .Normal)
+      if let doneButtonTitle = doneButtonTitle {
+        bottomContainer.doneButton.setTitle(doneButtonTitle, forState: .Normal)
+      }
     }
   }
 
@@ -84,7 +86,7 @@ public class ImagePickerController: UIViewController {
     }
 
     view.backgroundColor = .whiteColor()
-    view.backgroundColor = self.configuration.mainColor
+    view.backgroundColor = configuration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     subscribe()
@@ -136,11 +138,11 @@ public class ImagePickerController: UIViewController {
   }
 
   func adjustButtonTitle(notification: NSNotification) {
-    if let sender = notification.object as? ImageStack {
-      let title = !sender.images.isEmpty ?
-        configuration.doneButtonTitle : configuration.cancelButtonTitle
-      bottomContainer.doneButton.setTitle(title, forState: .Normal)
-    }
+    guard let sender = notification.object as? ImageStack else { return }
+    
+    let title = !sender.images.isEmpty ?
+      configuration.doneButtonTitle : configuration.cancelButtonTitle
+    bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
 
   // MARK: - Helpers
@@ -153,9 +155,9 @@ public class ImagePickerController: UIViewController {
     UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
       self.updateCollectionViewFrames(false)
-      }, completion: { finished in
+      }) { _ in
         completion?()
-    })
+    }
   }
 
   public func showGalleryView() {
@@ -199,9 +201,9 @@ public class ImagePickerController: UIViewController {
 extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
-    collapseGalleryView({ [unowned self] in
+    collapseGalleryView { [unowned self] in
       self.cameraController.takePicture()
-    })
+    }
   }
 
   func doneButtonDidPress() {
@@ -222,9 +224,9 @@ extension ImagePickerController: CameraViewDelegate {
 
   func handleFlashButton(hide: Bool) {
     let alpha: CGFloat = hide ? 0 : 1
-    UIView.animateWithDuration(0.3, animations: {
+    UIView.animateWithDuration(0.3) {
       self.topView.flashButton.alpha = alpha
-      })
+    }
   }
 
   func imageToLibrary(image: UIImage) {
@@ -234,10 +236,10 @@ extension ImagePickerController: CameraViewDelegate {
 
     UIView.animateWithDuration(0.3, animations: {
       self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
-      }, completion: { _ in
+      }) { _ in
         self.galleryView.collectionView.transform = CGAffineTransformIdentity
         self.galleryView.collectionView.reloadData()
-    })
+    }
   }
 }
 

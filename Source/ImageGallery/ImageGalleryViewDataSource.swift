@@ -22,7 +22,7 @@ extension ImageGalleryView: UICollectionViewDataSource {
 
       UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .CurveEaseInOut, animations: {
         cell.transform = CGAffineTransformIdentity
-        }, completion: nil)
+        }) { _ in }
 
       shouldTransform = false
     }

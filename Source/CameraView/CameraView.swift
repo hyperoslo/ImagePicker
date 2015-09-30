@@ -228,29 +228,30 @@ class CameraView: UIViewController {
   func timerDidFire() {
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.focusImageView.alpha = 0
-      }, completion: { _ in
+      }) { _ in
         self.focusImageView.transform = CGAffineTransformIdentity
-    })
+    }
   }
 
   // MARK: - Camera methods
 
   func focusTo(point: CGPoint) {
-    if let device = captureDevice {
+    guard let device = captureDevice else { return }
+    do { try device.lockForConfiguration() } catch {
+      print("Couldn't lock configuration")
+    }
 
-      do { try device.lockForConfiguration() } catch { }
-      if device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
-        device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
-        device.unlockForConfiguration()
-        focusImageView.center = point
-        UIView.animateWithDuration(0.5, animations: { [unowned self] in
-          self.focusImageView.alpha = 1
-          self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
-          }, completion: { _ in
-            self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
-              selector: "timerDidFire", userInfo: nil, repeats: false)
-        })
-      }
+    if device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
+      device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
+      device.unlockForConfiguration()
+      focusImageView.center = point
+      UIView.animateWithDuration(0.5, animations: { [unowned self] in
+        self.focusImageView.alpha = 1
+        self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
+        }, completion: { _ in
+          self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
+            selector: "timerDidFire", userInfo: nil, repeats: false)
+      })
     }
   }
 
@@ -269,6 +270,7 @@ class CameraView: UIViewController {
       do {
         try device.lockForConfiguration()
       } catch _ {
+        print("Couldn't lock configuration")
       }
       device.unlockForConfiguration()
     }
@@ -276,28 +278,28 @@ class CameraView: UIViewController {
 
   func beginSession() {
     configureDevice()
-    if captureSession.inputs.count == 0 {
-      let captureDeviceInput: AVCaptureDeviceInput?
-      do { try
-        captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
-        captureSession.addInput(captureDeviceInput)
-      } catch {
-        print("failed to capture device")
-      }
+    guard captureSession.inputs.count == 0 else { return }
 
-      guard let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) else { return }
-      self.previewLayer = previewLayer
-      previewLayer.autoreverses = true
-      previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-      view.layer.addSublayer(previewLayer)
-      previewLayer.frame = view.layer.frame
-      view.clipsToBounds = true
-      captureSession.startRunning()
-      delegate?.handleFlashButton(captureDevice?.position == .Front)
-      stillImageOutput = AVCaptureStillImageOutput()
-      stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-      captureSession.addOutput(stillImageOutput)
+    let captureDeviceInput: AVCaptureDeviceInput?
+    do { try
+      captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
+      captureSession.addInput(captureDeviceInput)
+    } catch {
+      print("Failed to capture device")
     }
+
+    guard let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) else { return }
+    self.previewLayer = previewLayer
+    previewLayer.autoreverses = true
+    previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+    view.layer.addSublayer(previewLayer)
+    previewLayer.frame = view.layer.frame
+    view.clipsToBounds = true
+    captureSession.startRunning()
+    delegate?.handleFlashButton(captureDevice?.position == .Front)
+    stillImageOutput = AVCaptureStillImageOutput()
+    stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+    captureSession.addOutput(stillImageOutput)
   }
 
   // MARK: - Private helpers
