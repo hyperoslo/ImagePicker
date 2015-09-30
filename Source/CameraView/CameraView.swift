@@ -236,21 +236,22 @@ class CameraView: UIViewController {
   // MARK: - Camera methods
 
   func focusTo(point: CGPoint) {
-    if let device = captureDevice {
+    guard let device = captureDevice else { return }
+    do { try device.lockForConfiguration() } catch {
+      print("Couldn't lock configuration")
+    }
 
-      do { try device.lockForConfiguration() } catch { }
-      if device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
-        device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
-        device.unlockForConfiguration()
-        focusImageView.center = point
-        UIView.animateWithDuration(0.5, animations: { [unowned self] in
-          self.focusImageView.alpha = 1
-          self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
-          }, completion: { _ in
-            self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
-              selector: "timerDidFire", userInfo: nil, repeats: false)
-        })
-      }
+    if device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
+      device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
+      device.unlockForConfiguration()
+      focusImageView.center = point
+      UIView.animateWithDuration(0.5, animations: { [unowned self] in
+        self.focusImageView.alpha = 1
+        self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
+        }, completion: { _ in
+          self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
+            selector: "timerDidFire", userInfo: nil, repeats: false)
+      })
     }
   }
 
