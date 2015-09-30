@@ -72,17 +72,17 @@ class TopView: UIView {
 
     switch currentTitle {
     case "AUTO":
-      button.setImage(self.getImage("flashIcon"), forState: .Normal)
+      button.setImage(getImage("flashIcon"), forState: .Normal)
       button.setTitleColor(UIColor(red:0.98, green:0.98, blue:0.45, alpha:1), forState: .Normal)
       button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
       button.setTitle("ON", forState: .Normal)
     case "ON":
-      button.setImage(self.getImage("flashIconOff"), forState: .Normal)
       button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
       button.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
+      button.setImage(getImage("flashIconOff"), forState: .Normal)
       button.setTitle("OFF", forState: .Normal)
     case "OFF":
-      button.setImage(self.getImage("flashIcon"), forState: .Normal)
+      button.setImage(getImage("flashIcon"), forState: .Normal)
       button.setTitle("AUTO", forState: .Normal)
     default:
       break
