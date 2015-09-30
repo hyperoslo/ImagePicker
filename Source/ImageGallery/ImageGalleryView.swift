@@ -229,10 +229,11 @@ public class ImageGalleryView: UIView {
         if authorizationStatus == .Denied {
           let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
 
-          let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
-            let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString)
-            UIApplication.sharedApplication().openURL(settingsURL!)
-          })
+          let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { _ in
+            if let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
+              UIApplication.sharedApplication().openURL(settingsURL)
+            }
+          }
 
           let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { _ in
             delegate?.dismissViewController(alertController)
