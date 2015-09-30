@@ -88,7 +88,7 @@ class TopView: UIView {
       break
     }
 
-    delegate?.flashButtonDidPress(button.currentTitle!)
+    delegate?.flashButtonDidPress(currentTitle)
   }
 
   func rotateCameraButtonDidPress(button: UIButton) {
