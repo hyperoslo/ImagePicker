@@ -96,6 +96,7 @@ extension ImageStackView {
     if let emptyView = emptyView {
       animateImageView(emptyView)
     }
+
     if let sender = notification.object as? ImageStack {
       renderViews(sender.images)
     }
