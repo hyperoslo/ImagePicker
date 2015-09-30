@@ -159,7 +159,9 @@ public class ImageGalleryView: UIView {
     guard let fetchResult = fetchResult else { return }
 
     if fetchResult.count != 0 && index < fetchResult.count {
-      imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
+      guard let asset = fetchResult.objectAtIndex(fetchResult.count - 1 - index) as? PHAsset else { return }
+
+      imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
         dispatch_async(dispatch_get_main_queue(), {
           if let image = image {
             self.images.addObject(image)
