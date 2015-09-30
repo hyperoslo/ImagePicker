@@ -201,9 +201,9 @@ public class ImagePickerController: UIViewController {
 extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
-    collapseGalleryView({ [unowned self] in
+    collapseGalleryView { [unowned self] in
       self.cameraController.takePicture()
-    })
+    }
   }
 
   func doneButtonDidPress() {
@@ -224,9 +224,9 @@ extension ImagePickerController: CameraViewDelegate {
 
   func handleFlashButton(hide: Bool) {
     let alpha: CGFloat = hide ? 0 : 1
-    UIView.animateWithDuration(0.3, animations: {
+    UIView.animateWithDuration(0.3) {
       self.topView.flashButton.alpha = alpha
-      })
+    }
   }
 
   func imageToLibrary(image: UIImage) {
@@ -236,10 +236,10 @@ extension ImagePickerController: CameraViewDelegate {
 
     UIView.animateWithDuration(0.3, animations: {
       self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
-      }, completion: { _ in
+      }) { _ in
         self.galleryView.collectionView.transform = CGAffineTransformIdentity
         self.galleryView.collectionView.reloadData()
-    })
+    }
   }
 }
 
