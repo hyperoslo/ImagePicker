@@ -284,10 +284,12 @@ extension ImageGalleryView: UICollectionViewDelegate {
   }
 
   public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    if indexPath.row + 10 >= images.count && indexPath.row < fetchResult?.count && canFetchImages {
-      imagesBeforeLoading = images.count
-      fetchPhotos(self.images.count)
-      canFetchImages = false
-    }
+    guard indexPath.row + 10 >= images.count
+      && indexPath.row < fetchResult?.count
+      && canFetchImages else { return }
+
+    imagesBeforeLoading = images.count
+    fetchPhotos(self.images.count)
+    canFetchImages = false
   }
 }
