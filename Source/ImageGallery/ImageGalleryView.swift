@@ -186,12 +186,14 @@ public class ImageGalleryView: UIView {
     let translation = gesture.translationInView(superview!)
     let velocity = gesture.velocityInView(superview!)
 
-    if gesture.state == UIGestureRecognizerState.Began {
+    switch gesture.state {
+    case .Began:
       delegate?.panGestureDidStart()
-    } else if gesture.state == UIGestureRecognizerState.Changed {
+    case .Changed:
       delegate?.panGestureDidChange(translation)
-    } else if gesture.state == UIGestureRecognizerState.Ended {
+    case .Ended:
       delegate?.panGestureDidEnd(translation, velocity: velocity)
+    default: break
     }
   }
 
