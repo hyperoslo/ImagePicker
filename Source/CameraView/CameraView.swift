@@ -228,9 +228,9 @@ class CameraView: UIViewController {
   func timerDidFire() {
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.focusImageView.alpha = 0
-      }, completion: { _ in
+      }) { _ in
         self.focusImageView.transform = CGAffineTransformIdentity
-    })
+    }
   }
 
   // MARK: - Camera methods
