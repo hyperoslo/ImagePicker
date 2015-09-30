@@ -41,6 +41,7 @@ class BottomContainerView: UIView {
     let view = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
     return view
     }()
+
   lazy var configuration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
