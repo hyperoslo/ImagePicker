@@ -219,7 +219,7 @@ public class ImageGalleryView: UIView {
     guard currentStatus != .Authorized else { return }
 
     if currentStatus == .NotDetermined {
-      self.delegate?.hideViews()
+      delegate?.hideViews()
     }
 
     PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
