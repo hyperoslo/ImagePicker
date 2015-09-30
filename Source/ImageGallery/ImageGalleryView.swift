@@ -152,11 +152,11 @@ public class ImageGalleryView: UIView {
 
     guard authorizationStatus == .Authorized else { return }
 
-    if self.fetchResult == nil {
-      self.fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
+    if fetchResult == nil {
+      fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
     }
 
-    guard let fetchResult = self.fetchResult else { return }
+    guard let fetchResult = fetchResult else { return }
 
     if fetchResult.count != 0 && index < fetchResult.count {
       imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
