@@ -232,9 +232,9 @@ public class ImageGalleryView: UIView {
             UIApplication.sharedApplication().openURL(settingsURL!)
           })
 
-          let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { _ in
+          let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { _ in
             delegate?.dismissViewController(alertController)
-          })
+          }
 
           alertController.addAction(alertAction)
           alertController.addAction(cancelAction)
@@ -269,9 +269,9 @@ extension ImageGalleryView: UICollectionViewDelegate {
     if cell.selectedImageView.image != nil {
       UIView.animateWithDuration(0.2, animations: {
         cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
-        }, completion: { _ in
+        }) { _ in
           cell.selectedImageView.image = nil
-      })
+      }
       selectedStack.dropImage(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
