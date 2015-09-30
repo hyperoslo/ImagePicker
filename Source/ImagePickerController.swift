@@ -155,9 +155,9 @@ public class ImagePickerController: UIViewController {
     UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
       self.updateCollectionViewFrames(false)
-      }, completion: { finished in
+      }) { _ in
         completion?()
-    })
+    }
   }
 
   public func showGalleryView() {
