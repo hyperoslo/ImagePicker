@@ -86,7 +86,7 @@ public class ImagePickerController: UIViewController {
     }
 
     view.backgroundColor = .whiteColor()
-    view.backgroundColor = self.configuration.mainColor
+    view.backgroundColor = configuration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     subscribe()
