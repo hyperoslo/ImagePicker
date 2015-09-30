@@ -12,7 +12,7 @@ class BottomContainerView: UIView {
 
   lazy var pickerButton: ButtonPicker = { [unowned self] in
     let pickerButton = ButtonPicker()
-    pickerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+    pickerButton.setTitleColor(.whiteColor(), forState: .Normal)
     pickerButton.delegate = self
 
     return pickerButton
