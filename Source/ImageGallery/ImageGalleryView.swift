@@ -274,9 +274,9 @@ extension ImageGalleryView: UICollectionViewDelegate {
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
       cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
-      UIView.animateWithDuration(0.2, animations: { _ in
+      UIView.animateWithDuration(0.2) { _ in
         cell.selectedImageView.transform = CGAffineTransformIdentity
-      })
+      }
       selectedStack.pushImage(image)
     }
   }
