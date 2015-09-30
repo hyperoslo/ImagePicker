@@ -109,7 +109,7 @@ extension ImageStackView {
   }
 
   func renderViews(images: [UIImage]) {
-    if let firstView = views.first where images.count < 1 {
+    if let firstView = views.first where images.isEmpty {
       for imageView in views {
         imageView.image = nil
         imageView.alpha = 0
