@@ -103,11 +103,11 @@ class BottomContainerView: UIView {
 
     UIView.animateWithDuration(0.3, animations: {
       imageView.transform = CGAffineTransformMakeScale(1.05, 1.05)
-      }, completion: { _ in
-        UIView.animateWithDuration(0.2, animations: { _ in
+      }) { _ in
+        UIView.animateWithDuration(0.2) { _ in
           imageView.transform = CGAffineTransformIdentity
-        })
-    })
+        }
+    }
   }
 }
 
