@@ -77,9 +77,9 @@ class TopView: UIView {
       button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
       button.setTitle("ON", forState: .Normal)
     case "ON":
-      button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-      button.setTitleColor(UIColor.whiteColor(), forState: .Highlighted)
       button.setImage(getImage("flashIconOff"), forState: .Normal)
+      button.setTitleColor(.whiteColor(), forState: .Normal)
+      button.setTitleColor(.whiteColor(), forState: .Highlighted)
       button.setTitle("OFF", forState: .Normal)
     case "OFF":
       button.setImage(getImage("flashIcon"), forState: .Normal)
