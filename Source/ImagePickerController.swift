@@ -265,7 +265,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func permissionGranted() {
-    galleryView.fetchPhotos(0)
+    galleryView.fetchPhotos()
     galleryView.canFetchImages = false
     cameraController.initializeCamera()
     enableGestures(true)

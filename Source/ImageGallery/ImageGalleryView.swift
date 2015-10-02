@@ -1,6 +1,5 @@
 import UIKit
 import Photos
-import AssetsLibrary
 
 protocol ImageGalleryPanGestureDelegate: class {
 
@@ -70,10 +69,7 @@ public class ImageGalleryView: UIView {
 
   lazy var selectedStack = ImageStack()
 
-  lazy var images: NSMutableArray = {
-    let images = NSMutableArray()
-    return images
-    }()
+  lazy var assets = [PHAsset]()
 
   lazy var configuration: PickerConfiguration = {
     let configuration = PickerConfiguration()
@@ -113,7 +109,7 @@ public class ImageGalleryView: UIView {
 
     topSeparator.addSubview(indicator)
     imagesBeforeLoading = 0
-    fetchPhotos(0)
+    fetchPhotos()
   }
 
   required public init?(coder aDecoder: NSCoder) {
@@ -139,46 +135,10 @@ public class ImageGalleryView: UIView {
 
   // MARK: - Photos handler
 
-  func fetchPhotos(index: Int) {
-    let imageManager = PHImageManager.defaultManager()
-    let requestOptions = PHImageRequestOptions()
-    let fetchOptions = PHFetchOptions()
-    let authorizationStatus = ALAssetsLibrary.authorizationStatus()
-    let size = CGSizeMake(720, 1280)
-
-    canFetchImages = false
-    requestOptions.synchronous = true
-    fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
-
-    guard authorizationStatus == .Authorized else { return }
-
-    if fetchResult == nil {
-      fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
-    }
-
-    guard let fetchResult = fetchResult else { return }
-
-    if fetchResult.count != 0 && index < fetchResult.count {
-      guard let asset = fetchResult.objectAtIndex(fetchResult.count - 1 - index) as? PHAsset else { return }
-
-      imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-        dispatch_async(dispatch_get_main_queue(), {
-          if let image = image {
-            self.images.addObject(image)
-            if index > self.imagesBeforeLoading + 10 {
-              self.canFetchImages = true
-              self.collectionView.reloadData()
-            } else {
-              self.fetchPhotos(index + 1)
-            }
-          }
-        })
-      })
-    } else {
-      dispatch_async(dispatch_get_main_queue(), {
-        self.canFetchImages = true
-        self.collectionView.reloadData()
-      })
+  func fetchPhotos() {
+    Photos.fetch { assets in
+      self.assets.removeAll()
+      self.assets.appendContentsOf(assets)
     }
   }
 
@@ -267,32 +227,36 @@ extension ImageGalleryView: UICollectionViewDelegate {
 
   public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
     let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageGalleryViewCell
-    let image = images[indexPath.row] as! UIImage
+    let asset = assets[indexPath.row]
+    Photos.resolveAsset(asset) { image in
+      guard let image = image else { return }
 
-    if cell.selectedImageView.image != nil {
-      UIView.animateWithDuration(0.2, animations: {
-        cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
-        }) { _ in
-          cell.selectedImageView.image = nil
+      if cell.selectedImageView.image != nil {
+        UIView.animateWithDuration(0.2, animations: {
+          cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+          }) { _ in
+            cell.selectedImageView.image = nil
+        }
+        self.selectedStack.dropImage(image)
+      } else {
+        cell.selectedImageView.image = self.getImage("selectedImageGallery")
+        cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+        UIView.animateWithDuration(0.2) { _ in
+          cell.selectedImageView.transform = CGAffineTransformIdentity
+        }
+        self.selectedStack.pushImage(image)
       }
-      selectedStack.dropImage(image)
-    } else {
-      cell.selectedImageView.image = getImage("selectedImageGallery")
-      cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
-      UIView.animateWithDuration(0.2) { _ in
-        cell.selectedImageView.transform = CGAffineTransformIdentity
-      }
-      selectedStack.pushImage(image)
     }
+
+
   }
 
   public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    guard indexPath.row + 10 >= images.count
+    guard indexPath.row + 10 >= assets.count
       && indexPath.row < fetchResult?.count
       && canFetchImages else { return }
 
-    imagesBeforeLoading = images.count
-    fetchPhotos(self.images.count)
+    fetchPhotos()
     canFetchImages = false
   }
 }
