@@ -27,4 +27,13 @@ struct Photos {
       })
     }
   }
+
+  static func resolveAsset(asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280) ,completion: (image: UIImage?) -> Void) {
+    let imageManager = PHImageManager.defaultManager()
+    let requestOptions = PHImageRequestOptions()
+
+    imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { image, _ in
+      completion(image: image)
+    })
+  }
 }
