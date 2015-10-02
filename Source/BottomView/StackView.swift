@@ -72,17 +72,16 @@ class ImageStackView: UIView {
   override func layoutSubviews() {
     let step: CGFloat = -3.0
     let scale: CGFloat = 0.8
-    let viewSize = CGSize(width: self.frame.width * scale,
-      height: self.frame.height * scale)
+    let viewSize = CGSize(width: frame.width * scale,
+      height: frame.height * scale)
 
     let offset = -step * CGFloat(views.count)
     var origin = CGPoint(x: offset, y: offset)
 
-    for (_, view) in views.enumerate() {
+    for view in views {
       origin.x += step
       origin.y += step
-      let frame = CGRect(origin: origin, size: viewSize)
-      view.frame = frame
+      view.frame = CGRect(origin: origin, size: viewSize)
     }
   }
 }
@@ -97,6 +96,7 @@ extension ImageStackView {
     if let emptyView = emptyView {
       animateImageView(emptyView)
     }
+
     if let sender = notification.object as? ImageStack {
       renderViews(sender.images)
     }
@@ -109,7 +109,7 @@ extension ImageStackView {
   }
 
   func renderViews(images: [UIImage]) {
-    if let firstView = views.first where images.count < 1 {
+    if let firstView = views.first where images.isEmpty {
       for imageView in views {
         imageView.image = nil
         imageView.alpha = 0
@@ -137,10 +137,10 @@ extension ImageStackView {
 
     UIView.animateWithDuration(0.3, animations: {
       imageView.transform = CGAffineTransformMakeScale(1.05, 1.05)
-      }, completion: { _ in
-        UIView.animateWithDuration(0.2, animations: { _ in
+      }) { _ in
+        UIView.animateWithDuration(0.2) { _ in
           imageView.transform = CGAffineTransformIdentity
-        })
-    })
+        }
+    }
   }
 }

@@ -12,7 +12,7 @@ class BottomContainerView: UIView {
 
   lazy var pickerButton: ButtonPicker = { [unowned self] in
     let pickerButton = ButtonPicker()
-    pickerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+    pickerButton.setTitleColor(.whiteColor(), forState: .Normal)
     pickerButton.delegate = self
 
     return pickerButton
@@ -41,6 +41,7 @@ class BottomContainerView: UIView {
     let view = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
     return view
     }()
+
   lazy var configuration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
@@ -102,11 +103,11 @@ class BottomContainerView: UIView {
 
     UIView.animateWithDuration(0.3, animations: {
       imageView.transform = CGAffineTransformMakeScale(1.05, 1.05)
-      }, completion: { _ in
-        UIView.animateWithDuration(0.2, animations: { _ in
+      }) { _ in
+        UIView.animateWithDuration(0.2) { _ in
           imageView.transform = CGAffineTransformIdentity
-        })
-    })
+        }
+    }
   }
 }
 

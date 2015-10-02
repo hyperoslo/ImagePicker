@@ -144,39 +144,41 @@ public class ImageGalleryView: UIView {
     let requestOptions = PHImageRequestOptions()
     let fetchOptions = PHFetchOptions()
     let authorizationStatus = ALAssetsLibrary.authorizationStatus()
-    let size = CGSizeMake(100, 150)
+    let size = CGSizeMake(720, 1280)
 
+    canFetchImages = false
     requestOptions.synchronous = true
     fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
-    canFetchImages = false
 
     guard authorizationStatus == .Authorized else { return }
 
-    if self.fetchResult == nil {
-      self.fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
+    if fetchResult == nil {
+      fetchResult = PHAsset.fetchAssetsWithMediaType(PHAssetMediaType.Image, options: fetchOptions)
     }
 
-    guard let fetchResult = self.fetchResult else { return }
+    guard let fetchResult = fetchResult else { return }
 
     if fetchResult.count != 0 && index < fetchResult.count {
-      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-      imageManager.requestImageForAsset(fetchResult.objectAtIndex(fetchResult.count - 1 - index) as! PHAsset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
-        if let image = image {
-          self.images.addObject(image)
-          if index > self.imagesBeforeLoading + 10 {
-            dispatch_async(dispatch_get_main_queue()) {
-              self.collectionView.reloadData()
+      guard let asset = fetchResult.objectAtIndex(fetchResult.count - 1 - index) as? PHAsset else { return }
+
+      imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { (image, _) in
+        dispatch_async(dispatch_get_main_queue(), {
+          if let image = image {
+            self.images.addObject(image)
+            if index > self.imagesBeforeLoading + 10 {
               self.canFetchImages = true
+              self.collectionView.reloadData()
+            } else {
+              self.fetchPhotos(index + 1)
             }
-          } else {
-            self.fetchPhotos(index+1)
           }
-        }
+        })
       })
-      }
     } else {
-      self.collectionView.reloadData()
-      canFetchImages = true
+      dispatch_async(dispatch_get_main_queue(), {
+        self.canFetchImages = true
+        self.collectionView.reloadData()
+      })
     }
   }
 
@@ -186,12 +188,14 @@ public class ImageGalleryView: UIView {
     let translation = gesture.translationInView(superview!)
     let velocity = gesture.velocityInView(superview!)
 
-    if gesture.state == UIGestureRecognizerState.Began {
+    switch gesture.state {
+    case .Began:
       delegate?.panGestureDidStart()
-    } else if gesture.state == UIGestureRecognizerState.Changed {
+    case .Changed:
       delegate?.panGestureDidChange(translation)
-    } else if gesture.state == UIGestureRecognizerState.Ended {
+    case .Ended:
       delegate?.panGestureDidEnd(translation, velocity: velocity)
+    default: break
     }
   }
 
@@ -214,8 +218,10 @@ public class ImageGalleryView: UIView {
   func checkStatus() {
     let currentStatus = PHPhotoLibrary.authorizationStatus()
 
+    guard currentStatus != .Authorized else { return }
+
     if currentStatus == .NotDetermined {
-      self.delegate?.hideViews()
+      delegate?.hideViews()
     }
 
     PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
@@ -223,14 +229,15 @@ public class ImageGalleryView: UIView {
         if authorizationStatus == .Denied {
           let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
 
-          let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: { _ in
-            let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString)
-            UIApplication.sharedApplication().openURL(settingsURL!)
-          })
+          let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { _ in
+            if let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
+              UIApplication.sharedApplication().openURL(settingsURL)
+            }
+          }
 
-          let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { _ in
+          let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { _ in
             delegate?.dismissViewController(alertController)
-          })
+          }
 
           alertController.addAction(alertAction)
           alertController.addAction(cancelAction)
@@ -265,26 +272,27 @@ extension ImageGalleryView: UICollectionViewDelegate {
     if cell.selectedImageView.image != nil {
       UIView.animateWithDuration(0.2, animations: {
         cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
-        }, completion: { _ in
+        }) { _ in
           cell.selectedImageView.image = nil
-      })
+      }
       selectedStack.dropImage(image)
     } else {
       cell.selectedImageView.image = getImage("selectedImageGallery")
       cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
-      UIView.animateWithDuration(0.2, animations: { _ in
+      UIView.animateWithDuration(0.2) { _ in
         cell.selectedImageView.transform = CGAffineTransformIdentity
-      })
+      }
       selectedStack.pushImage(image)
     }
   }
 
   public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    if indexPath.row + 10 >= images.count && indexPath.row + 10 < fetchResult?.count && canFetchImages {
-      imagesBeforeLoading = images.count
-      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-        self.fetchPhotos(self.images.count)
-      }
-    }
+    guard indexPath.row + 10 >= images.count
+      && indexPath.row < fetchResult?.count
+      && canFetchImages else { return }
+
+    imagesBeforeLoading = images.count
+    fetchPhotos(self.images.count)
+    canFetchImages = false
   }
 }
