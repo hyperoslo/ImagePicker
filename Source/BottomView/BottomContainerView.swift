@@ -8,7 +8,7 @@ protocol BottomContainerViewDelegate: class {
   func imageStackViewDidPress()
 }
 
-class BottomContainerView: UIView {
+public class BottomContainerView: UIView {
 
   lazy var pickerButton: ButtonPicker = { [unowned self] in
     let pickerButton = ButtonPicker()
@@ -28,7 +28,7 @@ class BottomContainerView: UIView {
     return view
     }()
 
-  lazy var doneButton: UIButton = { [unowned self] in
+  public lazy var doneButton: UIButton = { [unowned self] in
     let button = UIButton()
     button.setTitle(self.pickerConfiguration.cancelButtonTitle, forState: .Normal)
     button.titleLabel?.font = self.pickerConfiguration.doneButton
@@ -41,8 +41,6 @@ class BottomContainerView: UIView {
     let view = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
     return view
     }()
-
-  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
 
   lazy var topSeparator: UIView = { [unowned self] in
     let view = UIView()
@@ -58,12 +56,14 @@ class BottomContainerView: UIView {
     return gesture
     }()
 
+  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
+
   weak var delegate: BottomContainerViewDelegate?
   var pastCount = 0
 
   // MARK: Initializers
 
-  override init(frame: CGRect) {
+  public override init(frame: CGRect) {
     super.init(frame: frame)
 
     for view in [borderPickerButton, pickerButton, doneButton, stackView, topSeparator] {
@@ -77,7 +77,7 @@ class BottomContainerView: UIView {
     setupConstraints()
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  public required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

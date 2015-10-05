@@ -73,7 +73,7 @@ public class ImageGalleryView: UIView {
 
   lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
 
-  lazy var noImagesLabel: UILabel = { [unowned self] in
+  public lazy var noImagesLabel: UILabel = { [unowned self] in
     let label = UILabel()
     label.font = self.pickerConfiguration.noImagesFont
     label.textColor = self.pickerConfiguration.noImagesColor
