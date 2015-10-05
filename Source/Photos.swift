@@ -50,11 +50,11 @@ struct Photos {
     requestOptions.synchronous = true
 
     for asset in assets {
-      imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { image, info in
+      imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions) { image, info in
         if let image = image {
           images.append(image)
         }
-      })
+      }
     }
     
     return images
