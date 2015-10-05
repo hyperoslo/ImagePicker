@@ -228,6 +228,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
   public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
     let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageGalleryViewCell
     let asset = assets[indexPath.row]
+
     Photos.resolveAsset(asset) { image in
       guard let _ = image else { return }
 
