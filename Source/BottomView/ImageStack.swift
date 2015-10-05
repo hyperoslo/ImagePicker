@@ -1,4 +1,5 @@
 import UIKit
+import Photos
 
 public class ImageStack {
 
@@ -9,24 +10,24 @@ public class ImageStack {
     public static let imageKey = "image"
   }
 
-  public var images = [UIImage]()
+  public var assets = [PHAsset]()
 
-  public func pushImage(image: UIImage) {
-    images.append(image)
-    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidPush, object: self, userInfo: ["image" : image])
+  public func pushAsset(asset: PHAsset) {
+    assets.append(asset)
+    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidPush, object: self, userInfo: ["image" : asset])
   }
 
-  public func dropImage(image: UIImage) {
-    images = images.filter() {$0 != image}
-    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidDrop, object: self, userInfo: ["image" : image])
+  public func dropAsset(asset: PHAsset) {
+    assets = assets.filter() {$0 != asset}
+    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidDrop, object: self, userInfo: ["image" : asset])
   }
 
-  public func resetImages(newImages: [UIImage]) {
-    images = newImages
+  public func resetAssets(assets: [PHAsset]) {
+    self.assets = assets
     NSNotificationCenter.defaultCenter().postNotificationName(Notifications.stackDidReload, object: self, userInfo: nil)
   }
 
-  public func containsImage(image: UIImage) -> Bool {
-    return images.contains(image)
+  public func containsAsset(asset: PHAsset) -> Bool {
+    return assets.contains(asset)
   }
 }
