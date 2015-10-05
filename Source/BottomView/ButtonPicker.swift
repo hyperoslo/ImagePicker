@@ -16,15 +16,12 @@ class ButtonPicker: UIButton {
   lazy var numberLabel: UILabel = { [unowned self] in
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = self.configuration.numberLabelFont
+    label.font = self.pickerConfiguration.numberLabelFont
 
     return label
     }()
 
-  lazy var configuration: PickerConfiguration = {
-    let configuration = PickerConfiguration()
-    return configuration
-    }()
+  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
 
   weak var delegate: ButtonPickerDelegate?
 

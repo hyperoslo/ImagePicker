@@ -57,7 +57,7 @@ public class ImagePickerController: UIViewController {
     return gesture
     }()
 
-  lazy var configuration: PickerConfiguration = PickerConfiguration()
+  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
 
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
@@ -86,7 +86,7 @@ public class ImagePickerController: UIViewController {
     }
 
     view.backgroundColor = .whiteColor()
-    view.backgroundColor = configuration.mainColor
+    view.backgroundColor = pickerConfiguration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     subscribe()
@@ -141,7 +141,7 @@ public class ImagePickerController: UIViewController {
     guard let sender = notification.object as? ImageStack else { return }
     
     let title = !sender.assets.isEmpty ?
-      configuration.doneButtonTitle : configuration.cancelButtonTitle
+      pickerConfiguration.doneButtonTitle : pickerConfiguration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
 

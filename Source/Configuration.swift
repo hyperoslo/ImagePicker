@@ -1,6 +1,10 @@
 import UIKit
 
-public class PickerConfiguration {
+public struct Configuration {
+
+  static let sharedInstance = Configuration()
+
+  public init() { }
 
   // MARK: Colors
 
