@@ -5,7 +5,7 @@ import AssetsLibrary
 protocol CameraViewDelegate: class {
 
   func handleFlashButton(hide: Bool)
-  func imageToLibrary(image: UIImage)
+  func imageToLibrary()
 }
 
 class CameraView: UIViewController {
