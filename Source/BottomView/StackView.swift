@@ -124,9 +124,9 @@ extension ImageStackView {
 
     for (index, view) in views.enumerate() {
       if index <= photos.count - 1 {
-        Photos.resolveAsset(photos[index], size: CGSize(width: Dimensions.imageSize, height: Dimensions.imageSize), completion: { image in
+        Photos.resolveAsset(photos[index], size: CGSize(width: Dimensions.imageSize, height: Dimensions.imageSize)) { image in
           view.image = image
-        })
+        }
         view.alpha = 1
       } else {
         view.image = nil
