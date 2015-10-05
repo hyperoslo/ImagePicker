@@ -40,4 +40,23 @@ struct Photos {
       }
     })
   }
+
+  static func resolveAssets(assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [UIImage] {
+    let imageManager = PHImageManager.defaultManager()
+    let requestOptions = PHImageRequestOptions()
+
+    var images = [UIImage]()
+
+    requestOptions.synchronous = true
+
+    for asset in assets {
+      imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { image, info in
+        if let image = image {
+          images.append(image)
+        }
+      })
+    }
+    
+    return images
+  }
 }
