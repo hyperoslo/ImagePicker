@@ -229,7 +229,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
     let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageGalleryViewCell
     let asset = assets[indexPath.row]
     Photos.resolveAsset(asset) { image in
-      guard let image = image else { return }
+      guard let _ = image else { return }
 
       if cell.selectedImageView.image != nil {
         UIView.animateWithDuration(0.2, animations: {
@@ -237,14 +237,14 @@ extension ImageGalleryView: UICollectionViewDelegate {
           }) { _ in
             cell.selectedImageView.image = nil
         }
-        self.selectedStack.dropImage(image)
+        self.selectedStack.dropAsset(asset)
       } else {
         cell.selectedImageView.image = self.getImage("selectedImageGallery")
         cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
         UIView.animateWithDuration(0.2) { _ in
           cell.selectedImageView.transform = CGAffineTransformIdentity
         }
-        self.selectedStack.pushImage(image)
+        self.selectedStack.pushAsset(asset)
       }
     }
   }

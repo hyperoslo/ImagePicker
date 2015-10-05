@@ -1,4 +1,5 @@
 import UIKit
+import Photos
 
 protocol ImageStackViewDelegate: class {
   func imageStackViewDidPress()
@@ -98,18 +99,18 @@ extension ImageStackView {
     }
 
     if let sender = notification.object as? ImageStack {
-      renderViews(sender.images)
+      renderViews(sender.assets)
     }
   }
 
   func imageStackDidChangeContent(notification: NSNotification) {
     if let sender = notification.object as? ImageStack {
-      renderViews(sender.images)
+      renderViews(sender.assets)
     }
   }
 
-  func renderViews(images: [UIImage]) {
-    if let firstView = views.first where images.isEmpty {
+  func renderViews(assets: [PHAsset]) {
+    if let firstView = views.first where assets.isEmpty {
       for imageView in views {
         imageView.image = nil
         imageView.alpha = 0
@@ -119,11 +120,13 @@ extension ImageStackView {
       return
     }
 
-    let photos = Array(images.suffix(4))
+    let photos = Array(assets.suffix(4))
 
     for (index, view) in views.enumerate() {
       if index <= photos.count - 1 {
-        view.image = photos[index]
+        Photos.resolveAsset(photos[index], size: CGSize(width: Dimensions.imageSize, height: Dimensions.imageSize), completion: { image in
+          view.image = image
+        })
         view.alpha = 1
       } else {
         view.image = nil
