@@ -232,8 +232,8 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   func imageToLibrary(image: UIImage) {
-    galleryView.images.insertObject(image, atIndex: 0)
-    stack.pushImage(image)
+    //galleryView.images.insertObject(image, atIndex: 0)
+//    stack.pushImage(image)
     galleryView.shouldTransform = true
 
     UIView.animateWithDuration(0.3, animations: {
