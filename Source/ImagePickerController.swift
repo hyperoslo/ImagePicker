@@ -19,7 +19,7 @@ public class ImagePickerController: UIViewController {
     static let velocity: CGFloat = 100
   }
 
-  lazy public var galleryView: ImageGalleryView = { [unowned self] in
+  public lazy var galleryView: ImageGalleryView = { [unowned self] in
     let galleryView = ImageGalleryView()
     galleryView.delegate = self
     galleryView.selectedStack = self.stack
@@ -27,7 +27,7 @@ public class ImagePickerController: UIViewController {
     return galleryView
     }()
 
-  lazy var bottomContainer: BottomContainerView = { [unowned self] in
+  public lazy var bottomContainer: BottomContainerView = { [unowned self] in
     let view = BottomContainerView()
     view.backgroundColor = UIColor(red:0.09, green:0.11, blue:0.13, alpha:1)
     view.delegate = self
