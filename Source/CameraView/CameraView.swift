@@ -5,7 +5,7 @@ import AssetsLibrary
 protocol CameraViewDelegate: class {
 
   func handleFlashButton(hide: Bool)
-  func imageToLibrary(image: UIImage)
+  func imageToLibrary()
 }
 
 class CameraView: UIViewController {
@@ -188,13 +188,9 @@ class CameraView: UIViewController {
           let image = self.cropImage(imageFromData)
           let orientation = self.pictureOrientation()
           let assetsLibrary = ALAssetsLibrary()
-          assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: nil)
-
-          guard let imageCG = image.CGImage, realOrientation = UIImageOrientation(rawValue: orientation.rawValue) else { return }
-          let rotatedImage = UIImage(CGImage: imageCG,
-            scale: 1.0,
-            orientation: realOrientation)
-          self.delegate?.imageToLibrary(rotatedImage)
+          assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation) { url, error in
+            self.delegate?.imageToLibrary()
+          }
       })
       })
   }
