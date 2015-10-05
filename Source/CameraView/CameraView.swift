@@ -10,10 +10,7 @@ protocol CameraViewDelegate: class {
 
 class CameraView: UIViewController {
 
-  lazy var pickerConfiguration: Configuration = {
-    let configuration = Configuration()
-    return configuration
-    }()
+  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
@@ -64,8 +61,8 @@ class CameraView: UIViewController {
 
     initializeCamera()
     
-    view.backgroundColor = self.pickerConfiguration.configuration.mainColor
-    previewLayer?.backgroundColor = self.pickerConfiguration.configuration.mainColor.CGColor
+    view.backgroundColor = self.pickerConfiguration.mainColor
+    previewLayer?.backgroundColor = self.pickerConfiguration.mainColor.CGColor
   }
 
   // MARK: - Initialize camera

@@ -86,7 +86,7 @@ public class ImagePickerController: UIViewController {
     }
 
     view.backgroundColor = .whiteColor()
-    view.backgroundColor = pickerConfiguration.configuration.mainColor
+    view.backgroundColor = pickerConfiguration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     subscribe()
@@ -141,7 +141,7 @@ public class ImagePickerController: UIViewController {
     guard let sender = notification.object as? ImageStack else { return }
     
     let title = !sender.images.isEmpty ?
-      pickerConfiguration.configuration.doneButtonTitle : pickerConfiguration.configuration.cancelButtonTitle
+      pickerConfiguration.doneButtonTitle : pickerConfiguration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
 
