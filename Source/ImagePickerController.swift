@@ -231,16 +231,17 @@ extension ImagePickerController: CameraViewDelegate {
     }
   }
 
-  func imageToLibrary(image: UIImage) {
-    //galleryView.images.insertObject(image, atIndex: 0)
-//    stack.pushImage(image)
+  func imageToLibrary() {
+    galleryView.fetchPhotos() {
+      guard let asset = self.galleryView.assets.first else { return }
+      self.stack.pushAsset(asset)
+    }
     galleryView.shouldTransform = true
 
     UIView.animateWithDuration(0.3, animations: {
       self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
       }) { _ in
         self.galleryView.collectionView.transform = CGAffineTransformIdentity
-        self.galleryView.collectionView.reloadData()
     }
   }
 }
