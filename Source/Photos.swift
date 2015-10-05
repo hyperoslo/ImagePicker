@@ -32,8 +32,12 @@ struct Photos {
     let imageManager = PHImageManager.defaultManager()
     let requestOptions = PHImageRequestOptions()
 
-    imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { image, _ in
-      completion(image: image)
+    imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { image, info in
+      if let info = info where info["PHImageFileUTIKey"] == nil {
+        dispatch_async(dispatch_get_main_queue(), {
+          completion(image: image)
+        })
+      }
     })
   }
 }
