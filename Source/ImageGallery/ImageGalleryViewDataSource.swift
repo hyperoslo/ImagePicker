@@ -41,8 +41,6 @@ extension ImageGalleryView: UICollectionViewDataSource {
       }
     }
 
-
-
     return cell
   }
 }

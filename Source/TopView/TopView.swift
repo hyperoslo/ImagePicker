@@ -74,7 +74,7 @@ class TopView: UIView {
       button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
       button.setTitle("ON", forState: .Normal)
     case "ON":
-      button.setImage(getImage("flashIconOff"), forState: .Normal)
+      button.setImage(getImage("flashIconOn"), forState: .Normal)
       button.setTitleColor(.whiteColor(), forState: .Normal)
       button.setTitleColor(.whiteColor(), forState: .Highlighted)
       button.setTitle("OFF", forState: .Normal)
@@ -98,8 +98,10 @@ class TopView: UIView {
     let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
     let bundle = NSBundle(path: bundlePath!)
     let traitCollection = UITraitCollection(displayScale: 3)
-    let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
-
-    return image!
+    if let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection) {
+      return image
+    } else {
+      return UIImage()
+    }
   }
 }
