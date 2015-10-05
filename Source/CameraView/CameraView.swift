@@ -4,6 +4,7 @@ import AssetsLibrary
 
 protocol CameraViewDelegate: class {
 
+  func setFlashButtonHidden(hidden: Bool)
   func handleFlashButton(hide: Bool)
   func imageToLibrary()
 }
@@ -49,7 +50,13 @@ class CameraView: UIViewController {
 
   let captureSession = AVCaptureSession()
   let devices = AVCaptureDevice.devices()
-  var captureDevice: AVCaptureDevice?
+    var captureDevice: AVCaptureDevice? {
+        didSet {
+            if let currentDevice = captureDevice {
+              delegate?.setFlashButtonHidden(!currentDevice.hasFlash)
+            }
+        }
+    }
   var capturedDevices: NSMutableArray?
   var previewLayer: AVCaptureVideoPreviewLayer?
   weak var delegate: CameraViewDelegate?

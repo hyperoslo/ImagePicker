@@ -224,6 +224,10 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
 extension ImagePickerController: CameraViewDelegate {
 
+  func setFlashButtonHidden(hidden: Bool) {
+    topView.flashButton.hidden = hidden
+  }
+
   func handleFlashButton(hide: Bool) {
     let alpha: CGFloat = hide ? 0 : 1
     UIView.animateWithDuration(0.3) {
