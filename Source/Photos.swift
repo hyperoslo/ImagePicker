@@ -18,7 +18,7 @@ struct Photos {
       var assets = [PHAsset]()
       fetchResult?.enumerateObjectsUsingBlock { object, index, stop in
         if let asset = object as? PHAsset {
-          assets.append(asset)
+          assets.insert(asset, atIndex: 0)
         }
       }
 
