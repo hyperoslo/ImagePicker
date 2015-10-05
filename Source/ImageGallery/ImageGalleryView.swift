@@ -135,10 +135,13 @@ public class ImageGalleryView: UIView {
 
   // MARK: - Photos handler
 
-  func fetchPhotos() {
+  func fetchPhotos(completion: (() -> Void)? = nil) {
     Photos.fetch { assets in
       self.assets.removeAll()
       self.assets.appendContentsOf(assets)
+      self.collectionView.reloadData()
+
+      completion?()
     }
   }
 
