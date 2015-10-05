@@ -191,9 +191,9 @@ class CameraView: UIViewController {
           let image = self.cropImage(imageFromData)
           let orientation = self.pictureOrientation()
           let assetsLibrary = ALAssetsLibrary()
-          assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation, completionBlock: { url, error in
+          assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation) { url, error in
             self.delegate?.imageToLibrary()
-          })
+          }
       })
       })
   }
