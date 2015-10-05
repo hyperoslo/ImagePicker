@@ -98,10 +98,8 @@ class TopView: UIView {
     let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
     let bundle = NSBundle(path: bundlePath!)
     let traitCollection = UITraitCollection(displayScale: 3)
-    if let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection) {
-      return image
-    } else {
-      return UIImage()
-    }
+    guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection) else { return UIImage() }
+
+    return image
   }
 }
