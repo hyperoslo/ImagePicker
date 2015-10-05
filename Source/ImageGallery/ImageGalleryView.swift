@@ -247,8 +247,6 @@ extension ImageGalleryView: UICollectionViewDelegate {
         self.selectedStack.pushImage(image)
       }
     }
-
-
   }
 
   public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
