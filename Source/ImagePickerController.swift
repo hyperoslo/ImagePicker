@@ -140,7 +140,7 @@ public class ImagePickerController: UIViewController {
   func adjustButtonTitle(notification: NSNotification) {
     guard let sender = notification.object as? ImageStack else { return }
     
-    let title = !sender.images.isEmpty ?
+    let title = !sender.assets.isEmpty ?
       pickerConfiguration.doneButtonTitle : pickerConfiguration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, forState: .Normal)
   }
