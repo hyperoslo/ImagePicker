@@ -30,8 +30,8 @@ class BottomContainerView: UIView {
 
   lazy var doneButton: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setTitle(self.configuration.cancelButtonTitle, forState: .Normal)
-    button.titleLabel?.font = self.configuration.doneButton
+    button.setTitle(self.pickerConfiguration.configuration.cancelButtonTitle, forState: .Normal)
+    button.titleLabel?.font = self.pickerConfiguration.configuration.doneButton
     button.addTarget(self, action: "doneButtonDidPress:", forControlEvents: .TouchUpInside)
 
     return button
@@ -42,14 +42,14 @@ class BottomContainerView: UIView {
     return view
     }()
 
-  lazy var configuration: PickerConfiguration = {
+  lazy var pickerConfiguration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
     }()
 
   lazy var topSeparator: UIView = { [unowned self] in
     let view = UIView()
-    view.backgroundColor = self.configuration.backgroundColor
+    view.backgroundColor = self.pickerConfiguration.configuration.backgroundColor
 
     return view
     }()
@@ -74,7 +74,7 @@ class BottomContainerView: UIView {
       view.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    backgroundColor = configuration.backgroundColor
+    backgroundColor = pickerConfiguration.configuration.backgroundColor
     stackView.addGestureRecognizer(tapGestureRecognizer)
 
     setupConstraints()
@@ -87,7 +87,7 @@ class BottomContainerView: UIView {
   // MARK: - Action methods
 
   func doneButtonDidPress(button: UIButton) {
-    if button.currentTitle == configuration.cancelButtonTitle {
+    if button.currentTitle == pickerConfiguration.configuration.cancelButtonTitle {
       delegate?.cancelButtonDidPress()
     } else {
       delegate?.doneButtonDidPress()

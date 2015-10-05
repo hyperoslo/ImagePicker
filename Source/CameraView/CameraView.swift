@@ -10,7 +10,7 @@ protocol CameraViewDelegate: class {
 
 class CameraView: UIViewController {
 
-  lazy var configuration: PickerConfiguration = {
+  lazy var pickerConfiguration: PickerConfiguration = {
     let configuration = PickerConfiguration()
     return configuration
     }()
@@ -64,8 +64,8 @@ class CameraView: UIViewController {
 
     initializeCamera()
     
-    view.backgroundColor = self.configuration.mainColor
-    previewLayer?.backgroundColor = self.configuration.mainColor.CGColor
+    view.backgroundColor = self.pickerConfiguration.configuration.mainColor
+    previewLayer?.backgroundColor = self.pickerConfiguration.configuration.mainColor.CGColor
   }
 
   // MARK: - Initialize camera
