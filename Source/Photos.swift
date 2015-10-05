@@ -32,13 +32,13 @@ struct Photos {
     let imageManager = PHImageManager.defaultManager()
     let requestOptions = PHImageRequestOptions()
 
-    imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions, resultHandler: { image, info in
+    imageManager.requestImageForAsset(asset, targetSize: size, contentMode: PHImageContentMode.AspectFill, options: requestOptions) { image, info in
       if let info = info where info["PHImageFileUTIKey"] == nil {
         dispatch_async(dispatch_get_main_queue(), {
           completion(image: image)
         })
       }
-    })
+    }
   }
 
   static func resolveAssets(assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [UIImage] {
