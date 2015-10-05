@@ -1,9 +1,9 @@
 import Photos
 import AssetsLibrary
 
-struct Photos {
+public struct Photos {
 
-  static func fetch(completion: (assets: [PHAsset]) -> Void) {
+  public static func fetch(completion: (assets: [PHAsset]) -> Void) {
     let fetchOptions = PHFetchOptions()
     let authorizationStatus = ALAssetsLibrary.authorizationStatus()
     var fetchResult: PHFetchResult?
@@ -28,7 +28,7 @@ struct Photos {
     }
   }
 
-  static func resolveAsset(asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280) ,completion: (image: UIImage?) -> Void) {
+  public static func resolveAsset(asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280) ,completion: (image: UIImage?) -> Void) {
     let imageManager = PHImageManager.defaultManager()
     let requestOptions = PHImageRequestOptions()
 
@@ -41,7 +41,7 @@ struct Photos {
     }
   }
 
-  static func resolveAssets(assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [UIImage] {
+  public static func resolveAssets(assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [UIImage] {
     let imageManager = PHImageManager.defaultManager()
     let requestOptions = PHImageRequestOptions()
 
