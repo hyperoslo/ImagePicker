@@ -57,7 +57,7 @@ public class ImagePickerController: UIViewController {
     return gesture
     }()
 
-  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
+  public lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
 
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
