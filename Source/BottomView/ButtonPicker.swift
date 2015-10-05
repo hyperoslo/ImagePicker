@@ -21,8 +21,8 @@ class ButtonPicker: UIButton {
     return label
     }()
 
-  lazy var pickerConfiguration: PickerConfiguration = {
-    let configuration = PickerConfiguration()
+  lazy var pickerConfiguration: Configuration = {
+    let configuration = Configuration()
     return configuration
     }()
 

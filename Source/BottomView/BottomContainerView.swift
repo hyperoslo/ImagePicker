@@ -42,8 +42,8 @@ class BottomContainerView: UIView {
     return view
     }()
 
-  lazy var pickerConfiguration: PickerConfiguration = {
-    let configuration = PickerConfiguration()
+  lazy var pickerConfiguration: Configuration = {
+    let configuration = Configuration()
     return configuration
     }()
 

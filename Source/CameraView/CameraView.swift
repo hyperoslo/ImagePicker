@@ -10,8 +10,8 @@ protocol CameraViewDelegate: class {
 
 class CameraView: UIViewController {
 
-  lazy var pickerConfiguration: PickerConfiguration = {
-    let configuration = PickerConfiguration()
+  lazy var pickerConfiguration: Configuration = {
+    let configuration = Configuration()
     return configuration
     }()
 

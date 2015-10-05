@@ -1,8 +1,8 @@
 import UIKit
 
-public class PickerConfiguration {
+public class Configuration {
   var configuration = ImagePickerConfiguration()
-  static let sharedInstance = PickerConfiguration()
+  static let sharedInstance = Configuration()
 }
 
 public struct ImagePickerConfiguration {

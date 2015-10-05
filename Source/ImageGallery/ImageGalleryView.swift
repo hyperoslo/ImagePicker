@@ -75,8 +75,8 @@ public class ImageGalleryView: UIView {
     return images
     }()
 
-  lazy var pickerConfiguration: PickerConfiguration = {
-    let configuration = PickerConfiguration()
+  lazy var pickerConfiguration: Configuration = {
+    let configuration = Configuration()
     return configuration
     }()
 
