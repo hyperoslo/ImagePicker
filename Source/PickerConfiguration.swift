@@ -1,6 +1,13 @@
 import UIKit
 
 public class PickerConfiguration {
+  var configuration = ImagePickerConfiguration()
+  static let sharedInstance = PickerConfiguration()
+}
+
+public struct ImagePickerConfiguration {
+
+  public init() { }
 
   // MARK: Colors
 
