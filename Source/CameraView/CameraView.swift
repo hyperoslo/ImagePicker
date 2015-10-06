@@ -50,13 +50,14 @@ class CameraView: UIViewController {
 
   let captureSession = AVCaptureSession()
   let devices = AVCaptureDevice.devices()
-    var captureDevice: AVCaptureDevice? {
-        didSet {
-            if let currentDevice = captureDevice {
-              delegate?.setFlashButtonHidden(!currentDevice.hasFlash)
-            }
-        }
+  var captureDevice: AVCaptureDevice? {
+    didSet {
+      if let currentDevice = captureDevice {
+        delegate?.setFlashButtonHidden(!currentDevice.hasFlash)
+      }
     }
+  }
+
   var capturedDevices: NSMutableArray?
   var previewLayer: AVCaptureVideoPreviewLayer?
   weak var delegate: CameraViewDelegate?
