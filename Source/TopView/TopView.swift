@@ -67,25 +67,28 @@ class TopView: UIView {
   func flashButtonDidPress(button: UIButton) {
     guard let currentTitle = button.currentTitle else { return }
 
+    var newTitle = ""
+
     switch currentTitle {
     case "AUTO":
+      newTitle = "ON"
       button.setImage(getImage("flashIcon"), forState: .Normal)
       button.setTitleColor(UIColor(red:0.98, green:0.98, blue:0.45, alpha:1), forState: .Normal)
       button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
-      button.setTitle("ON", forState: .Normal)
     case "ON":
+      newTitle = "OFF"
       button.setImage(getImage("flashIconOn"), forState: .Normal)
       button.setTitleColor(.whiteColor(), forState: .Normal)
       button.setTitleColor(.whiteColor(), forState: .Highlighted)
-      button.setTitle("OFF", forState: .Normal)
     case "OFF":
+      newTitle = "AUTO"
       button.setImage(getImage("flashIcon"), forState: .Normal)
-      button.setTitle("AUTO", forState: .Normal)
     default:
       break
     }
 
-    delegate?.flashButtonDidPress(currentTitle)
+    button.setTitle(newTitle, forState: .Normal)
+    delegate?.flashButtonDidPress(newTitle)
   }
 
   func rotateCameraButtonDidPress(button: UIButton) {
