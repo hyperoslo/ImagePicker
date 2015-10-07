@@ -5,7 +5,6 @@ import AssetsLibrary
 protocol CameraViewDelegate: class {
 
   func setFlashButtonHidden(hidden: Bool)
-  func handleFlashButton(hide: Bool)
   func imageToLibrary()
 }
 
@@ -126,8 +125,6 @@ class CameraView: UIViewController {
 
     self.captureDevice = capturedDevices?.objectAtIndex(newDeviceIndex) as? AVCaptureDevice
     configureDevice()
-
-    delegate?.handleFlashButton(captureDevice.position == .Front)
 
     guard let currentCaptureDevice = self.captureDevice else { return }
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
@@ -297,7 +294,6 @@ class CameraView: UIViewController {
     previewLayer.frame = view.layer.frame
     view.clipsToBounds = true
     captureSession.startRunning()
-    delegate?.handleFlashButton(captureDevice?.position == .Front)
     stillImageOutput = AVCaptureStillImageOutput()
     stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
     captureSession.addOutput(stillImageOutput)
