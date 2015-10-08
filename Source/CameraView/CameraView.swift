@@ -197,7 +197,7 @@ class CameraView: UIViewController {
 
   func cropImage(image: UIImage) -> UIImage {
     guard let imageReference = CGImageCreateWithImageInRect(image.CGImage,
-      CGRect(x: 0, y: 0, width: image.size.height - 190, height: image.size.width)) else { return UIImage() }
+      CGRect(x: 0, y: 0, width: image.size.height - 285, height: image.size.width)) else { return UIImage() }
     let normalizedImage = UIImage(CGImage: imageReference, scale: 1, orientation: .Right)
 
     return normalizedImage
