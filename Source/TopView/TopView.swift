@@ -14,13 +14,16 @@ class TopView: UIView {
     static let height: CGFloat = 34
   }
 
+  var currentFlashIndex = 0
+  let flashButtonTitles = ["AUTO", "ON", "OFF"]
+
   lazy var flashButton: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setImage(self.getImage("flashIcon"), forState: .Normal)
+    button.setImage(self.getImage("AUTO"), forState: .Normal)
     button.setTitle("AUTO", forState: .Normal)
     button.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0)
-    button.setTitleColor(UIColor(red:0.98, green:0.98, blue:0.45, alpha:1), forState: .Normal)
-    button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
+    button.setTitleColor(.whiteColor(), forState: .Normal)
+    button.setTitleColor(.whiteColor(), forState: .Highlighted)
     button.titleLabel?.font = self.pickerConfiguration.flashButton
     button.addTarget(self, action: "flashButtonDidPress:", forControlEvents: .TouchUpInside)
     button.contentHorizontalAlignment = .Left
@@ -65,29 +68,23 @@ class TopView: UIView {
   // MARK: - Action methods
 
   func flashButtonDidPress(button: UIButton) {
-    guard let currentTitle = button.currentTitle else { return }
+    currentFlashIndex++
+    currentFlashIndex = currentFlashIndex % flashButtonTitles.count
 
-    var newTitle = ""
-
-    switch currentTitle {
-    case "AUTO":
-      newTitle = "ON"
-      button.setImage(getImage("flashIcon"), forState: .Normal)
+    switch currentFlashIndex {
+    case 1:
       button.setTitleColor(UIColor(red:0.98, green:0.98, blue:0.45, alpha:1), forState: .Normal)
       button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
-    case "ON":
-      newTitle = "OFF"
-      button.setImage(getImage("flashIconOn"), forState: .Normal)
+    default:
       button.setTitleColor(.whiteColor(), forState: .Normal)
       button.setTitleColor(.whiteColor(), forState: .Highlighted)
-    case "OFF":
-      newTitle = "AUTO"
-      button.setImage(getImage("flashIcon"), forState: .Normal)
-    default:
-      break
     }
 
+    let newTitle = flashButtonTitles[currentFlashIndex]
+
+    button.setImage(getImage(newTitle), forState: .Normal)
     button.setTitle(newTitle, forState: .Normal)
+
     delegate?.flashButtonDidPress(newTitle)
   }
 
