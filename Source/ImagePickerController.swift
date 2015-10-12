@@ -311,7 +311,6 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
   func panGestureDidChange(translation: CGPoint) {
     let galleryHeight = initialFrame.height - translation.y
-    print(galleryHeight)
     if galleryHeight <= ImageGalleryView.Dimensions.galleryBarHeight {
       updateGalleryViewFrames(ImageGalleryView.Dimensions.galleryBarHeight)
     } else if galleryHeight >= GestureConstants.maximumHeight {

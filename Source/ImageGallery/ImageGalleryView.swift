@@ -27,8 +27,7 @@ public class ImageGalleryView: UIView {
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.backgroundColor = self.pickerConfiguration.mainColor
     collectionView.showsHorizontalScrollIndicator = false
-//    collectionView.layer.anchorPoint = CGPointMake(0.5, 0.5)
-    collectionView.backgroundColor = UIColor.redColor()
+
     return collectionView
     }()
 
@@ -46,9 +45,7 @@ public class ImageGalleryView: UIView {
     let view = UIView()
     view.translatesAutoresizingMaskIntoConstraints = false
     view.addGestureRecognizer(self.panGestureRecognizer)
-    //view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
-view.backgroundColor = UIColor.redColor().colorWithAlphaComponent(0.6)
-    view.alpha = 0.2
+    view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
 
     return view
     }()
