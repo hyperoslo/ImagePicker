@@ -311,19 +311,28 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
   func panGestureDidChange(translation: CGPoint) {
     let galleryHeight = initialFrame.height - translation.y
+
+    if galleryHeight >= GestureConstants.maximumHeight { return }
+
     if galleryHeight <= ImageGalleryView.Dimensions.galleryBarHeight {
       updateGalleryViewFrames(ImageGalleryView.Dimensions.galleryBarHeight)
-    } else if galleryHeight >= GestureConstants.maximumHeight {
 
     } else if galleryHeight >= GestureConstants.minimumHeight {
+
       let scale = (galleryHeight - ImageGalleryView.Dimensions.galleryBarHeight) / (GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight)
       galleryView.collectionView.transform = CGAffineTransformMakeScale(scale, scale)
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y
+
+      let value = self.view.frame.width * (scale - 1) / scale
+      self.galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right:  value)
+
     } else {
+
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y
     }
+
     galleryView.noImagesLabel.center = galleryView.collectionView.center
   }
 
