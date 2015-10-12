@@ -27,8 +27,8 @@ public class ImageGalleryView: UIView {
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.backgroundColor = self.pickerConfiguration.mainColor
     collectionView.showsHorizontalScrollIndicator = false
-    collectionView.layer.anchorPoint = CGPointMake(0.5, 0.5)
-
+//    collectionView.layer.anchorPoint = CGPointMake(0.5, 0.5)
+    collectionView.backgroundColor = UIColor.redColor()
     return collectionView
     }()
 

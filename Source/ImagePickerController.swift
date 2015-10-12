@@ -23,6 +23,7 @@ public class ImagePickerController: UIViewController {
     let galleryView = ImageGalleryView()
     galleryView.delegate = self
     galleryView.selectedStack = self.stack
+    galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
 
     return galleryView
     }()
@@ -152,26 +153,42 @@ public class ImagePickerController: UIViewController {
   }
 
   public func collapseGalleryView(completion: (() -> Void)?) {
+        galleryView.collectionViewLayout.invalidateLayout()
     UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
-      self.updateCollectionViewFrames(false)
+      self.galleryView.collectionView.transform = CGAffineTransformIdentity
+
       }) { _ in
         completion?()
     }
   }
 
   public func showGalleryView() {
+        galleryView.collectionViewLayout.invalidateLayout()
     UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(GestureConstants.minimumHeight)
-      self.updateCollectionViewFrames(false)
+//      self.updateCollectionViewFrames(false)
+      self.galleryView.collectionView.transform = CGAffineTransformIdentity
       })
   }
 
   public func expandGalleryView() {
-    galleryView.collectionView.performBatchUpdates({
+        galleryView.collectionViewLayout.invalidateLayout()
+
+    UIView.animateWithDuration(0.3) { () -> Void in
+
+    }
+
+    UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(GestureConstants.maximumHeight)
-      self.updateCollectionViewFrames(true)
-      }, completion: nil)
+      let scale = (GestureConstants.maximumHeight + 25) / GestureConstants.minimumHeight
+      self.galleryView.collectionView.transform = CGAffineTransformMakeScale(scale, scale)
+
+      //TODO: update content insets
+
+      //      self.updateCollectionViewFrames(false)
+      //self.galleryView.collectionView.transform = CGAffineTransformMakeScale(1.8, 1.8)
+    })
   }
 
   func updateGalleryViewFrames(constant: CGFloat) {
@@ -181,7 +198,6 @@ public class ImagePickerController: UIViewController {
 
   func updateCollectionViewFrames(maximum: Bool) {
     let constant = maximum ? GestureConstants.maximumHeight : GestureConstants.minimumHeight
-    galleryView.collectionViewLayout.invalidateLayout()
     galleryView.collectionView.frame.size.height = constant - galleryView.topSeparator.frame.height
     galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
     galleryView.noImagesLabel.center = galleryView.collectionView.center
@@ -282,6 +298,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   func panGestureDidStart() {
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
+    //this does not work because of inter-item spacing of CV
     numberOfCells = Int(initialContentOffset.x / galleryView.collectionSize.width)
   }
 
@@ -300,27 +317,29 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
   func panGestureDidChange(translation: CGPoint) {
     let galleryHeight = initialFrame.height - translation.y
-
+    print(galleryHeight)
     if galleryHeight <= ImageGalleryView.Dimensions.galleryBarHeight {
+      print("A")
+      //botttom
       updateGalleryViewFrames(ImageGalleryView.Dimensions.galleryBarHeight)
     } else if galleryHeight >= GestureConstants.maximumHeight {
-      updateGalleryViewFrames(GestureConstants.maximumHeight)
-    } else {
+      print("B")
+      //top
+//      updateGalleryViewFrames(GestureConstants.maximumHeight)
+
+      
+    } else if galleryHeight >= GestureConstants.minimumHeight {
+      print("Scaling")
+      let scale = galleryHeight / (GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight)
+      print(scale)
+      galleryView.collectionView.transform = CGAffineTransformMakeScale(scale, scale)
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y
-    }
-
-    if galleryHeight > GestureConstants.minimumHeight {
-      galleryView.collectionViewLayout.invalidateLayout()
-      galleryView.collectionView.frame.size.height = galleryView.frame.size.height - ImageGalleryView.Dimensions.galleryBarHeight
-      galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
-
-      if galleryHeight < GestureConstants.maximumHeight {
-        let realTranslation = translation.y < -GestureConstants.minimumHeight + ImageGalleryView.Dimensions.galleryBarHeight
-          ? translation.y + GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight
-          : translation.y
-        galleryView.collectionView.contentOffset = CGPoint(x: initialContentOffset.x - (realTranslation * CGFloat(numberOfCells)), y: 0)
-      }
+    } else {
+      //intermediate
+      print("C")
+      galleryView.frame.origin.y = initialFrame.origin.y + translation.y
+      galleryView.frame.size.height = initialFrame.height - translation.y
     }
 
     galleryView.noImagesLabel.center = galleryView.collectionView.center
@@ -330,10 +349,13 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     let galleryHeight = initialFrame.height - translation.y
 
     if galleryView.frame.height < GestureConstants.minimumHeight && velocity.y < 0 {
+      print("gellery view normal size")
       showGalleryView()
     } else if velocity.y < -GestureConstants.velocity {
+      print("gellery view big size")
       expandGalleryView()
     } else if velocity.y > GestureConstants.velocity || galleryHeight < GestureConstants.minimumHeight {
+      print("gellery view hidden")
       collapseGalleryView(nil)
     }
   }
