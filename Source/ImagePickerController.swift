@@ -175,13 +175,10 @@ public class ImagePickerController: UIViewController {
   public func expandGalleryView() {
         galleryView.collectionViewLayout.invalidateLayout()
 
-    UIView.animateWithDuration(0.3) { () -> Void in
-
-    }
-
     UIView.animateWithDuration(0.3, animations: {
       self.updateGalleryViewFrames(GestureConstants.maximumHeight)
-      let scale = (GestureConstants.maximumHeight + 25) / GestureConstants.minimumHeight
+
+      let scale = (GestureConstants.maximumHeight - ImageGalleryView.Dimensions.galleryBarHeight) / (GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight)
       self.galleryView.collectionView.transform = CGAffineTransformMakeScale(scale, scale)
 
       //TODO: update content insets
@@ -330,7 +327,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       
     } else if galleryHeight >= GestureConstants.minimumHeight {
       print("Scaling")
-      let scale = galleryHeight / (GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight)
+      let scale = (galleryHeight - ImageGalleryView.Dimensions.galleryBarHeight) / (GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight)
       print(scale)
       galleryView.collectionView.transform = CGAffineTransformMakeScale(scale, scale)
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y

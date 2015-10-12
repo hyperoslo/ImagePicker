@@ -46,7 +46,9 @@ public class ImageGalleryView: UIView {
     let view = UIView()
     view.translatesAutoresizingMaskIntoConstraints = false
     view.addGestureRecognizer(self.panGestureRecognizer)
-    view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
+    //view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
+view.backgroundColor = UIColor.redColor().colorWithAlphaComponent(0.6)
+    view.alpha = 0.2
 
     return view
     }()
