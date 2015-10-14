@@ -108,19 +108,18 @@ class CameraView: UIViewController {
   // MARK: - Camera actions
 
   func rotateCamera() {
-    guard let captureDevice = captureDevice else { return }
-    let deviceIndex = capturedDevices?.indexOfObject(captureDevice)
-    let currentDeviceInput = captureSession.inputs.first as! AVCaptureDeviceInput
+    guard let captureDevice = captureDevice,
+      currentDeviceInput = captureSession.inputs.first as? AVCaptureDeviceInput,
+      deviceIndex = capturedDevices?.indexOfObject(captureDevice) else { return }
+
     var newDeviceIndex = 0
 
     blurView.frame = view.bounds
     containerView.frame = view.bounds
     view.addSubview(containerView)
 
-    if let index = capturedDevices?.count {
-      if deviceIndex != index - 1 && deviceIndex < capturedDevices?.count {
-        newDeviceIndex = deviceIndex! + 1
-      }
+    if let index = capturedDevices?.count where deviceIndex != index - 1 && deviceIndex < capturedDevices?.count {
+      newDeviceIndex = deviceIndex + 1
     }
 
     self.captureDevice = capturedDevices?.objectAtIndex(newDeviceIndex) as? AVCaptureDevice
@@ -133,11 +132,10 @@ class CameraView: UIViewController {
         self.captureSession.beginConfiguration()
         self.captureSession.removeInput(currentDeviceInput)
 
-        if currentCaptureDevice.supportsAVCaptureSessionPreset(AVCaptureSessionPreset1280x720) {
-          self.captureSession.sessionPreset = AVCaptureSessionPreset1280x720
-        } else {
-          self.captureSession.sessionPreset = AVCaptureSessionPreset640x480
-        }
+        self.captureSession.sessionPreset =
+          currentCaptureDevice.supportsAVCaptureSessionPreset(AVCaptureSessionPreset1280x720)
+          ? AVCaptureSessionPreset1280x720
+          : AVCaptureSessionPreset640x480
 
         try! self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
         self.captureSession.commitConfiguration()
