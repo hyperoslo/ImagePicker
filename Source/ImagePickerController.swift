@@ -324,8 +324,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y
 
-      let value = self.view.frame.width * (scale - 1) / scale
-      self.galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right:  value)
+      let value = view.frame.width * (scale - 1) / scale
+      galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right:  value)
 
     } else {
 
