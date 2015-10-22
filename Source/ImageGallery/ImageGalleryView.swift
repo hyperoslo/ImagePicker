@@ -195,7 +195,7 @@ public class ImageGalleryView: UIView {
           }
 
           let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { _ in
-            delegate?.dismissViewController(alertController)
+            self.delegate?.dismissViewController(alertController)
           }
 
           alertController.addAction(alertAction)
