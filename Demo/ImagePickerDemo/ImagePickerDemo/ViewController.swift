@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  ImagePickerDemo
-//
-//  Created by Khoa Pham on 11/8/15.
-//  Copyright © 2015 Ramon Gilabert Llop. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import ImagePicker
@@ -13,8 +5,8 @@ import ImagePicker
 class ViewController : UICollectionViewController, ImagePickerDelegate, UICollectionViewDelegateFlowLayout {
   var images = [UIImage]()
 
-
   // MARK: UICollectionViewDataSource
+
   override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return images.count
   }
@@ -28,7 +20,8 @@ class ViewController : UICollectionViewController, ImagePickerDelegate, UICollec
     return cell
   }
 
-  // MAKR: UICollectionViewDelegateFlowLayout
+  // MARK: UICollectionViewDelegateFlowLayout
+
   func collectionView(collectionView: UICollectionView, layout
     collectionViewLayout: UICollectionViewLayout,
     sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
@@ -38,6 +31,7 @@ class ViewController : UICollectionViewController, ImagePickerDelegate, UICollec
   }
 
   // MARK: ImagePickerDelegate
+
   func imagePicker(imagePickerController: ImagePickerController, doneButtonDidPress images: [UIImage]) {
     self.images = images
     collectionView?.reloadData()
@@ -45,6 +39,7 @@ class ViewController : UICollectionViewController, ImagePickerDelegate, UICollec
   }
 
   // MARK: Action
+    
   @IBAction func selectButtonTouched(sender: UIBarButtonItem) {
     let imagePicker = ImagePickerController()
     imagePicker.delegate = self

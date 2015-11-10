@@ -1,11 +1,3 @@
-//
-//  ImagePickerDelegate.swift
-//  Pods
-//
-//  Created by Khoa Pham on 11/8/15.
-//
-//
-
 import Foundation
 
 public protocol ImagePickerDelegate: class {
