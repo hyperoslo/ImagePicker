@@ -166,7 +166,6 @@ extension ImageStackView {
     UIView.animateWithDuration(0.3, animations: {
       imageView.transform = CGAffineTransformMakeScale(1.05, 1.05)
       }) { _ in
-
         UIView.animateWithDuration(0.2, animations: { () -> Void in
           self.activityView.alpha = 0.0
           imageView.transform = CGAffineTransformIdentity
