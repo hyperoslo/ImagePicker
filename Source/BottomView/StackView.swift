@@ -16,6 +16,7 @@ class ImageStackView: UIView {
   lazy var activityView: UIActivityIndicatorView = {
     let view = UIActivityIndicatorView()
     view.alpha = 0.0
+
     return view
     }()
 
