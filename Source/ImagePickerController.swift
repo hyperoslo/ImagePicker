@@ -212,6 +212,7 @@ public class ImagePickerController: UIViewController {
 extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
+    bottomContainer.stackView.startLoader()
     collapseGalleryView { [unowned self] in
       self.cameraController.takePicture()
     }

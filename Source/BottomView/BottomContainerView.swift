@@ -66,9 +66,9 @@ public class BottomContainerView: UIView {
   public override init(frame: CGRect) {
     super.init(frame: frame)
 
-    for view in [borderPickerButton, pickerButton, doneButton, stackView, topSeparator] {
-      addSubview(view)
-      view.translatesAutoresizingMaskIntoConstraints = false
+    [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].forEach {
+      addSubview($0)
+      $0.translatesAutoresizingMaskIntoConstraints = false
     }
 
     backgroundColor = pickerConfiguration.backgroundColor

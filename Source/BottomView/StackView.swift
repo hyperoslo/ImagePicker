@@ -13,6 +13,13 @@ class ImageStackView: UIView {
 
   weak var delegate: ImageStackViewDelegate?
 
+  lazy var activityView: UIActivityIndicatorView = {
+    let view = UIActivityIndicatorView()
+    view.alpha = 0.0
+
+    return view
+    }()
+
   var views: [UIImageView] = {
     var array = [UIImageView]()
     for i in 0...3 {
@@ -35,11 +42,9 @@ class ImageStackView: UIView {
 
     subscribe()
 
-    for view in views {
-      addSubview(view)
-    }
-    
-    views[0].alpha = 1
+    views.forEach { addSubview($0) }
+    addSubview(activityView)
+    views.first?.alpha = 1
     layoutSubviews()
   }
 
@@ -85,12 +90,23 @@ class ImageStackView: UIView {
       view.frame = CGRect(origin: origin, size: viewSize)
     }
   }
+
+  func startLoader() {
+    if let firstVisibleView = views.filter({ $0.alpha == 1.0 }).last {
+      activityView.frame.origin.x = firstVisibleView.center.x
+      activityView.frame.origin.y = firstVisibleView.center.y
+    }
+  
+    activityView.startAnimating()
+    UIView.animateWithDuration(0.3) {
+      self.activityView.alpha = 1.0
+    }
+  }
 }
 
 extension ImageStackView {
 
   func imageDidPush(notification: NSNotification) {
-
     //TODO indexOf in swift 2
     let emptyView = views.filter {$0.image == nil}.first
 
@@ -100,12 +116,14 @@ extension ImageStackView {
 
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
+      activityView.stopAnimating()
     }
   }
 
   func imageStackDidChangeContent(notification: NSNotification) {
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
+      activityView.stopAnimating()
     }
   }
 
@@ -132,6 +150,13 @@ extension ImageStackView {
         view.image = nil
         view.alpha = 0
       }
+
+      if index == photos.count {
+        UIView.animateWithDuration(0.3) {
+          self.activityView.frame.origin.x = view.center.x + 3
+          self.activityView.frame.origin.y = view.center.y + 3
+        }
+      }
     }
   }
 
@@ -141,9 +166,12 @@ extension ImageStackView {
     UIView.animateWithDuration(0.3, animations: {
       imageView.transform = CGAffineTransformMakeScale(1.05, 1.05)
       }) { _ in
-        UIView.animateWithDuration(0.2) { _ in
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+          self.activityView.alpha = 0.0
           imageView.transform = CGAffineTransformIdentity
-        }
+          }, completion: { _ in
+            self.activityView.stopAnimating()
+        })
     }
   }
 }
