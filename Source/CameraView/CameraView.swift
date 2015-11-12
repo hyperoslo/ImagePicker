@@ -52,9 +52,7 @@ class CameraView: UIViewController {
     label.font = self.pickerConfiguration.noCameraFont
     label.textColor = self.pickerConfiguration.noCameraColor
     label.text = self.pickerConfiguration.noCameraTitle
-    label.alpha = 1
     label.sizeToFit()
-    self.view.addSubview(label)
 
     return label
     }()
@@ -68,9 +66,7 @@ class CameraView: UIViewController {
       ])
 
     button.setAttributedTitle(title, forState: .Normal)
-    button.alpha = 1
     button.sizeToFit()
-    self.view.addSubview(button)
 
     return button
     }()
@@ -120,6 +116,8 @@ class CameraView: UIViewController {
     captureSession.sessionPreset = AVCaptureSessionPreset1920x1080
     capturedDevices = NSMutableArray()
 
+    showNoCamera(false)
+
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 
     for device in devices {
@@ -127,16 +125,18 @@ class CameraView: UIViewController {
         if authorizationStatus == .Authorized {
           captureDevice = device
           capturedDevices?.addObject(device)
-        } else if  && authorizationStatus == .NotDetermined {
+        } else if authorizationStatus == .NotDetermined {
           AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo,
             completionHandler: { (granted: Bool) -> Void in
               if granted {
                 self.captureDevice = device
                 self.capturedDevices?.addObject(device)
               }
+              self.showNoCamera(!granted)
           })
+        } else {
+          showNoCamera(true)
         }
-
       }
     }
 
@@ -340,6 +340,12 @@ class CameraView: UIViewController {
   }
 
   // MARK: - Private helpers
+
+  func showNoCamera(show: Bool) {
+    [noCameraButton, noCameraLabel].forEach {
+      show ? view.addSubview($0) : $0.removeFromSuperview()
+    }
+  }
 
   func getImage(name: String) -> UIImage {
     guard let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
