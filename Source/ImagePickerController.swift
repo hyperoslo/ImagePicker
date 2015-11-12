@@ -1,12 +1,5 @@
 import UIKit
 
-public protocol ImagePickerDelegate: class {
-
-  func wrapperDidPress(images: [UIImage])
-  func doneButtonDidPress(images: [UIImage])
-  func cancelButtonDidPress()
-}
-
 public class ImagePickerController: UIViewController {
 
   struct Dimensions {
@@ -221,17 +214,17 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func doneButtonDidPress() {
     let images = Photos.resolveAssets(stack.assets)
-    delegate?.doneButtonDidPress(images)
+    delegate?.imagePicker(self, doneButtonDidPress: images)
   }
 
   func cancelButtonDidPress() {
     dismissViewControllerAnimated(true, completion: nil)
-    delegate?.cancelButtonDidPress()
+    delegate?.imagePickerCancelButtonDidPress(self)
   }
 
   func imageStackViewDidPress() {
     let images = Photos.resolveAssets(stack.assets)
-    delegate?.wrapperDidPress(images)
+    delegate?.imagePicker(self, wrapperDidPress: images)
   }
 }
 
