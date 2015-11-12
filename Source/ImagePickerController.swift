@@ -195,7 +195,8 @@ public class ImagePickerController: UIViewController {
     let constant = maximum ? GestureConstants.maximumHeight : GestureConstants.minimumHeight
     galleryView.collectionView.frame.size.height = constant - galleryView.topSeparator.frame.height
     galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
-    galleryView.noImagesLabel.center = galleryView.collectionView.center
+
+    galleryView.updateNoImagesLabel()
   }
 
   func enableGestures(enabled: Bool) {
@@ -334,7 +335,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.frame.size.height = initialFrame.height - translation.y
     }
 
-    galleryView.noImagesLabel.center = galleryView.collectionView.center
+    galleryView.updateNoImagesLabel()
   }
 
   func panGestureDidEnd(translation: CGPoint, velocity: CGPoint) {

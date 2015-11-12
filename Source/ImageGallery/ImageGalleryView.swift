@@ -124,8 +124,18 @@ public class ImageGalleryView: UIView {
       width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
-    noImagesLabel.center = collectionView.center
+
+    updateNoImagesLabel()
   }
+
+  func updateNoImagesLabel() {
+    let height = CGRectGetHeight(bounds)
+    let threshold = Dimensions.galleryBarHeight * 2
+
+    noImagesLabel.center = CGPoint(x: CGRectGetWidth(bounds)/2, y: height/2)
+    noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
+  }
+
 
   // MARK: - Photos handler
 
