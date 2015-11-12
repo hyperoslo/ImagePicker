@@ -67,6 +67,7 @@ class CameraView: UIViewController {
 
     button.setAttributedTitle(title, forState: .Normal)
     button.sizeToFit()
+    button.addTarget(self, action: "settingsButtonDidTap", forControlEvents: .TouchUpInside)
 
     return button
     }()
@@ -144,6 +145,16 @@ class CameraView: UIViewController {
 
     if captureDevice != nil {
       beginSession()
+    }
+  }
+
+  // MARK: - Actions
+
+  func settingsButtonDidTap() {
+    dispatch_async(dispatch_get_main_queue()) {
+      if let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
+        UIApplication.sharedApplication().openURL(settingsURL)
+      }
     }
   }
 
