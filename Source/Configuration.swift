@@ -24,6 +24,7 @@ public struct Configuration {
   public var cancelButtonTitle = "Cancel"
   public var doneButtonTitle = "Done"
   public var noImagesTitle = "No images available"
+  public var noCameraTitle = "Camera is not available"
 
   // MARK: Dimensions
 
