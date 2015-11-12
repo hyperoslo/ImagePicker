@@ -59,6 +59,22 @@ class CameraView: UIViewController {
     return label
     }()
 
+  lazy var noCameraButton: UIButton = { [unowned self] in
+    let button = UIButton(type: .System)
+    let title = NSAttributedString(string: self.pickerConfiguration.settingsTitle,
+      attributes: [
+        NSFontAttributeName : self.pickerConfiguration.settingsFont,
+        NSForegroundColorAttributeName : self.pickerConfiguration.settingsColor,
+      ])
+
+    button.setAttributedTitle(title, forState: .Normal)
+    button.alpha = 1
+    button.sizeToFit()
+    self.view.addSubview(button)
+
+    return button
+    }()
+
   let captureSession = AVCaptureSession()
   let devices = AVCaptureDevice.devices()
   var captureDevice: AVCaptureDevice? {
@@ -88,8 +104,14 @@ class CameraView: UIViewController {
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
-    noCameraLabel.center = CGPoint(x: view.bounds.width / 2,
+
+    let centerX = view.bounds.width / 2
+
+    noCameraLabel.center = CGPoint(x: centerX,
       y: view.bounds.height / 2 - 100)
+
+    noCameraButton.center = CGPoint(x: centerX,
+      y: noCameraLabel.frame.maxY + 20)
   }
 
   // MARK: - Initialize camera
@@ -101,11 +123,11 @@ class CameraView: UIViewController {
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 
     for device in devices {
-      if let device = device as? AVCaptureDevice {
-        if device.hasMediaType(AVMediaTypeVideo) && authorizationStatus == .Authorized {
+      if let device = device as? AVCaptureDevice where device.hasMediaType(AVMediaTypeVideo) {
+        if authorizationStatus == .Authorized {
           captureDevice = device
           capturedDevices?.addObject(device)
-        } else if device.hasMediaType(AVMediaTypeVideo) && authorizationStatus == .NotDetermined {
+        } else if  && authorizationStatus == .NotDetermined {
           AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo,
             completionHandler: { (granted: Bool) -> Void in
               if granted {
