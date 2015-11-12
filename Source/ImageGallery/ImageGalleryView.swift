@@ -96,6 +96,8 @@ public class ImageGalleryView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
+    backgroundColor = pickerConfiguration.mainColor
+
     collectionView.registerClass(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
@@ -112,6 +114,11 @@ public class ImageGalleryView: UIView {
 
   // MARK: - Layout
 
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    updateNoImagesLabel()
+  }
+
   func updateFrames() {
     let totalWidth = UIScreen.mainScreen().bounds.width
     let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
@@ -124,18 +131,18 @@ public class ImageGalleryView: UIView {
       width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
-
-    updateNoImagesLabel()
   }
 
   func updateNoImagesLabel() {
     let height = CGRectGetHeight(bounds)
     let threshold = Dimensions.galleryBarHeight * 2
-
-    noImagesLabel.center = CGPoint(x: CGRectGetWidth(bounds)/2, y: height/2)
-    noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
+    if threshold > height || collectionView.alpha != 0 {
+      noImagesLabel.alpha = 0
+    } else {
+      noImagesLabel.center = CGPoint(x: CGRectGetWidth(bounds)/2, y: height/2)
+      noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
+    }
   }
-
 
   // MARK: - Photos handler
 
@@ -179,7 +186,7 @@ public class ImageGalleryView: UIView {
 
   func displayNoImagesMessage(hideCollectionView: Bool) {
     collectionView.alpha = hideCollectionView ? 0 : 1
-    noImagesLabel.alpha = hideCollectionView ? 1 : 0
+    updateNoImagesLabel()
   }
 
   func checkStatus() {

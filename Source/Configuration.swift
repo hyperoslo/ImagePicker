@@ -11,6 +11,8 @@ public struct Configuration {
   public var backgroundColor = UIColor(red:0.15, green:0.19, blue:0.24, alpha:1)
   public var mainColor = UIColor(red:0.09, green:0.11, blue:0.13, alpha:1)
   public var noImagesColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1)
+  public var noCameraColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1)
+  public var settingsColor = UIColor.whiteColor()
 
   // MARK: Fonts
 
@@ -18,12 +20,16 @@ public struct Configuration {
   public var doneButton = UIFont(name: "HelveticaNeue-Medium", size: 19)!
   public var flashButton = UIFont(name: "HelveticaNeue-Medium", size: 12)!
   public var noImagesFont = UIFont(name: "HelveticaNeue-Medium", size: 18)!
+  public var noCameraFont = UIFont(name: "HelveticaNeue-Medium", size: 18)!
+  public var settingsFont = UIFont(name: "HelveticaNeue-Medium", size: 18)!
 
   // MARK: Titles
 
   public var cancelButtonTitle = "Cancel"
   public var doneButtonTitle = "Done"
   public var noImagesTitle = "No images available"
+  public var noCameraTitle = "Camera is not available"
+  public var settingsTitle = "Settings"
 
   // MARK: Dimensions
 

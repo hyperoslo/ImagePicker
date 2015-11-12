@@ -47,6 +47,31 @@ class CameraView: UIViewController {
     return view
     }()
 
+  lazy var noCameraLabel: UILabel = { [unowned self] in
+    let label = UILabel()
+    label.font = self.pickerConfiguration.noCameraFont
+    label.textColor = self.pickerConfiguration.noCameraColor
+    label.text = self.pickerConfiguration.noCameraTitle
+    label.sizeToFit()
+
+    return label
+    }()
+
+  lazy var noCameraButton: UIButton = { [unowned self] in
+    let button = UIButton(type: .System)
+    let title = NSAttributedString(string: self.pickerConfiguration.settingsTitle,
+      attributes: [
+        NSFontAttributeName : self.pickerConfiguration.settingsFont,
+        NSForegroundColorAttributeName : self.pickerConfiguration.settingsColor,
+      ])
+
+    button.setAttributedTitle(title, forState: .Normal)
+    button.sizeToFit()
+    button.addTarget(self, action: "settingsButtonDidTap", forControlEvents: .TouchUpInside)
+
+    return button
+    }()
+
   let captureSession = AVCaptureSession()
   let devices = AVCaptureDevice.devices()
   var captureDevice: AVCaptureDevice? {
@@ -72,29 +97,47 @@ class CameraView: UIViewController {
     previewLayer?.backgroundColor = self.pickerConfiguration.mainColor.CGColor
   }
 
+  // MARK: - Layout
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+
+    let centerX = view.bounds.width / 2
+
+    noCameraLabel.center = CGPoint(x: centerX,
+      y: view.bounds.height / 2 - 100)
+
+    noCameraButton.center = CGPoint(x: centerX,
+      y: noCameraLabel.frame.maxY + 20)
+  }
+
   // MARK: - Initialize camera
 
   func initializeCamera() {
     captureSession.sessionPreset = AVCaptureSessionPreset1920x1080
     capturedDevices = NSMutableArray()
 
+    showNoCamera(false)
+
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
 
     for device in devices {
-      if let device = device as? AVCaptureDevice {
-        if device.hasMediaType(AVMediaTypeVideo) && authorizationStatus == .Authorized {
+      if let device = device as? AVCaptureDevice where device.hasMediaType(AVMediaTypeVideo) {
+        if authorizationStatus == .Authorized {
           captureDevice = device
           capturedDevices?.addObject(device)
-        } else if device.hasMediaType(AVMediaTypeVideo) && authorizationStatus == .NotDetermined {
+        } else if authorizationStatus == .NotDetermined {
           AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo,
             completionHandler: { (granted: Bool) -> Void in
               if granted {
                 self.captureDevice = device
                 self.capturedDevices?.addObject(device)
               }
+              self.showNoCamera(!granted)
           })
+        } else {
+          showNoCamera(true)
         }
-
       }
     }
 
@@ -102,6 +145,16 @@ class CameraView: UIViewController {
 
     if captureDevice != nil {
       beginSession()
+    }
+  }
+
+  // MARK: - Actions
+
+  func settingsButtonDidTap() {
+    dispatch_async(dispatch_get_main_queue()) {
+      if let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
+        UIApplication.sharedApplication().openURL(settingsURL)
+      }
     }
   }
 
@@ -298,6 +351,12 @@ class CameraView: UIViewController {
   }
 
   // MARK: - Private helpers
+
+  func showNoCamera(show: Bool) {
+    [noCameraButton, noCameraLabel].forEach {
+      show ? view.addSubview($0) : $0.removeFromSuperview()
+    }
+  }
 
   func getImage(name: String) -> UIImage {
     guard let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
