@@ -47,6 +47,18 @@ class CameraView: UIViewController {
     return view
     }()
 
+  lazy var noCameraLabel: UILabel = { [unowned self] in
+    let label = UILabel()
+    label.font = self.pickerConfiguration.noCameraFont
+    label.textColor = self.pickerConfiguration.noCameraColor
+    label.text = self.pickerConfiguration.noCameraTitle
+    label.alpha = 1
+    label.sizeToFit()
+    self.view.addSubview(label)
+
+    return label
+    }()
+
   let captureSession = AVCaptureSession()
   let devices = AVCaptureDevice.devices()
   var captureDevice: AVCaptureDevice? {
@@ -70,6 +82,14 @@ class CameraView: UIViewController {
     
     view.backgroundColor = self.pickerConfiguration.mainColor
     previewLayer?.backgroundColor = self.pickerConfiguration.mainColor.CGColor
+  }
+
+  // MARK: - Layout
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    noCameraLabel.center = CGPoint(x: view.bounds.width / 2,
+      y: view.bounds.height / 2 - 100)
   }
 
   // MARK: - Initialize camera
