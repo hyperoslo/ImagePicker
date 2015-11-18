@@ -14,6 +14,7 @@ class ImageGalleryViewCell: UICollectionViewCell {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
+
     for view in [imageView, selectedImageView] {
       view.contentMode = .ScaleAspectFill
       view.translatesAutoresizingMaskIntoConstraints = false
@@ -24,7 +25,7 @@ class ImageGalleryViewCell: UICollectionViewCell {
   }
 
   required init?(coder aDecoder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
+    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: - Configuration

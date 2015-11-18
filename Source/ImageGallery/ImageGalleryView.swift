@@ -176,8 +176,9 @@ public class ImageGalleryView: UIView {
   // MARK: - Private helpers
 
   func getImage(name: String) -> UIImage {
-    let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
-    let bundle = NSBundle(path: bundlePath!)
+    guard let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle") else { return UIImage() }
+
+    let bundle = NSBundle(path: bundlePath)
     let traitCollection = UITraitCollection(displayScale: 3)
     
     guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
