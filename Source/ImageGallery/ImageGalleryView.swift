@@ -85,7 +85,7 @@ public class ImageGalleryView: UIView {
     }()
 
   weak var delegate: ImageGalleryPanGestureDelegate?
-  var collectionSize: CGSize!
+  var collectionSize: CGSize?
   var shouldTransform = false
   var imagesBeforeLoading = 0
   var fetchResult: PHFetchResult?
@@ -159,8 +159,10 @@ public class ImageGalleryView: UIView {
   // MARK: - Pan gesture recognizer
 
   func handlePanGestureRecognizer(gesture: UIPanGestureRecognizer) {
-    let translation = gesture.translationInView(superview!)
-    let velocity = gesture.velocityInView(superview!)
+    guard let superview = superview else { return }
+
+    let translation = gesture.translationInView(superview)
+    let velocity = gesture.velocityInView(superview)
 
     switch gesture.state {
     case .Began:
@@ -234,6 +236,8 @@ extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
   public func collectionView(collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+      guard let collectionSize = collectionSize else { return CGSizeZero }
+
       return collectionSize
   }
 }
@@ -243,7 +247,9 @@ extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 extension ImageGalleryView: UICollectionViewDelegate {
 
   public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-    let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageGalleryViewCell
+    guard let cell = collectionView.cellForItemAtIndexPath(indexPath)
+      as? ImageGalleryViewCell else { return }
+
     let asset = assets[indexPath.row]
 
     Photos.resolveAsset(asset) { image in
@@ -267,12 +273,13 @@ extension ImageGalleryView: UICollectionViewDelegate {
     }
   }
 
-  public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    guard indexPath.row + 10 >= assets.count
-      && indexPath.row < fetchResult?.count
-      && canFetchImages else { return }
+  public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell,
+    forItemAtIndexPath indexPath: NSIndexPath) {
+      guard indexPath.row + 10 >= assets.count
+        && indexPath.row < fetchResult?.count
+        && canFetchImages else { return }
 
-    fetchPhotos()
-    canFetchImages = false
+      fetchPhotos()
+      canFetchImages = false
   }
 }
