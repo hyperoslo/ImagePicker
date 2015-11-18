@@ -8,7 +8,7 @@
 
 ![ImagePicker](https://github.com/hyperoslo/ImagePicker/master/Resources/ImagePickerPresentation.png)
 
-**ImagePicker** is the all in one camera solution for your iOS app. Let your users select images from the library or take pictures at the same time with this component. Get notified of every event and get all the UI work for free.
+**ImagePicker** is an all-in-one camera solution for your iOS app. Let your users select images from the library or take pictures at the same time with this component. Get notified of every event and get all the UI work for free.
 
 The component has been optimize to give a great user experience for the library working with assets instead of referenced images, this allows it to create a fast and smooth infinite scrolling.
 
