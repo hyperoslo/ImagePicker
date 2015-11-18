@@ -107,8 +107,7 @@ class ImageStackView: UIView {
 extension ImageStackView {
 
   func imageDidPush(notification: NSNotification) {
-    //TODO indexOf in swift 2
-    let emptyView = views.filter {$0.image == nil}.first
+    let emptyView = views.filter { $0.image == nil }.first
 
     if let emptyView = emptyView {
       animateImageView(emptyView)
