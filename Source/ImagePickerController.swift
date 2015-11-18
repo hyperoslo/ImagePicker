@@ -213,6 +213,7 @@ public class ImagePickerController: UIViewController {
 extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
+    bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     collapseGalleryView { [unowned self] in
       self.cameraController.takePicture()
@@ -247,6 +248,7 @@ extension ImagePickerController: CameraViewDelegate {
       self.stack.pushAsset(asset)
     }
     galleryView.shouldTransform = true
+    bottomContainer.pickerButton.enabled = true
 
     UIView.animateWithDuration(0.3, animations: {
       self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)

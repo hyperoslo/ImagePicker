@@ -73,7 +73,7 @@ class CameraView: UIViewController {
     }()
 
   let captureSession = AVCaptureSession()
-  let devices = AVCaptureDevice.devices()
+  var devices = AVCaptureDevice.devices()
   var captureDevice: AVCaptureDevice? {
     didSet {
       if let currentDevice = captureDevice {
@@ -120,6 +120,8 @@ class CameraView: UIViewController {
     showNoCamera(false)
 
     let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+
+    if devices.isEmpty { devices = AVCaptureDevice.devices() }
 
     for device in devices {
       if let device = device as? AVCaptureDevice where device.hasMediaType(AVMediaTypeVideo) {
