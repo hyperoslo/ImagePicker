@@ -179,9 +179,11 @@ public class ImageGalleryView: UIView {
     let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
     let bundle = NSBundle(path: bundlePath!)
     let traitCollection = UITraitCollection(displayScale: 3)
-    let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
+    
+    guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
+      else { return UIImage() }
 
-    return image!
+    return image
   }
 
   func displayNoImagesMessage(hideCollectionView: Bool) {
