@@ -243,6 +243,8 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   func imageToLibrary() {
+    guard let collectionSize = galleryView.collectionSize else { return }
+
     galleryView.fetchPhotos() {
       guard let asset = self.galleryView.assets.first else { return }
       self.stack.pushAsset(asset)
@@ -251,7 +253,7 @@ extension ImagePickerController: CameraViewDelegate {
     bottomContainer.pickerButton.enabled = true
 
     UIView.animateWithDuration(0.3, animations: {
-      self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(self.galleryView.collectionSize.width, 0)
+      self.galleryView.collectionView.transform = CGAffineTransformMakeTranslation(collectionSize.width, 0)
       }) { _ in
         self.galleryView.collectionView.transform = CGAffineTransformIdentity
     }
@@ -295,9 +297,11 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureDidStart() {
+    guard let collectionSize = galleryView.collectionSize else { return }
+
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
-    numberOfCells = Int(initialContentOffset.x / galleryView.collectionSize.width)
+    numberOfCells = Int(initialContentOffset.x / collectionSize.width)
   }
 
   func panGestureRecognizerHandler(gesture: UIPanGestureRecognizer) {
