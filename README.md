@@ -8,9 +8,9 @@
 
 ![ImagePicker](https://github.com/hyperoslo/ImagePicker/master/Resources/ImagePickerPresentation.png)
 
-**ImagePicker** is an all-in-one camera solution for your iOS app. Let your users select images from the library or take pictures at the same time with this component. Get notified of every event and get all the UI work for free.
+**ImagePicker** is an all-in-one camera solution for your iOS app. It let's your users to select images from the library and take pictures at the same time. As a developer you get notified of all the user interactions and get the beautiful UI for free, out of the box, it's just that simple.
 
-The component has been optimize to give a great user experience for the library working with assets instead of referenced images, this allows it to create a fast and smooth infinite scrolling.
+**ImagePicker** has been optimized to give a great user experience, it passes around referenced images instead of the image itself which makes it less memory consuming. This is what makes it smooth as butter.
 
 ## Usage
 
@@ -21,7 +21,7 @@ let imagePickerController = ImagePickerController()
 presentViewController(imagePickerController, animated: true, completion: nil)
 ```
 
-**ImagePicker** will let you know if the user interacts with it, we have some delegate methods:
+**ImagePicker** has three delegate methods that will inform you what the users are up to:
 
 ```swift
 func wrapperDidPress(images: [UIImage])
