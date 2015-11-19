@@ -2,10 +2,6 @@ import UIKit
 
 public struct Configuration {
 
-  static let sharedInstance = Configuration()
-
-  public init() { }
-
   // MARK: Colors
 
   public static var backgroundColor = UIColor(red:0.15, green:0.19, blue:0.24, alpha:1)
@@ -33,5 +29,5 @@ public struct Configuration {
 
   // MARK: Dimensions
 
-  public var cellSpacing: CGFloat = 2
+  public static var cellSpacing: CGFloat = 2
 }

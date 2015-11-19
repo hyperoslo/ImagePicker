@@ -10,8 +10,6 @@ protocol CameraViewDelegate: class {
 
 class CameraView: UIViewController {
 
-  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
-
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
     let blurView = UIVisualEffectView(effect: effect)
@@ -49,9 +47,9 @@ class CameraView: UIViewController {
 
   lazy var noCameraLabel: UILabel = { [unowned self] in
     let label = UILabel()
-    label.font = self.pickerConfiguration.noCameraFont
-    label.textColor = self.pickerConfiguration.noCameraColor
-    label.text = self.pickerConfiguration.noCameraTitle
+    label.font = Configuration.noCameraFont
+    label.textColor = Configuration.noCameraColor
+    label.text = Configuration.noCameraTitle
     label.sizeToFit()
 
     return label
@@ -59,10 +57,10 @@ class CameraView: UIViewController {
 
   lazy var noCameraButton: UIButton = { [unowned self] in
     let button = UIButton(type: .System)
-    let title = NSAttributedString(string: self.pickerConfiguration.settingsTitle,
+    let title = NSAttributedString(string: Configuration.settingsTitle,
       attributes: [
-        NSFontAttributeName : self.pickerConfiguration.settingsFont,
-        NSForegroundColorAttributeName : self.pickerConfiguration.settingsColor,
+        NSFontAttributeName : Configuration.settingsFont,
+        NSForegroundColorAttributeName : Configuration.settingsColor,
       ])
 
     button.setAttributedTitle(title, forState: .Normal)
@@ -93,8 +91,8 @@ class CameraView: UIViewController {
 
     initializeCamera()
     
-    view.backgroundColor = self.pickerConfiguration.mainColor
-    previewLayer?.backgroundColor = self.pickerConfiguration.mainColor.CGColor
+    view.backgroundColor = Configuration.mainColor
+    previewLayer?.backgroundColor = Configuration.mainColor.CGColor
   }
 
   // MARK: - Layout

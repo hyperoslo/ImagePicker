@@ -24,7 +24,7 @@ class TopView: UIView {
     button.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0)
     button.setTitleColor(.whiteColor(), forState: .Normal)
     button.setTitleColor(.whiteColor(), forState: .Highlighted)
-    button.titleLabel?.font = self.pickerConfiguration.flashButton
+    button.titleLabel?.font = Configuration.flashButton
     button.addTarget(self, action: "flashButtonDidPress:", forControlEvents: .TouchUpInside)
     button.contentHorizontalAlignment = .Left
 
@@ -39,8 +39,6 @@ class TopView: UIView {
 
     return button
     }()
-
-  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
 
   weak var delegate: TopViewDelegate?
 

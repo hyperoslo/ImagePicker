@@ -25,7 +25,7 @@ public class ImageGalleryView: UIView {
     let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
       collectionViewLayout: self.collectionViewLayout)
     collectionView.translatesAutoresizingMaskIntoConstraints = false
-    collectionView.backgroundColor = self.pickerConfiguration.mainColor
+    collectionView.backgroundColor = Configuration.mainColor
     collectionView.showsHorizontalScrollIndicator = false
 
     return collectionView
@@ -34,7 +34,7 @@ public class ImageGalleryView: UIView {
   lazy var collectionViewLayout: UICollectionViewLayout = { [unowned self] in
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .Horizontal
-    layout.minimumInteritemSpacing = self.pickerConfiguration.cellSpacing
+    layout.minimumInteritemSpacing = Configuration.cellSpacing
     layout.minimumLineSpacing = 2
     layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
 
@@ -70,13 +70,11 @@ public class ImageGalleryView: UIView {
 
   lazy var assets = [PHAsset]()
 
-  lazy var pickerConfiguration: Configuration = Configuration.sharedInstance
-
   public lazy var noImagesLabel: UILabel = { [unowned self] in
     let label = UILabel()
-    label.font = self.pickerConfiguration.noImagesFont
-    label.textColor = self.pickerConfiguration.noImagesColor
-    label.text = self.pickerConfiguration.noImagesTitle
+    label.font = Configuration.noImagesFont
+    label.textColor = Configuration.noImagesColor
+    label.text = Configuration.noImagesTitle
     label.alpha = 0
     label.sizeToFit()
     self.addSubview(label)
@@ -96,7 +94,7 @@ public class ImageGalleryView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    backgroundColor = pickerConfiguration.mainColor
+    backgroundColor = Configuration.mainColor
 
     collectionView.registerClass(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
