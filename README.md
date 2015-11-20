@@ -16,6 +16,7 @@
 
 ```swift
 let imagePickerController = ImagePickerController()
+imagePickerController.delegate = self
 presentViewController(imagePickerController, animated: true, completion: nil)
 ```
 
