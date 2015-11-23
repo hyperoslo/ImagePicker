@@ -67,8 +67,12 @@ pod 'ImagePicker'
 
 ## Author
 
-Hyper Interaktiv AS, ios@hyper.no
+Hyper Interaktiv AS, ios@hyper.no, with ❤️.
+
+## Contribute
+
+We would love you to contribute to **ImagePicker**, check the [CONTRIBUTING](https://github.com/hyperoslo/ImagePicker/blob/master/CONTRIBUTING.md) file for more info.
 
 ## License
 
-**ImagePicker** is available under the MIT license. See the LICENSE file for more info.
+**ImagePicker** is available under the MIT license. See the [LICENSE](https://github.com/hyperoslo/ImagePicker/blob/master/LICENSE.md) file for more info.
