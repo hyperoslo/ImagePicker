@@ -67,7 +67,7 @@ pod 'ImagePicker'
 
 ## Author
 
-Hyper Interaktiv AS, ios@hyper.no, with ❤️.
+Hyper made this with ❤️. If you’re using this library we probably want to hire you! Send us an email at ios@hyper.no.
 
 ## Contribute
 
