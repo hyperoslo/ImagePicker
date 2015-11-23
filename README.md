@@ -6,6 +6,7 @@
 
 ## Description
 
+<img src="https://github.com/hyperoslo/ImagePicker/blob/master/Resources/ImagePickerLogo.png" alt="ImagePicker Icon" align="right" />
 **ImagePicker** is an all-in-one camera solution for your iOS app. It let's your users select images from the library and take pictures at the same time. As a developer you get notified of all the user interactions and get the beautiful UI for free, out of the box, it's just that simple.
 
 **ImagePicker** has been optimized to give a great user experience, it passes around referenced images instead of the image itself which makes it less memory consuming. This is what makes it smooth as butter.
@@ -27,6 +28,19 @@ func wrapperDidPress(images: [UIImage])
 func doneButtonDidPress(images: [UIImage])
 func cancelButtonDidPress()
 ```
+
+### Optional bonus
+
+##### Configuration
+
+Configure text, colors and fonts by just overriding the static variables in the ImagePicker [configuration](https://github.com/hyperoslo/ImagePicker/blob/master/Source/Configuration.swift) struct. As an example:
+
+```swift
+Configuration.doneButtonTitle = "Finish"
+Configuration.noImagesTitle = "Sorry! There are no images here!"
+```
+
+##### Resolve assets
 
 As said before, **ImagePicker** works with referenced images, that is really powerful because it lets you download the asset and choose the size you want. If you want to change the default implementation, just add a variable in your controller.
 
