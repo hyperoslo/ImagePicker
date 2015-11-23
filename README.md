@@ -28,6 +28,20 @@ func doneButtonDidPress(images: [UIImage])
 func cancelButtonDidPress()
 ```
 
+As said before, **ImagePicker** works with referenced images, that is really powerful because it lets you download the asset and choose the size you want. If you want to change the default implementation, just add a variable in your controller.
+
+```swift
+public var imageAssets: [UIImage] {
+  return ImagePicker.resolveAssets(imagePicker.stack.assets)
+}
+```
+
+And when you call any delegate method that returns images, add in the first line:
+
+```swift
+let images = imageAssets
+```
+
 ## Installation
 
 **ImagePicker** is available through [CocoaPods](http://cocoapods.org). To install
