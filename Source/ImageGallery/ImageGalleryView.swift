@@ -145,7 +145,7 @@ public class ImageGalleryView: UIView {
   // MARK: - Photos handler
 
   func fetchPhotos(completion: (() -> Void)? = nil) {
-    Photos.fetch { assets in
+    ImagePicker.fetch { assets in
       self.assets.removeAll()
       self.assets.appendContentsOf(assets)
       self.collectionView.reloadData()
@@ -250,7 +250,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
 
     let asset = assets[indexPath.row]
 
-    Photos.resolveAsset(asset) { image in
+    ImagePicker.resolveAsset(asset) { image in
       guard let _ = image else { return }
 
       if cell.selectedImageView.image != nil {
