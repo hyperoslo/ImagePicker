@@ -28,6 +28,19 @@ func doneButtonDidPress(images: [UIImage])
 func cancelButtonDidPress()
 ```
 
+### Optional bonus
+
+##### Configuration
+
+Configure text, colors and fonts by just overriding the static variables in the ImagePicker [configuration](https://github.com/hyperoslo/ImagePicker/blob/master/Source/Configuration.swift) struct. As an example:
+
+```swift
+Configuration.doneButtonTitle = "Finish"
+Configuration.noImagesTitle = "Sorry! There are no images here!"
+```
+
+##### Resolve assets
+
 As said before, **ImagePicker** works with referenced images, that is really powerful because it lets you download the asset and choose the size you want. If you want to change the default implementation, just add a variable in your controller.
 
 ```swift
