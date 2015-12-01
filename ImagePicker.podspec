@@ -12,5 +12,4 @@ Pod::Spec.new do |s|
   s.source_files = 'Source/**/*'
   s.resource_bundles = { 'ImagePicker' => ['Images/*.{png}'] }
   s.frameworks = 'AVFoundation'
-# s.dependency 'AFNetworking', '~> 2.3'
 end
