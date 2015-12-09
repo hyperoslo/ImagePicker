@@ -366,10 +366,10 @@ class CameraView: UIViewController {
 
     let bundle = NSBundle(path: bundlePath)
     let traitCollection = UITraitCollection(displayScale: 3)
-    
+
     guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
       else { return UIImage() }
-    
+
     return image
   }
 }
