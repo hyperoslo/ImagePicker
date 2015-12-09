@@ -10,20 +10,9 @@
 		29D699DF1B70ABFC0021FA73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D699DE1B70ABFC0021FA73 /* AppDelegate.swift */; };
 		29D699E61B70ABFC0021FA73 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29D699E51B70ABFC0021FA73 /* Images.xcassets */; };
 		29D699E91B70ABFC0021FA73 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29D699E71B70ABFC0021FA73 /* LaunchScreen.xib */; };
-		29D699F51B70ABFC0021FA73 /* ImagePickerDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D699F41B70ABFC0021FA73 /* ImagePickerDemoTests.swift */; };
 		29D699FF1B70ACD50021FA73 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 29D699FE1B70ACD50021FA73 /* Podfile */; };
 		C3771E008DA39CF04754C8A9 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 733A7AD0105A657A80502E72 /* Pods.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		29D699EF1B70ABFC0021FA73 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29D699D11B70ABFC0021FA73 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 29D699D81B70ABFC0021FA73;
-			remoteInfo = ImagePickerDemo;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0F514C1F72DEB3C2416C8948 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -32,7 +21,6 @@
 		29D699DE1B70ABFC0021FA73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		29D699E51B70ABFC0021FA73 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		29D699E81B70ABFC0021FA73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		29D699EE1B70ABFC0021FA73 /* ImagePickerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImagePickerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		29D699F31B70ABFC0021FA73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		29D699F41B70ABFC0021FA73 /* ImagePickerDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerDemoTests.swift; sourceTree = "<group>"; };
 		29D699FE1B70ACD50021FA73 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
@@ -46,13 +34,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3771E008DA39CF04754C8A9 /* Pods.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		29D699EB1B70ABFC0021FA73 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,7 +55,6 @@
 			isa = PBXGroup;
 			children = (
 				29D699D91B70ABFC0021FA73 /* ImagePickerDemo.app */,
-				29D699EE1B70ABFC0021FA73 /* ImagePickerDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,24 +136,6 @@
 			productReference = 29D699D91B70ABFC0021FA73 /* ImagePickerDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		29D699ED1B70ABFC0021FA73 /* ImagePickerDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 29D699FB1B70ABFC0021FA73 /* Build configuration list for PBXNativeTarget "ImagePickerDemoTests" */;
-			buildPhases = (
-				29D699EA1B70ABFC0021FA73 /* Sources */,
-				29D699EB1B70ABFC0021FA73 /* Frameworks */,
-				29D699EC1B70ABFC0021FA73 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				29D699F01B70ABFC0021FA73 /* PBXTargetDependency */,
-			);
-			name = ImagePickerDemoTests;
-			productName = ImagePickerDemoTests;
-			productReference = 29D699EE1B70ABFC0021FA73 /* ImagePickerDemoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -187,10 +149,6 @@
 					29D699D81B70ABFC0021FA73 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = XVAH95CHDC;
-					};
-					29D699ED1B70ABFC0021FA73 = {
-						CreatedOnToolsVersion = 6.4;
-						TestTargetID = 29D699D81B70ABFC0021FA73;
 					};
 				};
 			};
@@ -208,7 +166,6 @@
 			projectRoot = "";
 			targets = (
 				29D699D81B70ABFC0021FA73 /* ImagePickerDemo */,
-				29D699ED1B70ABFC0021FA73 /* ImagePickerDemoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -221,13 +178,6 @@
 				29D699E91B70ABFC0021FA73 /* LaunchScreen.xib in Resources */,
 				29D699FF1B70ACD50021FA73 /* Podfile in Resources */,
 				29D699E61B70ABFC0021FA73 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		29D699EC1B70ABFC0021FA73 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,23 +240,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		29D699EA1B70ABFC0021FA73 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				29D699F51B70ABFC0021FA73 /* ImagePickerDemoTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		29D699F01B70ABFC0021FA73 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 29D699D81B70ABFC0021FA73 /* ImagePickerDemo */;
-			targetProxy = 29D699EF1B70ABFC0021FA73 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		29D699E71B70ABFC0021FA73 /* LaunchScreen.xib */ = {
@@ -357,7 +291,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -396,7 +330,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -411,7 +345,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = ImagePickerDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = no.ImagePicker.hyper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -425,44 +359,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = ImagePickerDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = no.ImagePicker.hyper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		29D699FC1B70ABFC0021FA73 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = ImagePickerDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImagePickerDemo.app/ImagePickerDemo";
-			};
-			name = Debug;
-		};
-		29D699FD1B70ABFC0021FA73 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = ImagePickerDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImagePickerDemo.app/ImagePickerDemo";
 			};
 			name = Release;
 		};
@@ -483,15 +383,6 @@
 			buildConfigurations = (
 				29D699F91B70ABFC0021FA73 /* Debug */,
 				29D699FA1B70ABFC0021FA73 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		29D699FB1B70ABFC0021FA73 /* Build configuration list for PBXNativeTarget "ImagePickerDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				29D699FC1B70ABFC0021FA73 /* Debug */,
-				29D699FD1B70ABFC0021FA73 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
