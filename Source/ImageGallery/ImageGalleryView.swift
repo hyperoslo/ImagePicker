@@ -78,7 +78,7 @@ public class ImageGalleryView: UIView {
     return label
     }()
 
-  lazy var selectedStack = ImageStack()
+  public lazy var selectedStack = ImageStack()
   lazy var assets = [PHAsset]()
 
   weak var delegate: ImageGalleryPanGestureDelegate?

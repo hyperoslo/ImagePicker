@@ -213,6 +213,8 @@ public class ImagePickerController: UIViewController {
 extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
+    guard imageLimit > galleryView.selectedStack.assets.count else { return }
+    
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     collapseGalleryView { [unowned self] in
