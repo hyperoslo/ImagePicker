@@ -66,10 +66,6 @@ public class ImageGalleryView: UIView {
     return gesture
     }()
 
-  lazy var selectedStack = ImageStack()
-
-  lazy var assets = [PHAsset]()
-
   public lazy var noImagesLabel: UILabel = { [unowned self] in
     let label = UILabel()
     label.font = Configuration.noImagesFont
@@ -82,12 +78,16 @@ public class ImageGalleryView: UIView {
     return label
     }()
 
+  lazy var selectedStack = ImageStack()
+  lazy var assets = [PHAsset]()
+
   weak var delegate: ImageGalleryPanGestureDelegate?
   var collectionSize: CGSize?
   var shouldTransform = false
   var imagesBeforeLoading = 0
   var fetchResult: PHFetchResult?
   var canFetchImages = false
+  var imageLimit = 0
 
   // MARK: - Initializers
 
@@ -260,7 +260,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
             cell.selectedImageView.image = nil
         }
         self.selectedStack.dropAsset(asset)
-      } else {
+      } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
         cell.selectedImageView.image = self.getImage("selectedImageGallery")
         cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
         UIView.animateWithDuration(0.2) { _ in

@@ -24,6 +24,7 @@ public class ImagePickerController: UIViewController {
     galleryView.delegate = self
     galleryView.selectedStack = self.stack
     galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
+    galleryView.imageLimit = self.imageLimit
 
     return galleryView
     }()
