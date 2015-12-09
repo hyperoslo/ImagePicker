@@ -6,6 +6,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   lazy var imagePickerController: ImagePickerController = {
     let imagePickerController = ImagePickerController()
+    imagePickerController.imageLimit = 5
     return imagePickerController
     }()
 

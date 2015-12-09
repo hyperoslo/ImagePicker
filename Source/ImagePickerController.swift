@@ -60,6 +60,7 @@ public class ImagePickerController: UIViewController {
 
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
+  public var imageLimit = 0
   let totalHeight = UIScreen.mainScreen().bounds.size.height
   let totalWidth = UIScreen.mainScreen().bounds.size.width
   var initialFrame: CGRect!

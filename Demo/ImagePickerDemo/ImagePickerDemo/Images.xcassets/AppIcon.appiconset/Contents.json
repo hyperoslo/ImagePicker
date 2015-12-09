@@ -124,6 +124,11 @@
       "scale" : "2x"
     },
     {
+      "idiom" : "car",
+      "size" : "60x60",
+      "scale" : "3x"
+    },
+    {
       "size" : "24x24",
       "idiom" : "watch",
       "filename" : "Icon-24@2x.png",
