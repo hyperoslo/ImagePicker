@@ -1,6 +1,5 @@
 import UIKit
 import AVFoundation
-import AssetsLibrary
 import PhotosUI
 
 protocol CameraViewDelegate: class {

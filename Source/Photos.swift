@@ -1,5 +1,4 @@
 import Photos
-import AssetsLibrary
 
 public struct ImagePicker {
 
