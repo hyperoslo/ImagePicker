@@ -1,6 +1,7 @@
 import UIKit
 import AVFoundation
 import AssetsLibrary
+import PhotosUI
 
 protocol CameraViewDelegate: class {
 
@@ -243,12 +244,13 @@ class CameraView: UIViewController {
           guard let imageFromData = UIImage(data: imageData) else { return }
           let image = self.cropImage(imageFromData)
           let orientation = self.pictureOrientation()
-          let assetsLibrary = ALAssetsLibrary()
-          assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation) { url, error in
-            self.delegate?.imageToLibrary()
-          }
+          UIImageWriteToSavedPhotosAlbum(UIImage(CGImage: image.CGImage!, scale: 1.0, orientation: orientation), self, "saveImageToGallery", nil)
       })
-      })
+    })
+  }
+
+  func saveImageToGallery() {
+    delegate?.imageToLibrary()
   }
 
   func cropImage(image: UIImage) -> UIImage {
@@ -259,7 +261,7 @@ class CameraView: UIViewController {
     return normalizedImage
   }
 
-  func pictureOrientation() -> ALAssetOrientation {
+  func pictureOrientation() -> UIImageOrientation {
     switch UIDevice.currentDevice().orientation {
     case .LandscapeLeft:
       return .Up
