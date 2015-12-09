@@ -44,7 +44,7 @@ class CameraView: UIViewController {
     view.alpha = 0
 
     return view
-    }()
+  }()
 
   lazy var noCameraLabel: UILabel = { [unowned self] in
     let label = UILabel()
@@ -91,7 +91,7 @@ class CameraView: UIViewController {
     super.viewDidLoad()
 
     initializeCamera()
-    
+
     view.backgroundColor = Configuration.mainColor
     previewLayer?.backgroundColor = Configuration.mainColor.CGColor
   }
@@ -213,7 +213,7 @@ class CameraView: UIViewController {
         captureDevice?.flashMode = .Off
       default:
         captureDevice?.flashMode = .Auto
-        
+
       }
     }
   }
@@ -246,7 +246,7 @@ class CameraView: UIViewController {
           let orientation = self.pictureOrientation()
           UIImageWriteToSavedPhotosAlbum(UIImage(CGImage: image.CGImage!, scale: 1.0, orientation: orientation), self, "saveImageToGallery", nil)
       })
-    })
+      })
   }
 
   func saveImageToGallery() {
@@ -363,13 +363,13 @@ class CameraView: UIViewController {
   func getImage(name: String) -> UIImage {
     guard let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
       else { return UIImage() }
-    
+
     let bundle = NSBundle(path: bundlePath)
     let traitCollection = UITraitCollection(displayScale: 3)
-
+    
     guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
       else { return UIImage() }
-
+    
     return image
   }
 }
