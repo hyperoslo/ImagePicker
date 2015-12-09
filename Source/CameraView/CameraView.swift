@@ -243,12 +243,13 @@ class CameraView: UIViewController {
           guard let imageFromData = UIImage(data: imageData) else { return }
           let image = self.cropImage(imageFromData)
           let orientation = self.pictureOrientation()
-          UIImageWriteToSavedPhotosAlbum(UIImage(CGImage: image.CGImage!, scale: 1.0, orientation: orientation), self, "saveImageToGallery", nil)
+          guard let imageCG = image.CGImage else { return }
+          UIImageWriteToSavedPhotosAlbum(UIImage(CGImage: imageCG, scale: 1.0, orientation: orientation), self, "saveImage:error:context:", nil)
       })
       })
   }
 
-  func saveImageToGallery() {
+  func saveImage(image: UIImage, error: NSErrorPointer, context:UnsafePointer<Void>) {
     delegate?.imageToLibrary()
   }
 
