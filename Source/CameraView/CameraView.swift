@@ -188,8 +188,8 @@ class CameraView: UIViewController {
           ? AVCaptureSessionPreset1280x720
           : AVCaptureSessionPreset640x480
 
-        do {
-          try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
+        do { try
+          self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
         } catch {
           print("There was an error capturing your device.")
         }
