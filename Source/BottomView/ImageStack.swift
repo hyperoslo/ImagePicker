@@ -22,8 +22,8 @@ public class ImageStack {
     NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidDrop, object: self, userInfo: ["image" : asset])
   }
 
-  public func resetAssets(assets: [PHAsset]) {
-    self.assets = assets
+  public func resetAssets(assetsArray: [PHAsset]) {
+    assets = assetsArray
     NSNotificationCenter.defaultCenter().postNotificationName(Notifications.stackDidReload, object: self, userInfo: nil)
   }
 
