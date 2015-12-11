@@ -206,8 +206,8 @@ class CameraView: UIViewController {
 
     do {
       try captureDevice?.lockForConfiguration()
-    } catch _ {
-    }
+    } catch _ { }
+
     switch title {
     case "ON":
       captureDevice?.flashMode = .On
