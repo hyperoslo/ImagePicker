@@ -65,6 +65,7 @@ public class ImagePickerController: UIViewController {
   var initialFrame: CGRect!
   var initialContentOffset: CGPoint!
   var numberOfCells: Int!
+  var statusBarHidden = true
 
   public var doneButtonTitle: String? {
     didSet {
@@ -95,6 +96,7 @@ public class ImagePickerController: UIViewController {
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
 
+    statusBarHidden = UIApplication.sharedApplication().statusBarHidden
     UIApplication.sharedApplication().statusBarHidden = true
   }
 
@@ -111,6 +113,11 @@ public class ImagePickerController: UIViewController {
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
+  }
+
+  public override func viewDidDisappear(animated: Bool) {
+    super.viewDidDisappear(animated)
+    UIApplication.sharedApplication().statusBarHidden = statusBarHidden
   }
 
   // MARK: - Notifications
