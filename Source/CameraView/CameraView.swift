@@ -199,21 +199,20 @@ class CameraView: UIViewController {
   }
 
   func flashCamera(title: String) {
+    guard let _ = captureDevice?.hasFlash else { return }
 
-    if (captureDevice?.hasFlash != nil) {
-      do {
-        try captureDevice?.lockForConfiguration()
-      } catch _ {
-      }
-      switch title {
-      case "ON":
-        captureDevice?.flashMode = .On
-      case "OFF":
-        captureDevice?.flashMode = .Off
-      default:
-        captureDevice?.flashMode = .Auto
-        
-      }
+    do {
+      try captureDevice?.lockForConfiguration()
+    } catch _ {
+    }
+    switch title {
+    case "ON":
+      captureDevice?.flashMode = .On
+    case "OFF":
+      captureDevice?.flashMode = .Off
+    default:
+      captureDevice?.flashMode = .Auto
+
     }
   }
 

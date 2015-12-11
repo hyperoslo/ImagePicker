@@ -60,8 +60,7 @@ public class ImagePickerController: UIViewController {
 
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
-  let totalHeight = UIScreen.mainScreen().bounds.size.height
-  let totalWidth = UIScreen.mainScreen().bounds.size.width
+  let totalSize = UIScreen.mainScreen().bounds.size
   var initialFrame: CGRect!
   var initialContentOffset: CGPoint!
   var numberOfCells: Int!
@@ -106,8 +105,8 @@ public class ImagePickerController: UIViewController {
     let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
       ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
 
-    galleryView.frame = CGRectMake(0, totalHeight - bottomContainer.frame.height - galleryHeight,
-      totalWidth, galleryHeight)
+    galleryView.frame = CGRectMake(0, totalSize.height - bottomContainer.frame.height - galleryHeight,
+      totalSize.width, galleryHeight)
     galleryView.updateFrames()
     galleryView.checkStatus()
 
@@ -192,7 +191,7 @@ public class ImagePickerController: UIViewController {
   }
 
   func updateGalleryViewFrames(constant: CGFloat) {
-    galleryView.frame.origin.y = totalHeight - bottomContainer.frame.height - constant
+    galleryView.frame.origin.y = totalSize.height - bottomContainer.frame.height - constant
     galleryView.frame.size.height = constant
   }
 
