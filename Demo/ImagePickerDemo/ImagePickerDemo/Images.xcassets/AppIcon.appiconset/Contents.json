@@ -26,19 +26,21 @@
       "scale" : "3x"
     },
     {
-      "idiom" : "iphone",
       "size" : "57x57",
+      "idiom" : "iphone",
+      "filename" : "Icon.png",
       "scale" : "1x"
     },
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "iphone-oldAppicon-@1x.png",
+      "filename" : "Icon@2x.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "iphone",
       "size" : "60x60",
+      "idiom" : "iphone",
+      "filename" : "iTunesArtwork@2x copy.png",
       "scale" : "2x"
     },
     {
@@ -62,28 +64,57 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "ipad",
       "size" : "40x40",
+      "idiom" : "ipad",
+      "filename" : "Icon-40@2x.png",
       "scale" : "2x"
     },
     {
+      "size" : "50x50",
       "idiom" : "ipad",
-      "size" : "76x76",
+      "filename" : "Icon-Small-50.png",
       "scale" : "1x"
     },
     {
+      "size" : "50x50",
       "idiom" : "ipad",
-      "size" : "76x76",
+      "filename" : "Icon-Small-50@2x.png",
       "scale" : "2x"
     },
     {
+      "size" : "72x72",
       "idiom" : "ipad",
+      "filename" : "Icon-72.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "72x72",
+      "idiom" : "ipad",
+      "filename" : "Icon-72@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "iTunesArtwork@2x copy-1.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "iTunesArtwork@2x copy-2.png",
+      "scale" : "2x"
+    },
+    {
       "size" : "83.5x83.5",
+      "idiom" : "ipad",
+      "filename" : "iTunesArtwork@2x copy-3.png",
       "scale" : "2x"
     },
     {
       "size" : "24x24",
       "idiom" : "watch",
+      "filename" : "Icon-24@2x.png",
       "scale" : "2x",
       "role" : "notificationCenter",
       "subtype" : "38mm"
@@ -91,6 +122,7 @@
     {
       "size" : "27.5x27.5",
       "idiom" : "watch",
+      "filename" : "Icon-27.5@2x.png",
       "scale" : "2x",
       "role" : "notificationCenter",
       "subtype" : "42mm"
@@ -98,13 +130,14 @@
     {
       "size" : "29x29",
       "idiom" : "watch",
-      "filename" : "iphone-settings-@1x.png",
+      "filename" : "Icon-29@2x.png",
       "role" : "companionSettings",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "watch",
+      "filename" : "Icon-29@3x.png",
       "role" : "companionSettings",
       "scale" : "3x"
     },
@@ -118,6 +151,7 @@
     {
       "size" : "44x44",
       "idiom" : "watch",
+      "filename" : "Icon-44@2x.png",
       "scale" : "2x",
       "role" : "longLook",
       "subtype" : "42mm"
@@ -125,6 +159,7 @@
     {
       "size" : "86x86",
       "idiom" : "watch",
+      "filename" : "Icon-86@2x.png",
       "scale" : "2x",
       "role" : "quickLook",
       "subtype" : "38mm"
@@ -132,9 +167,22 @@
     {
       "size" : "98x98",
       "idiom" : "watch",
+      "filename" : "Icon-98@2x.png",
       "scale" : "2x",
       "role" : "quickLook",
       "subtype" : "42mm"
+    },
+    {
+      "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "iTunesArtwork.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "iTunesArtwork@2x.png",
+      "scale" : "2x"
     }
   ],
   "info" : {
