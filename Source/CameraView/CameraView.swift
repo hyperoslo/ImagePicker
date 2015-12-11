@@ -190,7 +190,12 @@ class CameraView: UIViewController {
           ? AVCaptureSessionPreset1280x720
           : AVCaptureSessionPreset640x480
 
-        try! self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
+        do {
+          try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
+        } catch {
+          print("Error")
+        }
+
         self.captureSession.commitConfiguration()
         UIView.animateWithDuration(0.7, animations: { [unowned self] in
           self.containerView.alpha = 0

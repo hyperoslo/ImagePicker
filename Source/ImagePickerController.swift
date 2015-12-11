@@ -61,9 +61,9 @@ public class ImagePickerController: UIViewController {
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   let totalSize = UIScreen.mainScreen().bounds.size
-  var initialFrame: CGRect!
-  var initialContentOffset: CGPoint!
-  var numberOfCells: Int!
+  var initialFrame: CGRect?
+  var initialContentOffset: CGPoint?
+  var numberOfCells: Int?
   var statusBarHidden = true
 
   public var doneButtonTitle: String? {
@@ -305,7 +305,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
-    numberOfCells = Int(initialContentOffset.x / collectionSize.width)
+    if let contentOffset = initialContentOffset { numberOfCells = Int(contentOffset.x / collectionSize.width) }
   }
 
   func panGestureRecognizerHandler(gesture: UIPanGestureRecognizer) {
@@ -322,6 +322,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureDidChange(translation: CGPoint) {
+    guard let initialFrame = initialFrame else { return }
+
     let galleryHeight = initialFrame.height - translation.y
 
     if galleryHeight >= GestureConstants.maximumHeight { return }
@@ -349,6 +351,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureDidEnd(translation: CGPoint, velocity: CGPoint) {
+    guard let initialFrame = initialFrame else { return }
+
     let galleryHeight = initialFrame.height - translation.y
 
     if galleryView.frame.height < GestureConstants.minimumHeight && velocity.y < 0 {
