@@ -193,7 +193,7 @@ class CameraView: UIViewController {
         do {
           try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
         } catch {
-          print("Error")
+          print("There was an error capturing your device.")
         }
 
         self.captureSession.commitConfiguration()
