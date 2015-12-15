@@ -66,6 +66,13 @@ it, simply add the following line to your Podfile:
 pod 'ImagePicker'
 ```
 
+**ImagePicker** is also available through [Carthage](https://github.com/Carthage/Carthage).
+To install just write into your Cartfile:
+
+```ruby
+github "hyperoslo/ImagePicker"
+```
+
 ## Author
 
 [Hyper](http://hyper.no) made this with ❤️. If you’re using this library we probably want to [hire you](https://github.com/hyperoslo/iOS-playbook/blob/master/HYPER_RECIPES.md)! Send us an email at ios@hyper.no.
