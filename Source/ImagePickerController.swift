@@ -62,11 +62,11 @@ public class ImagePickerController: UIViewController {
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
-  let totalHeight = UIScreen.mainScreen().bounds.size.height
-  let totalWidth = UIScreen.mainScreen().bounds.size.width
-  var initialFrame: CGRect!
-  var initialContentOffset: CGPoint!
-  var numberOfCells: Int!
+  let totalSize = UIScreen.mainScreen().bounds.size
+  var initialFrame: CGRect?
+  var initialContentOffset: CGPoint?
+  var numberOfCells: Int?
+  var statusBarHidden = true
 
   public var doneButtonTitle: String? {
     didSet {
@@ -97,6 +97,7 @@ public class ImagePickerController: UIViewController {
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
 
+    statusBarHidden = UIApplication.sharedApplication().statusBarHidden
     UIApplication.sharedApplication().statusBarHidden = true
   }
 
@@ -106,13 +107,18 @@ public class ImagePickerController: UIViewController {
     let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
       ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
 
-    galleryView.frame = CGRectMake(0, totalHeight - bottomContainer.frame.height - galleryHeight,
-      totalWidth, galleryHeight)
+    galleryView.frame = CGRectMake(0, totalSize.height - bottomContainer.frame.height - galleryHeight,
+      totalSize.width, galleryHeight)
     galleryView.updateFrames()
     galleryView.checkStatus()
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
+  }
+
+  public override func viewDidDisappear(animated: Bool) {
+    super.viewDidDisappear(animated)
+    UIApplication.sharedApplication().statusBarHidden = statusBarHidden
   }
 
   // MARK: - Notifications
@@ -187,7 +193,7 @@ public class ImagePickerController: UIViewController {
   }
 
   func updateGalleryViewFrames(constant: CGFloat) {
-    galleryView.frame.origin.y = totalHeight - bottomContainer.frame.height - constant
+    galleryView.frame.origin.y = totalSize.height - bottomContainer.frame.height - constant
     galleryView.frame.size.height = constant
   }
 
@@ -303,7 +309,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
-    numberOfCells = Int(initialContentOffset.x / collectionSize.width)
+    if let contentOffset = initialContentOffset { numberOfCells = Int(contentOffset.x / collectionSize.width) }
   }
 
   func panGestureRecognizerHandler(gesture: UIPanGestureRecognizer) {
@@ -320,6 +326,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureDidChange(translation: CGPoint) {
+    guard let initialFrame = initialFrame else { return }
+
     let galleryHeight = initialFrame.height - translation.y
 
     if galleryHeight >= GestureConstants.maximumHeight { return }
@@ -347,6 +355,8 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureDidEnd(translation: CGPoint, velocity: CGPoint) {
+    guard let initialFrame = initialFrame else { return }
+
     let galleryHeight = initialFrame.height - translation.y
 
     if galleryView.frame.height < GestureConstants.minimumHeight && velocity.y < 0 {

@@ -143,9 +143,7 @@ class CameraView: UIViewController {
 
     captureDevice = capturedDevices?.firstObject as? AVCaptureDevice
 
-    if captureDevice != nil {
-      beginSession()
-    }
+    if captureDevice != nil { beginSession() }
   }
 
   // MARK: - Actions
@@ -190,7 +188,12 @@ class CameraView: UIViewController {
           ? AVCaptureSessionPreset1280x720
           : AVCaptureSessionPreset640x480
 
-        try! self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
+        do { try
+          self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
+        } catch {
+          print("There was an error capturing your device.")
+        }
+
         self.captureSession.commitConfiguration()
         UIView.animateWithDuration(0.7, animations: { [unowned self] in
           self.containerView.alpha = 0
@@ -199,21 +202,19 @@ class CameraView: UIViewController {
   }
 
   func flashCamera(title: String) {
+    guard let _ = captureDevice?.hasFlash else { return }
 
-    if (captureDevice?.hasFlash != nil) {
-      do {
-        try captureDevice?.lockForConfiguration()
-      } catch _ {
-      }
-      switch title {
-      case "ON":
-        captureDevice?.flashMode = .On
-      case "OFF":
-        captureDevice?.flashMode = .Off
-      default:
-        captureDevice?.flashMode = .Auto
+    do {
+      try captureDevice?.lockForConfiguration()
+    } catch _ { }
 
-      }
+    switch title {
+    case "ON":
+      captureDevice?.flashMode = .On
+    case "OFF":
+      captureDevice?.flashMode = .Off
+    default:
+      captureDevice?.flashMode = .Auto
     }
   }
 
