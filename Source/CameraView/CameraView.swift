@@ -215,6 +215,7 @@ class CameraView: UIViewController {
       captureDevice?.flashMode = .Off
     default:
       captureDevice?.flashMode = .Auto
+    }
   }
 
   func takePicture() {
