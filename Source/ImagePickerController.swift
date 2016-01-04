@@ -24,6 +24,7 @@ public class ImagePickerController: UIViewController {
     galleryView.delegate = self
     galleryView.selectedStack = self.stack
     galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
+    galleryView.imageLimit = self.imageLimit
 
     return galleryView
     }()
@@ -60,11 +61,20 @@ public class ImagePickerController: UIViewController {
 
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
+<<<<<<< HEAD
   let totalSize = UIScreen.mainScreen().bounds.size
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
   var numberOfCells: Int?
   var statusBarHidden = true
+=======
+  public var imageLimit = 0
+  let totalHeight = UIScreen.mainScreen().bounds.size.height
+  let totalWidth = UIScreen.mainScreen().bounds.size.width
+  var initialFrame: CGRect!
+  var initialContentOffset: CGPoint!
+  var numberOfCells: Int!
+>>>>>>> 68e09a8648876b88c1d74cfab258fce7e1aea1ee
 
   public var doneButtonTitle: String? {
     didSet {
@@ -217,6 +227,8 @@ public class ImagePickerController: UIViewController {
 extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
+    guard imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count else { return }
+    
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     collapseGalleryView { [unowned self] in
