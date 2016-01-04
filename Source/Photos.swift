@@ -1,11 +1,10 @@
 import Photos
-import AssetsLibrary
 
 public struct ImagePicker {
 
   public static func fetch(completion: (assets: [PHAsset]) -> Void) {
     let fetchOptions = PHFetchOptions()
-    let authorizationStatus = ALAssetsLibrary.authorizationStatus()
+    let authorizationStatus = PHPhotoLibrary.authorizationStatus()
     var fetchResult: PHFetchResult?
 
     guard authorizationStatus == .Authorized else { return }

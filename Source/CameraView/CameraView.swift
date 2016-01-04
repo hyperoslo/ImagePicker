@@ -1,6 +1,6 @@
 import UIKit
 import AVFoundation
-import AssetsLibrary
+import PhotosUI
 
 protocol CameraViewDelegate: class {
 
@@ -43,7 +43,7 @@ class CameraView: UIViewController {
     view.alpha = 0
 
     return view
-    }()
+  }()
 
   lazy var noCameraLabel: UILabel = { [unowned self] in
     let label = UILabel()
@@ -90,7 +90,7 @@ class CameraView: UIViewController {
     super.viewDidLoad()
 
     initializeCamera()
-    
+
     view.backgroundColor = Configuration.mainColor
     previewLayer?.backgroundColor = Configuration.mainColor.CGColor
   }
@@ -215,7 +215,6 @@ class CameraView: UIViewController {
       captureDevice?.flashMode = .Off
     default:
       captureDevice?.flashMode = .Auto
-
     }
   }
 
@@ -245,12 +244,14 @@ class CameraView: UIViewController {
           guard let imageFromData = UIImage(data: imageData) else { return }
           let image = self.cropImage(imageFromData)
           let orientation = self.pictureOrientation()
-          let assetsLibrary = ALAssetsLibrary()
-          assetsLibrary.writeImageToSavedPhotosAlbum(image.CGImage, orientation: orientation) { url, error in
-            self.delegate?.imageToLibrary()
-          }
+          guard let imageCG = image.CGImage else { return }
+          UIImageWriteToSavedPhotosAlbum(UIImage(CGImage: imageCG, scale: 1.0, orientation: orientation), self, "saveImage:error:context:", nil)
       })
       })
+  }
+
+  func saveImage(image: UIImage, error: NSErrorPointer, context:UnsafePointer<Void>) {
+    delegate?.imageToLibrary()
   }
 
   func cropImage(image: UIImage) -> UIImage {
@@ -261,7 +262,7 @@ class CameraView: UIViewController {
     return normalizedImage
   }
 
-  func pictureOrientation() -> ALAssetOrientation {
+  func pictureOrientation() -> UIImageOrientation {
     switch UIDevice.currentDevice().orientation {
     case .LandscapeLeft:
       return .Up
@@ -363,7 +364,7 @@ class CameraView: UIViewController {
   func getImage(name: String) -> UIImage {
     guard let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle")
       else { return UIImage() }
-    
+
     let bundle = NSBundle(path: bundlePath)
     let traitCollection = UITraitCollection(displayScale: 3)
 
