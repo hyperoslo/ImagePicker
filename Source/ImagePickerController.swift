@@ -61,20 +61,12 @@ public class ImagePickerController: UIViewController {
 
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
-<<<<<<< HEAD
+  public var imageLimit = 0
   let totalSize = UIScreen.mainScreen().bounds.size
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
   var numberOfCells: Int?
   var statusBarHidden = true
-=======
-  public var imageLimit = 0
-  let totalHeight = UIScreen.mainScreen().bounds.size.height
-  let totalWidth = UIScreen.mainScreen().bounds.size.width
-  var initialFrame: CGRect!
-  var initialContentOffset: CGPoint!
-  var numberOfCells: Int!
->>>>>>> 68e09a8648876b88c1d74cfab258fce7e1aea1ee
 
   public var doneButtonTitle: String? {
     didSet {

@@ -215,25 +215,6 @@ class CameraView: UIViewController {
       captureDevice?.flashMode = .Off
     default:
       captureDevice?.flashMode = .Auto
-
-<<<<<<< HEAD
-=======
-    if (captureDevice?.hasFlash != nil) {
-      do {
-        try captureDevice?.lockForConfiguration()
-      } catch _ {
-      }
-      switch title {
-      case "ON":
-        captureDevice?.flashMode = .On
-      case "OFF":
-        captureDevice?.flashMode = .Off
-      default:
-        captureDevice?.flashMode = .Auto
-
-      }
->>>>>>> 68e09a8648876b88c1d74cfab258fce7e1aea1ee
-    }
   }
 
   func takePicture() {
