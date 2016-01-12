@@ -55,7 +55,7 @@ public class ImageGalleryView: UIView {
     view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
     view.layer.cornerRadius = Dimensions.indicatorHeight / 2
     view.translatesAutoresizingMaskIntoConstraints = false
-    
+
     return view
     }()
 
@@ -74,7 +74,7 @@ public class ImageGalleryView: UIView {
     label.alpha = 0
     label.sizeToFit()
     self.addSubview(label)
-    
+
     return label
     }()
 
@@ -176,11 +176,13 @@ public class ImageGalleryView: UIView {
   // MARK: - Private helpers
 
   func getImage(name: String) -> UIImage {
-    guard let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle") else { return UIImage() }
-
-    let bundle = NSBundle(path: bundlePath)
     let traitCollection = UITraitCollection(displayScale: 3)
-    
+    var bundle = NSBundle(forClass: self.classForCoder)
+
+    if let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle"), resourceBundle = NSBundle(path: bundlePath) {
+      bundle = resourceBundle
+    }
+
     guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
       else { return UIImage() }
 
