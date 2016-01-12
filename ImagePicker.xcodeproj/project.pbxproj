@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D5D370C01C44FD1600690C0A /* AUTO@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BA1C44FD1600690C0A /* AUTO@3x.png */; };
+		D5D370C11C44FD1600690C0A /* cameraIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BB1C44FD1600690C0A /* cameraIcon@3x.png */; };
+		D5D370C21C44FD1600690C0A /* focusIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BC1C44FD1600690C0A /* focusIcon@3x.png */; };
+		D5D370C31C44FD1600690C0A /* OFF@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BD1C44FD1600690C0A /* OFF@3x.png */; };
+		D5D370C41C44FD1600690C0A /* ON@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BE1C44FD1600690C0A /* ON@3x.png */; };
+		D5D370C51C44FD1600690C0A /* selectedImageGallery@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BF1C44FD1600690C0A /* selectedImageGallery@3x.png */; };
 		D5DC59961C201BE1003BD79B /* ImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5DC598B1C201BE1003BD79B /* ImagePicker.framework */; };
 		D5DC59C21C201CC4003BD79B /* BottomContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC59AD1C201CC4003BD79B /* BottomContainerView.swift */; };
 		D5DC59C31C201CC4003BD79B /* ButtonPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC59AE1C201CC4003BD79B /* ButtonPicker.swift */; };
@@ -35,6 +41,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D5D370BA1C44FD1600690C0A /* AUTO@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AUTO@3x.png"; sourceTree = "<group>"; };
+		D5D370BB1C44FD1600690C0A /* cameraIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cameraIcon@3x.png"; sourceTree = "<group>"; };
+		D5D370BC1C44FD1600690C0A /* focusIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "focusIcon@3x.png"; sourceTree = "<group>"; };
+		D5D370BD1C44FD1600690C0A /* OFF@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OFF@3x.png"; sourceTree = "<group>"; };
+		D5D370BE1C44FD1600690C0A /* ON@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ON@3x.png"; sourceTree = "<group>"; };
+		D5D370BF1C44FD1600690C0A /* selectedImageGallery@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selectedImageGallery@3x.png"; sourceTree = "<group>"; };
 		D5DC598B1C201BE1003BD79B /* ImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5DC59951C201BE1003BD79B /* ImagePicker-iOS-Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ImagePicker-iOS-Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5DC59A61C201CC4003BD79B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -74,9 +86,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D5D370B91C44FD1600690C0A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				D5D370BA1C44FD1600690C0A /* AUTO@3x.png */,
+				D5D370BB1C44FD1600690C0A /* cameraIcon@3x.png */,
+				D5D370BC1C44FD1600690C0A /* focusIcon@3x.png */,
+				D5D370BD1C44FD1600690C0A /* OFF@3x.png */,
+				D5D370BE1C44FD1600690C0A /* ON@3x.png */,
+				D5D370BF1C44FD1600690C0A /* selectedImageGallery@3x.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
 		D5DC59811C201BE1003BD79B = {
 			isa = PBXGroup;
 			children = (
+				D5D370B91C44FD1600690C0A /* Images */,
 				D5DC59A51C201CC4003BD79B /* Tests */,
 				D5DC59A81C201CC4003BD79B /* SupportFiles */,
 				D5DC59AA1C201CC4003BD79B /* Source */,
@@ -260,6 +286,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5D370C41C44FD1600690C0A /* ON@3x.png in Resources */,
+				D5D370C21C44FD1600690C0A /* focusIcon@3x.png in Resources */,
+				D5D370C01C44FD1600690C0A /* AUTO@3x.png in Resources */,
+				D5D370C51C44FD1600690C0A /* selectedImageGallery@3x.png in Resources */,
+				D5D370C11C44FD1600690C0A /* cameraIcon@3x.png in Resources */,
+				D5D370C31C44FD1600690C0A /* OFF@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
