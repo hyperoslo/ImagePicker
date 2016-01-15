@@ -374,4 +374,28 @@ class CameraView: UIViewController {
 
     return image
   }
+
+  override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+
+    guard let previewLayer = self.previewLayer,
+      connection = previewLayer.connection
+      else { return }
+
+    previewLayer.frame.size = size
+
+    switch UIDevice.currentDevice().orientation {
+    case .Portrait:
+      connection.videoOrientation = .Portrait
+    case .LandscapeLeft:
+      connection.videoOrientation = .LandscapeRight
+    case .LandscapeRight:
+      connection.videoOrientation = .LandscapeLeft
+    case .PortraitUpsideDown:
+      connection.videoOrientation = .PortraitUpsideDown
+    default:
+      break
+    }
+
+  }
 }
