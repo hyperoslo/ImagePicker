@@ -367,4 +367,10 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       collapseGalleryView(nil)
     }
   }
+
+  override public func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+
+    cameraController.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+  }
 }
