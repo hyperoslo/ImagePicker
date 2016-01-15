@@ -158,6 +158,17 @@ public class ImagePickerController: UIViewController {
       selector: "adjustButtonTitle:",
       name: ImageStack.Notifications.stackDidReload,
       object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "volumeChanged:",
+      name: "AVSystemController_SystemVolumeDidChangeNotification",
+      object: nil)
+  }
+
+  func volumeChanged(notification: NSNotification) {
+    guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider else { return }
+    slider.setValue(volume, animated: false)
+    cameraController.takePicture()
   }
 
   func adjustButtonTitle(notification: NSNotification) {
