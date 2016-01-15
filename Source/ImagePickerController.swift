@@ -1,4 +1,5 @@
 import UIKit
+import MediaPlayer
 
 public protocol ImagePickerDelegate: class {
 
