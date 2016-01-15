@@ -398,6 +398,5 @@ class CameraView: UIViewController {
     default:
       break
     }
-
   }
 }
