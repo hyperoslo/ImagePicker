@@ -60,6 +60,12 @@ public class ImagePickerController: UIViewController {
     return gesture
     }()
 
+  lazy var volumeView: MPVolumeView = { [unowned self] in
+    let view = MPVolumeView()
+    view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+
+    return view
+  }()
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
@@ -86,6 +92,9 @@ public class ImagePickerController: UIViewController {
       view.addSubview(subview)
       subview.translatesAutoresizingMaskIntoConstraints = false
     }
+
+    view.addSubview(volumeView)
+    view.sendSubviewToBack(volumeView)
 
     view.backgroundColor = .whiteColor()
     view.backgroundColor = Configuration.mainColor
