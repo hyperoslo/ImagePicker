@@ -103,6 +103,8 @@ public class ImagePickerController: UIViewController {
     view.backgroundColor = Configuration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
+    try! AVAudioSession.sharedInstance().setActive(true)
+
     subscribe()
     setupConstraints()
   }
@@ -137,6 +139,7 @@ public class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
+    try! AVAudioSession.sharedInstance().setActive(false)
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
 
