@@ -34,7 +34,7 @@ func cancelButtonDidPress()
 
 ##### Configuration
 
-Configure text, colors and fonts by just overriding the static variables in the ImagePicker [configuration](https://github.com/hyperoslo/ImagePicker/blob/master/Source/Configuration.swift) struct. As an example:
+Configure text, colors, fonts and camera features by just overriding the static variables in the ImagePicker [configuration](https://github.com/hyperoslo/ImagePicker/blob/master/Source/Configuration.swift) struct. As an example:
 
 ```swift
 Configuration.doneButtonTitle = "Finish"

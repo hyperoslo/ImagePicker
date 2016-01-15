@@ -210,7 +210,7 @@ public class ImagePickerController: UIViewController {
     bottomContainer.pickerButton.enabled = enabled
     bottomContainer.tapGestureRecognizer.enabled = enabled
     topView.flashButton.enabled = enabled
-    topView.rotateCamera.enabled = enabled
+    topView.rotateCamera.enabled = Configuration.canRotateCamera
   }
 }
 

@@ -30,4 +30,7 @@ public struct Configuration {
   // MARK: Dimensions
 
   public static var cellSpacing: CGFloat = 2
+    
+  // MARK: Camera Features
+  public static var canRotateCamera = false
 }
