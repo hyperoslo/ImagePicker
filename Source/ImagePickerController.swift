@@ -66,6 +66,9 @@ public class ImagePickerController: UIViewController {
 
     return view
   }()
+
+  var volume = AVAudioSession.sharedInstance().outputVolume
+
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
