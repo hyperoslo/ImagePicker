@@ -31,6 +31,14 @@ func doneButtonDidPress(images: [UIImage])
 func cancelButtonDidPress()
 ```
 
+**ImagePicker** supports limiting the amount of images that can be selected, it defaults
+to zero, which means that the user can select how many images that he/she wants.
+
+```swift
+let imagePickerController = ImagePickerController()
+imagePickerController.imageLimit = 5
+```
+
 ### Optional bonus
 
 ##### Configuration
