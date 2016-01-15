@@ -13,7 +13,6 @@ class CameraView: UIViewController {
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
     let blurView = UIVisualEffectView(effect: effect)
-    self.containerView.addSubview(blurView)
 
     return blurView
     }()
@@ -24,7 +23,6 @@ class CameraView: UIViewController {
     imageView.backgroundColor = .clearColor()
     imageView.frame = CGRectMake(0, 0, 110, 110)
     imageView.alpha = 0
-    self.view.addSubview(imageView)
 
     return imageView
     }()
@@ -33,7 +31,6 @@ class CameraView: UIViewController {
     let view = UIView()
     view.backgroundColor = .blackColor()
     view.alpha = 0
-    self.view.addSubview(view)
 
     return view
     }()
@@ -93,6 +90,11 @@ class CameraView: UIViewController {
 
     view.backgroundColor = Configuration.mainColor
     previewLayer?.backgroundColor = Configuration.mainColor.CGColor
+
+    containerView.addSubview(blurView)
+    [focusImageView, capturedImageView].forEach {
+      view.addSubview($0)
+    }
   }
 
   // MARK: - Layout
