@@ -6,9 +6,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   ImagePicker:
-    :path: ../../
+    :path: "../../"
 
 SPEC CHECKSUMS:
   ImagePicker: 2a904341bbc47c96457de00558d2f8dd186eff7c
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: ebbcd890a98cb01cb66183bea63d5e8e97f82923
+
+COCOAPODS: 1.0.0.beta.2

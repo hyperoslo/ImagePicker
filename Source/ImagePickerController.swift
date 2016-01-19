@@ -220,7 +220,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
     guard imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count else { return }
-    
+
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     collapseGalleryView { [unowned self] in
@@ -366,5 +366,11 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     } else if velocity.y > GestureConstants.velocity || galleryHeight < GestureConstants.minimumHeight {
       collapseGalleryView(nil)
     }
+  }
+
+  override public func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+
+    cameraController.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
   }
 }
