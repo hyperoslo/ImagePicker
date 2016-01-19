@@ -1,4 +1,5 @@
 import UIKit
+import MediaPlayer
 
 public protocol ImagePickerDelegate: class {
 
@@ -59,6 +60,15 @@ public class ImagePickerController: UIViewController {
     return gesture
     }()
 
+  lazy var volumeView: MPVolumeView = { [unowned self] in
+    let view = MPVolumeView()
+    view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+
+    return view
+  }()
+
+  var volume = AVAudioSession.sharedInstance().outputVolume
+
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
@@ -86,9 +96,14 @@ public class ImagePickerController: UIViewController {
       subview.translatesAutoresizingMaskIntoConstraints = false
     }
 
+    view.addSubview(volumeView)
+    view.sendSubviewToBack(volumeView)
+
     view.backgroundColor = .whiteColor()
     view.backgroundColor = Configuration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
+
+    try! AVAudioSession.sharedInstance().setActive(true)
 
     subscribe()
     setupConstraints()
@@ -124,6 +139,7 @@ public class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
+    try! AVAudioSession.sharedInstance().setActive(false)
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
 
@@ -142,6 +158,17 @@ public class ImagePickerController: UIViewController {
       selector: "adjustButtonTitle:",
       name: ImageStack.Notifications.stackDidReload,
       object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "volumeChanged:",
+      name: "AVSystemController_SystemVolumeDidChangeNotification",
+      object: nil)
+  }
+
+  func volumeChanged(notification: NSNotification) {
+    guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider else { return }
+    slider.setValue(volume, animated: false)
+    cameraController.takePicture()
   }
 
   func adjustButtonTitle(notification: NSNotification) {
