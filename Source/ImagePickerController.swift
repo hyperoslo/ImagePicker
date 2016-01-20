@@ -111,9 +111,8 @@ public class ImagePickerController: UIViewController {
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
-
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
-    UIApplication.sharedApplication().statusBarHidden = true
+    UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
   }
 
   public override func viewDidAppear(animated: Bool) {
@@ -131,9 +130,13 @@ public class ImagePickerController: UIViewController {
     initialContentOffset = galleryView.collectionView.contentOffset
   }
 
+  public override func viewWillDisappear(animated: Bool) {
+    super.viewWillDisappear(animated)
+    UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
+  }
+	
   public override func viewDidDisappear(animated: Bool) {
     super.viewDidDisappear(animated)
-    UIApplication.sharedApplication().statusBarHidden = statusBarHidden
   }
 
   // MARK: - Notifications
