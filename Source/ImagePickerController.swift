@@ -130,11 +130,10 @@ public class ImagePickerController: UIViewController {
     initialContentOffset = galleryView.collectionView.contentOffset
   }
 
-	public override func viewWillDisappear(animated: Bool) {
-		super.viewWillDisappear(animated)
-		
-		UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
-	}
+  public override func viewWillDisappear(animated: Bool) {
+    super.viewWillDisappear(animated)
+    UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
+  }
 	
   public override func viewDidDisappear(animated: Bool) {
     super.viewDidDisappear(animated)
