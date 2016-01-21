@@ -23,12 +23,13 @@ imagePickerController.delegate = self
 presentViewController(imagePickerController, animated: true, completion: nil)
 ```
 
-**ImagePicker** has three delegate methods that will inform you what the users are up to:
+**ImagePicker** has four delegate methods that will inform you what the users are up to:
 
 ```swift
 func wrapperDidPress(images: [UIImage])
 func doneButtonDidPress(images: [UIImage])
 func cancelButtonDidPress()
+func audioSessionActivity(activity: Bool, didChangeWithError error: ErrorType?)
 ```
 
 **ImagePicker** supports limiting the amount of images that can be selected, it defaults
