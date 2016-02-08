@@ -262,8 +262,15 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
-    collapseGalleryView { [unowned self] in
-      self.cameraController.takePicture()
+    let action: Void -> Void = { [unowned self] in
+              self.cameraController.takePicture()
+            }
+    
+    if Configuration.collapseCollectionViewWhileShot {
+        collapseGalleryView(action)
+    }
+    else {
+        action()
     }
   }
 

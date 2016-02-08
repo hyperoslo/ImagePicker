@@ -30,4 +30,8 @@ public struct Configuration {
   // MARK: Dimensions
 
   public static var cellSpacing: CGFloat = 2
+    
+  // MARK: Custom behaviour
+  
+    public static var collapseCollectionViewWhileShot: Bool = true
 }
