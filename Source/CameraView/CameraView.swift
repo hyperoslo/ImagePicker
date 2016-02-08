@@ -96,6 +96,11 @@ class CameraView: UIViewController {
       view.addSubview($0)
     }
   }
+    
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    setCorrectOrientationToPreviewLayer()
+  }
 
   // MARK: - Layout
 
@@ -380,12 +385,15 @@ class CameraView: UIViewController {
   override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
     super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
+    previewLayer?.frame.size = size
+    setCorrectOrientationToPreviewLayer()
+  }
+    
+  func setCorrectOrientationToPreviewLayer() {
     guard let previewLayer = self.previewLayer,
       connection = previewLayer.connection
       else { return }
-
-    previewLayer.frame.size = size
-
+        
     switch UIDevice.currentDevice().orientation {
     case .Portrait:
       connection.videoOrientation = .Portrait

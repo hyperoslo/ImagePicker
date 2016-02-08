@@ -125,6 +125,7 @@ public class ImageGalleryView: UIView {
     collectionView.delegate = self
 
     topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
+    topSeparator.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
     indicator.frame = CGRect(x: (totalWidth - Dimensions.indicatorWidth) / 2, y: (topSeparator.frame.height - Dimensions.indicatorHeight) / 2,
       width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
