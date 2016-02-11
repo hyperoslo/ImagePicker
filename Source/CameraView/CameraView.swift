@@ -8,7 +8,7 @@ protocol CameraViewDelegate: class {
   func imageToLibrary()
 }
 
-class CameraView: UIViewController {
+class CameraView: UIViewController, CLLocationManagerDelegate {
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
@@ -83,10 +83,14 @@ class CameraView: UIViewController {
   var stillImageOutput: AVCaptureStillImageOutput?
   var animationTimer: NSTimer?
 
+  var locationManager = CLLocationManager()
+  var latestLocation: CLLocation?
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
     initializeCamera()
+    initializeLocationManager()
 
     view.backgroundColor = Configuration.mainColor
     previewLayer?.backgroundColor = Configuration.mainColor.CGColor
@@ -100,6 +104,11 @@ class CameraView: UIViewController {
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     setCorrectOrientationToPreviewLayer()
+    locationManager.startUpdatingLocation()
+  }
+
+  override func viewDidDisappear(animated: Bool) {
+    locationManager.stopUpdatingLocation()
   }
 
   // MARK: - Layout
@@ -151,6 +160,14 @@ class CameraView: UIViewController {
     captureDevice = capturedDevices?.firstObject as? AVCaptureDevice
 
     if captureDevice != nil { beginSession() }
+  }
+
+  // MARK: - Initialize location manager
+
+  func initializeLocationManager() {
+    locationManager.delegate = self
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    locationManager.requestWhenInUseAuthorization()
   }
 
   // MARK: - Actions
@@ -248,14 +265,17 @@ class CameraView: UIViewController {
       stillImageOutput.captureStillImageAsynchronouslyFromConnection(stillImageOutput.connectionWithMediaType(AVMediaTypeVideo),
         completionHandler: { (buffer, error) -> Void in
           let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
-          guard let imageFromData = UIImage(data: imageData) else { return }
-          UIImageWriteToSavedPhotosAlbum(imageFromData, self, "saveImage:error:context:", nil)
-      })
-      })
-  }
 
-  func saveImage(image: UIImage, error: NSErrorPointer, context:UnsafePointer<Void>) {
-    delegate?.imageToLibrary()
+          guard let imageFromData = UIImage(data: imageData) else { return }
+
+          PHPhotoLibrary.sharedPhotoLibrary().performChanges({
+            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(imageFromData)
+            request.location = self.latestLocation
+          }, completionHandler:  { success, error in
+            self.delegate?.imageToLibrary()
+          })
+      })
+    })
   }
 
   // MARK: - Timer methods
@@ -334,6 +354,24 @@ class CameraView: UIViewController {
     stillImageOutput = AVCaptureStillImageOutput()
     stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
     captureSession.addOutput(stillImageOutput)
+  }
+
+  // MARK: - CLLocationManagerDelegate
+
+  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    // Pick the location with best (= smallest value) horizontal accuracy
+    latestLocation = locations.sort{ $0.horizontalAccuracy < $1.horizontalAccuracy }.first
+  }
+
+  func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
+      locationManager.startUpdatingLocation()
+    } else {
+      locationManager.stopUpdatingLocation()
+    }
+  }
+
+  func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
   }
 
   // MARK: - Private helpers
