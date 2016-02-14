@@ -169,7 +169,11 @@ public class ImagePickerController: UIViewController {
   }
 
   func volumeChanged(notification: NSNotification) {
-    guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider else { return }
+    guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
+      let userInfo = notification.userInfo,
+      let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String
+      where changeReason == "ExplicitVolumeChange" else { return }
+    
     slider.setValue(volume, animated: false)
     cameraController.takePicture()
   }
