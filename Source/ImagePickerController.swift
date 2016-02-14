@@ -72,7 +72,7 @@ public class ImagePickerController: UIViewController {
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
-  let totalSize = UIScreen.mainScreen().bounds.size
+  var totalSize: CGSize { return UIScreen.mainScreen().bounds.size }
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
   var numberOfCells: Int?
@@ -188,6 +188,15 @@ public class ImagePickerController: UIViewController {
 
   // MARK: - Helpers
 
+  public override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+        
+    let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
+            ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
+    galleryView.frame = CGRectMake(0, totalSize.height - bottomContainer.frame.height - galleryHeight,
+            totalSize.width, galleryHeight)
+  }
+    
   public override func prefersStatusBarHidden() -> Bool {
     return true
   }
@@ -257,8 +266,15 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
-    collapseGalleryView { [unowned self] in
-      self.cameraController.takePicture()
+    let action: Void -> Void = { [unowned self] in
+              self.cameraController.takePicture()
+            }
+    
+    if Configuration.collapseCollectionViewWhileShot {
+        collapseGalleryView(action)
+    }
+    else {
+        action()
     }
   }
 
