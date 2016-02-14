@@ -96,7 +96,7 @@ class CameraView: UIViewController {
       view.addSubview($0)
     }
   }
-    
+
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     setCorrectOrientationToPreviewLayer()
@@ -239,9 +239,9 @@ class CameraView: UIViewController {
     let queue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL)
 
     guard let stillImageOutput = self.stillImageOutput else { return }
-    
+
     if let videoOrientation = previewLayer?.connection.videoOrientation {
-        stillImageOutput.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation
+      stillImageOutput.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation
     }
 
     dispatch_async(queue, { [unowned self] in
@@ -364,12 +364,12 @@ class CameraView: UIViewController {
     previewLayer?.frame.size = size
     setCorrectOrientationToPreviewLayer()
   }
-    
+
   func setCorrectOrientationToPreviewLayer() {
     guard let previewLayer = self.previewLayer,
       connection = previewLayer.connection
       else { return }
-        
+
     switch UIDevice.currentDevice().orientation {
     case .Portrait:
       connection.videoOrientation = .Portrait

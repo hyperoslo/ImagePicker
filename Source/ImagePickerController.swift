@@ -65,7 +65,7 @@ public class ImagePickerController: UIViewController {
     view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
 
     return view
-  }()
+    }()
 
   var volume = AVAudioSession.sharedInstance().outputVolume
 
@@ -134,7 +134,7 @@ public class ImagePickerController: UIViewController {
     super.viewWillDisappear(animated)
     UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
   }
-	
+
   public override func viewDidDisappear(animated: Bool) {
     super.viewDidDisappear(animated)
   }
@@ -173,7 +173,7 @@ public class ImagePickerController: UIViewController {
       let userInfo = notification.userInfo,
       let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String
       where changeReason == "ExplicitVolumeChange" else { return }
-    
+
     slider.setValue(volume, animated: false)
     cameraController.takePicture()
   }
@@ -190,13 +190,16 @@ public class ImagePickerController: UIViewController {
 
   public override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews()
-        
+
     let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
-            ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
-    galleryView.frame = CGRectMake(0, totalSize.height - bottomContainer.frame.height - galleryHeight,
-            totalSize.width, galleryHeight)
+      ? ImageGalleryView.Dimensions.galleryBarHeight
+      : GestureConstants.minimumHeight
+
+    let y = totalSize.height - bottomContainer.frame.height - galleryHeight
+    galleryView.frame = CGRect(x: 0, y: y,
+      width: totalSize.width, height: galleryHeight)
   }
-    
+
   public override func prefersStatusBarHidden() -> Bool {
     return true
   }
@@ -267,14 +270,13 @@ extension ImagePickerController: BottomContainerViewDelegate {
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     let action: Void -> Void = { [unowned self] in
-              self.cameraController.takePicture()
-            }
-    
-    if Configuration.collapseCollectionViewWhileShot {
-        collapseGalleryView(action)
+      self.cameraController.takePicture()
     }
-    else {
-        action()
+
+    if Configuration.collapseCollectionViewWhileShot {
+      collapseGalleryView(action)
+    } else {
+      action()
     }
   }
 
