@@ -50,7 +50,9 @@
 				DD112158CF9886DE925FED5E /* Frameworks */,
 				A067DFAD5749963FA2D2ADED /* Pods */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		29D699DA1B70ABFC0021FA73 /* Products */ = {
 			isa = PBXGroup;
