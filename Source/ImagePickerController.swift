@@ -134,7 +134,7 @@ public class ImagePickerController: UIViewController {
     super.viewWillDisappear(animated)
     UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
   }
-	
+
   public override func viewDidDisappear(animated: Bool) {
     super.viewDidDisappear(animated)
   }
@@ -158,7 +158,7 @@ public class ImagePickerController: UIViewController {
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
+      selector: "didReloadAssets:",
       name: ImageStack.Notifications.stackDidReload,
       object: nil)
 
@@ -166,6 +166,12 @@ public class ImagePickerController: UIViewController {
       selector: "volumeChanged:",
       name: "AVSystemController_SystemVolumeDidChangeNotification",
       object: nil)
+  }
+
+  func didReloadAssets(notification: NSNotification) {
+    adjustButtonTitle(notification)
+    galleryView.collectionView.reloadData()
+    galleryView.collectionView.setContentOffset(CGPointZero, animated: false)
   }
 
   func volumeChanged(notification: NSNotification) {
