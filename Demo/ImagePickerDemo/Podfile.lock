@@ -6,7 +6,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   ImagePicker:
-    :path: ../../
+    :path: "../../"
 
 SPEC CHECKSUMS:
   ImagePicker: 2a904341bbc47c96457de00558d2f8dd186eff7c

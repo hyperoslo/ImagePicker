@@ -1,4 +1,5 @@
 import UIKit
+import MediaPlayer
 
 public protocol ImagePickerDelegate: class {
 
@@ -59,10 +60,19 @@ public class ImagePickerController: UIViewController {
     return gesture
     }()
 
+  lazy var volumeView: MPVolumeView = { [unowned self] in
+    let view = MPVolumeView()
+    view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+
+    return view
+    }()
+
+  var volume = AVAudioSession.sharedInstance().outputVolume
+
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
-  let totalSize = UIScreen.mainScreen().bounds.size
+  var totalSize: CGSize { return UIScreen.mainScreen().bounds.size }
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
   var numberOfCells: Int?
@@ -86,9 +96,14 @@ public class ImagePickerController: UIViewController {
       subview.translatesAutoresizingMaskIntoConstraints = false
     }
 
+    view.addSubview(volumeView)
+    view.sendSubviewToBack(volumeView)
+
     view.backgroundColor = .whiteColor()
     view.backgroundColor = Configuration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
+
+    try! AVAudioSession.sharedInstance().setActive(true)
 
     subscribe()
     setupConstraints()
@@ -96,9 +111,8 @@ public class ImagePickerController: UIViewController {
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
-
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
-    UIApplication.sharedApplication().statusBarHidden = true
+    UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
   }
 
   public override func viewDidAppear(animated: Bool) {
@@ -116,14 +130,19 @@ public class ImagePickerController: UIViewController {
     initialContentOffset = galleryView.collectionView.contentOffset
   }
 
+  public override func viewWillDisappear(animated: Bool) {
+    super.viewWillDisappear(animated)
+    UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
+  }
+
   public override func viewDidDisappear(animated: Bool) {
     super.viewDidDisappear(animated)
-    UIApplication.sharedApplication().statusBarHidden = statusBarHidden
   }
 
   // MARK: - Notifications
 
   deinit {
+    try! AVAudioSession.sharedInstance().setActive(false)
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
 
@@ -139,9 +158,30 @@ public class ImagePickerController: UIViewController {
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
+      selector: "didReloadAssets:",
       name: ImageStack.Notifications.stackDidReload,
       object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: "volumeChanged:",
+      name: "AVSystemController_SystemVolumeDidChangeNotification",
+      object: nil)
+  }
+
+  func didReloadAssets(notification: NSNotification) {
+    adjustButtonTitle(notification)
+    galleryView.collectionView.reloadData()
+    galleryView.collectionView.setContentOffset(CGPointZero, animated: false)
+  }
+
+  func volumeChanged(notification: NSNotification) {
+    guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
+      let userInfo = notification.userInfo,
+      let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String
+      where changeReason == "ExplicitVolumeChange" else { return }
+
+    slider.setValue(volume, animated: false)
+    cameraController.takePicture()
   }
 
   func adjustButtonTitle(notification: NSNotification) {
@@ -153,6 +193,18 @@ public class ImagePickerController: UIViewController {
   }
 
   // MARK: - Helpers
+
+  public override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+
+    let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
+      ? ImageGalleryView.Dimensions.galleryBarHeight
+      : GestureConstants.minimumHeight
+
+    let y = totalSize.height - bottomContainer.frame.height - galleryHeight
+    galleryView.frame = CGRect(x: 0, y: y,
+      width: totalSize.width, height: galleryHeight)
+  }
 
   public override func prefersStatusBarHidden() -> Bool {
     return true
@@ -220,11 +272,17 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
     guard imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count else { return }
-    
+
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
-    collapseGalleryView { [unowned self] in
+    let action: Void -> Void = { [unowned self] in
       self.cameraController.takePicture()
+    }
+
+    if Configuration.collapseCollectionViewWhileShot {
+      collapseGalleryView(action)
+    } else {
+      action()
     }
   }
 
@@ -366,5 +424,11 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     } else if velocity.y > GestureConstants.velocity || galleryHeight < GestureConstants.minimumHeight {
       collapseGalleryView(nil)
     }
+  }
+
+  override public func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+
+    cameraController.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
   }
 }

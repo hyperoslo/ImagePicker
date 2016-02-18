@@ -31,6 +31,8 @@ public struct Configuration {
 
   public static var cellSpacing: CGFloat = 2
     
-  // MARK: Camera Features
-  public static var canRotateCamera = true
+  // MARK: Custom behaviour
+
+  public static var canRotateCamera: Bool = true
+  public static var collapseCollectionViewWhileShot: Bool = true
 }

@@ -113,10 +113,6 @@ extension ImagePickerController {
       view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: attribute,
         relatedBy: .Equal, toItem: view, attribute: attribute,
         multiplier: 1, constant: 0))
-
-      view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: attribute,
-        relatedBy: .Equal, toItem: view, attribute: attribute,
-        multiplier: 1, constant: 0))
     }
 
     for attribute in topViewAttributes {
