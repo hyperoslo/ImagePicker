@@ -102,10 +102,13 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   }
 
   override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    setCorrectOrientationToPreviewLayer()
     locationManager.startUpdatingLocation()
   }
 
   override func viewDidDisappear(animated: Bool) {
+    super.viewDidDisappear(animated)
     locationManager.stopUpdatingLocation()
   }
 
@@ -253,38 +256,26 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
 
     let queue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL)
 
-    if let videoOrientation = previewLayer?.connection.videoOrientation {
-      stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation
-    }
-
     guard let stillImageOutput = self.stillImageOutput else { return }
+
+    if let videoOrientation = previewLayer?.connection.videoOrientation {
+      stillImageOutput.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation
+    }
 
     dispatch_async(queue, { [unowned self] in
       stillImageOutput.captureStillImageAsynchronouslyFromConnection(stillImageOutput.connectionWithMediaType(AVMediaTypeVideo),
         completionHandler: { (buffer, error) -> Void in
           let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
-
           guard let imageFromData = UIImage(data: imageData) else { return }
-          let image = self.cropImage(imageFromData)
-          let orientation = self.pictureOrientation()
-          guard let imageCG = image.CGImage else { return }
 
           PHPhotoLibrary.sharedPhotoLibrary().performChanges({
-            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(UIImage(CGImage: imageCG, scale: 1.0, orientation: orientation))
+            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(imageFromData)
             request.location = self.latestLocation
           }, completionHandler:  { success, error in
             self.delegate?.imageToLibrary()
           })
       })
     })
-  }
-
-  func cropImage(image: UIImage) -> UIImage {
-    guard let imageReference = CGImageCreateWithImageInRect(image.CGImage,
-      CGRect(x: 0, y: 0, width: image.size.height - 285, height: image.size.width)) else { return UIImage() }
-    let normalizedImage = UIImage(CGImage: imageReference, scale: 1, orientation: .Right)
-
-    return normalizedImage
   }
 
   func pictureOrientation() -> UIImageOrientation {
@@ -421,11 +412,14 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
     super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
+    previewLayer?.frame.size = size
+    setCorrectOrientationToPreviewLayer()
+  }
+
+  func setCorrectOrientationToPreviewLayer() {
     guard let previewLayer = self.previewLayer,
       connection = previewLayer.connection
       else { return }
-
-    previewLayer.frame.size = size
 
     switch UIDevice.currentDevice().orientation {
     case .Portrait:

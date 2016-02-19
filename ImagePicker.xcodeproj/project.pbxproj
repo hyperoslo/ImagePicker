@@ -108,7 +108,9 @@
 				D5DC59AA1C201CC4003BD79B /* Source */,
 				D5DC598C1C201BE1003BD79B /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		D5DC598C1C201BE1003BD79B /* Products */ = {
 			isa = PBXGroup;
