@@ -83,14 +83,16 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   var stillImageOutput: AVCaptureStillImageOutput?
   var animationTimer: NSTimer?
 
-  var locationManager = CLLocationManager()
-  var latestLocation: CLLocation?
+  var locationManager: LocationManager?
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     initializeCamera()
-    initializeLocationManager()
+
+    if Configuration.recordLocation {
+      locationManager = LocationManager()
+    }
 
     view.backgroundColor = Configuration.mainColor
     previewLayer?.backgroundColor = Configuration.mainColor.CGColor
@@ -104,11 +106,12 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     setCorrectOrientationToPreviewLayer()
-    locationManager.startUpdatingLocation()
+    locationManager?.startUpdatingLocation()
   }
 
   override func viewDidDisappear(animated: Bool) {
-    locationManager.stopUpdatingLocation()
+    super.viewDidDisappear(animated)
+    locationManager?.stopUpdatingLocation()
   }
 
   // MARK: - Layout
@@ -160,14 +163,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     captureDevice = capturedDevices?.firstObject as? AVCaptureDevice
 
     if captureDevice != nil { beginSession() }
-  }
-
-  // MARK: - Initialize location manager
-
-  func initializeLocationManager() {
-    locationManager.delegate = self
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    locationManager.requestWhenInUseAuthorization()
   }
 
   // MARK: - Actions
@@ -270,7 +265,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
 
           PHPhotoLibrary.sharedPhotoLibrary().performChanges({
             let request = PHAssetChangeRequest.creationRequestForAssetFromImage(imageFromData)
-            request.location = self.latestLocation
+            request.location = self.locationManager?.latestLocation
           }, completionHandler:  { success, error in
             self.delegate?.imageToLibrary()
           })
@@ -356,24 +351,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     captureSession.addOutput(stillImageOutput)
   }
 
-  // MARK: - CLLocationManagerDelegate
-
-  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    // Pick the location with best (= smallest value) horizontal accuracy
-    latestLocation = locations.sort{ $0.horizontalAccuracy < $1.horizontalAccuracy }.first
-  }
-
-  func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-    if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
-      locationManager.startUpdatingLocation()
-    } else {
-      locationManager.stopUpdatingLocation()
-    }
-  }
-
-  func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-  }
-
   // MARK: - Private helpers
 
   func showNoCamera(show: Bool) {
@@ -420,5 +397,43 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     default:
       break
     }
+  }
+}
+
+class LocationManager: NSObject, CLLocationManagerDelegate {
+  var clManager = CLLocationManager()
+  var latestLocation: CLLocation?
+
+  override init() {
+    super.init()
+    clManager.delegate = self
+    clManager.desiredAccuracy = kCLLocationAccuracyBest
+    clManager.requestWhenInUseAuthorization()
+  }
+
+  func startUpdatingLocation() {
+    clManager.startUpdatingLocation()
+  }
+
+  func stopUpdatingLocation() {
+    clManager.stopUpdatingLocation()
+  }
+
+  // MARK: - CLLocationManagerDelegate
+
+  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    // Pick the location with best (= smallest value) horizontal accuracy
+    latestLocation = locations.sort{ $0.horizontalAccuracy < $1.horizontalAccuracy }.first
+  }
+
+  func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
+      clManager.startUpdatingLocation()
+    } else {
+      clManager.stopUpdatingLocation()
+    }
+  }
+
+  func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
   }
 }
