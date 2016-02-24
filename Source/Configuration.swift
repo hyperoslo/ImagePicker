@@ -33,5 +33,6 @@ public struct Configuration {
     
   // MARK: Custom behaviour
   
-    public static var collapseCollectionViewWhileShot: Bool = true
+  public static var collapseCollectionViewWhileShot: Bool = true
+  public static var recordLocation: Bool = true
 }
