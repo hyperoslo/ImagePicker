@@ -32,6 +32,7 @@ public struct Configuration {
   public static var cellSpacing: CGFloat = 2
     
   // MARK: Custom behaviour
-  
-    public static var collapseCollectionViewWhileShot: Bool = true
+
+  public static var canRotateCamera: Bool = true
+  public static var collapseCollectionViewWhileShot: Bool = true
 }

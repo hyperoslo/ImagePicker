@@ -46,8 +46,14 @@ class TopView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
+    
+    var buttons: [UIButton] = [flashButton]
 
-    for button in [flashButton, rotateCamera] {
+    if (Configuration.canRotateCamera) {
+        buttons.append(rotateCamera)
+    }
+    
+    for button in buttons {
       button.layer.shadowColor = UIColor.blackColor().CGColor
       button.layer.shadowOpacity = 0.5
       button.layer.shadowOffset = CGSize(width: 0, height: 1)
