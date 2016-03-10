@@ -26,9 +26,9 @@ presentViewController(imagePickerController, animated: true, completion: nil)
 **ImagePicker** has three delegate methods that will inform you what the users are up to:
 
 ```swift
-func wrapperDidPress(images: [UIImage])
-func doneButtonDidPress(images: [UIImage])
-func cancelButtonDidPress()
+func imagePickerWrapperDidPress(images: [UIImage])
+func imagePickerDoneButtonDidPress(images: [UIImage])
+func imagePickerCancelButtonDidPress()
 ```
 
 **ImagePicker** supports limiting the amount of images that can be selected, it defaults
