@@ -6,6 +6,9 @@ public protocol ImagePickerDelegate: class {
   func wrapperDidPress(images: [UIImage])
   func doneButtonDidPress(images: [UIImage])
   func cancelButtonDidPress()
+    
+  func audioSessionActivity(activity: Bool, didChangeWithError error: ErrorType?)
+
 }
 
 public class ImagePickerController: UIViewController {
@@ -103,7 +106,13 @@ public class ImagePickerController: UIViewController {
     view.backgroundColor = Configuration.mainColor
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
-    try! AVAudioSession.sharedInstance().setActive(true)
+    do {
+      try AVAudioSession.sharedInstance().setActive(true)
+      delegate?.audioSessionActivity(true, didChangeWithError: nil)
+        
+    } catch let error {
+      delegate?.audioSessionActivity(true, didChangeWithError: error)
+    }
 
     subscribe()
     setupConstraints()
@@ -142,7 +151,15 @@ public class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
-    try! AVAudioSession.sharedInstance().setActive(false)
+    
+    do {
+      try AVAudioSession.sharedInstance().setActive(false)
+      delegate?.audioSessionActivity(false, didChangeWithError: nil)
+        
+    } catch let error {
+      delegate?.audioSessionActivity(false, didChangeWithError: error)
+    }
+    
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
 
