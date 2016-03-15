@@ -413,22 +413,22 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
 }
 
 class LocationManager: NSObject, CLLocationManagerDelegate {
-  var clManager = CLLocationManager()
+  var locationManager = CLLocationManager()
   var latestLocation: CLLocation?
 
   override init() {
     super.init()
-    clManager.delegate = self
-    clManager.desiredAccuracy = kCLLocationAccuracyBest
-    clManager.requestWhenInUseAuthorization()
+    locationManager.delegate = self
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    locationManager.requestWhenInUseAuthorization()
   }
 
   func startUpdatingLocation() {
-    clManager.startUpdatingLocation()
+    locationManager.startUpdatingLocation()
   }
 
   func stopUpdatingLocation() {
-    clManager.stopUpdatingLocation()
+    locationManager.stopUpdatingLocation()
   }
 
   // MARK: - CLLocationManagerDelegate
@@ -440,12 +440,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
 
   func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
     if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
-      clManager.startUpdatingLocation()
+      locationManager.startUpdatingLocation()
     } else {
-      clManager.stopUpdatingLocation()
+      locationManager.stopUpdatingLocation()
     }
-  }
-
-  func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
   }
 }
