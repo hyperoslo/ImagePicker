@@ -265,6 +265,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
 
           PHPhotoLibrary.sharedPhotoLibrary().performChanges({
             let request = PHAssetChangeRequest.creationRequestForAssetFromImage(imageFromData)
+            request.creationDate = NSDate()
             request.location = self.locationManager?.latestLocation
           }, completionHandler:  { success, error in
             self.delegate?.imageToLibrary()
