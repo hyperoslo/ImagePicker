@@ -8,7 +8,7 @@ protocol CameraViewDelegate: class {
   func imageToLibrary()
 }
 
-class CameraView: UIViewController {
+class CameraView: UIViewController, CLLocationManagerDelegate {
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
@@ -83,10 +83,16 @@ class CameraView: UIViewController {
   var stillImageOutput: AVCaptureStillImageOutput?
   var animationTimer: NSTimer?
 
+  var locationManager: LocationManager?
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
     initializeCamera()
+
+    if Configuration.recordLocation {
+      locationManager = LocationManager()
+    }
 
     view.backgroundColor = Configuration.mainColor
     previewLayer?.backgroundColor = Configuration.mainColor.CGColor
@@ -100,6 +106,12 @@ class CameraView: UIViewController {
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     setCorrectOrientationToPreviewLayer()
+    locationManager?.startUpdatingLocation()
+  }
+
+  override func viewDidDisappear(animated: Bool) {
+    super.viewDidDisappear(animated)
+    locationManager?.stopUpdatingLocation()
   }
 
   // MARK: - Layout
@@ -248,14 +260,18 @@ class CameraView: UIViewController {
       stillImageOutput.captureStillImageAsynchronouslyFromConnection(stillImageOutput.connectionWithMediaType(AVMediaTypeVideo),
         completionHandler: { (buffer, error) -> Void in
           let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
-          guard let imageFromData = UIImage(data: imageData) else { return }
-          UIImageWriteToSavedPhotosAlbum(imageFromData, self, "saveImage:error:context:", nil)
-      })
-      })
-  }
 
-  func saveImage(image: UIImage, error: NSErrorPointer, context:UnsafePointer<Void>) {
-    delegate?.imageToLibrary()
+          guard let imageFromData = UIImage(data: imageData) else { return }
+
+          PHPhotoLibrary.sharedPhotoLibrary().performChanges({
+            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(imageFromData)
+            request.creationDate = NSDate()
+            request.location = self.locationManager?.latestLocation
+          }, completionHandler:  { success, error in
+            self.delegate?.imageToLibrary()
+          })
+      })
+    })
   }
 
   // MARK: - Timer methods
@@ -381,6 +397,41 @@ class CameraView: UIViewController {
       connection.videoOrientation = .PortraitUpsideDown
     default:
       break
+    }
+  }
+}
+
+class LocationManager: NSObject, CLLocationManagerDelegate {
+  var locationManager = CLLocationManager()
+  var latestLocation: CLLocation?
+
+  override init() {
+    super.init()
+    locationManager.delegate = self
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    locationManager.requestWhenInUseAuthorization()
+  }
+
+  func startUpdatingLocation() {
+    locationManager.startUpdatingLocation()
+  }
+
+  func stopUpdatingLocation() {
+    locationManager.stopUpdatingLocation()
+  }
+
+  // MARK: - CLLocationManagerDelegate
+
+  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    // Pick the location with best (= smallest value) horizontal accuracy
+    latestLocation = locations.sort{ $0.horizontalAccuracy < $1.horizontalAccuracy }.first
+  }
+
+  func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
+      locationManager.startUpdatingLocation()
+    } else {
+      locationManager.stopUpdatingLocation()
     }
   }
 }
