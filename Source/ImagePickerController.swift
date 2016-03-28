@@ -1,7 +1,7 @@
 import UIKit
 import MediaPlayer
 
-public protocol ImagePickerDelegate: class {
+@objc public protocol ImagePickerDelegate: class {
 
   func wrapperDidPress(images: [UIImage])
   func doneButtonDidPress(images: [UIImage])
