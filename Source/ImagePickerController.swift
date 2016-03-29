@@ -249,14 +249,6 @@ public class ImagePickerController: UIViewController {
     galleryView.frame.size.height = constant
   }
 
-  func updateCollectionViewFrames(maximum: Bool) {
-    let constant = maximum ? GestureConstants.maximumHeight : GestureConstants.minimumHeight
-    galleryView.collectionView.frame.size.height = constant - galleryView.topSeparator.frame.height
-    galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
-
-    galleryView.updateNoImagesLabel()
-  }
-
   func enableGestures(enabled: Bool) {
     galleryView.alpha = enabled ? 1 : 0
     bottomContainer.pickerButton.enabled = enabled
