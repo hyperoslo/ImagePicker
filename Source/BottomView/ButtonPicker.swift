@@ -41,17 +41,17 @@ class ButtonPicker: UIButton {
 
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "recalculatePhotosCount:",
+      selector: #selector(recalculatePhotosCount(_:)),
       name: ImageStack.Notifications.imageDidPush,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "recalculatePhotosCount:",
+      selector: #selector(recalculatePhotosCount(_:)),
       name: ImageStack.Notifications.imageDidDrop,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "recalculatePhotosCount:",
+      selector: #selector(recalculatePhotosCount(_:)),
       name: ImageStack.Notifications.stackDidReload,
       object: nil)
   }
@@ -65,8 +65,8 @@ class ButtonPicker: UIButton {
   func setupButton() {
     backgroundColor = .whiteColor()
     layer.cornerRadius = Dimensions.buttonSize / 2
-    addTarget(self, action: "pickerButtonDidPress:", forControlEvents: .TouchUpInside)
-    addTarget(self, action: "pickerButtonDidHighlight:", forControlEvents: .TouchDown)
+    addTarget(self, action: #selector(pickerButtonDidPress(_:)), forControlEvents: .TouchUpInside)
+    addTarget(self, action: #selector(pickerButtonDidHighlight(_:)), forControlEvents: .TouchDown)
   }
 
   // MARK: - Layout

@@ -32,7 +32,7 @@ public class BottomContainerView: UIView {
     let button = UIButton()
     button.setTitle(Configuration.cancelButtonTitle, forState: .Normal)
     button.titleLabel?.font = Configuration.doneButton
-    button.addTarget(self, action: "doneButtonDidPress:", forControlEvents: .TouchUpInside)
+    button.addTarget(self, action: #selector(doneButtonDidPress(_:)), forControlEvents: .TouchUpInside)
 
     return button
     }()
@@ -51,7 +51,7 @@ public class BottomContainerView: UIView {
 
   lazy var tapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
     let gesture = UITapGestureRecognizer()
-    gesture.addTarget(self, action: "handleTapGestureRecognizer:")
+    gesture.addTarget(self, action: #selector(handleTapGestureRecognizer(_:)))
 
     return gesture
     }()
