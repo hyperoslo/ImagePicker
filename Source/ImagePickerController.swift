@@ -192,18 +192,6 @@ public class ImagePickerController: UIViewController {
 
   // MARK: - Helpers
 
-  public override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews()
-
-    let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
-      ? ImageGalleryView.Dimensions.galleryBarHeight
-      : GestureConstants.minimumHeight
-
-    let y = totalSize.height - bottomContainer.frame.height - galleryHeight
-    galleryView.frame = CGRect(x: 0, y: y,
-      width: totalSize.width, height: galleryHeight)
-  }
-
   public override func prefersStatusBarHidden() -> Bool {
     return true
   }
