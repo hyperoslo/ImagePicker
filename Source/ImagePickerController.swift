@@ -55,7 +55,7 @@ public class ImagePickerController: UIViewController {
 
   lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
     let gesture = UIPanGestureRecognizer()
-    gesture.addTarget(self, action: "panGestureRecognizerHandler:")
+    gesture.addTarget(self, action: #selector(panGestureRecognizerHandler(_:)))
 
     return gesture
     }()
@@ -148,22 +148,22 @@ public class ImagePickerController: UIViewController {
 
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
+      selector: #selector(adjustButtonTitle(_:)),
       name: ImageStack.Notifications.imageDidPush,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "adjustButtonTitle:",
+      selector: #selector(adjustButtonTitle(_:)),
       name: ImageStack.Notifications.imageDidDrop,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "didReloadAssets:",
+      selector: #selector(didReloadAssets(_:)),
       name: ImageStack.Notifications.stackDidReload,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "volumeChanged:",
+      selector: #selector(volumeChanged(_:)),
       name: "AVSystemController_SystemVolumeDidChangeNotification",
       object: nil)
   }

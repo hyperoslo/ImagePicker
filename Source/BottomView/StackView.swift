@@ -60,17 +60,17 @@ class ImageStackView: UIView {
 
   func subscribe() {
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "imageDidPush:",
+      selector: #selector(imageDidPush(_:)),
       name: ImageStack.Notifications.imageDidPush,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "imageStackDidChangeContent:",
+      selector: #selector(imageStackDidChangeContent(_:)),
       name: ImageStack.Notifications.imageDidDrop,
       object: nil)
 
     NSNotificationCenter.defaultCenter().addObserver(self,
-      selector: "imageStackDidChangeContent:",
+      selector: #selector(imageStackDidChangeContent(_:)),
       name: ImageStack.Notifications.stackDidReload,
       object: nil)
   }

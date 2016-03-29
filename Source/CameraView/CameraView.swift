@@ -62,7 +62,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
 
     button.setAttributedTitle(title, forState: .Normal)
     button.sizeToFit()
-    button.addTarget(self, action: "settingsButtonDidTap", forControlEvents: .TouchUpInside)
+    button.addTarget(self, action: #selector(settingsButtonDidTap), forControlEvents: .TouchUpInside)
 
     return button
     }()
@@ -301,7 +301,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
         self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
         }, completion: { _ in
           self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
-            selector: "timerDidFire", userInfo: nil, repeats: false)
+            selector: #selector(CameraView.timerDidFire), userInfo: nil, repeats: false)
       })
     }
   }

@@ -61,7 +61,7 @@ public class ImageGalleryView: UIView {
 
   lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
     let gesture = UIPanGestureRecognizer()
-    gesture.addTarget(self, action: "handlePanGestureRecognizer:")
+    gesture.addTarget(self, action: #selector(handlePanGestureRecognizer(_:)))
 
     return gesture
     }()
