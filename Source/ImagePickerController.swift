@@ -10,9 +10,7 @@ public protocol ImagePickerDelegate: class {
 
 public class ImagePickerController: UIViewController {
 
-  struct Dimensions {
-    static let bottomContainerHeight: CGFloat = 101
-  }
+  
 
   struct GestureConstants {
     static let maximumHeight: CGFloat = 200
@@ -194,18 +192,6 @@ public class ImagePickerController: UIViewController {
 
   // MARK: - Helpers
 
-  public override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews()
-
-    let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
-      ? ImageGalleryView.Dimensions.galleryBarHeight
-      : GestureConstants.minimumHeight
-
-    let y = totalSize.height - bottomContainer.frame.height - galleryHeight
-    galleryView.frame = CGRect(x: 0, y: y,
-      width: totalSize.width, height: galleryHeight)
-  }
-
   public override func prefersStatusBarHidden() -> Bool {
     return true
   }
@@ -247,14 +233,6 @@ public class ImagePickerController: UIViewController {
   func updateGalleryViewFrames(constant: CGFloat) {
     galleryView.frame.origin.y = totalSize.height - bottomContainer.frame.height - constant
     galleryView.frame.size.height = constant
-  }
-
-  func updateCollectionViewFrames(maximum: Bool) {
-    let constant = maximum ? GestureConstants.maximumHeight : GestureConstants.minimumHeight
-    galleryView.collectionView.frame.size.height = constant - galleryView.topSeparator.frame.height
-    galleryView.collectionSize = CGSize(width: galleryView.collectionView.frame.height, height: galleryView.collectionView.frame.height)
-
-    galleryView.updateNoImagesLabel()
   }
 
   func enableGestures(enabled: Bool) {

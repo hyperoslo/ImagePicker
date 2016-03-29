@@ -9,7 +9,11 @@ protocol BottomContainerViewDelegate: class {
 }
 
 public class BottomContainerView: UIView {
-
+  
+  struct Dimensions {
+    static let height: CGFloat = 101
+  }
+  
   lazy var pickerButton: ButtonPicker = { [unowned self] in
     let pickerButton = ButtonPicker()
     pickerButton.setTitleColor(.whiteColor(), forState: .Normal)
