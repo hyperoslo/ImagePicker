@@ -10,9 +10,7 @@ public protocol ImagePickerDelegate: class {
 
 public class ImagePickerController: UIViewController {
 
-  struct Dimensions {
-    static let bottomContainerHeight: CGFloat = 101
-  }
+  
 
   struct GestureConstants {
     static let maximumHeight: CGFloat = 200
