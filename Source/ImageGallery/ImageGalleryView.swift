@@ -174,22 +174,6 @@ public class ImageGalleryView: UIView {
     }
   }
 
-  // MARK: - Private helpers
-
-  func getImage(name: String) -> UIImage {
-    let traitCollection = UITraitCollection(displayScale: 3)
-    var bundle = NSBundle(forClass: self.classForCoder)
-
-    if let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle"), resourceBundle = NSBundle(path: bundlePath) {
-      bundle = resourceBundle
-    }
-
-    guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
-      else { return UIImage() }
-
-    return image
-  }
-
   func displayNoImagesMessage(hideCollectionView: Bool) {
     collectionView.alpha = hideCollectionView ? 0 : 1
     updateNoImagesLabel()
@@ -264,7 +248,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
         }
         self.selectedStack.dropAsset(asset)
       } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
-        cell.selectedImageView.image = self.getImage("selectedImageGallery")
+        cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
         cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
         UIView.animateWithDuration(0.2) { _ in
           cell.selectedImageView.transform = CGAffineTransformIdentity

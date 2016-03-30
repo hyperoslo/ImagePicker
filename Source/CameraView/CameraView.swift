@@ -9,7 +9,7 @@ protocol CameraViewDelegate: class {
 }
 
 class CameraView: UIViewController, CLLocationManagerDelegate {
-
+  
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
     let blurView = UIVisualEffectView(effect: effect)
@@ -19,7 +19,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
 
   lazy var focusImageView: UIImageView = { [unowned self] in
     let imageView = UIImageView()
-    imageView.image = self.getImage("focusIcon")
+    imageView.image = AssetManager.getImage("focusIcon")
     imageView.backgroundColor = .clearColor()
     imageView.frame = CGRectMake(0, 0, 110, 110)
     imageView.alpha = 0
@@ -358,20 +358,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     [noCameraButton, noCameraLabel].forEach {
       show ? view.addSubview($0) : $0.removeFromSuperview()
     }
-  }
-
-  func getImage(name: String) -> UIImage {
-    let traitCollection = UITraitCollection(displayScale: 3)
-    var bundle = NSBundle(forClass: self.classForCoder)
-
-    if let bundlePath = NSBundle(forClass: self.classForCoder).resourcePath?.stringByAppendingString("/ImagePicker.bundle"), resourceBundle = NSBundle(path: bundlePath) {
-      bundle = resourceBundle
-    }
-
-    guard let image = UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection)
-      else { return UIImage() }
-
-    return image
   }
 
   override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
