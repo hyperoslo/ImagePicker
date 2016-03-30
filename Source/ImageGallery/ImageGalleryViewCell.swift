@@ -2,15 +2,8 @@ import UIKit
 
 class ImageGalleryViewCell: UICollectionViewCell {
 
-  lazy var imageView: UIImageView = {
-    let imageView = UIImageView()
-    return imageView
-    }()
-
-  lazy var selectedImageView: UIImageView = {
-    let imageView = UIImageView()
-    return imageView
-    }()
+  lazy var imageView = UIImageView()
+  lazy var selectedImageView = UIImageView()
 
   override init(frame: CGRect) {
     super.init(frame: frame)

@@ -4,10 +4,10 @@ public struct Configuration {
 
   // MARK: Colors
 
-  public static var backgroundColor = UIColor(red:0.15, green:0.19, blue:0.24, alpha:1)
-  public static var mainColor = UIColor(red:0.09, green:0.11, blue:0.13, alpha:1)
-  public static var noImagesColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1)
-  public static var noCameraColor = UIColor(red:0.86, green:0.86, blue:0.86, alpha:1)
+  public static var backgroundColor = UIColor(red: 0.15, green: 0.19, blue: 0.24, alpha: 1)
+  public static var mainColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
+  public static var noImagesColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1)
+  public static var noCameraColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1)
   public static var settingsColor = UIColor.whiteColor()
 
   // MARK: Fonts
@@ -33,7 +33,7 @@ public struct Configuration {
     
   // MARK: Custom behaviour
   
-  public static var canRotateCamera: Bool = true
-  public static var collapseCollectionViewWhileShot: Bool = true
-  public static var recordLocation: Bool = true
+  public static var canRotateCamera = true
+  public static var collapseCollectionViewWhileShot = true
+  public static var recordLocation = true
 }

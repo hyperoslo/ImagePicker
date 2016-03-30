@@ -69,18 +69,6 @@ class ButtonPicker: UIButton {
     addTarget(self, action: #selector(pickerButtonDidHighlight(_:)), forControlEvents: .TouchDown)
   }
 
-  // MARK: - Layout
-
-  func setupConstraints() {
-    let attributes: [NSLayoutAttribute] = [.CenterX, .CenterY]
-
-    for attribute in attributes {
-      addConstraint(NSLayoutConstraint(item: numberLabel, attribute: attribute,
-        relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
-    }
-  }
-
   // MARK: - Actions
 
   func recalculatePhotosCount(notification: NSNotification) {
