@@ -3,28 +3,19 @@ import Photos
 public struct ImagePicker {
 
   public static func fetch(completion: (assets: [PHAsset]) -> Void) {
-    let fetchOptions = PHFetchOptions()
-    let authorizationStatus = PHPhotoLibrary.authorizationStatus()
-    var fetchResult: PHFetchResult?
-
-    guard authorizationStatus == .Authorized else { return }
-
-    if fetchResult == nil {
-      fetchResult = PHAsset.fetchAssetsWithMediaType(.Image, options: fetchOptions)
-    }
-
-    if fetchResult?.count > 0 {
-      var assets = [PHAsset]()
-      fetchResult?.enumerateObjectsUsingBlock { object, index, stop in
-        if let asset = object as? PHAsset {
-          assets.insert(asset, atIndex: 0)
-        }
+    guard PHPhotoLibrary.authorizationStatus() == .Authorized else { return }
+    
+    var assets = [PHAsset]()
+    let fetchResult = PHAsset.fetchAssetsWithMediaType(.Image, options: PHFetchOptions())
+    fetchResult.enumerateObjectsUsingBlock { object, index, stop in
+      if let asset = object as? PHAsset {
+        assets.insert(asset, atIndex: 0)
       }
-
-      dispatch_async(dispatch_get_main_queue(), {
-        completion(assets: assets)
-      })
     }
+    
+    dispatch_async(dispatch_get_main_queue(), {
+      completion(assets: assets)
+    })
   }
 
   public static func resolveAsset(asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), completion: (image: UIImage?) -> Void) {
