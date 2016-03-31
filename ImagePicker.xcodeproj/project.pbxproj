@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		399770A71CAD2F0600200061 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399770A61CAD2F0600200061 /* LocationManager.swift */; };
 		39D134101CAC4B4E00EA2ECE /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */; };
 		D5D370C01C44FD1600690C0A /* AUTO@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BA1C44FD1600690C0A /* AUTO@3x.png */; };
 		D5D370C11C44FD1600690C0A /* cameraIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BB1C44FD1600690C0A /* cameraIcon@3x.png */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		399770A61CAD2F0600200061 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		D5D370BA1C44FD1600690C0A /* AUTO@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AUTO@3x.png"; sourceTree = "<group>"; };
 		D5D370BB1C44FD1600690C0A /* cameraIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cameraIcon@3x.png"; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				D5DC59BB1C201CC4003BD79B /* Photos.swift */,
 				D5DC59BC1C201CC4003BD79B /* TopView */,
 				39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */,
+				399770A61CAD2F0600200061 /* LocationManager.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 			files = (
 				D5DC59CE1C201CC4003BD79B /* TopView.swift in Sources */,
 				D5DC59C41C201CC4003BD79B /* ImageStack.swift in Sources */,
+				399770A71CAD2F0600200061 /* LocationManager.swift in Sources */,
 				D5DC59CB1C201CC4003BD79B /* ImageGalleryViewDataSource.swift in Sources */,
 				D5DC59CA1C201CC4003BD79B /* ImageGalleryViewCell.swift in Sources */,
 				D5DC59C81C201CC4003BD79B /* ConstraintsSetup.swift in Sources */,
