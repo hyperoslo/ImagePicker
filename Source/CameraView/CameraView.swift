@@ -9,7 +9,7 @@ protocol CameraViewDelegate: class {
 }
 
 class CameraView: UIViewController, CLLocationManagerDelegate {
-  
+
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
     let blurView = UIVisualEffectView(effect: effect)
