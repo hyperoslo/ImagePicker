@@ -77,8 +77,8 @@ class TopView: UIView {
 
     switch currentFlashIndex {
     case 1:
-      button.setTitleColor(UIColor(red:0.98, green:0.98, blue:0.45, alpha:1), forState: .Normal)
-      button.setTitleColor(UIColor(red:0.52, green:0.52, blue:0.24, alpha:1), forState: .Highlighted)
+      button.setTitleColor(UIColor(red: 0.98, green: 0.98, blue: 0.45, alpha: 1), forState: .Normal)
+      button.setTitleColor(UIColor(red: 0.52, green: 0.52, blue: 0.24, alpha: 1), forState: .Highlighted)
     default:
       button.setTitleColor(.whiteColor(), forState: .Normal)
       button.setTitleColor(.whiteColor(), forState: .Highlighted)

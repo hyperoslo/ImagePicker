@@ -150,3 +150,16 @@ extension ImageGalleryViewCell {
     }
   }
 }
+
+extension ButtonPicker {
+
+  func setupConstraints() {
+    let attributes: [NSLayoutAttribute] = [.CenterX, .CenterY]
+    
+    for attribute in attributes {
+      addConstraint(NSLayoutConstraint(item: numberLabel, attribute: attribute,
+        relatedBy: .Equal, toItem: self, attribute: attribute,
+        multiplier: 1, constant: 0))
+    }
+  }
+}

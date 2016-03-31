@@ -9,9 +9,7 @@ public protocol ImagePickerDelegate: class {
 }
 
 public class ImagePickerController: UIViewController {
-
   
-
   struct GestureConstants {
     static let maximumHeight: CGFloat = 200
     static let minimumHeight: CGFloat = 125
@@ -30,7 +28,7 @@ public class ImagePickerController: UIViewController {
 
   public lazy var bottomContainer: BottomContainerView = { [unowned self] in
     let view = BottomContainerView()
-    view.backgroundColor = UIColor(red:0.09, green:0.11, blue:0.13, alpha:1)
+    view.backgroundColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
     view.delegate = self
 
     return view
@@ -109,6 +107,7 @@ public class ImagePickerController: UIViewController {
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
+    
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
     UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
   }
@@ -131,10 +130,6 @@ public class ImagePickerController: UIViewController {
   public override func viewWillDisappear(animated: Bool) {
     super.viewWillDisappear(animated)
     UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
-  }
-
-  public override func viewDidDisappear(animated: Bool) {
-    super.viewDidDisappear(animated)
   }
 
   // MARK: - Notifications
