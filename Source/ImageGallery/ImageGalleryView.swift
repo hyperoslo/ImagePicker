@@ -22,7 +22,7 @@ public class ImageGalleryView: UIView {
   }
 
   lazy public var collectionView: UICollectionView = { [unowned self] in
-    let collectionView = UICollectionView(frame: CGRectMake(0, 0, 0, 0),
+    let collectionView = UICollectionView(frame: CGRectZero,
       collectionViewLayout: self.collectionViewLayout)
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.backgroundColor = Configuration.mainColor
@@ -36,7 +36,7 @@ public class ImageGalleryView: UIView {
     layout.scrollDirection = .Horizontal
     layout.minimumInteritemSpacing = Configuration.cellSpacing
     layout.minimumLineSpacing = 2
-    layout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0)
+    layout.sectionInset = UIEdgeInsetsZero
 
     return layout
     }()
@@ -138,7 +138,7 @@ public class ImageGalleryView: UIView {
     if threshold > height || collectionView.alpha != 0 {
       noImagesLabel.alpha = 0
     } else {
-      noImagesLabel.center = CGPoint(x: CGRectGetWidth(bounds)/2, y: height/2)
+      noImagesLabel.center = CGPoint(x: CGRectGetWidth(bounds) / 2, y: height / 2)
       noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
     }
   }

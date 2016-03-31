@@ -41,11 +41,8 @@ public class BottomContainerView: UIView {
     return button
     }()
 
-  lazy var stackView: ImageStackView = {
-    let view = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
-    return view
-    }()
-
+  lazy var stackView = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+    
   lazy var topSeparator: UIView = { [unowned self] in
     let view = UIView()
     view.backgroundColor = Configuration.backgroundColor
