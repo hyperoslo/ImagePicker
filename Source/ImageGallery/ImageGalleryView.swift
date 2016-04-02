@@ -27,6 +27,8 @@ public class ImageGalleryView: UIView {
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.backgroundColor = Configuration.mainColor
     collectionView.showsHorizontalScrollIndicator = false
+    collectionView.dataSource = self
+    collectionView.delegate = self
 
     return collectionView
     }()
@@ -102,6 +104,7 @@ public class ImageGalleryView: UIView {
     [collectionView, topSeparator].forEach { addSubview($0) }
 
     topSeparator.addSubview(indicator)
+    
     imagesBeforeLoading = 0
     fetchPhotos()
   }
@@ -120,12 +123,8 @@ public class ImageGalleryView: UIView {
   func updateFrames() {
     let totalWidth = UIScreen.mainScreen().bounds.width
     let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
-
-    collectionView.dataSource = self
-    collectionView.delegate = self
-
     topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
-    topSeparator.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
+    topSeparator.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin, .FlexibleWidth]
     indicator.frame = CGRect(x: (totalWidth - Dimensions.indicatorWidth) / 2, y: (topSeparator.frame.height - Dimensions.indicatorHeight) / 2,
       width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)

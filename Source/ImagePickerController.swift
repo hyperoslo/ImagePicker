@@ -403,5 +403,9 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 
     cameraController.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    coordinator.animateAlongsideTransition({ (context) in
+      self.collapseGalleryView(nil)
+      self.galleryView.updateFrames()
+      }, completion: nil)    
   }
 }
