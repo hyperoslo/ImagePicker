@@ -9,7 +9,7 @@ public protocol ImagePickerDelegate: class {
 }
 
 public class ImagePickerController: UIViewController {
-  
+
   struct GestureConstants {
     static let maximumHeight: CGFloat = 200
     static let minimumHeight: CGFloat = 125
@@ -108,7 +108,7 @@ public class ImagePickerController: UIViewController {
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
-    
+
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
     UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
   }
@@ -249,9 +249,7 @@ public class ImagePickerController: UIViewController {
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     let action: Void -> Void = { [unowned self] in
-      self.cameraController.takePicture({ (finished) in
-        self.isTakingPicture = false
-      })
+      self.cameraController.takePicture { self.isTakingPicture = false }
     }
 
     if Configuration.collapseCollectionViewWhileShot {
@@ -269,7 +267,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   func pickerButtonDidPress() {
     takePicture()
   }
-  
+
   func doneButtonDidPress() {
     let images = ImagePicker.resolveAssets(stack.assets)
     delegate?.doneButtonDidPress(images)

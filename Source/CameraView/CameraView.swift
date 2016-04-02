@@ -237,7 +237,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     }
   }
 
-  func takePicture(completion: Bool -> ()) {
+  func takePicture(completion: () -> ()) {
     capturedImageView.frame = view.bounds
 
     UIView.animateWithDuration(0.1, animations: {
@@ -269,7 +269,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
             request.location = self.locationManager?.latestLocation
           }, completionHandler:  { success, error in
             self.delegate?.imageToLibrary()
-            completion(true)
+            completion()
           })
       })
     })
