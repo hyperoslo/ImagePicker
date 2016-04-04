@@ -104,7 +104,7 @@ public class ImageGalleryView: UIView {
     [collectionView, topSeparator].forEach { addSubview($0) }
 
     topSeparator.addSubview(indicator)
-    
+
     imagesBeforeLoading = 0
     fetchPhotos()
   }
@@ -122,6 +122,7 @@ public class ImageGalleryView: UIView {
 
   func updateFrames() {
     let totalWidth = UIScreen.mainScreen().bounds.width
+    frame.size.width = totalWidth
     let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
     topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
     topSeparator.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin, .FlexibleWidth]
