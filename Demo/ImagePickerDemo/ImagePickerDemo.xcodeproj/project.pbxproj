@@ -152,7 +152,7 @@
 				TargetAttributes = {
 					29D699D81B70ABFC0021FA73 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = XVAH95CHDC;
+						DevelopmentTeam = LG4DBY4QF9;
 					};
 				};
 			};
@@ -347,11 +347,11 @@
 			baseConfigurationReference = C4392341AC7391C01AD9F350 /* Pods-ImagePickerDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = ImagePickerDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = no.ImagePicker.hyper;
+				PRODUCT_BUNDLE_IDENTIFIER = no.hyper.ImagePickerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -361,11 +361,11 @@
 			baseConfigurationReference = 6F9E1FF802198DC16F260795 /* Pods-ImagePickerDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = ImagePickerDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = no.ImagePicker.hyper;
+				PRODUCT_BUNDLE_IDENTIFIER = no.hyper.ImagePickerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
