@@ -9,7 +9,7 @@ public protocol ImagePickerDelegate: class {
 }
 
 public class ImagePickerController: UIViewController {
-  
+
   struct GestureConstants {
     static let maximumHeight: CGFloat = 200
     static let minimumHeight: CGFloat = 125
@@ -74,6 +74,7 @@ public class ImagePickerController: UIViewController {
   var numberOfCells: Int?
   var statusBarHidden = true
 
+  private var isTakingPicture = false
   public var doneButtonTitle: String? {
     didSet {
       if let doneButtonTitle = doneButtonTitle {
@@ -107,7 +108,7 @@ public class ImagePickerController: UIViewController {
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
-    
+
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
     UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
   }
@@ -174,7 +175,7 @@ public class ImagePickerController: UIViewController {
       where changeReason == "ExplicitVolumeChange" else { return }
 
     slider.setValue(volume, animated: false)
-    cameraController.takePicture()
+    takePicture()
   }
 
   func adjustButtonTitle(notification: NSNotification) {
@@ -237,19 +238,18 @@ public class ImagePickerController: UIViewController {
     topView.flashButton.enabled = enabled
     topView.rotateCamera.enabled = Configuration.canRotateCamera
   }
-}
 
-// MARK: - Action methods
+  private func isBelowImageLimit() -> Bool {
+    return (imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count)
+    }
 
-extension ImagePickerController: BottomContainerViewDelegate {
-
-  func pickerButtonDidPress() {
-    guard imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count else { return }
-
+  private func takePicture() {
+    guard isBelowImageLimit() && !isTakingPicture else { return }
+    isTakingPicture = true
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     let action: Void -> Void = { [unowned self] in
-      self.cameraController.takePicture()
+      self.cameraController.takePicture { self.isTakingPicture = false }
     }
 
     if Configuration.collapseCollectionViewWhileShot {
@@ -257,6 +257,15 @@ extension ImagePickerController: BottomContainerViewDelegate {
     } else {
       action()
     }
+  }
+}
+
+// MARK: - Action methods
+
+extension ImagePickerController: BottomContainerViewDelegate {
+
+  func pickerButtonDidPress() {
+    takePicture()
   }
 
   func doneButtonDidPress() {
