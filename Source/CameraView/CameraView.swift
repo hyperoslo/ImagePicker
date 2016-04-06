@@ -61,7 +61,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
       ])
 
     button.setAttributedTitle(title, forState: .Normal)
+    button.contentEdgeInsets = UIEdgeInsetsMake(5.0, 10.0, 5.0, 10.0)
     button.sizeToFit()
+    button.layer.borderColor = Configuration.settingsColor.CGColor
+    button.layer.borderWidth = 1
+    button.layer.cornerRadius = 4
     button.addTarget(self, action: #selector(settingsButtonDidTap), forControlEvents: .TouchUpInside)
 
     return button
@@ -122,7 +126,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     let centerX = view.bounds.width / 2
 
     noCameraLabel.center = CGPoint(x: centerX,
-      y: view.bounds.height / 2 - 100)
+      y: view.bounds.height / 2 - 80)
 
     noCameraButton.center = CGPoint(x: centerX,
       y: noCameraLabel.frame.maxY + 20)

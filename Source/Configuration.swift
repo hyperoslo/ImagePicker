@@ -17,7 +17,7 @@ public struct Configuration {
   public static var flashButton = UIFont(name: "HelveticaNeue-Medium", size: 12)!
   public static var noImagesFont = UIFont(name: "HelveticaNeue-Medium", size: 18)!
   public static var noCameraFont = UIFont(name: "HelveticaNeue-Medium", size: 18)!
-  public static var settingsFont = UIFont(name: "HelveticaNeue-Medium", size: 18)!
+  public static var settingsFont = UIFont(name: "HelveticaNeue-Medium", size: 16)!
 
   // MARK: Titles
 
