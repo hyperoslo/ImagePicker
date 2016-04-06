@@ -131,7 +131,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   // MARK: - Initialize camera
 
   func initializeCamera() {
-    captureSession.sessionPreset = AVCaptureSessionPreset1920x1080
     capturedDevices = NSMutableArray()
 
     showNoCamera(false)
@@ -195,18 +194,13 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     self.captureDevice = capturedDevices?.objectAtIndex(newDeviceIndex) as? AVCaptureDevice
     configureDevice()
 
-    guard let currentCaptureDevice = self.captureDevice else { return }
+    guard let _ = self.captureDevice else { return }
+
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.containerView.alpha = 1
       }, completion: { finished in
         self.captureSession.beginConfiguration()
         self.captureSession.removeInput(currentDeviceInput)
-
-        self.captureSession.sessionPreset =
-          currentCaptureDevice.supportsAVCaptureSessionPreset(AVCaptureSessionPreset1280x720)
-          ? AVCaptureSessionPreset1280x720
-          : AVCaptureSessionPreset640x480
-
         do { try
           self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
         } catch {
