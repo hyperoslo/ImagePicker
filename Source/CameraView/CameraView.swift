@@ -167,8 +167,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   
   func handlePermission(granted: Bool, device: AVCaptureDevice) {
     if granted {
-      self.captureDevice = device
-      self.capturedDevices?.addObject(device)
+      captureDevice = device
+      capturedDevices?.addObject(device)
     }
     
     dispatch_async(dispatch_get_main_queue()) {
