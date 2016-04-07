@@ -151,12 +151,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
           capturedDevices?.addObject(device)
         } else if authorizationStatus == .NotDetermined {
           AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo,
-            completionHandler: { (granted: Bool) -> Void in
-              if granted {
-                self.captureDevice = device
-                self.capturedDevices?.addObject(device)
-              }
-              self.showNoCamera(!granted)
+            completionHandler: { [weak self] (granted: Bool) -> Void in
+              self?.handlePermission(granted, device: device)
           })
         } else {
           showNoCamera(true)
@@ -167,6 +163,17 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     captureDevice = capturedDevices?.firstObject as? AVCaptureDevice
 
     if captureDevice != nil { beginSession() }
+  }
+  
+  func handlePermission(granted: Bool, device: AVCaptureDevice) {
+    if granted {
+      captureDevice = device
+      capturedDevices?.addObject(device)
+    }
+    
+    dispatch_async(dispatch_get_main_queue()) {
+      self.showNoCamera(!granted)
+    }
   }
 
   // MARK: - Actions
