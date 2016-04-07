@@ -271,8 +271,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
             let request = PHAssetChangeRequest.creationRequestForAssetFromImage(imageFromData)
             request.creationDate = NSDate()
             request.location = self.locationManager?.latestLocation
-          }, completionHandler:  { success, error in
-            self.delegate?.imageToLibrary()
+          }, completionHandler:  { [weak self] success, error in
+            dispatch_async(dispatch_get_main_queue()) {
+              self?.delegate?.imageToLibrary()
+            }
+            
             completion()
           })
       })
