@@ -130,6 +130,8 @@ public class ImageGalleryView: UIView {
       width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
+    
+    collectionView.reloadData()
   }
 
   func updateNoImagesLabel() {
