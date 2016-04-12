@@ -119,6 +119,9 @@ public class ImagePickerController: UIViewController {
     let galleryHeight: CGFloat = UIScreen.mainScreen().nativeBounds.height == 960
       ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
 
+    galleryView.collectionView.transform = CGAffineTransformIdentity
+    galleryView.collectionView.contentInset = UIEdgeInsetsZero
+    
     galleryView.frame = CGRectMake(0, totalSize.height - bottomContainer.frame.height - galleryHeight,
       totalSize.width, galleryHeight)
     galleryView.updateFrames()
