@@ -1,14 +1,24 @@
 PODS:
   - ImagePicker (1.2)
+  - MainThreadGuard (0.1.0)
 
 DEPENDENCIES:
   - ImagePicker (from `../../`)
+  - MainThreadGuard (from `https://github.com/onmyway133/MainThreadGuard`)
 
 EXTERNAL SOURCES:
   ImagePicker:
     :path: "../../"
+  MainThreadGuard:
+    :git: https://github.com/onmyway133/MainThreadGuard
+
+CHECKOUT OPTIONS:
+  MainThreadGuard:
+    :commit: 6a22bcfb2d7fd7dbf097c37cb7756be9d07dadd1
+    :git: https://github.com/onmyway133/MainThreadGuard
 
 SPEC CHECKSUMS:
   ImagePicker: 85f14ed6872f46c08d210077b5540a890a6cd151
+  MainThreadGuard: 401a64b400d749b41a9c1fe93086af05c3f33333
 
 COCOAPODS: 0.39.0
