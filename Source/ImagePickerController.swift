@@ -1,5 +1,6 @@
 import UIKit
 import MediaPlayer
+import Photos
 
 public protocol ImagePickerDelegate: class {
 
@@ -125,7 +126,7 @@ public class ImagePickerController: UIViewController {
     galleryView.frame = CGRectMake(0, totalSize.height - bottomContainer.frame.height - galleryHeight,
       totalSize.width, galleryHeight)
     galleryView.updateFrames()
-    galleryView.checkStatus()
+    checkStatus()
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
@@ -134,6 +135,53 @@ public class ImagePickerController: UIViewController {
   public override func viewWillDisappear(animated: Bool) {
     super.viewWillDisappear(animated)
     UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
+  }
+
+  func checkStatus() {
+    let currentStatus = PHPhotoLibrary.authorizationStatus()
+    guard currentStatus != .Authorized else { return }
+
+    if currentStatus == .NotDetermined { hideViews() }
+
+    PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
+      dispatch_async(dispatch_get_main_queue(), {
+        if authorizationStatus == .Denied {
+          self.presentAskPermissionAlert()
+        } else if authorizationStatus == .Authorized {
+          self.permissionGranted()
+        }
+      })
+    }
+  }
+
+  func presentAskPermissionAlert() {
+    let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
+
+    let alertAction = UIAlertAction(title: "OK", style: .Default) { _ in
+      if let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
+        UIApplication.sharedApplication().openURL(settingsURL)
+      }
+    }
+
+    let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { _ in
+      self.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    alertController.addAction(alertAction)
+    alertController.addAction(cancelAction)
+
+    presentViewController(alertController, animated: true, completion: nil)
+  }
+
+  func hideViews() {
+    enableGestures(false)
+  }
+
+  func permissionGranted() {
+    galleryView.fetchPhotos()
+    galleryView.canFetchImages = false
+    cameraController.initializeCamera()
+    enableGestures(true)
   }
 
   // MARK: - Notifications
@@ -327,25 +375,6 @@ extension ImagePickerController: TopViewDelegate {
 // MARK: - Pan gesture handler
 
 extension ImagePickerController: ImageGalleryPanGestureDelegate {
-
-  func hideViews() {
-    enableGestures(false)
-  }
-
-  func permissionGranted() {
-    galleryView.fetchPhotos()
-    galleryView.canFetchImages = false
-    cameraController.initializeCamera()
-    enableGestures(true)
-  }
-
-  func presentViewController(controller: UIAlertController) {
-    presentViewController(controller, animated: true, completion: nil)
-  }
-
-  func dismissViewController(controller: UIAlertController) {
-    dismissViewControllerAnimated(true, completion: nil)
-  }
 
   func panGestureDidStart() {
     guard let collectionSize = galleryView.collectionSize else { return }

@@ -6,10 +6,6 @@ protocol ImageGalleryPanGestureDelegate: class {
   func panGestureDidStart()
   func panGestureDidChange(translation: CGPoint)
   func panGestureDidEnd(translation: CGPoint, velocity: CGPoint)
-  func presentViewController(controller: UIAlertController)
-  func dismissViewController(controller: UIAlertController)
-  func permissionGranted()
-  func hideViews()
 }
 
 public class ImageGalleryView: UIView {
@@ -179,40 +175,6 @@ public class ImageGalleryView: UIView {
   func displayNoImagesMessage(hideCollectionView: Bool) {
     collectionView.alpha = hideCollectionView ? 0 : 1
     updateNoImagesLabel()
-  }
-
-  func checkStatus() {
-    let currentStatus = PHPhotoLibrary.authorizationStatus()
-
-    guard currentStatus != .Authorized else { return }
-
-    if currentStatus == .NotDetermined {
-      delegate?.hideViews()
-    }
-
-    PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
-      dispatch_async(dispatch_get_main_queue(), {
-        if authorizationStatus == .Denied {
-          let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
-
-          let alertAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default) { _ in
-            if let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
-              UIApplication.sharedApplication().openURL(settingsURL)
-            }
-          }
-
-          let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { _ in
-            self.delegate?.dismissViewController(alertController)
-          }
-
-          alertController.addAction(alertAction)
-          alertController.addAction(cancelAction)
-          self.delegate?.presentViewController(alertController)
-        } else if authorizationStatus == .Authorized {
-          self.delegate?.permissionGranted()
-        }
-      })
-    }
   }
 }
 
