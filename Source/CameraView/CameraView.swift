@@ -71,6 +71,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     return button
     }()
 
+  let sessionQueue = dispatch_queue_create("no.hyper.ImagePicker.SessionQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0))
+
   let captureSession = AVCaptureSession()
   var devices = AVCaptureDevice.devices()
   var captureDevice: AVCaptureDevice? {
@@ -355,10 +357,13 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     view.layer.addSublayer(previewLayer)
     previewLayer.frame = view.layer.frame
     view.clipsToBounds = true
-    captureSession.startRunning()
-    stillImageOutput = AVCaptureStillImageOutput()
-    stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-    captureSession.addOutput(stillImageOutput)
+
+    dispatch_async(sessionQueue) {
+      self.captureSession.startRunning()
+      self.stillImageOutput = AVCaptureStillImageOutput()
+      self.stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+      self.captureSession.addOutput(self.stillImageOutput)
+    }
   }
 
   // MARK: - Private helpers
