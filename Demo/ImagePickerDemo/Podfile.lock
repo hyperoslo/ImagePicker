@@ -1,5 +1,5 @@
 PODS:
-  - ImagePicker (1.2)
+  - ImagePicker (1.3)
   - MainThreadGuard (0.1.0)
 
 DEPENDENCIES:
@@ -18,7 +18,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/onmyway133/MainThreadGuard
 
 SPEC CHECKSUMS:
-  ImagePicker: 85f14ed6872f46c08d210077b5540a890a6cd151
+  ImagePicker: 667e68fdef7b08dcbb5879e410b37f331f82fc3e
   MainThreadGuard: 401a64b400d749b41a9c1fe93086af05c3f33333
 
 COCOAPODS: 0.39.0
