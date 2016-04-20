@@ -212,8 +212,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
       }, completion: { finished in
         self.captureSession.beginConfiguration()
         self.captureSession.removeInput(currentDeviceInput)
-        do { try
-          self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
+        do {
+          self.configurePreset()
+          try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
         } catch {
           print("There was an error capturing your device.")
         }
@@ -341,8 +342,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     guard captureSession.inputs.count == 0 else { return }
 
     let captureDeviceInput: AVCaptureDeviceInput?
-    do { try
-      captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
+    do {
+      try captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
+      self.configurePreset()
       captureSession.addInput(captureDeviceInput)
     } catch {
       print("Failed to capture device")
@@ -393,5 +395,25 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     default:
       break
     }
+  }
+
+  // MARK: Preset
+  func configurePreset() {
+    guard let device = self.captureDevice else { return }
+
+    for preset in preferredPresets() {
+      if device.supportsAVCaptureSessionPreset(preset) && self.captureSession.canSetSessionPreset(preset) {
+        self.captureSession.sessionPreset = preset
+        return
+      }
+    }
+  }
+
+  func preferredPresets() -> [String] {
+    return [
+      AVCaptureSessionPresetHigh,
+      AVCaptureSessionPresetMedium,
+      AVCaptureSessionPresetLow
+    ]
   }
 }
