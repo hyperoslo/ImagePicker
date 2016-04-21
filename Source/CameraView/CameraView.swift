@@ -265,9 +265,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     dispatch_async(queue, { [unowned self] in
       stillImageOutput.captureStillImageAsynchronouslyFromConnection(stillImageOutput.connectionWithMediaType(AVMediaTypeVideo),
         completionHandler: { (buffer, error) -> Void in
-          let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
 
-          guard let imageFromData = UIImage(data: imageData) else { return }
+          guard error == nil && buffer != nil && CMSampleBufferIsValid(buffer),
+            let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),
+            imageFromData = UIImage(data: imageData)
+          else { return }
 
           PHPhotoLibrary.sharedPhotoLibrary().performChanges({
             let request = PHAssetChangeRequest.creationRequestForAssetFromImage(imageFromData)
