@@ -12,6 +12,7 @@ class CameraMan {
   var stillImageOutput: AVCaptureStillImageOutput?
 
   var noCameraHandler: (() -> Void)?
+  var flashHandler: ((Bool) -> Void)?
 
   deinit {
     stop()
@@ -46,6 +47,15 @@ class CameraMan {
     stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
   }
 
+  func addInput(input: AVCaptureDeviceInput) {
+    configurePreset(input)
+    flashHandler?(input.device.hasFlash)
+
+    if session.canAddInput(input) {
+      session.addInput(input)
+    }
+  }
+
   // MARK: - Permission
 
   func checkPermission() {
@@ -78,11 +88,7 @@ class CameraMan {
   func start() {
     guard let input = backCamera, output = stillImageOutput else { return }
 
-    configurePreset(input)
-
-    if session.canAddInput(input) {
-      session.addInput(input)
-    }
+    addInput(input)
 
     if session.canAddOutput(output) {
       session.addOutput(output)
@@ -108,8 +114,8 @@ class CameraMan {
       guard let input = (currentInput == self.backCamera) ? self.frontCamera : self.backCamera else { return }
 
       self.session.removeInput(currentInput)
-      self.configurePreset(input)
-      self.session.addInput(input)
+
+      self.addInput(input)
 
       self.session.commitConfiguration()
     }
