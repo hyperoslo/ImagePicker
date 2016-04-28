@@ -180,7 +180,6 @@ public class ImagePickerController: UIViewController {
   func permissionGranted() {
     galleryView.fetchPhotos()
     galleryView.canFetchImages = false
-    cameraController.initializeCamera()
     enableGestures(true)
   }
 

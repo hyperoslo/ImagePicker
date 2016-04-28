@@ -8,7 +8,7 @@ protocol CameraViewDelegate: class {
   func imageToLibrary()
 }
 
-class CameraView: UIViewController, CLLocationManagerDelegate {
+class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
@@ -71,42 +71,32 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     return button
     }()
 
-  let sessionQueue = dispatch_queue_create("no.hyper.ImagePicker.SessionQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0))
 
-  let captureSession = AVCaptureSession()
-  var devices = AVCaptureDevice.devices()
-  var captureDevice: AVCaptureDevice? {
-    didSet {
-      if let currentDevice = captureDevice {
-        delegate?.setFlashButtonHidden(!currentDevice.hasFlash)
-      }
-    }
-  }
+  let cameraMan = CameraMan()
 
-  var capturedDevices: NSMutableArray?
   var previewLayer: AVCaptureVideoPreviewLayer?
   weak var delegate: CameraViewDelegate?
-  var stillImageOutput: AVCaptureStillImageOutput?
   var animationTimer: NSTimer?
-
   var locationManager: LocationManager?
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    initializeCamera()
 
     if Configuration.recordLocation {
       locationManager = LocationManager()
     }
 
     view.backgroundColor = Configuration.mainColor
-    previewLayer?.backgroundColor = Configuration.mainColor.CGColor
 
+    view.addSubview(containerView)
     containerView.addSubview(blurView)
+
     [focusImageView, capturedImageView].forEach {
       view.addSubview($0)
     }
+
+    cameraMan.delegate = self
+    cameraMan.start()
   }
 
   override func viewDidAppear(animated: Bool) {
@@ -118,6 +108,20 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   override func viewDidDisappear(animated: Bool) {
     super.viewDidDisappear(animated)
     locationManager?.stopUpdatingLocation()
+  }
+
+  func setupPreviewLayer() {
+    guard let layer = AVCaptureVideoPreviewLayer(session: cameraMan.session) else { return }
+
+    layer.backgroundColor = Configuration.mainColor.CGColor
+    layer.autoreverses = true
+    layer.videoGravity = AVLayerVideoGravityResizeAspectFill
+
+    view.layer.addSublayer(layer)
+    layer.frame = view.layer.frame
+    view.clipsToBounds = true
+
+    previewLayer = layer
   }
 
   // MARK: - Layout
@@ -132,49 +136,10 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
 
     noCameraButton.center = CGPoint(x: centerX,
       y: noCameraLabel.frame.maxY + 20)
-  }
 
-  // MARK: - Initialize camera
-
-  func initializeCamera() {
-    capturedDevices = NSMutableArray()
-
-    showNoCamera(false)
-
-    let authorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
-
-    if devices.isEmpty { devices = AVCaptureDevice.devices() }
-
-    for device in devices {
-      if let device = device as? AVCaptureDevice where device.hasMediaType(AVMediaTypeVideo) {
-        if authorizationStatus == .Authorized {
-          captureDevice = device
-          capturedDevices?.addObject(device)
-        } else if authorizationStatus == .NotDetermined {
-          AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo,
-            completionHandler: { [weak self] (granted: Bool) -> Void in
-              self?.handlePermission(granted, device: device)
-          })
-        } else {
-          showNoCamera(true)
-        }
-      }
-    }
-
-    captureDevice = capturedDevices?.firstObject as? AVCaptureDevice
-
-    if captureDevice != nil { beginSession() }
-  }
-  
-  func handlePermission(granted: Bool, device: AVCaptureDevice) {
-    if granted {
-      captureDevice = device
-      capturedDevices?.addObject(device)
-    }
-    
-    dispatch_async(dispatch_get_main_queue()) {
-      self.showNoCamera(!granted)
-    }
+    blurView.frame = view.bounds
+    containerView.frame = view.bounds
+    capturedImageView.frame = view.bounds
   }
 
   // MARK: - Actions
@@ -190,103 +155,40 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   // MARK: - Camera actions
 
   func rotateCamera() {
-    guard let captureDevice = captureDevice,
-      currentDeviceInput = captureSession.inputs.first as? AVCaptureDeviceInput,
-      deviceIndex = capturedDevices?.indexOfObject(captureDevice) else { return }
-
-    var newDeviceIndex = 0
-
-    blurView.frame = view.bounds
-    containerView.frame = view.bounds
-    view.addSubview(containerView)
-
-    if let index = capturedDevices?.count where deviceIndex != index - 1 && deviceIndex < capturedDevices?.count {
-      newDeviceIndex = deviceIndex + 1
-    }
-
-    self.captureDevice = capturedDevices?.objectAtIndex(newDeviceIndex) as? AVCaptureDevice
-    configureDevice()
-
-    guard let _ = self.captureDevice else { return }
-
-    UIView.animateWithDuration(0.3, animations: {
+    UIView.animateWithDuration(0.3, animations: { _ in
       self.containerView.alpha = 1
       }, completion: { finished in
-        self.captureSession.beginConfiguration()
-        self.captureSession.removeInput(currentDeviceInput)
-
-        self.configurePreset()
-
-        if let input = try? AVCaptureDeviceInput(device: self.captureDevice)
-          where self.captureSession.canAddInput(input) {
-          self.captureSession.addInput(input)
+        self.cameraMan.switchCamera {
+          UIView.animateWithDuration(0.7) {
+            self.containerView.alpha = 0
+          }
         }
-
-        self.captureSession.commitConfiguration()
-        UIView.animateWithDuration(0.7, animations: { [unowned self] in
-          self.containerView.alpha = 0
-          })
     })
   }
 
   func flashCamera(title: String) {
-    guard let _ = captureDevice?.hasFlash else { return }
+    let mapping: [String: AVCaptureFlashMode] = [
+      "ON": .On,
+      "OFF": .Off
+    ]
 
-    do {
-      try captureDevice?.lockForConfiguration()
-    } catch _ { }
-
-    switch title {
-    case "ON":
-      captureDevice?.flashMode = .On
-    case "OFF":
-      captureDevice?.flashMode = .Off
-    default:
-      captureDevice?.flashMode = .Auto
-    }
+    cameraMan.flash(mapping[title] ?? .Auto)
   }
 
   func takePicture(completion: () -> ()) {
-    capturedImageView.frame = view.bounds
+    guard let previewLayer = previewLayer else { return }
 
     UIView.animateWithDuration(0.1, animations: {
       self.capturedImageView.alpha = 1
       }, completion: { _ in
-        UIView.animateWithDuration(0.1, animations: {
+        UIView.animateWithDuration(0.1) {
           self.capturedImageView.alpha = 0
-        })
+        }
     })
 
-    let queue = dispatch_queue_create("session queue", DISPATCH_QUEUE_SERIAL)
-
-    guard let stillImageOutput = self.stillImageOutput else { return }
-
-    if let videoOrientation = previewLayer?.connection.videoOrientation {
-      stillImageOutput.connectionWithMediaType(AVMediaTypeVideo).videoOrientation = videoOrientation
+    self.cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation) {
+      completion()
     }
-
-    dispatch_async(queue, { [unowned self] in
-      stillImageOutput.captureStillImageAsynchronouslyFromConnection(stillImageOutput.connectionWithMediaType(AVMediaTypeVideo),
-        completionHandler: { (buffer, error) -> Void in
-
-          guard error == nil && buffer != nil && CMSampleBufferIsValid(buffer),
-            let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),
-            imageFromData = UIImage(data: imageData)
-          else { return }
-
-          PHPhotoLibrary.sharedPhotoLibrary().performChanges({
-            let request = PHAssetChangeRequest.creationRequestForAssetFromImage(imageFromData)
-            request.creationDate = NSDate()
-            request.location = self.locationManager?.latestLocation
-          }, completionHandler:  { [weak self] success, error in
-            dispatch_async(dispatch_get_main_queue()) {
-              self?.delegate?.imageToLibrary()
-            }
-            
-            completion()
-          })
-      })
-    })
   }
 
   // MARK: - Timer methods
@@ -294,31 +196,26 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
   func timerDidFire() {
     UIView.animateWithDuration(0.3, animations: { [unowned self] in
       self.focusImageView.alpha = 0
-      }) { _ in
+      }, completion: { _ in
         self.focusImageView.transform = CGAffineTransformIdentity
-    }
+    })
   }
 
   // MARK: - Camera methods
 
   func focusTo(point: CGPoint) {
-    guard let device = captureDevice else { return }
-    do { try device.lockForConfiguration() } catch {
-      print("Couldn't lock configuration")
-    }
+    let convertedPoint = CGPoint(x: point.x / UIScreen.mainScreen().bounds.width,
+                                 y:point.y / UIScreen.mainScreen().bounds.height)
 
-    if device.isFocusModeSupported(AVCaptureFocusMode.Locked) {
-      device.focusPointOfInterest = CGPointMake(point.x / UIScreen.mainScreen().bounds.width, point.y / UIScreen.mainScreen().bounds.height)
-      device.unlockForConfiguration()
-      focusImageView.center = point
-      UIView.animateWithDuration(0.5, animations: { [unowned self] in
-        self.focusImageView.alpha = 1
-        self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
-        }, completion: { _ in
-          self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
-            selector: #selector(CameraView.timerDidFire), userInfo: nil, repeats: false)
-      })
-    }
+    cameraMan.focus(convertedPoint)
+
+    UIView.animateWithDuration(0.5, animations: { _ in
+      self.focusImageView.alpha = 1
+      self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
+      }, completion: { _ in
+        self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
+          selector: #selector(CameraView.timerDidFire), userInfo: nil, repeats: false)
+    })
   }
 
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -329,44 +226,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     focusImageView.transform = CGAffineTransformIdentity
     animationTimer?.invalidate()
     focusTo(CGPointMake(touchX, touchY))
-  }
-
-  func configureDevice() {
-    if let device = captureDevice {
-      do {
-        try device.lockForConfiguration()
-      } catch _ {
-        print("Couldn't lock configuration")
-      }
-      device.unlockForConfiguration()
-    }
-  }
-
-  func beginSession() {
-    configureDevice()
-    guard captureSession.inputs.count == 0 else { return }
-
-    self.configurePreset()
-
-    if let input = try? AVCaptureDeviceInput(device: self.captureDevice)
-      where self.captureSession.canAddInput(input) {
-      self.captureSession.addInput(input)
-    }
-
-    guard let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) else { return }
-    self.previewLayer = previewLayer
-    previewLayer.autoreverses = true
-    previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-    view.layer.addSublayer(previewLayer)
-    previewLayer.frame = view.layer.frame
-    view.clipsToBounds = true
-
-    dispatch_async(sessionQueue) {
-      self.captureSession.startRunning()
-      self.stillImageOutput = AVCaptureStillImageOutput()
-      self.stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-      self.captureSession.addOutput(self.stillImageOutput)
-    }
   }
 
   // MARK: - Private helpers
@@ -403,23 +262,16 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     }
   }
 
-  // MARK: Preset
-  func configurePreset() {
-    guard let device = self.captureDevice else { return }
-
-    for preset in preferredPresets() {
-      if device.supportsAVCaptureSessionPreset(preset) && self.captureSession.canSetSessionPreset(preset) {
-        self.captureSession.sessionPreset = preset
-        return
-      }
-    }
+  // CameraManDelegate
+  func cameraManNotAvailable(cameraMan: CameraMan) {
+    showNoCamera(true)
   }
 
-  func preferredPresets() -> [String] {
-    return [
-      AVCaptureSessionPresetHigh,
-      AVCaptureSessionPresetMedium,
-      AVCaptureSessionPresetLow
-    ]
+  func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput) {
+    delegate?.setFlashButtonHidden(input.device.hasFlash)
+  }
+
+  func cameraManWillStart(cameraMan: CameraMan) {
+    setupPreviewLayer()
   }
 }

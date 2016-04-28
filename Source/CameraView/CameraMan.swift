@@ -2,7 +2,14 @@ import Foundation
 import AVFoundation
 import PhotosUI
 
+protocol CameraManDelegate: class {
+  func cameraManNotAvailable(cameraMan: CameraMan)
+  func cameraManWillStart(cameraMan: CameraMan)
+  func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput)
+}
+
 class CameraMan {
+  weak var delegate: CameraManDelegate?
 
   let session = AVCaptureSession()
   let queue = dispatch_queue_create("no.hyper.ImagePicker.Camera.SessionQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0))
@@ -11,16 +18,13 @@ class CameraMan {
   var frontCamera: AVCaptureDeviceInput?
   var stillImageOutput: AVCaptureStillImageOutput?
 
-  var noCameraHandler: (() -> Void)?
-  var flashHandler: ((Bool) -> Void)?
-
   deinit {
     stop()
   }
 
   // MARK: - Setup
 
-  func setup() {
+  func start() {
     checkPermission()
   }
 
@@ -49,10 +53,10 @@ class CameraMan {
 
   func addInput(input: AVCaptureDeviceInput) {
     configurePreset(input)
-    flashHandler?(input.device.hasFlash)
 
     if session.canAddInput(input) {
       session.addInput(input)
+      delegate?.cameraMan(self, didChangeInput: input)
     }
   }
 
@@ -63,11 +67,11 @@ class CameraMan {
 
     switch status {
     case .Authorized:
-      setupDevices()
+      setup()
     case .NotDetermined:
       requestPermission()
     default:
-      noCameraHandler?()
+      delegate?.cameraManNotAvailable(self)
     }
   }
 
@@ -75,9 +79,9 @@ class CameraMan {
     AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) { granted in
       dispatch_async(dispatch_get_main_queue()) {
         if granted {
-          self.setupDevices()
+          self.setup()
         } else {
-          self.noCameraHandler?()
+          self.delegate?.cameraManNotAvailable(self)
         }
       }
     }
@@ -85,7 +89,14 @@ class CameraMan {
 
   // MARK: - Session
 
-  func start() {
+  var currentInput: AVCaptureDeviceInput? {
+    return session.inputs.first as? AVCaptureDeviceInput
+  }
+
+  private func setup() {
+    // Devices
+    setupDevices()
+
     guard let input = backCamera, output = stillImageOutput else { return }
 
     addInput(input)
@@ -93,6 +104,8 @@ class CameraMan {
     if session.canAddOutput(output) {
       session.addOutput(output)
     }
+
+    self.delegate?.cameraManWillStart(self)
 
     dispatch_async(queue) {
       self.session.startRunning()
@@ -105,19 +118,24 @@ class CameraMan {
     }
   }
 
-  func switchCamera() {
-    guard let currentInput = session.inputs.first as? AVCaptureDeviceInput else { return }
+  func switchCamera(completion: (() -> Void)? = nil) {
+    guard let currentInput = currentInput else { return }
 
     dispatch_async(queue) {
+      guard let input = (currentInput == self.backCamera) ? self.frontCamera : self.backCamera
+        else {
+          completion?()
+          return
+      }
+
       self.session.beginConfiguration()
-
-      guard let input = (currentInput == self.backCamera) ? self.frontCamera : self.backCamera else { return }
-
       self.session.removeInput(currentInput)
-
       self.addInput(input)
-
       self.session.commitConfiguration()
+
+      dispatch_async(dispatch_get_main_queue()) {
+        completion?()
+      }
     }
   }
 
@@ -150,6 +168,31 @@ class CameraMan {
           completion?()
         }
     })
+  }
+
+  func flash(mode: AVCaptureFlashMode) {
+    dispatch_async(queue) {
+      self.configure {
+        self.currentInput?.device.flashMode = mode
+      }
+    }
+  }
+
+  func focus(point: CGPoint) {
+    guard let device = currentInput?.device where device.isFocusModeSupported(AVCaptureFocusMode.Locked) else { return }
+
+    configure {
+      device.focusPointOfInterest = point
+    }
+  }
+
+  // MARK: - Configure
+
+  func configure(block: () -> Void) {
+    if let device = currentInput?.device where (try? device.lockForConfiguration()) != nil {
+      block()
+      device.unlockForConfiguration()
+    }
   }
 
   // MARK: - Preset
