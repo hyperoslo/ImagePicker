@@ -6,7 +6,7 @@ class CameraMan {
 
   let session = AVCaptureSession()
   let queue = dispatch_queue_create("no.hyper.ImagePicker.Camera.SessionQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0))
-  
+
   var backCamera: AVCaptureDeviceInput?
   var frontCamera: AVCaptureDeviceInput?
   var stillImageOutput: AVCaptureStillImageOutput?
@@ -113,6 +113,37 @@ class CameraMan {
 
       self.session.commitConfiguration()
     }
+  }
+
+  func takePhoto(previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?, completion: (() -> Void)? = nil) {
+    guard let connection = stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo) else { return }
+
+    connection.videoOrientation = previewLayer.connection.videoOrientation
+
+    dispatch_async(queue) {
+      self.stillImageOutput?.captureStillImageAsynchronouslyFromConnection(connection) {
+        buffer, error in
+
+        guard error == nil && buffer != nil && CMSampleBufferIsValid(buffer),
+          let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),
+          image = UIImage(data: imageData)
+          else { return }
+
+        self.savePhoto(image, location: location, completion: completion)
+      }
+    }
+  }
+
+  func savePhoto(image: UIImage, location: CLLocation?, completion: (() -> Void)? = nil) {
+    PHPhotoLibrary.sharedPhotoLibrary().performChanges({
+      let request = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
+      request.creationDate = NSDate()
+      request.location = location
+      }, completionHandler: { _ in
+        dispatch_async(dispatch_get_main_queue()) {
+          completion?()
+        }
+    })
   }
 
   // MARK: - Preset
