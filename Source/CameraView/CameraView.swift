@@ -284,7 +284,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     delegate?.setFlashButtonHidden(!input.device.hasFlash)
   }
 
-  func cameraManWillStart(cameraMan: CameraMan) {
+  func cameraManDidStart(cameraMan: CameraMan) {
     setupPreviewLayer()
   }
 }
