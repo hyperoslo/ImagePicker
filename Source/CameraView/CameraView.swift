@@ -6,6 +6,7 @@ protocol CameraViewDelegate: class {
 
   func setFlashButtonHidden(hidden: Bool)
   func imageToLibrary()
+  func cameraNotAvailable()
 }
 
 class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
@@ -267,6 +268,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   // CameraManDelegate
   func cameraManNotAvailable(cameraMan: CameraMan) {
     showNoCamera(true)
+    focusImageView.hidden = true
+    delegate?.cameraNotAvailable()
   }
 
   func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput) {

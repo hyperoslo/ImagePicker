@@ -356,6 +356,12 @@ extension ImagePickerController: CameraViewDelegate {
         self.galleryView.collectionView.transform = CGAffineTransformIdentity
     }
   }
+
+  func cameraNotAvailable() {
+    topView.flashButton.hidden = true
+    topView.rotateCamera.hidden = true
+    bottomContainer.pickerButton.enabled = false
+  }
 }
 
 // MARK: - TopView delegate methods
