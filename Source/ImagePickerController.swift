@@ -144,13 +144,13 @@ public class ImagePickerController: UIViewController {
     if currentStatus == .NotDetermined { hideViews() }
 
     PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
-      dispatch_async(dispatch_get_main_queue(), {
+      dispatch_async(dispatch_get_main_queue()) {
         if authorizationStatus == .Denied {
           self.presentAskPermissionAlert()
         } else if authorizationStatus == .Authorized {
           self.permissionGranted()
         }
-      })
+      }
     }
   }
 
