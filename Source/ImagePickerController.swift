@@ -102,7 +102,7 @@ public class ImagePickerController: UIViewController {
 
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
-    try! AVAudioSession.sharedInstance().setActive(true)
+    try? AVAudioSession.sharedInstance().setActive(true)
 
     subscribe()
     setupConstraints()
@@ -187,7 +187,7 @@ public class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
-    try! AVAudioSession.sharedInstance().setActive(false)
+    try? AVAudioSession.sharedInstance().setActive(false)
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
 
