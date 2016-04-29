@@ -96,7 +96,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }
 
     cameraMan.delegate = self
-    cameraMan.start()
+    cameraMan.setup()
   }
 
   override func viewDidAppear(animated: Bool) {
@@ -157,7 +157,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   func rotateCamera() {
     UIView.animateWithDuration(0.3, animations: { _ in
       self.containerView.alpha = 1
-      }, completion: { finished in
+      }, completion: { _ in
         self.cameraMan.switchCamera {
           UIView.animateWithDuration(0.7) {
             self.containerView.alpha = 0
@@ -186,8 +186,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
         }
     })
 
-    self.cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation) {
+    cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation) {
       completion()
+      self.delegate?.imageToLibrary()
     }
   }
 
@@ -209,6 +210,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
     cameraMan.focus(convertedPoint)
 
+    focusImageView.center = point
     UIView.animateWithDuration(0.5, animations: { _ in
       self.focusImageView.alpha = 1
       self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
@@ -268,7 +270,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   }
 
   func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput) {
-    delegate?.setFlashButtonHidden(input.device.hasFlash)
+    delegate?.setFlashButtonHidden(!input.device.hasFlash)
   }
 
   func cameraManWillStart(cameraMan: CameraMan) {

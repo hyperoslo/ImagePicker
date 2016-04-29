@@ -24,7 +24,7 @@ class CameraMan {
 
   // MARK: - Setup
 
-  func start() {
+  func setup() {
     checkPermission()
   }
 
@@ -56,7 +56,10 @@ class CameraMan {
 
     if session.canAddInput(input) {
       session.addInput(input)
-      delegate?.cameraMan(self, didChangeInput: input)
+
+      dispatch_async(dispatch_get_main_queue()) {
+        self.delegate?.cameraMan(self, didChangeInput: input)
+      }
     }
   }
 
@@ -67,7 +70,7 @@ class CameraMan {
 
     switch status {
     case .Authorized:
-      setup()
+      start()
     case .NotDetermined:
       requestPermission()
     default:
@@ -79,7 +82,7 @@ class CameraMan {
     AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) { granted in
       dispatch_async(dispatch_get_main_queue()) {
         if granted {
-          self.setup()
+          self.start()
         } else {
           self.delegate?.cameraManNotAvailable(self)
         }
@@ -93,7 +96,7 @@ class CameraMan {
     return session.inputs.first as? AVCaptureDeviceInput
   }
 
-  private func setup() {
+  private func start() {
     // Devices
     setupDevices()
 
@@ -105,7 +108,9 @@ class CameraMan {
       session.addOutput(output)
     }
 
-    self.delegate?.cameraManWillStart(self)
+    dispatch_async(dispatch_get_main_queue()) {
+      self.delegate?.cameraManWillStart(self)
+    }
 
     dispatch_async(queue) {
       self.session.startRunning()
@@ -119,19 +124,25 @@ class CameraMan {
   }
 
   func switchCamera(completion: (() -> Void)? = nil) {
-    guard let currentInput = currentInput else { return }
+    guard let currentInput = currentInput
+      else {
+        completion?()
+        return
+    }
 
     dispatch_async(queue) {
       guard let input = (currentInput == self.backCamera) ? self.frontCamera : self.backCamera
         else {
-          completion?()
+          dispatch_async(dispatch_get_main_queue()) {
+            completion?()
+          }
           return
       }
 
-      self.session.beginConfiguration()
-      self.session.removeInput(currentInput)
-      self.addInput(input)
-      self.session.commitConfiguration()
+      self.configure {
+        self.session.removeInput(currentInput)
+        self.addInput(input)
+      }
 
       dispatch_async(dispatch_get_main_queue()) {
         completion?()
@@ -151,7 +162,12 @@ class CameraMan {
         guard error == nil && buffer != nil && CMSampleBufferIsValid(buffer),
           let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),
           image = UIImage(data: imageData)
-          else { return }
+          else {
+            dispatch_async(dispatch_get_main_queue()) {
+              completion?()
+            }
+            return
+        }
 
         self.savePhoto(image, location: location, completion: completion)
       }
@@ -171,9 +187,11 @@ class CameraMan {
   }
 
   func flash(mode: AVCaptureFlashMode) {
+    guard let device = currentInput?.device where device.isFlashModeSupported(mode) else { return }
+
     dispatch_async(queue) {
-      self.configure {
-        self.currentInput?.device.flashMode = mode
+      self.lock {
+        device.flashMode = mode
       }
     }
   }
@@ -181,26 +199,35 @@ class CameraMan {
   func focus(point: CGPoint) {
     guard let device = currentInput?.device where device.isFocusModeSupported(AVCaptureFocusMode.Locked) else { return }
 
-    configure {
-      device.focusPointOfInterest = point
+    dispatch_async(queue) {
+      self.lock {
+        device.focusPointOfInterest = point
+      }
     }
   }
 
-  // MARK: - Configure
+  // MARK: - Lock
 
-  func configure(block: () -> Void) {
+  func lock(block: () -> Void) {
     if let device = currentInput?.device where (try? device.lockForConfiguration()) != nil {
       block()
       device.unlockForConfiguration()
     }
   }
 
+  // MARK: - Configure
+  func configure(block: () -> Void) {
+    session.beginConfiguration()
+    block()
+    session.commitConfiguration()
+  }
+
   // MARK: - Preset
 
   func configurePreset(input: AVCaptureDeviceInput) {
-    preferredPresets().forEach {
-      if input.device.supportsAVCaptureSessionPreset($0) && self.session.canSetSessionPreset($0) {
-        self.session.sessionPreset = $0
+    for asset in preferredPresets() {
+      if input.device.supportsAVCaptureSessionPreset(asset) && self.session.canSetSessionPreset(asset) {
+        self.session.sessionPreset = asset
         return
       }
     }
