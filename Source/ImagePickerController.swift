@@ -99,6 +99,7 @@ public class ImagePickerController: UIViewController {
 
     view.backgroundColor = .whiteColor()
     view.backgroundColor = Configuration.mainColor
+
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     try! AVAudioSession.sharedInstance().setActive(true)
