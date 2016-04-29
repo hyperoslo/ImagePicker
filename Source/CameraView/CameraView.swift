@@ -6,6 +6,7 @@ protocol CameraViewDelegate: class {
 
   func setFlashButtonHidden(hidden: Bool)
   func imageToLibrary()
+  func cameraNotAvailable()
 }
 
 class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
@@ -71,6 +72,12 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     return button
     }()
 
+  lazy var tapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
+    let gesture = UITapGestureRecognizer()
+    gesture.addTarget(self, action: #selector(tapGestureRecognizerHandler(_:)))
+
+    return gesture
+    }()
 
   let cameraMan = CameraMan()
 
@@ -94,6 +101,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     [focusImageView, capturedImageView].forEach {
       view.addSubview($0)
     }
+
+    view.addGestureRecognizer(tapGestureRecognizer)
 
     cameraMan.delegate = self
     cameraMan.setup()
@@ -220,14 +229,14 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     })
   }
 
-  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    guard let firstTouch = touches.first else { return }
-    let anyTouch = firstTouch
-    let touchX = anyTouch.locationInView(view).x
-    let touchY = anyTouch.locationInView(view).y
+  // MARK: - Tap
+
+  func tapGestureRecognizerHandler(gesture: UITapGestureRecognizer) {
+    let touch = gesture.locationInView(view)
+
     focusImageView.transform = CGAffineTransformIdentity
     animationTimer?.invalidate()
-    focusTo(CGPointMake(touchX, touchY))
+    focusTo(touch)
   }
 
   // MARK: - Private helpers
@@ -267,13 +276,15 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   // CameraManDelegate
   func cameraManNotAvailable(cameraMan: CameraMan) {
     showNoCamera(true)
+    focusImageView.hidden = true
+    delegate?.cameraNotAvailable()
   }
 
   func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput) {
     delegate?.setFlashButtonHidden(!input.device.hasFlash)
   }
 
-  func cameraManWillStart(cameraMan: CameraMan) {
+  func cameraManDidStart(cameraMan: CameraMan) {
     setupPreviewLayer()
   }
 }

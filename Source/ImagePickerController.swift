@@ -99,9 +99,10 @@ public class ImagePickerController: UIViewController {
 
     view.backgroundColor = .whiteColor()
     view.backgroundColor = Configuration.mainColor
+
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
-    try! AVAudioSession.sharedInstance().setActive(true)
+    try? AVAudioSession.sharedInstance().setActive(true)
 
     subscribe()
     setupConstraints()
@@ -186,7 +187,7 @@ public class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
-    try! AVAudioSession.sharedInstance().setActive(false)
+    try? AVAudioSession.sharedInstance().setActive(false)
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
 
@@ -355,6 +356,12 @@ extension ImagePickerController: CameraViewDelegate {
       }) { _ in
         self.galleryView.collectionView.transform = CGAffineTransformIdentity
     }
+  }
+
+  func cameraNotAvailable() {
+    topView.flashButton.hidden = true
+    topView.rotateCamera.hidden = true
+    bottomContainer.pickerButton.enabled = false
   }
 }
 

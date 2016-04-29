@@ -4,7 +4,7 @@ import PhotosUI
 
 protocol CameraManDelegate: class {
   func cameraManNotAvailable(cameraMan: CameraMan)
-  func cameraManWillStart(cameraMan: CameraMan)
+  func cameraManDidStart(cameraMan: CameraMan)
   func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput)
 }
 
@@ -108,12 +108,12 @@ class CameraMan {
       session.addOutput(output)
     }
 
-    dispatch_async(dispatch_get_main_queue()) {
-      self.delegate?.cameraManWillStart(self)
-    }
-
     dispatch_async(queue) {
       self.session.startRunning()
+
+      dispatch_async(dispatch_get_main_queue()) {
+        self.delegate?.cameraManDidStart(self)
+      }
     }
   }
 
