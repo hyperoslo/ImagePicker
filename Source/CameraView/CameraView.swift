@@ -209,16 +209,17 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
 
     guard let _ = self.captureDevice else { return }
 
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animateWithDuration(0.3, animations: {
       self.containerView.alpha = 1
       }, completion: { finished in
         self.captureSession.beginConfiguration()
         self.captureSession.removeInput(currentDeviceInput)
-        do {
-          self.configurePreset()
-          try self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice))
-        } catch {
-          print("There was an error capturing your device.")
+
+        self.configurePreset()
+
+        if let input = try? AVCaptureDeviceInput(device: self.captureDevice)
+          where self.captureSession.canAddInput(input) {
+          self.captureSession.addInput(input)
         }
 
         self.captureSession.commitConfiguration()
@@ -345,13 +346,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate {
     configureDevice()
     guard captureSession.inputs.count == 0 else { return }
 
-    let captureDeviceInput: AVCaptureDeviceInput?
-    do {
-      try captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice)
-      self.configurePreset()
-      captureSession.addInput(captureDeviceInput)
-    } catch {
-      print("Failed to capture device")
+    self.configurePreset()
+
+    if let input = try? AVCaptureDeviceInput(device: self.captureDevice)
+      where self.captureSession.canAddInput(input) {
+      self.captureSession.addInput(input)
     }
 
     guard let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession) else { return }
