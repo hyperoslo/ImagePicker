@@ -21,11 +21,14 @@ public struct Configuration {
 
   // MARK: Titles
 
+  public static var OKButtonTitle = "OK"
   public static var cancelButtonTitle = "Cancel"
   public static var doneButtonTitle = "Done"
   public static var noImagesTitle = "No images available"
   public static var noCameraTitle = "Camera is not available"
   public static var settingsTitle = "Settings"
+  public static var requestPermissionTitle = "Permission denied"
+  public static var requestPermissionMessage = "Please, allow the application to access to your photo library."
 
   // MARK: Dimensions
 

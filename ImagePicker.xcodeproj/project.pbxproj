@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		39D134101CAC4B4E00EA2ECE /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */; };
 		39E3C3311CAFD79200340DAD /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E3C3301CAFD79200340DAD /* LocationManager.swift */; };
+		D20FF6361CD23426000F3BFE /* CameraMan.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20FF6351CD23426000F3BFE /* CameraMan.swift */; };
 		D5D370C01C44FD1600690C0A /* AUTO@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BA1C44FD1600690C0A /* AUTO@3x.png */; };
 		D5D370C11C44FD1600690C0A /* cameraIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BB1C44FD1600690C0A /* cameraIcon@3x.png */; };
 		D5D370C21C44FD1600690C0A /* focusIcon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D5D370BC1C44FD1600690C0A /* focusIcon@3x.png */; };
@@ -45,6 +46,7 @@
 /* Begin PBXFileReference section */
 		39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		39E3C3301CAFD79200340DAD /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		D20FF6351CD23426000F3BFE /* CameraMan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraMan.swift; sourceTree = "<group>"; };
 		D5D370BA1C44FD1600690C0A /* AUTO@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AUTO@3x.png"; sourceTree = "<group>"; };
 		D5D370BB1C44FD1600690C0A /* cameraIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cameraIcon@3x.png"; sourceTree = "<group>"; };
 		D5D370BC1C44FD1600690C0A /* focusIcon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "focusIcon@3x.png"; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				D5DC59B21C201CC4003BD79B /* CameraView.swift */,
+				D20FF6351CD23426000F3BFE /* CameraMan.swift */,
 			);
 			path = CameraView;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				D5DC59C91C201CC4003BD79B /* ImageGalleryView.swift in Sources */,
 				D5DC59C31C201CC4003BD79B /* ButtonPicker.swift in Sources */,
 				D5DC59C51C201CC4003BD79B /* StackView.swift in Sources */,
+				D20FF6361CD23426000F3BFE /* CameraMan.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
