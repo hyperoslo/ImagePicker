@@ -155,15 +155,15 @@ public class ImagePickerController: UIViewController {
   }
 
   func presentAskPermissionAlert() {
-    let alertController = UIAlertController(title: "Permission denied", message: "Please, allow the application to access to your photo library.", preferredStyle: .Alert)
+    let alertController = UIAlertController(title: Configuration.requestPermissionTitle, message: Configuration.requestPermissionMessage, preferredStyle: .Alert)
 
-    let alertAction = UIAlertAction(title: "OK", style: .Default) { _ in
+    let alertAction = UIAlertAction(title: Configuration.OKButtonTitle, style: .Default) { _ in
       if let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
         UIApplication.sharedApplication().openURL(settingsURL)
       }
     }
 
-    let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { _ in
+    let cancelAction = UIAlertAction(title: Configuration.cancelButtonTitle, style: .Cancel) { _ in
       self.dismissViewControllerAnimated(true, completion: nil)
     }
 
