@@ -118,9 +118,7 @@ class CameraMan {
   }
 
   func stop() {
-    dispatch_async(queue) {
-      self.session.stopRunning()
-    }
+    self.session.stopRunning()
   }
 
   func switchCamera(completion: (() -> Void)? = nil) {
