@@ -109,7 +109,7 @@ public class ImagePickerController: UIViewController {
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
 
-    try? AVAudioSession.sharedInstance().setActive(true)
+    _ = try? AVAudioSession.sharedInstance().setActive(true)
 
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
     UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
@@ -189,7 +189,7 @@ public class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
-    try? AVAudioSession.sharedInstance().setActive(false)
+    _ = try? AVAudioSession.sharedInstance().setActive(false)
     NSNotificationCenter.defaultCenter().removeObserver(self)
   }
 
