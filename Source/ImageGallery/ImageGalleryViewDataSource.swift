@@ -7,7 +7,7 @@ extension ImageGalleryView: UICollectionViewDataSource {
   }
 
   public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    displayNoImagesMessage(assets.count == 0)
+    displayNoImagesMessage(assets.isEmpty)
     return assets.count
   }
 

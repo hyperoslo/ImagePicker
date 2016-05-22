@@ -53,7 +53,7 @@ public struct ImagePicker {
         }
       }
     }
-    
+
     return images
   }
 }

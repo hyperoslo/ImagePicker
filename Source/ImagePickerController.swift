@@ -102,14 +102,14 @@ public class ImagePickerController: UIViewController {
 
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
-    try? AVAudioSession.sharedInstance().setActive(true)
-
     subscribe()
     setupConstraints()
   }
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
+
+    try? AVAudioSession.sharedInstance().setActive(true)
 
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
     UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
@@ -123,9 +123,11 @@ public class ImagePickerController: UIViewController {
 
     galleryView.collectionView.transform = CGAffineTransformIdentity
     galleryView.collectionView.contentInset = UIEdgeInsetsZero
-    
-    galleryView.frame = CGRectMake(0, totalSize.height - bottomContainer.frame.height - galleryHeight,
-      totalSize.width, galleryHeight)
+
+    galleryView.frame = CGRect(x: 0,
+                               y: totalSize.height - bottomContainer.frame.height - galleryHeight,
+                               width: totalSize.width,
+                               height: galleryHeight)
     galleryView.updateFrames()
     checkStatus()
 
@@ -216,13 +218,13 @@ public class ImagePickerController: UIViewController {
   func didReloadAssets(notification: NSNotification) {
     adjustButtonTitle(notification)
     galleryView.collectionView.reloadData()
-    galleryView.collectionView.setContentOffset(CGPointZero, animated: false)
+    galleryView.collectionView.setContentOffset(CGPoint.zero, animated: false)
   }
 
   func volumeChanged(notification: NSNotification) {
     guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
-      let userInfo = notification.userInfo,
-      let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String
+      userInfo = notification.userInfo,
+      changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String
       where changeReason == "ExplicitVolumeChange" else { return }
 
     slider.setValue(volume, animated: false)
@@ -453,6 +455,6 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     coordinator.animateAlongsideTransition({ (context) in
       self.collapseGalleryView(nil)
       self.galleryView.updateFrames()
-      }, completion: nil)    
+      }, completion: nil)
   }
 }
