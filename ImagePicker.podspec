@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "ImagePicker"
   s.summary          = "Reinventing the way ImagePicker works."
-  s.version          = "1.3"
+  s.version          = "1.3.0"
   s.homepage         = "https://github.com/hyperoslo/ImagePicker"
   s.license          = 'MIT'
   s.author           = { "Hyper Interaktiv AS" => "ios@hyper.no" }
