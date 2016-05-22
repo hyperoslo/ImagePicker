@@ -22,7 +22,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     let imageView = UIImageView()
     imageView.image = AssetManager.getImage("focusIcon")
     imageView.backgroundColor = .clearColor()
-    imageView.frame = CGRectMake(0, 0, 110, 110)
+    imageView.frame = CGRect(x: 0, y: 0, width: 110, height: 110)
     imageView.alpha = 0
 
     return imageView
@@ -62,7 +62,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
       ])
 
     button.setAttributedTitle(title, forState: .Normal)
-    button.contentEdgeInsets = UIEdgeInsetsMake(5.0, 10.0, 5.0, 10.0)
+    button.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
     button.sizeToFit()
     button.layer.borderColor = Configuration.settingsColor.CGColor
     button.layer.borderWidth = 1

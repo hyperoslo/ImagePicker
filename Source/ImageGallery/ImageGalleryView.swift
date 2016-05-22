@@ -18,7 +18,7 @@ public class ImageGalleryView: UIView {
   }
 
   lazy public var collectionView: UICollectionView = { [unowned self] in
-    let collectionView = UICollectionView(frame: CGRectZero,
+    let collectionView = UICollectionView(frame: CGRect.zero,
       collectionViewLayout: self.collectionViewLayout)
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.backgroundColor = Configuration.mainColor
@@ -126,19 +126,19 @@ public class ImageGalleryView: UIView {
       width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
-    
+
     collectionView.reloadData()
   }
 
   func updateNoImagesLabel() {
-    let height = CGRectGetHeight(bounds)
+    let height = bounds.height
     let threshold = Dimensions.galleryBarHeight * 2
 
     UIView.animateWithDuration(0.25) {
       if threshold > height || self.collectionView.alpha != 0 {
         self.noImagesLabel.alpha = 0
       } else {
-        self.noImagesLabel.center = CGPoint(x: CGRectGetWidth(self.bounds) / 2, y: height / 2)
+        self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: height / 2)
         self.noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
       }
     }
@@ -188,7 +188,7 @@ extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
   public func collectionView(collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-      guard let collectionSize = collectionSize else { return CGSizeZero }
+      guard let collectionSize = collectionSize else { return CGSize.zero }
 
       return collectionSize
   }

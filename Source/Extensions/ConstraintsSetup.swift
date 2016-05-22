@@ -74,7 +74,7 @@ extension TopView {
     addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Width,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
       multiplier: 1, constant: 55))
-    
+
     if Configuration.canRotateCamera {
       addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Right,
         relatedBy: .Equal, toItem: self, attribute: .Right,
@@ -155,7 +155,7 @@ extension ButtonPicker {
 
   func setupConstraints() {
     let attributes: [NSLayoutAttribute] = [.CenterX, .CenterY]
-    
+
     for attribute in attributes {
       addConstraint(NSLayoutConstraint(item: numberLabel, attribute: attribute,
         relatedBy: .Equal, toItem: self, attribute: attribute,

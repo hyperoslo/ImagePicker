@@ -96,7 +96,7 @@ class ImageStackView: UIView {
       activityView.frame.origin.x = firstVisibleView.center.x
       activityView.frame.origin.y = firstVisibleView.center.y
     }
-  
+
     activityView.startAnimating()
     UIView.animateWithDuration(0.3) {
       self.activityView.alpha = 1.0

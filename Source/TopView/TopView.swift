@@ -21,7 +21,7 @@ class TopView: UIView {
     let button = UIButton()
     button.setImage(AssetManager.getImage("AUTO"), forState: .Normal)
     button.setTitle("AUTO", forState: .Normal)
-    button.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0)
+    button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
     button.setTitleColor(.whiteColor(), forState: .Normal)
     button.setTitleColor(.whiteColor(), forState: .Highlighted)
     button.titleLabel?.font = Configuration.flashButton
@@ -46,13 +46,13 @@ class TopView: UIView {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
+
     var buttons: [UIButton] = [flashButton]
 
-    if (Configuration.canRotateCamera) {
+    if Configuration.canRotateCamera {
         buttons.append(rotateCamera)
     }
-    
+
     for button in buttons {
       button.layer.shadowColor = UIColor.blackColor().CGColor
       button.layer.shadowOpacity = 0.5
