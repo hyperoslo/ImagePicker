@@ -1,4 +1,3 @@
 {
-  "maxReviewers": 2,
-  "requiredOrgs": ["hyperoslo"]
+  "maxReviewers": 2
 }
