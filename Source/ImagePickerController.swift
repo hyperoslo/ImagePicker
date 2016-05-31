@@ -324,6 +324,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   func doneButtonDidPress() {
     let images = ImagePicker.resolveAssets(stack.assets)
     delegate?.doneButtonDidPress(images)
+    dismissViewControllerAnimated(true, completion: nil)
   }
 
   func cancelButtonDidPress() {
