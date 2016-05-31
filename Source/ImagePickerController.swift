@@ -140,6 +140,10 @@ public class ImagePickerController: UIViewController {
     UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
   }
 
+  public func resetAssets() {
+    self.stack.resetAssets([])
+  }
+
   func checkStatus() {
     let currentStatus = PHPhotoLibrary.authorizationStatus()
     guard currentStatus != .Authorized else { return }
