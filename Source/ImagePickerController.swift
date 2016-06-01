@@ -4,9 +4,9 @@ import Photos
 
 public protocol ImagePickerDelegate: class {
 
-  func wrapperDidPress(images: [UIImage])
-  func doneButtonDidPress(images: [UIImage])
-  func cancelButtonDidPress()
+  func wrapperDidPress(imagePicker: ImagePickerController, images: [UIImage])
+  func doneButtonDidPress(imagePicker: ImagePickerController, images: [UIImage])
+  func cancelButtonDidPress(imagePicker: ImagePickerController)
 }
 
 public class ImagePickerController: UIViewController {
@@ -138,6 +138,10 @@ public class ImagePickerController: UIViewController {
   public override func viewWillDisappear(animated: Bool) {
     super.viewWillDisappear(animated)
     UIApplication.sharedApplication().setStatusBarHidden(statusBarHidden, withAnimation: .Fade)
+  }
+
+  public func resetAssets() {
+    self.stack.resetAssets([])
   }
 
   func checkStatus() {
@@ -323,18 +327,18 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func doneButtonDidPress() {
     let images = ImagePicker.resolveAssets(stack.assets)
-    delegate?.doneButtonDidPress(images)
+    delegate?.doneButtonDidPress(self, images: images)
     dismissViewControllerAnimated(true, completion: nil)
   }
 
   func cancelButtonDidPress() {
     dismissViewControllerAnimated(true, completion: nil)
-    delegate?.cancelButtonDidPress()
+    delegate?.cancelButtonDidPress(self)
   }
 
   func imageStackViewDidPress() {
     let images = ImagePicker.resolveAssets(stack.assets)
-    delegate?.wrapperDidPress(images)
+    delegate?.wrapperDidPress(self, images: images)
   }
 }
 
