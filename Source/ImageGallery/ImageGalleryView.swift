@@ -13,8 +13,6 @@ public class ImageGalleryView: UIView {
   struct Dimensions {
     static let galleryHeight: CGFloat = 160
     static let galleryBarHeight: CGFloat = 24
-    static let indicatorWidth: CGFloat = 41
-    static let indicatorHeight: CGFloat = 8
   }
 
   lazy public var collectionView: UICollectionView = { [unowned self] in
@@ -44,15 +42,6 @@ public class ImageGalleryView: UIView {
     view.translatesAutoresizingMaskIntoConstraints = false
     view.addGestureRecognizer(self.panGestureRecognizer)
     view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
-
-    return view
-    }()
-
-  lazy var indicator: UIView = {
-    let view = UIView()
-    view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
-    view.layer.cornerRadius = Dimensions.indicatorHeight / 2
-    view.translatesAutoresizingMaskIntoConstraints = false
 
     return view
     }()
@@ -99,7 +88,7 @@ public class ImageGalleryView: UIView {
 
     [collectionView, topSeparator].forEach { addSubview($0) }
 
-    topSeparator.addSubview(indicator)
+    topSeparator.addSubview(Configuration.indicatorView)
 
     imagesBeforeLoading = 0
     fetchPhotos()
@@ -122,8 +111,8 @@ public class ImageGalleryView: UIView {
     let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
     topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
     topSeparator.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin, .FlexibleWidth]
-    indicator.frame = CGRect(x: (totalWidth - Dimensions.indicatorWidth) / 2, y: (topSeparator.frame.height - Dimensions.indicatorHeight) / 2,
-      width: Dimensions.indicatorWidth, height: Dimensions.indicatorHeight)
+    Configuration.indicatorView.frame = CGRect(x: (totalWidth - Configuration.indicatorWidth) / 2, y: (topSeparator.frame.height - Configuration.indicatorHeight) / 2,
+      width: Configuration.indicatorWidth, height: Configuration.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
 
