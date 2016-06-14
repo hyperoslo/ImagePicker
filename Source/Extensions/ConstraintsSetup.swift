@@ -7,54 +7,55 @@ extension BottomContainerView {
   func setupConstraints() {
 
     for attribute: NSLayoutAttribute in [.CenterX, .CenterY] {
-      addConstraint(NSLayoutConstraint(item: pickerButton, attribute: attribute,
+      NSLayoutConstraint(item: pickerButton, attribute: attribute,
         relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
 
-      addConstraint(NSLayoutConstraint(item: borderPickerButton, attribute: attribute,
+      NSLayoutConstraint(item: borderPickerButton, attribute: attribute,
         relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
     }
 
     for attribute: NSLayoutAttribute in [.Width, .Left, .Top] {
-      addConstraint(NSLayoutConstraint(item: topSeparator, attribute: attribute,
+      NSLayoutConstraint(item: topSeparator, attribute: attribute,
         relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
     }
 
     for attribute: NSLayoutAttribute in [.Width, .Height] {
-      addConstraint(NSLayoutConstraint(item: pickerButton, attribute: attribute,
+      NSLayoutConstraint(item: pickerButton, attribute: attribute,
         relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
+        multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize).active = true
 
-      addConstraint(NSLayoutConstraint(item: borderPickerButton, attribute: attribute,
+      NSLayoutConstraint(item: borderPickerButton, attribute: attribute,
         relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
+        multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize).active = true
 
-      addConstraint(NSLayoutConstraint(item: stackView, attribute: attribute,
+      NSLayoutConstraint(item: stackView, attribute: attribute,
         relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
+        multiplier: 1, constant: ImageStackView.Dimensions.imageSize).active = true
     }
 
-    addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterY,
+    NSLayoutConstraint(item: doneButton, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
+      multiplier: 1, constant: 0).active = true
 
-    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterY,
+    NSLayoutConstraint(item: stackView, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: -2))
+      multiplier: 1, constant: -2).active = true
 
-    addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterX,
+    NSLayoutConstraint(item: doneButton, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .Right,
-      multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
+      multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2)
+      .active = true
 
-    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterX,
+    NSLayoutConstraint(item: stackView, attribute: .CenterX,
       relatedBy: .Equal, toItem: self, attribute: .Left,
-      multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/3))
+      multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/3).active = true
 
-    addConstraint(NSLayoutConstraint(item: topSeparator, attribute: .Height,
+    NSLayoutConstraint(item: topSeparator, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: 1))
+      multiplier: 1, constant: 1).active = true
   }
 }
 
@@ -63,34 +64,34 @@ extension BottomContainerView {
 extension TopView {
 
   func setupConstraints() {
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Left,
+    NSLayoutConstraint(item: flashButton, attribute: .Left,
       relatedBy: .Equal, toItem: self, attribute: .Left,
-      multiplier: 1, constant: Dimensions.leftOffset))
+      multiplier: 1, constant: Dimensions.leftOffset).active = true
 
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .CenterY,
+    NSLayoutConstraint(item: flashButton, attribute: .CenterY,
       relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
+      multiplier: 1, constant: 0).active = true
 
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Width,
+    NSLayoutConstraint(item: flashButton, attribute: .Width,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: 55))
+      multiplier: 1, constant: 55).active = true
 
     if Configuration.canRotateCamera {
-      addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Right,
+      NSLayoutConstraint(item: rotateCamera, attribute: .Right,
         relatedBy: .Equal, toItem: self, attribute: .Right,
-        multiplier: 1, constant: Dimensions.rightOffset))
+        multiplier: 1, constant: Dimensions.rightOffset).active = true
 
-      addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .CenterY,
+      NSLayoutConstraint(item: rotateCamera, attribute: .CenterY,
         relatedBy: .Equal, toItem: self, attribute: .CenterY,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
 
-      addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Width,
+      NSLayoutConstraint(item: rotateCamera, attribute: .Width,
         relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: 55))
+        multiplier: 1, constant: 55).active = true
 
-      addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Height,
+      NSLayoutConstraint(item: rotateCamera, attribute: .Height,
         relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: 55))
+        multiplier: 1, constant: 55).active = true
     }
   }
 }
@@ -104,34 +105,34 @@ extension ImagePickerController {
     let topViewAttributes: [NSLayoutAttribute] = [.Left, .Top, .Width]
 
     for attribute in attributes {
-      view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: attribute,
+      NSLayoutConstraint(item: bottomContainer, attribute: attribute,
         relatedBy: .Equal, toItem: view, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
     }
 
     for attribute: NSLayoutAttribute in [.Left, .Top, .Width] {
-      view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: attribute,
+      NSLayoutConstraint(item: cameraController.view, attribute: attribute,
         relatedBy: .Equal, toItem: view, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
     }
 
     for attribute in topViewAttributes {
-      view.addConstraint(NSLayoutConstraint(item: topView, attribute: attribute,
+      NSLayoutConstraint(item: topView, attribute: attribute,
         relatedBy: .Equal, toItem: self.view, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
     }
 
-    view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .Height,
+    NSLayoutConstraint(item: bottomContainer, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: BottomContainerView.Dimensions.height))
+      multiplier: 1, constant: BottomContainerView.Dimensions.height).active = true
 
-    view.addConstraint(NSLayoutConstraint(item: topView, attribute: .Height,
+    NSLayoutConstraint(item: topView, attribute: .Height,
       relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: TopView.Dimensions.height))
+      multiplier: 1, constant: TopView.Dimensions.height).active = true
 
-    view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: .Height,
+    NSLayoutConstraint(item: cameraController.view, attribute: .Height,
       relatedBy: .Equal, toItem: view, attribute: .Height,
-      multiplier: 1, constant: -BottomContainerView.Dimensions.height))
+      multiplier: 1, constant: -BottomContainerView.Dimensions.height).active = true
   }
 }
 
@@ -140,13 +141,13 @@ extension ImageGalleryViewCell {
   func setupConstraints() {
 
     for attribute: NSLayoutAttribute in [.Width, .Height, .CenterX, .CenterY] {
-      addConstraint(NSLayoutConstraint(item: imageView, attribute: attribute,
+      NSLayoutConstraint(item: imageView, attribute: attribute,
         relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
 
-      addConstraint(NSLayoutConstraint(item: selectedImageView, attribute: attribute,
+      NSLayoutConstraint(item: selectedImageView, attribute: attribute,
         relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
     }
   }
 }
@@ -157,9 +158,9 @@ extension ButtonPicker {
     let attributes: [NSLayoutAttribute] = [.CenterX, .CenterY]
 
     for attribute in attributes {
-      addConstraint(NSLayoutConstraint(item: numberLabel, attribute: attribute,
+      NSLayoutConstraint(item: numberLabel, attribute: attribute,
         relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
+        multiplier: 1, constant: 0).active = true
     }
   }
 }

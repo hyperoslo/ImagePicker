@@ -253,6 +253,8 @@ public class ImagePickerController: UIViewController {
         completion?()
     }
   }
+    
+    
 
   public func showGalleryView() {
     galleryView.collectionViewLayout.invalidateLayout()
