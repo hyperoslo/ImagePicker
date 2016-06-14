@@ -1,8 +1,9 @@
 import Foundation
 import CoreLocation
 
-class LocationManager: NSObject, CLLocationManagerDelegate {
-  var locationManager = CLLocationManager()
+class LocationManager: NSObject {
+  
+  let locationManager = CLLocationManager()
   var latestLocation: CLLocation?
 
   override init() {
@@ -19,14 +20,14 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
   func stopUpdatingLocation() {
     locationManager.stopUpdatingLocation()
   }
+}
 
-  // MARK: - CLLocationManagerDelegate
-
+extension LocationManager: CLLocationManagerDelegate {
   func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     // Pick the location with best (= smallest value) horizontal accuracy
     latestLocation = locations.sort { $0.horizontalAccuracy < $1.horizontalAccuracy }.first
   }
-
+  
   func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
     if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
       locationManager.startUpdatingLocation()
@@ -34,4 +35,5 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
       locationManager.stopUpdatingLocation()
     }
   }
+  
 }

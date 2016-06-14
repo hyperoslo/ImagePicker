@@ -11,58 +11,52 @@ public protocol ImagePickerDelegate: class {
 
 public class ImagePickerController: UIViewController {
 
-  struct GestureConstants {
+  enum GestureConstants {
     static let maximumHeight: CGFloat = 200
     static let minimumHeight: CGFloat = 125
     static let velocity: CGFloat = 100
   }
 
   public lazy var galleryView: ImageGalleryView = { [unowned self] in
-    let galleryView = ImageGalleryView()
-    galleryView.delegate = self
-    galleryView.selectedStack = self.stack
-    galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
-    galleryView.imageLimit = self.imageLimit
+    $0.delegate = self
+    $0.selectedStack = self.stack
+    $0.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
+    $0.imageLimit = self.imageLimit
 
-    return galleryView
-    }()
+    return $0
+    }(ImageGalleryView())
 
   public lazy var bottomContainer: BottomContainerView = { [unowned self] in
-    let view = BottomContainerView()
-    view.backgroundColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
-    view.delegate = self
+    $0.backgroundColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
+    $0.delegate = self
 
-    return view
-    }()
+    return $0
+    }(BottomContainerView())
 
   lazy var topView: TopView = { [unowned self] in
-    let view = TopView()
-    view.backgroundColor = .clearColor()
-    view.delegate = self
+    $0.backgroundColor = .clearColor()
+    $0.delegate = self
 
-    return view
-    }()
+    return $0
+    }(TopView())
 
   lazy var cameraController: CameraView = { [unowned self] in
-    let controller = CameraView()
-    controller.delegate = self
+    $0.delegate = self
 
-    return controller
-    }()
+    return $0
+    }(CameraView())
 
   lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
-    let gesture = UIPanGestureRecognizer()
-    gesture.addTarget(self, action: #selector(panGestureRecognizerHandler(_:)))
+    $0.addTarget(self, action: #selector(panGestureRecognizerHandler(_:)))
 
-    return gesture
-    }()
+    return $0
+    }(UIPanGestureRecognizer())
 
   lazy var volumeView: MPVolumeView = { [unowned self] in
-    let view = MPVolumeView()
-    view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+    $0.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
 
-    return view
-    }()
+    return $0
+    }(MPVolumeView())
 
   var volume = AVAudioSession.sharedInstance().outputVolume
 

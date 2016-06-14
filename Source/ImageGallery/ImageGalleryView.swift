@@ -10,7 +10,7 @@ protocol ImageGalleryPanGestureDelegate: class {
 
 public class ImageGalleryView: UIView {
 
-  struct Dimensions {
+  enum Dimensions {
     static let galleryHeight: CGFloat = 160
     static let galleryBarHeight: CGFloat = 24
     static let indicatorWidth: CGFloat = 41
@@ -30,51 +30,46 @@ public class ImageGalleryView: UIView {
     }()
 
   lazy var collectionViewLayout: UICollectionViewLayout = { [unowned self] in
-    let layout = UICollectionViewFlowLayout()
-    layout.scrollDirection = .Horizontal
-    layout.minimumInteritemSpacing = Configuration.cellSpacing
-    layout.minimumLineSpacing = 2
-    layout.sectionInset = UIEdgeInsetsZero
+    $0.scrollDirection = .Horizontal
+    $0.minimumInteritemSpacing = Configuration.cellSpacing
+    $0.minimumLineSpacing = 2
+    $0.sectionInset = UIEdgeInsetsZero
 
-    return layout
-    }()
+    return $0
+    }(UICollectionViewFlowLayout())
 
   lazy var topSeparator: UIView = { [unowned self] in
-    let view = UIView()
-    view.translatesAutoresizingMaskIntoConstraints = false
-    view.addGestureRecognizer(self.panGestureRecognizer)
-    view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
+    $0.translatesAutoresizingMaskIntoConstraints = false
+    $0.addGestureRecognizer(self.panGestureRecognizer)
+    $0.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
 
-    return view
-    }()
+    return $0
+    }(UIView())
 
   lazy var indicator: UIView = {
-    let view = UIView()
-    view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
-    view.layer.cornerRadius = Dimensions.indicatorHeight / 2
-    view.translatesAutoresizingMaskIntoConstraints = false
+    $0.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
+    $0.layer.cornerRadius = Dimensions.indicatorHeight / 2
+    $0.translatesAutoresizingMaskIntoConstraints = false
 
-    return view
-    }()
+    return $0
+    }(UIView())
 
   lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
-    let gesture = UIPanGestureRecognizer()
-    gesture.addTarget(self, action: #selector(handlePanGestureRecognizer(_:)))
+    $0.addTarget(self, action: #selector(handlePanGestureRecognizer(_:)))
 
-    return gesture
-    }()
+    return $0
+    }(UIPanGestureRecognizer())
 
   public lazy var noImagesLabel: UILabel = { [unowned self] in
-    let label = UILabel()
-    label.font = Configuration.noImagesFont
-    label.textColor = Configuration.noImagesColor
-    label.text = Configuration.noImagesTitle
-    label.alpha = 0
-    label.sizeToFit()
-    self.addSubview(label)
+    $0.font = Configuration.noImagesFont
+    $0.textColor = Configuration.noImagesColor
+    $0.text = Configuration.noImagesTitle
+    $0.alpha = 0
+    $0.sizeToFit()
+    self.addSubview($0)
 
-    return label
-    }()
+    return $0
+    }(UILabel())
 
   public lazy var selectedStack = ImageStack()
   lazy var assets = [PHAsset]()
@@ -93,9 +88,8 @@ public class ImageGalleryView: UIView {
     super.init(frame: frame)
 
     backgroundColor = Configuration.mainColor
-
-    collectionView.registerClass(ImageGalleryViewCell.self,
-      forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
+    
+    collectionView.register(ImageGalleryViewCell)
 
     [collectionView, topSeparator].forEach { addSubview($0) }
 

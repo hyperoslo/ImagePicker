@@ -10,52 +10,47 @@ protocol BottomContainerViewDelegate: class {
 
 public class BottomContainerView: UIView {
 
-  struct Dimensions {
+  enum Dimensions {
     static let height: CGFloat = 101
   }
 
   lazy var pickerButton: ButtonPicker = { [unowned self] in
-    let pickerButton = ButtonPicker()
-    pickerButton.setTitleColor(.whiteColor(), forState: .Normal)
-    pickerButton.delegate = self
+    $0.setTitleColor(.whiteColor(), forState: .Normal)
+    $0.delegate = self
 
-    return pickerButton
-    }()
+    return $0
+    }(ButtonPicker())
 
   lazy var borderPickerButton: UIView = {
-    let view = UIView()
-    view.backgroundColor = .clearColor()
-    view.layer.borderColor = UIColor.whiteColor().CGColor
-    view.layer.borderWidth = ButtonPicker.Dimensions.borderWidth
-    view.layer.cornerRadius = ButtonPicker.Dimensions.buttonBorderSize / 2
+    $0.backgroundColor = .clearColor()
+    $0.layer.borderColor = UIColor.whiteColor().CGColor
+    $0.layer.borderWidth = ButtonPicker.Dimensions.borderWidth
+    $0.layer.cornerRadius = ButtonPicker.Dimensions.buttonBorderSize / 2
 
-    return view
-    }()
+    return $0
+    }(UIView())
 
   public lazy var doneButton: UIButton = { [unowned self] in
-    let button = UIButton()
-    button.setTitle(Configuration.cancelButtonTitle, forState: .Normal)
-    button.titleLabel?.font = Configuration.doneButton
-    button.addTarget(self, action: #selector(doneButtonDidPress(_:)), forControlEvents: .TouchUpInside)
+    $0.setTitle(Configuration.cancelButtonTitle, forState: .Normal)
+    $0.titleLabel?.font = Configuration.doneButton
+    $0.addTarget(self, action: #selector(doneButtonDidPress(_:)), forControlEvents: .TouchUpInside)
 
-    return button
-    }()
+    return $0
+    }(UIButton())
 
   lazy var stackView = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
 
   lazy var topSeparator: UIView = { [unowned self] in
-    let view = UIView()
-    view.backgroundColor = Configuration.backgroundColor
+    $0.backgroundColor = Configuration.backgroundColor
 
-    return view
-    }()
+    return $0
+    }(UIView())
 
   lazy var tapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
-    let gesture = UITapGestureRecognizer()
-    gesture.addTarget(self, action: #selector(handleTapGestureRecognizer(_:)))
+    $0.addTarget(self, action: #selector(handleTapGestureRecognizer(_:)))
 
-    return gesture
-    }()
+    return $0
+    }(UITapGestureRecognizer())
 
   weak var delegate: BottomContainerViewDelegate?
   var pastCount = 0

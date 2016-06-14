@@ -7,3 +7,14 @@
 //
 
 import Foundation
+
+extension Int {
+  
+  func times(repeatFunction: () -> ()) {
+    if self > 0 {
+      for _ in 0..<self {
+        repeatFunction()
+      }
+    }
+  }
+}

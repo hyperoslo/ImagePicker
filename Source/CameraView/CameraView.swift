@@ -9,7 +9,7 @@ protocol CameraViewDelegate: class {
   func cameraNotAvailable()
 }
 
-class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
+class CameraView: UIViewController {
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .Dark)
@@ -19,65 +19,59 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }()
 
   lazy var focusImageView: UIImageView = { [unowned self] in
-    let imageView = UIImageView()
-    imageView.image = AssetManager.getImage("focusIcon")
-    imageView.backgroundColor = .clearColor()
-    imageView.frame = CGRect(x: 0, y: 0, width: 110, height: 110)
-    imageView.alpha = 0
+    $0.image = AssetManager.getImage("focusIcon")
+    $0.backgroundColor = .clearColor()
+    $0.frame = CGRect(x: 0, y: 0, width: 110, height: 110)
+    $0.alpha = 0
 
-    return imageView
-    }()
+    return $0
+    }(UIImageView())
 
   lazy var capturedImageView: UIView = { [unowned self] in
-    let view = UIView()
-    view.backgroundColor = .blackColor()
-    view.alpha = 0
+    $0.backgroundColor = .blackColor()
+    $0.alpha = 0
 
-    return view
-    }()
+    return $0
+    }(UIView())
 
   lazy var containerView: UIView = {
-    let view = UIView()
-    view.alpha = 0
+    $0.alpha = 0
 
-    return view
-  }()
+    return $0
+  }(UIView())
 
   lazy var noCameraLabel: UILabel = { [unowned self] in
-    let label = UILabel()
-    label.font = Configuration.noCameraFont
-    label.textColor = Configuration.noCameraColor
-    label.text = Configuration.noCameraTitle
-    label.sizeToFit()
+    $0.font = Configuration.noCameraFont
+    $0.textColor = Configuration.noCameraColor
+    $0.text = Configuration.noCameraTitle
+    $0.sizeToFit()
 
-    return label
-    }()
+    return $0
+    }(UILabel())
 
   lazy var noCameraButton: UIButton = { [unowned self] in
-    let button = UIButton(type: .System)
     let title = NSAttributedString(string: Configuration.settingsTitle,
       attributes: [
         NSFontAttributeName : Configuration.settingsFont,
         NSForegroundColorAttributeName : Configuration.settingsColor,
       ])
 
-    button.setAttributedTitle(title, forState: .Normal)
-    button.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
-    button.sizeToFit()
-    button.layer.borderColor = Configuration.settingsColor.CGColor
-    button.layer.borderWidth = 1
-    button.layer.cornerRadius = 4
-    button.addTarget(self, action: #selector(settingsButtonDidTap), forControlEvents: .TouchUpInside)
+    $0.setAttributedTitle(title, forState: .Normal)
+    $0.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
+    $0.sizeToFit()
+    $0.layer.borderColor = Configuration.settingsColor.CGColor
+    $0.layer.borderWidth = 1
+    $0.layer.cornerRadius = 4
+    $0.addTarget(self, action: #selector(settingsButtonDidTap), forControlEvents: .TouchUpInside)
 
-    return button
-    }()
+    return $0
+    }(UIButton(type: .System))
 
   lazy var tapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
-    let gesture = UITapGestureRecognizer()
-    gesture.addTarget(self, action: #selector(tapGestureRecognizerHandler(_:)))
+    $0.addTarget(self, action: #selector(tapGestureRecognizerHandler(_:)))
 
-    return gesture
-    }()
+    return $0
+    }(UITapGestureRecognizer())
 
   let cameraMan = CameraMan()
 
@@ -85,6 +79,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   weak var delegate: CameraViewDelegate?
   var animationTimer: NSTimer?
   var locationManager: LocationManager?
+  
+  
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -94,7 +90,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }
 
     view.backgroundColor = Configuration.mainColor
-
     view.addSubview(containerView)
     containerView.addSubview(blurView)
 
@@ -273,18 +268,22 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }
   }
 
-  // CameraManDelegate
+}
+
+extension CameraView: CameraManDelegate {
+  
   func cameraManNotAvailable(cameraMan: CameraMan) {
     showNoCamera(true)
     focusImageView.hidden = true
     delegate?.cameraNotAvailable()
   }
-
+  
   func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput) {
     delegate?.setFlashButtonHidden(!input.device.hasFlash)
   }
-
+  
   func cameraManDidStart(cameraMan: CameraMan) {
     setupPreviewLayer()
   }
+
 }

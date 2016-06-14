@@ -7,22 +7,22 @@ protocol ImageStackViewDelegate: class {
 
 class ImageStackView: UIView {
 
-  struct Dimensions {
+  enum Dimensions {
     static let imageSize: CGFloat = 58
   }
 
   weak var delegate: ImageStackViewDelegate?
 
   lazy var activityView: UIActivityIndicatorView = {
-    let view = UIActivityIndicatorView()
-    view.alpha = 0.0
+    $0.alpha = 0.0
 
-    return view
-    }()
+    return $0
+    }(UIActivityIndicatorView())
 
   var views: [UIImageView] = {
     var array = [UIImageView]()
-    for i in 0...3 {
+    
+    3.times {
       let view = UIImageView()
       view.layer.cornerRadius = 3
       view.layer.borderColor = UIColor.whiteColor().CGColor

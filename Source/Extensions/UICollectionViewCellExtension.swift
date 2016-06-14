@@ -1,5 +1,5 @@
 //
-//  UICollectionViewCell+Extension.swift
+//  UICollectionViewCellExtension.swift
 //  ImagePicker
 //
 //  Created by Diogo Antunes on 6/14/16.

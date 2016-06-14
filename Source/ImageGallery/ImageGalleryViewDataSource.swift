@@ -2,19 +2,14 @@ import UIKit
 
 extension ImageGalleryView: UICollectionViewDataSource {
 
-  struct CollectionView {
-    static let reusableIdentifier = "imagesReusableIdentifier"
-  }
-
   public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     displayNoImagesMessage(assets.isEmpty)
     return assets.count
   }
 
   public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CollectionView.reusableIdentifier,
-      forIndexPath: indexPath) as? ImageGalleryViewCell else { return UICollectionViewCell() }
-
+    
+    let cell = collectionView.dequeueReusableCell(forIndexPath: indexPath) as ImageGalleryViewCell
     let asset = assets[indexPath.row]
 
     ImagePicker.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in

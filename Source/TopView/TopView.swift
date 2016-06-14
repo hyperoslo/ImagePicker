@@ -8,7 +8,7 @@ protocol TopViewDelegate: class {
 
 class TopView: UIView {
 
-  struct Dimensions {
+  enum Dimensions {
     static let leftOffset: CGFloat = 11
     static let rightOffset: CGFloat = 7
     static let height: CGFloat = 34
@@ -18,27 +18,25 @@ class TopView: UIView {
   let flashButtonTitles = ["AUTO", "ON", "OFF"]
 
   lazy var flashButton: UIButton = { [unowned self] in
-    let button = UIButton()
-    button.setImage(AssetManager.getImage("AUTO"), forState: .Normal)
-    button.setTitle("AUTO", forState: .Normal)
-    button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
-    button.setTitleColor(.whiteColor(), forState: .Normal)
-    button.setTitleColor(.whiteColor(), forState: .Highlighted)
-    button.titleLabel?.font = Configuration.flashButton
-    button.addTarget(self, action: #selector(flashButtonDidPress(_:)), forControlEvents: .TouchUpInside)
-    button.contentHorizontalAlignment = .Left
+    $0.setImage(AssetManager.getImage("AUTO"), forState: .Normal)
+    $0.setTitle("AUTO", forState: .Normal)
+    $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+    $0.setTitleColor(.whiteColor(), forState: .Normal)
+    $0.setTitleColor(.whiteColor(), forState: .Highlighted)
+    $0.titleLabel?.font = Configuration.flashButton
+    $0.addTarget(self, action: #selector(flashButtonDidPress(_:)), forControlEvents: .TouchUpInside)
+    $0.contentHorizontalAlignment = .Left
 
-    return button
-    }()
+    return $0
+    }(UIButton())
 
   lazy var rotateCamera: UIButton = { [unowned self] in
-    let button = UIButton()
-    button.setImage(AssetManager.getImage("cameraIcon"), forState: .Normal)
-    button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), forControlEvents: .TouchUpInside)
-    button.imageView?.contentMode = .Center
+    $0.setImage(AssetManager.getImage("cameraIcon"), forState: .Normal)
+    $0.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), forControlEvents: .TouchUpInside)
+    $0.imageView?.contentMode = .Center
 
-    return button
-    }()
+    return $0
+    }(UIButton())
 
   weak var delegate: TopViewDelegate?
 

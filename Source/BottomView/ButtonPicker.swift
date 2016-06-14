@@ -7,7 +7,7 @@ protocol ButtonPickerDelegate: class {
 
 class ButtonPicker: UIButton {
 
-  struct Dimensions {
+  enum Dimensions {
     static let borderWidth: CGFloat = 2
     static let buttonSize: CGFloat = 58
     static let buttonBorderSize: CGFloat = 68

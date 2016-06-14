@@ -3,10 +3,10 @@ import Photos
 
 public class ImageStack {
 
-  public struct Notifications {
-    public static let imageDidPush = "imageDidPush"
-    public static let imageDidDrop = "imageDidDrop"
-    public static let stackDidReload = "stackDidReload"
+  public enum Notifications {
+    static let imageDidPush = "imageDidPush"
+    static let imageDidDrop = "imageDidDrop"
+    static let stackDidReload = "stackDidReload"
   }
 
   public var assets = [PHAsset]()
