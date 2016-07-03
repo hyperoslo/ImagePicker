@@ -151,8 +151,7 @@ extension ImageStackView {
 
       if index == photos.count {
         UIView.animateWithDuration(0.3) {
-          self.activityView.frame.origin.x = view.center.x + 3
-          self.activityView.frame.origin.y = view.center.y + 3
+          self.activityView.frame.origin = CGPoint(x: view.center.x + 3, y: view.center.x + 3)
         }
       }
     }
