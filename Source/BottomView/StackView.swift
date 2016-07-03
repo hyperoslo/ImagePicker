@@ -22,7 +22,7 @@ class ImageStackView: UIView {
 
   var views: [UIImageView] = {
     var array = [UIImageView]()
-    for i in 0...3 {
+    for _ in 0...3 {
       let view = UIImageView()
       view.layer.cornerRadius = 3
       view.layer.borderColor = UIColor.whiteColor().CGColor
