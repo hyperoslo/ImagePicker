@@ -45,7 +45,6 @@ class ImageStackView: UIView {
     views.forEach { addSubview($0) }
     addSubview(activityView)
     views.first?.alpha = 1
-    layoutSubviews()
   }
 
   required init?(coder aDecoder: NSCoder) {
