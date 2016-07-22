@@ -62,7 +62,6 @@ class TopView: UIView {
       addSubview(button)
     }
 
-    setupConstraints()
   }
 
   required init?(coder aDecoder: NSCoder) {
