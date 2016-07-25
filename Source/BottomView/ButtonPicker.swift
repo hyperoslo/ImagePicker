@@ -65,6 +65,7 @@ class ButtonPicker: UIButton {
   func setupButton() {
     backgroundColor = .whiteColor()
     layer.cornerRadius = Dimensions.buttonSize / 2
+    accessibilityLabel = "Take photo"
     addTarget(self, action: #selector(pickerButtonDidPress(_:)), forControlEvents: .TouchUpInside)
     addTarget(self, action: #selector(pickerButtonDidHighlight(_:)), forControlEvents: .TouchDown)
   }
