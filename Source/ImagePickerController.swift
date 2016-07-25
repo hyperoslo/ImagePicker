@@ -204,9 +204,6 @@ public class ImagePickerController: UIViewController {
     setupConstraints(compactHeight)
     bottomContainer.setupConstraints(compactHeight)
     topView.setupConstraints(compactHeight)
-//    self.view.setNeedsLayout()
-//    self.bottomContainer.setNeedsLayout()
-//    self.cameraController.view.setNeedsLayout()
   }
 
   // MARK: - Notifications
