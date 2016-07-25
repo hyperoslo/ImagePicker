@@ -326,7 +326,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    let images = ImagePicker.resolveAssets(stack.assets)
+    let images = AssetManager.resolveAssets(stack.assets)
     delegate?.doneButtonDidPress(self, images: images)
   }
 
@@ -336,7 +336,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    let images = ImagePicker.resolveAssets(stack.assets)
+    let images = AssetManager.resolveAssets(stack.assets)
     delegate?.wrapperDidPress(self, images: images)
   }
 }
