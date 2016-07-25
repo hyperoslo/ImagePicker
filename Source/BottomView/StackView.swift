@@ -22,7 +22,7 @@ class ImageStackView: UIView {
 
   var views: [UIImageView] = {
     var array = [UIImageView]()
-    for i in 0...3 {
+    for _ in 0...3 {
       let view = UIImageView()
       view.layer.cornerRadius = 3
       view.layer.borderColor = UIColor.whiteColor().CGColor
@@ -45,7 +45,6 @@ class ImageStackView: UIView {
     views.forEach { addSubview($0) }
     addSubview(activityView)
     views.first?.alpha = 1
-    layoutSubviews()
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -128,9 +127,9 @@ extension ImageStackView {
 
   func renderViews(assets: [PHAsset]) {
     if let firstView = views.first where assets.isEmpty {
-      for imageView in views {
-        imageView.image = nil
-        imageView.alpha = 0
+      views.forEach{
+        $0.image = nil
+        $0.alpha = 0
       }
 
       firstView.alpha = 1
@@ -152,8 +151,7 @@ extension ImageStackView {
 
       if index == photos.count {
         UIView.animateWithDuration(0.3) {
-          self.activityView.frame.origin.x = view.center.x + 3
-          self.activityView.frame.origin.y = view.center.y + 3
+          self.activityView.frame.origin = CGPoint(x: view.center.x + 3, y: view.center.x + 3)
         }
       }
     }
