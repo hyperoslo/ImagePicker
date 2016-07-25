@@ -28,7 +28,6 @@
 		D5DC59CA1C201CC4003BD79B /* ImageGalleryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC59B81C201CC4003BD79B /* ImageGalleryViewCell.swift */; };
 		D5DC59CB1C201CC4003BD79B /* ImageGalleryViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC59B91C201CC4003BD79B /* ImageGalleryViewDataSource.swift */; };
 		D5DC59CC1C201CC4003BD79B /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC59BA1C201CC4003BD79B /* ImagePickerController.swift */; };
-		D5DC59CD1C201CC4003BD79B /* Photos.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC59BB1C201CC4003BD79B /* Photos.swift */; };
 		D5DC59CE1C201CC4003BD79B /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC59BD1C201CC4003BD79B /* TopView.swift */; };
 		D5DC59CF1C201CCC003BD79B /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC59A71C201CC4003BD79B /* Tests.swift */; };
 /* End PBXBuildFile section */
@@ -69,7 +68,6 @@
 		D5DC59B81C201CC4003BD79B /* ImageGalleryViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGalleryViewCell.swift; sourceTree = "<group>"; };
 		D5DC59B91C201CC4003BD79B /* ImageGalleryViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGalleryViewDataSource.swift; sourceTree = "<group>"; };
 		D5DC59BA1C201CC4003BD79B /* ImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
-		D5DC59BB1C201CC4003BD79B /* Photos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photos.swift; sourceTree = "<group>"; };
 		D5DC59BD1C201CC4003BD79B /* TopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -153,7 +151,6 @@
 				D5DC59B41C201CC4003BD79B /* Extensions */,
 				D5DC59B61C201CC4003BD79B /* ImageGallery */,
 				D5DC59BA1C201CC4003BD79B /* ImagePickerController.swift */,
-				D5DC59BB1C201CC4003BD79B /* Photos.swift */,
 				D5DC59BC1C201CC4003BD79B /* TopView */,
 				39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */,
 				39E3C3301CAFD79200340DAD /* LocationManager.swift */,
@@ -346,7 +343,6 @@
 				D5DC59C71C201CC4003BD79B /* Configuration.swift in Sources */,
 				39D134101CAC4B4E00EA2ECE /* AssetManager.swift in Sources */,
 				D5DC59C21C201CC4003BD79B /* BottomContainerView.swift in Sources */,
-				D5DC59CD1C201CC4003BD79B /* Photos.swift in Sources */,
 				D5DC59CC1C201CC4003BD79B /* ImagePickerController.swift in Sources */,
 				D5DC59C61C201CC4003BD79B /* CameraView.swift in Sources */,
 				D5DC59C91C201CC4003BD79B /* ImageGalleryView.swift in Sources */,
