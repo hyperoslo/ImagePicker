@@ -217,6 +217,11 @@ public class ImagePickerController: UIViewController {
       selector: #selector(volumeChanged(_:)),
       name: "AVSystemController_SystemVolumeDidChangeNotification",
       object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: #selector(handleRotation(_:)),
+      name: UIDeviceOrientationDidChangeNotification,
+      object: nil)
   }
 
   func didReloadAssets(notification: NSNotification) {
@@ -374,6 +379,25 @@ extension ImagePickerController: CameraViewDelegate {
 
   public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
     return .Portrait
+  }
+
+  public func handleRotation(note: NSNotification) {
+    let transform: CGAffineTransform
+
+    switch UIDevice.currentDevice().orientation {
+    case .LandscapeLeft:
+      transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+    case .LandscapeRight:
+      transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+    case .PortraitUpsideDown:
+      transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+    default:
+      transform = CGAffineTransformIdentity
+    }
+
+    UIView.animateWithDuration(0.25) {
+      self.topView.rotateCamera.transform = transform
+    }
   }
 }
 
