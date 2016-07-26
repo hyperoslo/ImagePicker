@@ -388,6 +388,7 @@ extension ImagePickerController: CameraViewDelegate {
       self.topView.rotateCamera.transform = rotate
       self.bottomContainer.pickerButton.transform = rotate
       self.bottomContainer.stackView.transform = rotate
+      self.bottomContainer.doneButton.transform = rotate
       self.galleryView.collectionViewLayout.invalidateLayout()
 
       let translate: CGAffineTransform
