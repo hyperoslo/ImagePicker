@@ -397,6 +397,8 @@ extension ImagePickerController: CameraViewDelegate {
 
     UIView.animateWithDuration(0.25) {
       self.topView.rotateCamera.transform = rotate
+      self.bottomContainer.pickerButton.transform = rotate
+      self.bottomContainer.stackView.transform = rotate
 
       let translate: CGAffineTransform
       if [UIDeviceOrientation.LandscapeLeft, UIDeviceOrientation.LandscapeRight]
