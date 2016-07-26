@@ -369,6 +369,12 @@ extension ImagePickerController: CameraViewDelegate {
     topView.rotateCamera.hidden = true
     bottomContainer.pickerButton.enabled = false
   }
+
+  // MARK: - Rotation
+
+  public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    return .Portrait
+  }
 }
 
 // MARK: - TopView delegate methods
