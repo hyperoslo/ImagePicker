@@ -382,21 +382,31 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   public func handleRotation(note: NSNotification) {
-    let transform: CGAffineTransform
+    let rotate: CGAffineTransform
 
     switch UIDevice.currentDevice().orientation {
     case .LandscapeLeft:
-      transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+      rotate = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
     case .LandscapeRight:
-      transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+      rotate = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
     case .PortraitUpsideDown:
-      transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
+      rotate = CGAffineTransformMakeRotation(CGFloat(M_PI))
     default:
-      transform = CGAffineTransformIdentity
+      rotate = CGAffineTransformIdentity
     }
 
     UIView.animateWithDuration(0.25) {
-      self.topView.rotateCamera.transform = transform
+      self.topView.rotateCamera.transform = rotate
+
+      let translate: CGAffineTransform
+      if [UIDeviceOrientation.LandscapeLeft, UIDeviceOrientation.LandscapeRight]
+        .contains(UIDevice.currentDevice().orientation) {
+        translate = CGAffineTransformMakeTranslation(-20, 15)
+      } else {
+        translate = CGAffineTransformIdentity
+      }
+
+      self.topView.flashButton.transform = CGAffineTransformConcat(rotate, translate)
     }
   }
 }
