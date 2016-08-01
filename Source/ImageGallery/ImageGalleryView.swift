@@ -30,7 +30,7 @@ public class ImageGalleryView: UIView {
     }()
 
   lazy var collectionViewLayout: UICollectionViewLayout = { [unowned self] in
-    let layout = UICollectionViewFlowLayout()
+    let layout = ImageGalleryLayout()
     layout.scrollDirection = .Horizontal
     layout.minimumInteritemSpacing = Configuration.cellSpacing
     layout.minimumLineSpacing = 2

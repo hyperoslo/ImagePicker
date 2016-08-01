@@ -247,13 +247,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }
   }
 
-  override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-    super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-
-    previewLayer?.frame.size = size
-    setCorrectOrientationToPreviewLayer()
-  }
-
   func setCorrectOrientationToPreviewLayer() {
     guard let previewLayer = self.previewLayer,
       connection = previewLayer.connection
