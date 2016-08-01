@@ -103,13 +103,13 @@ public class ImagePickerController: UIViewController {
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     subscribe()
-    setupConstraints()
   }
 
   public override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
 
     _ = try? AVAudioSession.sharedInstance().setActive(true)
+    setupConstraintsForAllViews(traitCollection.verticalSizeClass == .Compact)
 
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
     UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
@@ -188,6 +188,22 @@ public class ImagePickerController: UIViewController {
     galleryView.fetchPhotos()
     galleryView.canFetchImages = false
     enableGestures(true)
+  }
+
+  public override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+    coordinator.animateAlongsideTransition(
+      { context in
+        self.setupConstraintsForAllViews(newCollection.verticalSizeClass == .Compact)
+      },
+      completion: nil)
+
+  }
+
+  func setupConstraintsForAllViews(compactHeight: Bool) {
+    setupConstraints(compactHeight)
+    bottomContainer.setupConstraints(compactHeight)
+    topView.setupConstraints(compactHeight)
   }
 
   // MARK: - Notifications
@@ -289,8 +305,13 @@ public class ImagePickerController: UIViewController {
   }
 
   func updateGalleryViewFrames(constant: CGFloat) {
-    galleryView.frame.origin.y = totalSize.height - bottomContainer.frame.height - constant
-    galleryView.frame.size.height = constant
+    if view.traitCollection.verticalSizeClass == .Compact {
+      // Don't show the gallery when we have a compact (phone landscape) height
+      galleryView.frame.size.height = 0
+    } else {
+      galleryView.frame.origin.y = totalSize.height - bottomContainer.frame.height - constant
+      galleryView.frame.size.height = constant
+    }
   }
 
   func enableGestures(enabled: Bool) {

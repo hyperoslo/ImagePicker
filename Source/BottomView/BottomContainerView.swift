@@ -73,7 +73,6 @@ public class BottomContainerView: UIView {
     backgroundColor = Configuration.backgroundColor
     stackView.addGestureRecognizer(tapGestureRecognizer)
 
-    setupConstraints()
   }
 
   public required init?(coder aDecoder: NSCoder) {
