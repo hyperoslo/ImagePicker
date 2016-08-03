@@ -110,7 +110,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
-    setCorrectOrientationToPreviewLayer()
+
+    previewLayer?.connection.videoOrientation = .Portrait
     locationManager?.startUpdatingLocation()
   }
 
@@ -244,25 +245,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   func showNoCamera(show: Bool) {
     [noCameraButton, noCameraLabel].forEach {
       show ? view.addSubview($0) : $0.removeFromSuperview()
-    }
-  }
-
-  func setCorrectOrientationToPreviewLayer() {
-    guard let previewLayer = self.previewLayer,
-      connection = previewLayer.connection
-      else { return }
-
-    switch UIDevice.currentDevice().orientation {
-    case .Portrait:
-      connection.videoOrientation = .Portrait
-    case .LandscapeLeft:
-      connection.videoOrientation = .LandscapeRight
-    case .LandscapeRight:
-      connection.videoOrientation = .LandscapeLeft
-    case .PortraitUpsideDown:
-      connection.videoOrientation = .PortraitUpsideDown
-    default:
-      break
     }
   }
 
