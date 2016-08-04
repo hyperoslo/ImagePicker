@@ -12,6 +12,7 @@
 		29D699E91B70ABFC0021FA73 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29D699E71B70ABFC0021FA73 /* LaunchScreen.xib */; };
 		29D699FF1B70ACD50021FA73 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 29D699FE1B70ACD50021FA73 /* Podfile */; };
 		4221AE1F43A643A689082012 /* Pods_ImagePickerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1148A4E4BFF9A0AAED07754 /* Pods_ImagePickerDemo.framework */; };
+		D20AA8A51D5330100085FF5B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AA8A41D5330100085FF5B /* ViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		6F9E1FF802198DC16F260795 /* Pods-ImagePickerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImagePickerDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImagePickerDemo/Pods-ImagePickerDemo.release.xcconfig"; sourceTree = "<group>"; };
 		733A7AD0105A657A80502E72 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4392341AC7391C01AD9F350 /* Pods-ImagePickerDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImagePickerDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImagePickerDemo/Pods-ImagePickerDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		D20AA8A41D5330100085FF5B /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F1148A4E4BFF9A0AAED07754 /* Pods_ImagePickerDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImagePickerDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -69,6 +71,7 @@
 				29D699E51B70ABFC0021FA73 /* Images.xcassets */,
 				29D699E71B70ABFC0021FA73 /* LaunchScreen.xib */,
 				29D699DC1B70ABFC0021FA73 /* Supporting Files */,
+				D20AA8A41D5330100085FF5B /* ViewController.swift */,
 			);
 			path = ImagePickerDemo;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D20AA8A51D5330100085FF5B /* ViewController.swift in Sources */,
 				29D699DF1B70ABFC0021FA73 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
