@@ -40,12 +40,14 @@ class ViewController: UIViewController, ImagePickerDelegate {
   }
 
   func wrapperDidPress(imagePicker: ImagePickerController, images: [UIImage]) {
+    guard images.count > 0 else { return }
+
     let lightboxImages = images.map {
       return LightboxImage(image: $0)
     }
 
     let lightbox = LightboxController(images: lightboxImages, startIndex: 0)
-    presentViewController(lightbox, animated: true, completion: nil)
+    imagePicker.presentViewController(lightbox, animated: true, completion: nil)
   }
 
   func doneButtonDidPress(imagePicker: ImagePickerController, images: [UIImage]) {
