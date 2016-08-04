@@ -1,16 +1,32 @@
 PODS:
-  - ImagePicker (1.3.0)
+  - Hue (1.1.1)
+  - ImagePicker (1.4.0)
+  - Lightbox (1.0.0):
+    - Hue
+    - Sugar
+  - Sugar (1.2.0)
 
 DEPENDENCIES:
   - ImagePicker (from `../../`)
+  - Lightbox (from `https://github.com/hyperoslo/Lightbox.git`)
 
 EXTERNAL SOURCES:
   ImagePicker:
     :path: "../../"
+  Lightbox:
+    :git: https://github.com/hyperoslo/Lightbox.git
+
+CHECKOUT OPTIONS:
+  Lightbox:
+    :commit: 87949871e1a3c61dc0c7470d52c530a4196fcc9a
+    :git: https://github.com/hyperoslo/Lightbox.git
 
 SPEC CHECKSUMS:
-  ImagePicker: ed649bfeb850b2b8715c9e95a35725c730b5f627
+  Hue: 931aeeadcb29ce5de5b97589aa936be4638a1501
+  ImagePicker: 6659ccdd4737bfa14ed3b4aa7ffe18b193d92a0c
+  Lightbox: 857975225b89e83758b4895c035f5621d62e9bba
+  Sugar: 556b623f0f8846cf08de7302701892f11d567419
 
-PODFILE CHECKSUM: ebbcd890a98cb01cb66183bea63d5e8e97f82923
+PODFILE CHECKSUM: a71ec783dda324ec7860ef3ad95fd6d1d38e53c3
 
 COCOAPODS: 1.0.1
