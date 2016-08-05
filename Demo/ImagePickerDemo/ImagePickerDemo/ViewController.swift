@@ -1,6 +1,7 @@
 import UIKit
 import ImagePicker
 import Lightbox
+import CoreLocation
 
 class ViewController: UIViewController, ImagePickerDelegate {
 
@@ -41,10 +42,10 @@ class ViewController: UIViewController, ImagePickerDelegate {
   
   
 
-  func wrapperDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) {
+  func wrapperDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)]) {
     guard images.count > 0 else { return }
 
-    let lightboxImages = images.map { image, coordinates in
+    let lightboxImages = images.map { image, location in
       return image
     }
 
@@ -52,7 +53,7 @@ class ViewController: UIViewController, ImagePickerDelegate {
 //    imagePicker.presentViewController(lightbox, animated: true, completion: nil)
   }
 
-  func doneButtonDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) {
+  func doneButtonDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)]) {
     
     imagePicker.dismissViewControllerAnimated(true, completion: nil)
     

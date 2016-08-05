@@ -4,8 +4,8 @@ import Photos
 
 public protocol ImagePickerDelegate: class {
 
-  func wrapperDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)])
-  func doneButtonDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)])
+  func wrapperDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)])
+  func doneButtonDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)])
   func cancelButtonDidPress(imagePicker: ImagePickerController)
 }
 
@@ -332,7 +332,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func doneButtonDidPress() {
     AssetManager.resolveAssets(stack.assets, imagesClosers: {
-        (images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) in
+        (images: [(image: UIImage,location: CLLocation?)]) in
         self.delegate?.doneButtonDidPress(self, images: images)
     })
     
@@ -345,7 +345,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func imageStackViewDidPress() {
     AssetManager.resolveAssets(stack.assets, imagesClosers: {
-        (images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) in
+        (images: [(image: UIImage,location: CLLocation?)]) in
         self.delegate?.wrapperDidPress(self, images: images)
     }) 
   }
