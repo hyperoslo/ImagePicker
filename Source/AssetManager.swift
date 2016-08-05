@@ -53,7 +53,7 @@ public class AssetManager {
     }
   }
 
-  public static func resolveAssets(assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)] {
+    public static func resolveAssets(assets: [PHAsset],imagesClosers: ([(image: UIImage,(lat: NSNumber,lon: NSNumber)?)])->(), size: CGSize = CGSize(width: 720, height: 1280)) {
     let imageManager = PHImageManager.defaultManager()
     let requestOptions = PHImageRequestOptions()
     requestOptions.synchronous = true
@@ -74,12 +74,14 @@ public class AssetManager {
         imageManager.requestImageForAsset(asset, targetSize: size, contentMode: .AspectFill, options: requestOptions) { image, info in
           if let image = image {
             images.append((image, coordinates))
+            
+            if (images.count == assets.count) {
+                imagesClosers(images)
+            }
           }
         }
         
       }
     }
-    
-    return images
   }
 }

@@ -38,6 +38,8 @@ class ViewController: UIViewController, ImagePickerDelegate {
   func cancelButtonDidPress(imagePicker: ImagePickerController) {
     imagePicker.dismissViewControllerAnimated(true, completion: nil)
   }
+  
+  
 
   func wrapperDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) {
     guard images.count > 0 else { return }
@@ -51,6 +53,8 @@ class ViewController: UIViewController, ImagePickerDelegate {
   }
 
   func doneButtonDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) {
+    
     imagePicker.dismissViewControllerAnimated(true, completion: nil)
+    
   }
 }

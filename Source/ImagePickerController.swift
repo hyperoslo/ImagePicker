@@ -331,8 +331,11 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    let images = AssetManager.resolveAssets(stack.assets)
-    delegate?.doneButtonDidPress(self, images: images)
+    AssetManager.resolveAssets(stack.assets, imagesClosers: {
+        (images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) in
+        self.delegate?.doneButtonDidPress(self, images: images)
+    })
+    
   }
 
   func cancelButtonDidPress() {
@@ -341,8 +344,10 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    let images = AssetManager.resolveAssets(stack.assets)
-    delegate?.wrapperDidPress(self, images: images)
+    AssetManager.resolveAssets(stack.assets, imagesClosers: {
+        (images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) in
+        self.delegate?.wrapperDidPress(self, images: images)
+    }) 
   }
 }
 
