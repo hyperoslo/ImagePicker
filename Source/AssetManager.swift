@@ -53,22 +53,21 @@ public class AssetManager {
     }
   }
 
-    public static func resolveAssets(assets: [PHAsset],imagesClosers: ([(image: UIImage,(lat: NSNumber,lon: NSNumber)?)])->(), size: CGSize = CGSize(width: 720, height: 1280)) {
+  public static func resolveAssets(assets: [PHAsset],imagesClosers: ([(image: UIImage,(lat: NSNumber,lon: NSNumber)?)])->(), size: CGSize = CGSize(width: 720, height: 1280)) {
     let imageManager = PHImageManager.defaultManager()
     let requestOptions = PHImageRequestOptions()
     requestOptions.synchronous = true
-
+    
     var images = [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]()
     for asset in assets {
       let options = PHContentEditingInputRequestOptions()
       options.networkAccessAllowed = true
       
       asset.requestContentEditingInputWithOptions(options) { (contentEditingInput: PHContentEditingInput?, _) -> Void in
-        let fullImage = CIImage(contentsOfURL: contentEditingInput!.fullSizeImageURL!)
         
         var coordinates : (lat:NSNumber,lon: NSNumber)? = nil
-        if let gps = fullImage!.properties["{GPS}"] {
-          coordinates = (NSNumber(double:(gps["Latitude"] as? Double)!),NSNumber(double:(gps["Longitude"] as? Double)!))
+        if let location = contentEditingInput!.location {
+          coordinates = (NSNumber(double:location.coordinate.latitude),NSNumber(double:location.coordinate.longitude))
         }
         
         imageManager.requestImageForAsset(asset, targetSize: size, contentMode: .AspectFill, options: requestOptions) { image, info in
@@ -76,7 +75,7 @@ public class AssetManager {
             images.append((image, coordinates))
             
             if (images.count == assets.count) {
-                imagesClosers(images)
+              imagesClosers(images)
             }
           }
         }
