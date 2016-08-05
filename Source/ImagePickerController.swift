@@ -4,8 +4,8 @@ import Photos
 
 public protocol ImagePickerDelegate: class {
 
-  func wrapperDidPress(imagePicker: ImagePickerController, images: [UIImage])
-  func doneButtonDidPress(imagePicker: ImagePickerController, images: [UIImage])
+  func wrapperDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)])
+  func doneButtonDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)])
   func cancelButtonDidPress(imagePicker: ImagePickerController)
 }
 

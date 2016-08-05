@@ -53,17 +53,30 @@ public class AssetManager {
     }
   }
 
-  public static func resolveAssets(assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [UIImage] {
+  public static func resolveAssets(assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)] {
     let imageManager = PHImageManager.defaultManager()
     let requestOptions = PHImageRequestOptions()
     requestOptions.synchronous = true
 
-    var images = [UIImage]()
+    var images = [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]()
     for asset in assets {
-      imageManager.requestImageForAsset(asset, targetSize: size, contentMode: .AspectFill, options: requestOptions) { image, info in
-        if let image = image {
-          images.append(image)
+      let options = PHContentEditingInputRequestOptions()
+      options.networkAccessAllowed = true
+      
+      asset.requestContentEditingInputWithOptions(options) { (contentEditingInput: PHContentEditingInput?, _) -> Void in
+        let fullImage = CIImage(contentsOfURL: contentEditingInput!.fullSizeImageURL!)
+        
+        var coordinates : (lat:NSNumber,lon: NSNumber)? = nil
+        if let gps = fullImage!.properties["{GPS}"] {
+          coordinates = (NSNumber(double:(gps["Latitude"] as? Double)!),NSNumber(double:(gps["Longitude"] as? Double)!))
         }
+        
+        imageManager.requestImageForAsset(asset, targetSize: size, contentMode: .AspectFill, options: requestOptions) { image, info in
+          if let image = image {
+            images.append((image, coordinates))
+          }
+        }
+        
       }
     }
     

@@ -39,18 +39,18 @@ class ViewController: UIViewController, ImagePickerDelegate {
     imagePicker.dismissViewControllerAnimated(true, completion: nil)
   }
 
-  func wrapperDidPress(imagePicker: ImagePickerController, images: [UIImage]) {
+  func wrapperDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) {
     guard images.count > 0 else { return }
 
-    let lightboxImages = images.map {
-      return LightboxImage(image: $0)
+    let lightboxImages = images.map { image, coordinates in
+      return image
     }
 
-    let lightbox = LightboxController(images: lightboxImages, startIndex: 0)
-    imagePicker.presentViewController(lightbox, animated: true, completion: nil)
+//    let lightbox = LightboxController(images: lightboxImages, startIndex: 0)
+//    imagePicker.presentViewController(lightbox, animated: true, completion: nil)
   }
 
-  func doneButtonDidPress(imagePicker: ImagePickerController, images: [UIImage]) {
+  func doneButtonDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,(lat: NSNumber,lon: NSNumber)?)]) {
     imagePicker.dismissViewControllerAnimated(true, completion: nil)
   }
 }
