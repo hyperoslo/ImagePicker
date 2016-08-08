@@ -33,10 +33,23 @@ public struct Configuration {
   // MARK: Dimensions
 
   public static var cellSpacing: CGFloat = 2
+  public static var indicatorWidth: CGFloat = 41
+  public static var indicatorHeight: CGFloat = 8
 
   // MARK: Custom behaviour
 
   public static var canRotateCamera = true
   public static var collapseCollectionViewWhileShot = true
   public static var recordLocation = true
+
+  // MARK: Images
+    
+  public static var indicatorView: UIView = {
+    let view = UIView()
+    view.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.6)
+    view.layer.cornerRadius = 4
+    view.translatesAutoresizingMaskIntoConstraints = false
+        
+    return view
+  }()
 }
