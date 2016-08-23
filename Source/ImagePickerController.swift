@@ -74,6 +74,7 @@ public class ImagePickerController: UIViewController {
   var initialContentOffset: CGPoint?
   var numberOfCells: Int?
   var statusBarHidden = true
+  var preferredImageSize: CGSize?
 
   private var isTakingPicture = false
   public var doneButtonTitle: String? {
@@ -331,7 +332,13 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    let images = AssetManager.resolveAssets(stack.assets)
+    var images: [UIImage]
+    if let preferredImageSize = preferredImageSize {
+      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+    } else {
+      images = AssetManager.resolveAssets(stack.assets)
+    }
+
     delegate?.doneButtonDidPress(self, images: images)
   }
 
@@ -341,7 +348,13 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    let images = AssetManager.resolveAssets(stack.assets)
+    var images: [UIImage]
+    if let preferredImageSize = preferredImageSize {
+        images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+    } else {
+        images = AssetManager.resolveAssets(stack.assets)
+    }
+
     delegate?.wrapperDidPress(self, images: images)
   }
 }
