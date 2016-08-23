@@ -69,12 +69,12 @@ public class ImagePickerController: UIViewController {
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
+  public var preferredImageSize: CGSize?
   var totalSize: CGSize { return UIScreen.mainScreen().bounds.size }
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
   var numberOfCells: Int?
   var statusBarHidden = true
-  var preferredImageSize: CGSize?
 
   private var isTakingPicture = false
   public var doneButtonTitle: String? {
