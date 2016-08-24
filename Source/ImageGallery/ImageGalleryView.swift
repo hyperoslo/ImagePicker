@@ -4,8 +4,8 @@ import Photos
 protocol ImageGalleryPanGestureDelegate: class {
 
   func panGestureDidStart()
-  func panGestureDidChange(translation: CGPoint)
-  func panGestureDidEnd(translation: CGPoint, velocity: CGPoint)
+  func panGestureDidChange(_ translation: CGPoint)
+  func panGestureDidEnd(_ translation: CGPoint, velocity: CGPoint)
 }
 
 public class ImageGalleryView: UIView {
@@ -29,10 +29,10 @@ public class ImageGalleryView: UIView {
 
   lazy var collectionViewLayout: UICollectionViewLayout = { [unowned self] in
     let layout = ImageGalleryLayout()
-    layout.scrollDirection = .Horizontal
+    layout.scrollDirection = .horizontal
     layout.minimumInteritemSpacing = Configuration.cellSpacing
     layout.minimumLineSpacing = 2
-    layout.sectionInset = UIEdgeInsetsZero
+    layout.sectionInset = UIEdgeInsets.zero
 
     return layout
     }()
@@ -41,7 +41,7 @@ public class ImageGalleryView: UIView {
     let view = UIView()
     view.translatesAutoresizingMaskIntoConstraints = false
     view.addGestureRecognizer(self.panGestureRecognizer)
-    view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.6)
+    view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
 
     return view
     }()
@@ -72,7 +72,7 @@ public class ImageGalleryView: UIView {
   var collectionSize: CGSize?
   var shouldTransform = false
   var imagesBeforeLoading = 0
-  var fetchResult: PHFetchResult?
+  var fetchResult: PHFetchResult<AnyObject>?
   var canFetchImages = false
   var imageLimit = 0
 
@@ -83,7 +83,7 @@ public class ImageGalleryView: UIView {
 
     backgroundColor = Configuration.mainColor
 
-    collectionView.registerClass(ImageGalleryViewCell.self,
+    collectionView.register(ImageGalleryViewCell.self,
       forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
     [collectionView, topSeparator].forEach { addSubview($0) }
@@ -106,11 +106,11 @@ public class ImageGalleryView: UIView {
   }
 
   func updateFrames() {
-    let totalWidth = UIScreen.mainScreen().bounds.width
+    let totalWidth = UIScreen.main.bounds.width
     frame.size.width = totalWidth
     let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
     topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
-    topSeparator.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin, .FlexibleWidth]
+    topSeparator.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleWidth]
     Configuration.indicatorView.frame = CGRect(x: (totalWidth - Configuration.indicatorWidth) / 2, y: (topSeparator.frame.height - Configuration.indicatorHeight) / 2,
       width: Configuration.indicatorWidth, height: Configuration.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
@@ -123,7 +123,7 @@ public class ImageGalleryView: UIView {
     let height = bounds.height
     let threshold = Dimensions.galleryBarHeight * 2
 
-    UIView.animateWithDuration(0.25) {
+    UIView.animate(withDuration: 0.25) {
       if threshold > height || self.collectionView.alpha != 0 {
         self.noImagesLabel.alpha = 0
       } else {
@@ -135,10 +135,10 @@ public class ImageGalleryView: UIView {
 
   // MARK: - Photos handler
 
-  func fetchPhotos(completion: (() -> Void)? = nil) {
+  func fetchPhotos(_ completion: (() -> Void)? = nil) {
     AssetManager.fetch { assets in
       self.assets.removeAll()
-      self.assets.appendContentsOf(assets)
+      self.assets.append(contentsOf: assets)
       self.collectionView.reloadData()
 
       completion?()
@@ -147,24 +147,24 @@ public class ImageGalleryView: UIView {
 
   // MARK: - Pan gesture recognizer
 
-  func handlePanGestureRecognizer(gesture: UIPanGestureRecognizer) {
+  func handlePanGestureRecognizer(_ gesture: UIPanGestureRecognizer) {
     guard let superview = superview else { return }
 
-    let translation = gesture.translationInView(superview)
-    let velocity = gesture.velocityInView(superview)
+    let translation = gesture.translation(in: superview)
+    let velocity = gesture.velocity(in: superview)
 
     switch gesture.state {
-    case .Began:
+    case .began:
       delegate?.panGestureDidStart()
-    case .Changed:
+    case .changed:
       delegate?.panGestureDidChange(translation)
-    case .Ended:
+    case .ended:
       delegate?.panGestureDidEnd(translation, velocity: velocity)
     default: break
     }
   }
 
-  func displayNoImagesMessage(hideCollectionView: Bool) {
+  func displayNoImagesMessage(_ hideCollectionView: Bool) {
     collectionView.alpha = hideCollectionView ? 0 : 1
     updateNoImagesLabel()
   }
@@ -174,9 +174,9 @@ public class ImageGalleryView: UIView {
 
 extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 
-  public func collectionView(collectionView: UICollectionView,
+  public func collectionView(_ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    sizeForItemAt indexPath: IndexPath) -> CGSize {
       guard let collectionSize = collectionSize else { return CGSize.zero }
 
       return collectionSize
@@ -187,37 +187,37 @@ extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 
 extension ImageGalleryView: UICollectionViewDelegate {
 
-  public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-    guard let cell = collectionView.cellForItemAtIndexPath(indexPath)
+  public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    guard let cell = collectionView.cellForItem(at: indexPath)
       as? ImageGalleryViewCell else { return }
 
-    let asset = assets[indexPath.row]
+    let asset = assets[(indexPath as NSIndexPath).row]
 
     AssetManager.resolveAsset(asset) { image in
       guard let _ = image else { return }
 
       if cell.selectedImageView.image != nil {
-        UIView.animateWithDuration(0.2, animations: {
-          cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+        UIView.animate(withDuration: 0.2, animations: {
+          cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
           }) { _ in
             cell.selectedImageView.image = nil
         }
         self.selectedStack.dropAsset(asset)
       } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
         cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
-        cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
-        UIView.animateWithDuration(0.2) { _ in
-          cell.selectedImageView.transform = CGAffineTransformIdentity
+        cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.2) { _ in
+          cell.selectedImageView.transform = CGAffineTransform.identity
         }
         self.selectedStack.pushAsset(asset)
       }
     }
   }
 
-  public func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell,
-    forItemAtIndexPath indexPath: NSIndexPath) {
-      guard indexPath.row + 10 >= assets.count
-        && indexPath.row < fetchResult?.count
+  public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
+    forItemAt indexPath: IndexPath) {
+      guard (indexPath as NSIndexPath).row + 10 >= assets.count
+        && (indexPath as NSIndexPath).row < fetchResult?.count
         && canFetchImages else { return }
 
       fetchPhotos()

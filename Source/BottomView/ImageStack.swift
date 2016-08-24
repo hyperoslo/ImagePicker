@@ -12,22 +12,22 @@ public class ImageStack {
   public var assets = [PHAsset]()
   private let imageKey = "image"
 
-  public func pushAsset(asset: PHAsset) {
+  public func pushAsset(_ asset: PHAsset) {
     assets.append(asset)
-    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidPush, object: self, userInfo: [imageKey: asset])
+    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.imageDidPush), object: self, userInfo: [imageKey: asset])
   }
 
-  public func dropAsset(asset: PHAsset) {
+  public func dropAsset(_ asset: PHAsset) {
     assets = assets.filter() {$0 != asset}
-    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidDrop, object: self, userInfo: [imageKey: asset])
+    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.imageDidDrop), object: self, userInfo: [imageKey: asset])
   }
 
-  public func resetAssets(assetsArray: [PHAsset]) {
+  public func resetAssets(_ assetsArray: [PHAsset]) {
     assets = assetsArray
-    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.stackDidReload, object: self, userInfo: nil)
+    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.stackDidReload), object: self, userInfo: nil)
   }
 
-  public func containsAsset(asset: PHAsset) -> Bool {
+  public func containsAsset(_ asset: PHAsset) -> Bool {
     return assets.contains(asset)
   }
 }
