@@ -69,6 +69,7 @@ public class ImagePickerController: UIViewController {
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
+  public var preferredImageSize: CGSize?
   var totalSize: CGSize { return UIScreen.mainScreen().bounds.size }
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
@@ -331,7 +332,13 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    let images = AssetManager.resolveAssets(stack.assets)
+    var images: [UIImage]
+    if let preferredImageSize = preferredImageSize {
+      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+    } else {
+      images = AssetManager.resolveAssets(stack.assets)
+    }
+
     delegate?.doneButtonDidPress(self, images: images)
   }
 
@@ -341,7 +348,13 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    let images = AssetManager.resolveAssets(stack.assets)
+    var images: [UIImage]
+    if let preferredImageSize = preferredImageSize {
+        images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+    } else {
+        images = AssetManager.resolveAssets(stack.assets)
+    }
+
     delegate?.wrapperDidPress(self, images: images)
   }
 }
