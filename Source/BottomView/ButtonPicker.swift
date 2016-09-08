@@ -7,7 +7,7 @@ protocol ButtonPickerDelegate: class {
 
 class ButtonPicker: UIButton {
 
-  enum Dimensions {
+  struct Dimensions {
     static let borderWidth: CGFloat = 2
     static let buttonSize: CGFloat = 58
     static let buttonBorderSize: CGFloat = 68
@@ -65,6 +65,7 @@ class ButtonPicker: UIButton {
   func setupButton() {
     backgroundColor = .whiteColor()
     layer.cornerRadius = Dimensions.buttonSize / 2
+    accessibilityLabel = "Take photo"
     addTarget(self, action: #selector(pickerButtonDidPress(_:)), forControlEvents: .TouchUpInside)
     addTarget(self, action: #selector(pickerButtonDidHighlight(_:)), forControlEvents: .TouchDown)
   }

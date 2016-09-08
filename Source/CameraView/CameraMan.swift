@@ -151,7 +151,7 @@ class CameraMan {
   func takePhoto(previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?, completion: (() -> Void)? = nil) {
     guard let connection = stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo) else { return }
 
-    connection.videoOrientation = previewLayer.connection.videoOrientation
+    connection.videoOrientation = Helper.videoOrientation()
 
     dispatch_async(queue) {
       self.stillImageOutput?.captureStillImageAsynchronouslyFromConnection(connection) {

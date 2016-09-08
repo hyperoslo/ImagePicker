@@ -12,7 +12,7 @@ extension ImageGalleryView: UICollectionViewDataSource {
     let cell = collectionView.dequeueReusableCell(forIndexPath: indexPath) as ImageGalleryViewCell
     let asset = assets[indexPath.row]
 
-    ImagePicker.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in
+    AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in
       if let image = image {
         cell.configureCell(image)
 

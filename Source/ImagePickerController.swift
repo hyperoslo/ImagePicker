@@ -2,7 +2,7 @@ import UIKit
 import MediaPlayer
 import Photos
 
-public protocol ImagePickerDelegate: class {
+@objc public protocol ImagePickerDelegate: class {
 
   func wrapperDidPress(imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(imagePicker: ImagePickerController, images: [UIImage])
@@ -63,6 +63,7 @@ public class ImagePickerController: UIViewController {
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
+  public var preferredImageSize: CGSize?
   var totalSize: CGSize { return UIScreen.mainScreen().bounds.size }
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
@@ -211,6 +212,11 @@ public class ImagePickerController: UIViewController {
       selector: #selector(volumeChanged(_:)),
       name: "AVSystemController_SystemVolumeDidChangeNotification",
       object: nil)
+
+    NSNotificationCenter.defaultCenter().addObserver(self,
+      selector: #selector(handleRotation(_:)),
+      name: UIDeviceOrientationDidChangeNotification,
+      object: nil)
   }
 
   func didReloadAssets(notification: NSNotification) {
@@ -322,7 +328,13 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    let images = ImagePicker.resolveAssets(stack.assets)
+    var images: [UIImage]
+    if let preferredImageSize = preferredImageSize {
+      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+    } else {
+      images = AssetManager.resolveAssets(stack.assets)
+    }
+
     delegate?.doneButtonDidPress(self, images: images)
   }
 
@@ -332,7 +344,13 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    let images = ImagePicker.resolveAssets(stack.assets)
+    var images: [UIImage]
+    if let preferredImageSize = preferredImageSize {
+        images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+    } else {
+        images = AssetManager.resolveAssets(stack.assets)
+    }
+
     delegate?.wrapperDidPress(self, images: images)
   }
 }
@@ -364,6 +382,35 @@ extension ImagePickerController: CameraViewDelegate {
     topView.flashButton.hidden = true
     topView.rotateCamera.hidden = true
     bottomContainer.pickerButton.enabled = false
+  }
+
+  // MARK: - Rotation
+
+  public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    return .Portrait
+  }
+
+  public func handleRotation(note: NSNotification) {
+    let rotate = Helper.rotationTransform()
+
+    UIView.animateWithDuration(0.25) {
+      [self.topView.rotateCamera, self.bottomContainer.pickerButton,
+        self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
+        $0.transform = rotate
+      }
+
+      self.galleryView.collectionViewLayout.invalidateLayout()
+
+      let translate: CGAffineTransform
+      if [UIDeviceOrientation.LandscapeLeft, UIDeviceOrientation.LandscapeRight]
+        .contains(UIDevice.currentDevice().orientation) {
+        translate = CGAffineTransformMakeTranslation(-20, 15)
+      } else {
+        translate = CGAffineTransformIdentity
+      }
+
+      self.topView.flashButton.transform = CGAffineTransformConcat(rotate, translate)
+    }
   }
 }
 
@@ -446,15 +493,5 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     } else if velocity.y > GestureConstants.velocity || galleryHeight < GestureConstants.minimumHeight {
       collapseGalleryView(nil)
     }
-  }
-
-  override public func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-    super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-
-    cameraController.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-    coordinator.animateAlongsideTransition({ (context) in
-      self.collapseGalleryView(nil)
-      self.galleryView.updateFrames()
-      }, completion: nil)
   }
 }

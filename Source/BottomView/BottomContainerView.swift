@@ -10,7 +10,7 @@ protocol BottomContainerViewDelegate: class {
 
 public class BottomContainerView: UIView {
 
-  enum Dimensions {
+  struct Dimensions {
     static let height: CGFloat = 101
   }
 
@@ -66,6 +66,7 @@ public class BottomContainerView: UIView {
     }
 
     backgroundColor = Configuration.backgroundColor
+    stackView.accessibilityLabel = "Image stack"
     stackView.addGestureRecognizer(tapGestureRecognizer)
 
     setupConstraints()

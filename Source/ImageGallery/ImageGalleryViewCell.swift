@@ -14,6 +14,10 @@ class ImageGalleryViewCell: UICollectionViewCell {
       view.clipsToBounds = true
       contentView.addSubview(view)
     }
+
+    isAccessibilityElement = true
+    accessibilityLabel = "Photo"
+
     setupConstraints()
   }
 
