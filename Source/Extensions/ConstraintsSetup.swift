@@ -4,162 +4,163 @@ import UIKit
 
 extension BottomContainerView {
 
-  func setupConstraints() {
+	func setupConstraints() {
 
-    for attribute: NSLayoutAttribute in [.CenterX, .CenterY] {
-      addConstraint(NSLayoutConstraint(item: pickerButton, attribute: attribute,
-        relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
+		for attribute: NSLayoutAttribute in [.CenterX, .CenterY] {
+			NSLayoutConstraint(item: pickerButton, attribute: attribute,
+				relatedBy: .Equal, toItem: self, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
 
-      addConstraint(NSLayoutConstraint(item: borderPickerButton, attribute: attribute,
-        relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
-    }
+			NSLayoutConstraint(item: borderPickerButton, attribute: attribute,
+				relatedBy: .Equal, toItem: self, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
+		}
 
-    for attribute: NSLayoutAttribute in [.Width, .Left, .Top] {
-      addConstraint(NSLayoutConstraint(item: topSeparator, attribute: attribute,
-        relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
-    }
+		for attribute: NSLayoutAttribute in [.Width, .Left, .Top] {
+			NSLayoutConstraint(item: topSeparator, attribute: attribute,
+				relatedBy: .Equal, toItem: self, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
+		}
 
-    for attribute: NSLayoutAttribute in [.Width, .Height] {
-      addConstraint(NSLayoutConstraint(item: pickerButton, attribute: attribute,
-        relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
+		for attribute: NSLayoutAttribute in [.Width, .Height] {
+			NSLayoutConstraint(item: pickerButton, attribute: attribute,
+				relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+				multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize).active = true
 
-      addConstraint(NSLayoutConstraint(item: borderPickerButton, attribute: attribute,
-        relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
+			NSLayoutConstraint(item: borderPickerButton, attribute: attribute,
+				relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+				multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize).active = true
 
-      addConstraint(NSLayoutConstraint(item: stackView, attribute: attribute,
-        relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
-    }
+			NSLayoutConstraint(item: stackView, attribute: attribute,
+				relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+				multiplier: 1, constant: ImageStackView.Dimensions.imageSize).active = true
+		}
 
-    addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterY,
-      relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
+		NSLayoutConstraint(item: doneButton, attribute: .CenterY,
+			relatedBy: .Equal, toItem: self, attribute: .CenterY,
+			multiplier: 1, constant: 0).active = true
 
-    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterY,
-      relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: -2))
+		NSLayoutConstraint(item: stackView, attribute: .CenterY,
+			relatedBy: .Equal, toItem: self, attribute: .CenterY,
+			multiplier: 1, constant: -2).active = true
 
-    addConstraint(NSLayoutConstraint(item: doneButton, attribute: .CenterX,
-      relatedBy: .Equal, toItem: self, attribute: .Right,
-      multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width)/2)/2))
+		NSLayoutConstraint(item: doneButton, attribute: .CenterX,
+			relatedBy: .Equal, toItem: self, attribute: .Right,
+			multiplier: 1, constant: -(UIScreen.mainScreen().bounds.width - (ButtonPicker.Dimensions.buttonBorderSize + UIScreen.mainScreen().bounds.width) / 2) / 2)
+			.active = true
 
-    addConstraint(NSLayoutConstraint(item: stackView, attribute: .CenterX,
-      relatedBy: .Equal, toItem: self, attribute: .Left,
-      multiplier: 1, constant: UIScreen.mainScreen().bounds.width/4 - ButtonPicker.Dimensions.buttonBorderSize/3))
+		NSLayoutConstraint(item: stackView, attribute: .CenterX,
+			relatedBy: .Equal, toItem: self, attribute: .Left,
+			multiplier: 1, constant: UIScreen.mainScreen().bounds.width / 4 - ButtonPicker.Dimensions.buttonBorderSize / 3).active = true
 
-    addConstraint(NSLayoutConstraint(item: topSeparator, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: 1))
-  }
+		NSLayoutConstraint(item: topSeparator, attribute: .Height,
+			relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+			multiplier: 1, constant: 1).active = true
+	}
 }
 
 // MARK: - TopView autolayout
 
 extension TopView {
 
-  func setupConstraints() {
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Left,
-      relatedBy: .Equal, toItem: self, attribute: .Left,
-      multiplier: 1, constant: Dimensions.leftOffset))
+	func setupConstraints() {
+		NSLayoutConstraint(item: flashButton, attribute: .Left,
+			relatedBy: .Equal, toItem: self, attribute: .Left,
+			multiplier: 1, constant: Dimensions.leftOffset).active = true
 
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .CenterY,
-      relatedBy: .Equal, toItem: self, attribute: .CenterY,
-      multiplier: 1, constant: 0))
+		NSLayoutConstraint(item: flashButton, attribute: .CenterY,
+			relatedBy: .Equal, toItem: self, attribute: .CenterY,
+			multiplier: 1, constant: 0).active = true
 
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Width,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: 55))
+		NSLayoutConstraint(item: flashButton, attribute: .Width,
+			relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+			multiplier: 1, constant: 55).active = true
 
-    if Configuration.canRotateCamera {
-      addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Right,
-        relatedBy: .Equal, toItem: self, attribute: .Right,
-        multiplier: 1, constant: Dimensions.rightOffset))
+		if Configuration.canRotateCamera {
+			NSLayoutConstraint(item: rotateCamera, attribute: .Right,
+				relatedBy: .Equal, toItem: self, attribute: .Right,
+				multiplier: 1, constant: Dimensions.rightOffset).active = true
 
-      addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .CenterY,
-        relatedBy: .Equal, toItem: self, attribute: .CenterY,
-        multiplier: 1, constant: 0))
+			NSLayoutConstraint(item: rotateCamera, attribute: .CenterY,
+				relatedBy: .Equal, toItem: self, attribute: .CenterY,
+				multiplier: 1, constant: 0).active = true
 
-      addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Width,
-        relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: 55))
+			NSLayoutConstraint(item: rotateCamera, attribute: .Width,
+				relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+				multiplier: 1, constant: 55).active = true
 
-      addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .Height,
-        relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-        multiplier: 1, constant: 55))
-    }
-  }
+			NSLayoutConstraint(item: rotateCamera, attribute: .Height,
+				relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+				multiplier: 1, constant: 55).active = true
+		}
+	}
 }
 
 // MARK: - Controller autolayout
 
 extension ImagePickerController {
 
-  func setupConstraints() {
-    let attributes: [NSLayoutAttribute] = [.Bottom, .Right, .Width]
-    let topViewAttributes: [NSLayoutAttribute] = [.Left, .Top, .Width]
+	func setupConstraints() {
+		let attributes: [NSLayoutAttribute] = [.Bottom, .Right, .Width]
+		let topViewAttributes: [NSLayoutAttribute] = [.Left, .Top, .Width]
 
-    for attribute in attributes {
-      view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: attribute,
-        relatedBy: .Equal, toItem: view, attribute: attribute,
-        multiplier: 1, constant: 0))
-    }
+		for attribute in attributes {
+			NSLayoutConstraint(item: bottomContainer, attribute: attribute,
+				relatedBy: .Equal, toItem: view, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
+		}
 
-    for attribute: NSLayoutAttribute in [.Left, .Top, .Width] {
-      view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: attribute,
-        relatedBy: .Equal, toItem: view, attribute: attribute,
-        multiplier: 1, constant: 0))
-    }
+		for attribute: NSLayoutAttribute in [.Left, .Top, .Width] {
+			NSLayoutConstraint(item: cameraController.view, attribute: attribute,
+				relatedBy: .Equal, toItem: view, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
+		}
 
-    for attribute in topViewAttributes {
-      view.addConstraint(NSLayoutConstraint(item: topView, attribute: attribute,
-        relatedBy: .Equal, toItem: self.view, attribute: attribute,
-        multiplier: 1, constant: 0))
-    }
+		for attribute in topViewAttributes {
+			NSLayoutConstraint(item: topView, attribute: attribute,
+				relatedBy: .Equal, toItem: self.view, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
+		}
 
-    view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: BottomContainerView.Dimensions.height))
+		NSLayoutConstraint(item: bottomContainer, attribute: .Height,
+			relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+			multiplier: 1, constant: BottomContainerView.Dimensions.height).active = true
 
-    view.addConstraint(NSLayoutConstraint(item: topView, attribute: .Height,
-      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
-      multiplier: 1, constant: TopView.Dimensions.height))
+		NSLayoutConstraint(item: topView, attribute: .Height,
+			relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+			multiplier: 1, constant: TopView.Dimensions.height).active = true
 
-    view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: .Height,
-      relatedBy: .Equal, toItem: view, attribute: .Height,
-      multiplier: 1, constant: -BottomContainerView.Dimensions.height))
-  }
+		NSLayoutConstraint(item: cameraController.view, attribute: .Height,
+			relatedBy: .Equal, toItem: view, attribute: .Height,
+			multiplier: 1, constant: -BottomContainerView.Dimensions.height).active = true
+	}
 }
 
 extension ImageGalleryViewCell {
 
-  func setupConstraints() {
+	func setupConstraints() {
 
-    for attribute: NSLayoutAttribute in [.Width, .Height, .CenterX, .CenterY] {
-      addConstraint(NSLayoutConstraint(item: imageView, attribute: attribute,
-        relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
+		for attribute: NSLayoutAttribute in [.Width, .Height, .CenterX, .CenterY] {
+			NSLayoutConstraint(item: imageView, attribute: attribute,
+				relatedBy: .Equal, toItem: self, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
 
-      addConstraint(NSLayoutConstraint(item: selectedImageView, attribute: attribute,
-        relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
-    }
-  }
+			NSLayoutConstraint(item: selectedImageView, attribute: attribute,
+				relatedBy: .Equal, toItem: self, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
+		}
+	}
 }
 
 extension ButtonPicker {
 
-  func setupConstraints() {
-    let attributes: [NSLayoutAttribute] = [.CenterX, .CenterY]
+	func setupConstraints() {
+		let attributes: [NSLayoutAttribute] = [.CenterX, .CenterY]
 
-    for attribute in attributes {
-      addConstraint(NSLayoutConstraint(item: numberLabel, attribute: attribute,
-        relatedBy: .Equal, toItem: self, attribute: attribute,
-        multiplier: 1, constant: 0))
-    }
-  }
+		for attribute in attributes {
+			NSLayoutConstraint(item: numberLabel, attribute: attribute,
+				relatedBy: .Equal, toItem: self, attribute: attribute,
+				multiplier: 1, constant: 0).active = true
+		}
+	}
 }
