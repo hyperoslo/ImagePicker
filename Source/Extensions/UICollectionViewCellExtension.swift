@@ -11,10 +11,10 @@ import UIKit
 protocol ReusableView { }
 
 extension ReusableView where Self: UIView {
-  
-  static var reuseIdentifier: String {
-    return String(self)
-  }
+
+	static var reuseIdentifier: String {
+		return String(self)
+	}
 }
 
 extension UICollectionViewCell: ReusableView { }

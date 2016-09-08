@@ -2,38 +2,38 @@ import Foundation
 import CoreLocation
 
 class LocationManager: NSObject {
-  
-  let locationManager = CLLocationManager()
-  var latestLocation: CLLocation?
 
-  override init() {
-    super.init()
-    locationManager.delegate = self
-    locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    locationManager.requestWhenInUseAuthorization()
-  }
+	let locationManager = CLLocationManager()
+	var latestLocation: CLLocation?
 
-  func startUpdatingLocation() {
-    locationManager.startUpdatingLocation()
-  }
+	override init() {
+		super.init()
+		locationManager.delegate = self
+		locationManager.desiredAccuracy = kCLLocationAccuracyBest
+		locationManager.requestWhenInUseAuthorization()
+	}
 
-  func stopUpdatingLocation() {
-    locationManager.stopUpdatingLocation()
-  }
+	func startUpdatingLocation() {
+		locationManager.startUpdatingLocation()
+	}
+
+	func stopUpdatingLocation() {
+		locationManager.stopUpdatingLocation()
+	}
 }
 
 extension LocationManager: CLLocationManagerDelegate {
-  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    // Pick the location with best (= smallest value) horizontal accuracy
-    latestLocation = locations.sort { $0.horizontalAccuracy < $1.horizontalAccuracy }.first
-  }
-  
-  func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-    if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
-      locationManager.startUpdatingLocation()
-    } else {
-      locationManager.stopUpdatingLocation()
-    }
-  }
-  
+	func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+		// Pick the location with best (= smallest value) horizontal accuracy
+		latestLocation = locations.sort { $0.horizontalAccuracy < $1.horizontalAccuracy }.first
+	}
+
+	func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+		if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
+			locationManager.startUpdatingLocation()
+		} else {
+			locationManager.stopUpdatingLocation()
+		}
+	}
+
 }
