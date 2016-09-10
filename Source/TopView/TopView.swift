@@ -2,7 +2,7 @@ import UIKit
 
 protocol TopViewDelegate: class {
 
-  func flashButtonDidPress(title: String)
+  func flashButtonDidPress(_ title: String)
   func rotateDeviceDidPress()
 }
 
@@ -19,23 +19,23 @@ class TopView: UIView {
 
   lazy var flashButton: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setImage(AssetManager.getImage("AUTO"), forState: .Normal)
-    button.setTitle("AUTO", forState: .Normal)
+    button.setImage(AssetManager.getImage("AUTO"), for: UIControlState())
+    button.setTitle("AUTO", for: UIControlState())
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
-    button.setTitleColor(.whiteColor(), forState: .Normal)
-    button.setTitleColor(.whiteColor(), forState: .Highlighted)
+    button.setTitleColor(.white, for: UIControlState())
+    button.setTitleColor(.white, for: .highlighted)
     button.titleLabel?.font = Configuration.flashButton
-    button.addTarget(self, action: #selector(flashButtonDidPress(_:)), forControlEvents: .TouchUpInside)
-    button.contentHorizontalAlignment = .Left
+    button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
+    button.contentHorizontalAlignment = .left
 
     return button
     }()
 
   lazy var rotateCamera: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setImage(AssetManager.getImage("cameraIcon"), forState: .Normal)
-    button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), forControlEvents: .TouchUpInside)
-    button.imageView?.contentMode = .Center
+    button.setImage(AssetManager.getImage("cameraIcon"), for: UIControlState())
+    button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), for: .touchUpInside)
+    button.imageView?.contentMode = .center
 
     return button
     }()
@@ -54,7 +54,7 @@ class TopView: UIView {
     }
 
     for button in buttons {
-      button.layer.shadowColor = UIColor.blackColor().CGColor
+      button.layer.shadowColor = UIColor.black.cgColor
       button.layer.shadowOpacity = 0.5
       button.layer.shadowOffset = CGSize(width: 0, height: 1)
       button.layer.shadowRadius = 1
@@ -71,28 +71,28 @@ class TopView: UIView {
 
   // MARK: - Action methods
 
-  func flashButtonDidPress(button: UIButton) {
+  func flashButtonDidPress(_ button: UIButton) {
     currentFlashIndex += 1
     currentFlashIndex = currentFlashIndex % flashButtonTitles.count
 
     switch currentFlashIndex {
     case 1:
-      button.setTitleColor(UIColor(red: 0.98, green: 0.98, blue: 0.45, alpha: 1), forState: .Normal)
-      button.setTitleColor(UIColor(red: 0.52, green: 0.52, blue: 0.24, alpha: 1), forState: .Highlighted)
+      button.setTitleColor(UIColor(red: 0.98, green: 0.98, blue: 0.45, alpha: 1), for: UIControlState())
+      button.setTitleColor(UIColor(red: 0.52, green: 0.52, blue: 0.24, alpha: 1), for: .highlighted)
     default:
-      button.setTitleColor(.whiteColor(), forState: .Normal)
-      button.setTitleColor(.whiteColor(), forState: .Highlighted)
+      button.setTitleColor(.white, for: UIControlState())
+      button.setTitleColor(.white, for: .highlighted)
     }
 
     let newTitle = flashButtonTitles[currentFlashIndex]
 
-    button.setImage(AssetManager.getImage(newTitle), forState: .Normal)
-    button.setTitle(newTitle, forState: .Normal)
+    button.setImage(AssetManager.getImage(newTitle), for: UIControlState())
+    button.setTitle(newTitle, for: UIControlState())
 
     delegate?.flashButtonDidPress(newTitle)
   }
 
-  func rotateCameraButtonDidPress(button: UIButton) {
+  func rotateCameraButtonDidPress(_ button: UIButton) {
     delegate?.rotateDeviceDidPress()
   }
 }
