@@ -127,7 +127,7 @@ extension ImageStackView {
 
   func renderViews(assets: [PHAsset]) {
     if let firstView = views.first where assets.isEmpty {
-      views.forEach{
+      views.forEach {
         $0.image = nil
         $0.alpha = 0
       }
