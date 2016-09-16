@@ -1,7 +1,7 @@
 import UIKit
 import Photos
 
-public class ImageStack {
+open class ImageStack {
 
   public struct Notifications {
     public static let imageDidPush = "imageDidPush"
@@ -9,25 +9,25 @@ public class ImageStack {
     public static let stackDidReload = "stackDidReload"
   }
 
-  public var assets = [PHAsset]()
-  private let imageKey = "image"
+  open var assets = [PHAsset]()
+  fileprivate let imageKey = "image"
 
-  public func pushAsset(asset: PHAsset) {
+  open func pushAsset(_ asset: PHAsset) {
     assets.append(asset)
-    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidPush, object: self, userInfo: [imageKey: asset])
+    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.imageDidPush), object: self, userInfo: [imageKey: asset])
   }
 
-  public func dropAsset(asset: PHAsset) {
+  open func dropAsset(_ asset: PHAsset) {
     assets = assets.filter() {$0 != asset}
-    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.imageDidDrop, object: self, userInfo: [imageKey: asset])
+    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.imageDidDrop), object: self, userInfo: [imageKey: asset])
   }
 
-  public func resetAssets(assetsArray: [PHAsset]) {
+  open func resetAssets(_ assetsArray: [PHAsset]) {
     assets = assetsArray
-    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.stackDidReload, object: self, userInfo: nil)
+    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.stackDidReload), object: self, userInfo: nil)
   }
 
-  public func containsAsset(asset: PHAsset) -> Bool {
+  open func containsAsset(_ asset: PHAsset) -> Bool {
     return assets.contains(asset)
   }
 }
