@@ -127,12 +127,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 29D699F81B70ABFC0021FA73 /* Build configuration list for PBXNativeTarget "ImagePickerDemo" */;
 			buildPhases = (
+				C778BEAC7AB10F589B3E99B4 /* 📦 Check Pods Manifest.lock */,
 				CFC24DB54992EE46F3A63C6F /* [CP] Check Pods Manifest.lock */,
 				29D699D51B70ABFC0021FA73 /* Sources */,
 				29D699D61B70ABFC0021FA73 /* Frameworks */,
 				29D699D71B70ABFC0021FA73 /* Resources */,
 				A0BD0958A43D0416D3FF9365 /* [CP] Embed Pods Frameworks */,
 				6821C4AC157C46704C0307CA /* [CP] Copy Pods Resources */,
+				2F7C44CBB41440DDE5229FDD /* 📦 Embed Pods Frameworks */,
+				2B17A812C83D77DF651F8740 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -155,7 +158,8 @@
 				TargetAttributes = {
 					29D699D81B70ABFC0021FA73 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = LG4DBY4QF9;
+						DevelopmentTeam = J5Q4K53JM9;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -191,6 +195,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2B17A812C83D77DF651F8740 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImagePickerDemo/Pods-ImagePickerDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2F7C44CBB41440DDE5229FDD /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImagePickerDemo/Pods-ImagePickerDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6821C4AC157C46704C0307CA /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -219,6 +253,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ImagePickerDemo/Pods-ImagePickerDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C778BEAC7AB10F589B3E99B4 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		CFC24DB54992EE46F3A63C6F /* [CP] Check Pods Manifest.lock */ = {
@@ -353,12 +402,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = J5Q4K53JM9;
 				INFOPLIST_FILE = ImagePickerDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = no.hyper.ImagePickerDemo2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cropio.ImagePickerDemo2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -369,12 +420,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = J5Q4K53JM9;
 				INFOPLIST_FILE = ImagePickerDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = no.hyper.ImagePickerDemo2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cropio.ImagePickerDemo2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

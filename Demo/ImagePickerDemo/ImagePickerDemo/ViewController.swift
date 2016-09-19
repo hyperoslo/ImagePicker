@@ -1,6 +1,5 @@
 import UIKit
 import ImagePicker
-import Lightbox
 import CoreLocation
 
 class ViewController: UIViewController, ImagePickerDelegate {
@@ -10,52 +9,52 @@ class ViewController: UIViewController, ImagePickerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    view.backgroundColor = UIColor.whiteColor()
+    view.backgroundColor = UIColor.white
     view.addSubview(button)
     button.translatesAutoresizingMaskIntoConstraints = false
 
-    view.addConstraint(NSLayoutConstraint(item: button, attribute: .CenterX, relatedBy: .Equal, toItem: view, attribute: .CenterX, multiplier: 1, constant: 0))
-    view.addConstraint(NSLayoutConstraint(item: button, attribute: .CenterY, relatedBy: .Equal, toItem: view, attribute: .CenterY, multiplier: 1, constant: 0))
+    view.addConstraint(NSLayoutConstraint(item: button, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 0))
+    view.addConstraint(NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0))
   }
 
   func makeButton() -> UIButton {
     let button = UIButton()
-    button.setTitle("Show ImagePicker", forState: .Normal)
-    button.setTitleColor(UIColor.blackColor(), forState: .Normal)
-    button.addTarget(self, action: #selector(buttonTouched(_:)), forControlEvents: .TouchUpInside)
+    button.setTitle("Show ImagePicker", for: UIControlState())
+    button.setTitleColor(UIColor.black, for: UIControlState())
+    button.addTarget(self, action: #selector(buttonTouched(_:)), for: .touchUpInside)
 
     return button
   }
 
-  func buttonTouched(button: UIButton) {
+  func buttonTouched(_ button: UIButton) {
     let imagePicker = ImagePickerController()
     imagePicker.delegate = self
 
-    presentViewController(imagePicker, animated: true, completion: nil)
+    present(imagePicker, animated: true, completion: nil)
   }
 
   // MARK: - ImagePickerDelegate
 
-  func cancelButtonDidPress(imagePicker: ImagePickerController) {
-    imagePicker.dismissViewControllerAnimated(true, completion: nil)
+  func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
+    imagePicker.dismiss(animated: true, completion: nil)
   }
   
   
 
-  func wrapperDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)]) {
+  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)]) {
     guard images.count > 0 else { return }
 
-    let lightboxImages = images.map { image, location in
-      return image
-    }
+//    let lightboxImages = images.map { image, location in
+//      return image
+//    }
 
 //    let lightbox = LightboxController(images: lightboxImages, startIndex: 0)
 //    imagePicker.presentViewController(lightbox, animated: true, completion: nil)
   }
 
-  func doneButtonDidPress(imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)]) {
+  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)]) {
     
-    imagePicker.dismissViewControllerAnimated(true, completion: nil)
+    imagePicker.dismiss(animated: true, completion: nil)
     
   }
 }
