@@ -3,16 +3,16 @@ import AVFoundation
 import PhotosUI
 
 protocol CameraManDelegate: class {
-  func cameraManNotAvailable(cameraMan: CameraMan)
-  func cameraManDidStart(cameraMan: CameraMan)
-  func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput)
+  func cameraManNotAvailable(_ cameraMan: CameraMan)
+  func cameraManDidStart(_ cameraMan: CameraMan)
+  func cameraMan(_ cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput)
 }
 
 class CameraMan {
   weak var delegate: CameraManDelegate?
 
   let session = AVCaptureSession()
-  let queue = dispatch_queue_create("no.hyper.ImagePicker.Camera.SessionQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_BACKGROUND, 0))
+  let queue = DispatchQueue(label: "no.hyper.ImagePicker.Camera.SessionQueue")
 
   var backCamera: AVCaptureDeviceInput?
   var frontCamera: AVCaptureDeviceInput?
@@ -37,9 +37,9 @@ class CameraMan {
       return $0.hasMediaType(AVMediaTypeVideo)
     }.forEach {
       switch $0.position {
-      case .Front:
+      case .front:
         self.frontCamera = try? AVCaptureDeviceInput(device: $0)
-      case .Back:
+      case .back:
         self.backCamera = try? AVCaptureDeviceInput(device: $0)
       default:
         break
@@ -51,13 +51,13 @@ class CameraMan {
     stillImageOutput?.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
   }
 
-  func addInput(input: AVCaptureDeviceInput) {
+  func addInput(_ input: AVCaptureDeviceInput) {
     configurePreset(input)
 
     if session.canAddInput(input) {
       session.addInput(input)
 
-      dispatch_async(dispatch_get_main_queue()) {
+      DispatchQueue.main.async {
         self.delegate?.cameraMan(self, didChangeInput: input)
       }
     }
@@ -66,12 +66,12 @@ class CameraMan {
   // MARK: - Permission
 
   func checkPermission() {
-    let status = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+    let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
 
     switch status {
-    case .Authorized:
+    case .authorized:
       start()
-    case .NotDetermined:
+    case .notDetermined:
       requestPermission()
     default:
       delegate?.cameraManNotAvailable(self)
@@ -79,8 +79,8 @@ class CameraMan {
   }
 
   func requestPermission() {
-    AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) { granted in
-      dispatch_async(dispatch_get_main_queue()) {
+    AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { granted in
+      DispatchQueue.main.async {
         if granted {
           self.start()
         } else {
@@ -96,11 +96,11 @@ class CameraMan {
     return session.inputs.first as? AVCaptureDeviceInput
   }
 
-  private func start() {
+  fileprivate func start() {
     // Devices
     setupDevices()
 
-    guard let input = backCamera, output = stillImageOutput else { return }
+    guard let input = backCamera, let output = stillImageOutput else { return }
 
     addInput(input)
 
@@ -108,10 +108,10 @@ class CameraMan {
       session.addOutput(output)
     }
 
-    dispatch_async(queue) {
+    queue.async {
       self.session.startRunning()
 
-      dispatch_async(dispatch_get_main_queue()) {
+      DispatchQueue.main.async {
         self.delegate?.cameraManDidStart(self)
       }
     }
@@ -121,17 +121,17 @@ class CameraMan {
     self.session.stopRunning()
   }
 
-  func switchCamera(completion: (() -> Void)? = nil) {
+  func switchCamera(_ completion: (() -> Void)? = nil) {
     guard let currentInput = currentInput
       else {
         completion?()
         return
     }
 
-    dispatch_async(queue) {
+    queue.async {
       guard let input = (currentInput == self.backCamera) ? self.frontCamera : self.backCamera
         else {
-          dispatch_async(dispatch_get_main_queue()) {
+          DispatchQueue.main.async {
             completion?()
           }
           return
@@ -142,26 +142,26 @@ class CameraMan {
         self.addInput(input)
       }
 
-      dispatch_async(dispatch_get_main_queue()) {
+      DispatchQueue.main.async {
         completion?()
       }
     }
   }
 
-  func takePhoto(previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?, completion: (() -> Void)? = nil) {
-    guard let connection = stillImageOutput?.connectionWithMediaType(AVMediaTypeVideo) else { return }
+  func takePhoto(_ previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?, completion: (() -> Void)? = nil) {
+    guard let connection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo) else { return }
 
     connection.videoOrientation = Helper.videoOrientation()
 
-    dispatch_async(queue) {
-      self.stillImageOutput?.captureStillImageAsynchronouslyFromConnection(connection) {
+    queue.async {
+      self.stillImageOutput?.captureStillImageAsynchronously(from: connection) {
         buffer, error in
 
-        guard error == nil && buffer != nil && CMSampleBufferIsValid(buffer),
+        guard error == nil && buffer != nil && CMSampleBufferIsValid(buffer!),
           let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),
-          image = UIImage(data: imageData)
+          let image = UIImage(data: imageData)
           else {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
               completion?()
             }
             return
@@ -172,32 +172,32 @@ class CameraMan {
     }
   }
 
-  func savePhoto(image: UIImage, location: CLLocation?, completion: (() -> Void)? = nil) {
-    PHPhotoLibrary.sharedPhotoLibrary().performChanges({
-      let request = PHAssetChangeRequest.creationRequestForAssetFromImage(image)
-      request.creationDate = NSDate()
+  func savePhoto(_ image: UIImage, location: CLLocation?, completion: (() -> Void)? = nil) {
+    PHPhotoLibrary.shared().performChanges({
+      let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
+      request.creationDate = Date()
       request.location = location
       }, completionHandler: { _ in
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
           completion?()
         }
     })
   }
 
-  func flash(mode: AVCaptureFlashMode) {
-    guard let device = currentInput?.device where device.isFlashModeSupported(mode) else { return }
+  func flash(_ mode: AVCaptureFlashMode) {
+    guard let device = currentInput?.device , device.isFlashModeSupported(mode) else { return }
 
-    dispatch_async(queue) {
+    queue.async {
       self.lock {
         device.flashMode = mode
       }
     }
   }
 
-  func focus(point: CGPoint) {
-    guard let device = currentInput?.device where device.isFocusModeSupported(AVCaptureFocusMode.Locked) else { return }
+  func focus(_ point: CGPoint) {
+    guard let device = currentInput?.device , device.isFocusModeSupported(AVCaptureFocusMode.locked) else { return }
 
-    dispatch_async(queue) {
+    queue.async {
       self.lock {
         device.focusPointOfInterest = point
       }
@@ -206,15 +206,15 @@ class CameraMan {
 
   // MARK: - Lock
 
-  func lock(block: () -> Void) {
-    if let device = currentInput?.device where (try? device.lockForConfiguration()) != nil {
+  func lock(_ block: () -> Void) {
+    if let device = currentInput?.device , (try? device.lockForConfiguration()) != nil {
       block()
       device.unlockForConfiguration()
     }
   }
 
   // MARK: - Configure
-  func configure(block: () -> Void) {
+  func configure(_ block: () -> Void) {
     session.beginConfiguration()
     block()
     session.commitConfiguration()
@@ -222,7 +222,7 @@ class CameraMan {
 
   // MARK: - Preset
 
-  func configurePreset(input: AVCaptureDeviceInput) {
+  func configurePreset(_ input: AVCaptureDeviceInput) {
     for asset in preferredPresets() {
       if input.device.supportsAVCaptureSessionPreset(asset) && self.session.canSetSessionPreset(asset) {
         self.session.sessionPreset = asset
