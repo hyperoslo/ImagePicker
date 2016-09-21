@@ -1,66 +1,85 @@
 import Foundation
 import UIKit
 import Photos
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
 
-public class AssetManager {
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
 
-  public static func getImage(name: String) -> UIImage {
+
+open class AssetManager {
+
+  open static func getImage(_ name: String) -> UIImage {
     let traitCollection = UITraitCollection(displayScale: 3)
-    var bundle = NSBundle(forClass: AssetManager.self)
+    var bundle = Bundle(for: AssetManager.self)
 
-    if let bundlePath = bundle.resourcePath?.stringByAppendingString("/ImagePicker.bundle"), resourceBundle = NSBundle(path: bundlePath) {
-      bundle = resourceBundle
-    }
+    let bundlePath = (bundle.resourcePath)! + "/ImagePicker.bundle"
+    let resourceBundle = Bundle(path: bundlePath)
+    bundle = resourceBundle!
 
-    return UIImage(named: name, inBundle: bundle, compatibleWithTraitCollection: traitCollection) ?? UIImage()
+    return UIImage(named: name, in: bundle, compatibleWith: traitCollection) ?? UIImage()
   }
 
-  public static func fetch(completion: (assets: [PHAsset]) -> Void) {
+  open static func fetch(_ completion: @escaping (_ assets: [PHAsset]) -> Void) {
     let fetchOptions = PHFetchOptions()
     let authorizationStatus = PHPhotoLibrary.authorizationStatus()
-    var fetchResult: PHFetchResult?
+    var fetchResult: PHFetchResult<PHAsset>?
 
-    guard authorizationStatus == .Authorized else { return }
+    guard authorizationStatus == .authorized else { return }
 
     if fetchResult == nil {
-      fetchResult = PHAsset.fetchAssetsWithMediaType(.Image, options: fetchOptions)
+      fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
     }
 
     if fetchResult?.count > 0 {
       var assets = [PHAsset]()
-      fetchResult?.enumerateObjectsUsingBlock { object, index, stop in
-        if let asset = object as? PHAsset {
-          assets.insert(asset, atIndex: 0)
-        }
-      }
-
-      dispatch_async(dispatch_get_main_queue(), {
-        completion(assets: assets)
+      
+      fetchResult?.enumerateObjects(options: NSEnumerationOptions.concurrent, using: { (object, index, stop) in
+        assets.insert(object, at: 0)
+      })
+      
+      DispatchQueue.main.async(execute: {
+        completion(assets)
       })
     }
   }
 
-  public static func resolveAsset(asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), completion: (image: UIImage?) -> Void) {
-    let imageManager = PHImageManager.defaultManager()
+  open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), completion: @escaping (_ image: UIImage?) -> Void) {
+    let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
 
-    imageManager.requestImageForAsset(asset, targetSize: size, contentMode: .AspectFill, options: requestOptions) { image, info in
-      if let info = info where info["PHImageFileUTIKey"] == nil {
-        dispatch_async(dispatch_get_main_queue(), {
-          completion(image: image)
+    imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
+      if let info = info , info["PHImageFileUTIKey"] == nil {
+        DispatchQueue.main.async(execute: {
+          completion(image)
         })
       }
     }
   }
 
-  public static func resolveAssets(assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [UIImage] {
-    let imageManager = PHImageManager.defaultManager()
+  open static func resolveAssets(_ assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [UIImage] {
+    let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
-    requestOptions.synchronous = true
+    requestOptions.isSynchronous = true
 
     var images = [UIImage]()
     for asset in assets {
-      imageManager.requestImageForAsset(asset, targetSize: size, contentMode: .AspectFill, options: requestOptions) { image, info in
+      imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
         if let image = image {
           images.append(image)
         }
