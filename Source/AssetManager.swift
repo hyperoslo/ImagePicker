@@ -66,7 +66,6 @@ public class AssetManager {
         }
       }
     }
-    
     return images
   }
 }

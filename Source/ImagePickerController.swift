@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 import UIKit
 import MediaPlayer
 import Photos
