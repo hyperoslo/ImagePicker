@@ -43,9 +43,10 @@ public class AssetManager {
   public static func resolveAsset(asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), completion: (image: UIImage?) -> Void) {
     let imageManager = PHImageManager.defaultManager()
     let requestOptions = PHImageRequestOptions()
+    requestOptions.deliveryMode = .HighQualityFormat
 
     imageManager.requestImageForAsset(asset, targetSize: size, contentMode: .AspectFill, options: requestOptions) { image, info in
-      if let info = info where info["PHImageFileUTIKey"] == nil {
+      if let info = info {
         dispatch_async(dispatch_get_main_queue(), {
           completion(image: image)
         })
