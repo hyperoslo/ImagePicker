@@ -22,13 +22,13 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
 
   // MARK: - CLLocationManagerDelegate
 
-  func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     // Pick the location with best (= smallest value) horizontal accuracy
-    latestLocation = locations.sort { $0.horizontalAccuracy < $1.horizontalAccuracy }.first
+    latestLocation = locations.sorted { $0.horizontalAccuracy < $1.horizontalAccuracy }.first
   }
 
-  func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-    if status == .AuthorizedAlways || status == .AuthorizedWhenInUse {
+  func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    if status == .authorizedAlways || status == .authorizedWhenInUse {
       locationManager.startUpdatingLocation()
     } else {
       locationManager.stopUpdatingLocation()
