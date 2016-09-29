@@ -272,18 +272,7 @@
 				TargetAttributes = {
 					D5DC598A1C201BE1003BD79B = {
 						CreatedOnToolsVersion = 7.2;
-<<<<<<< HEAD
-=======
 						DevelopmentTeam = QQJ8AA32HJ;
->>>>>>> 456f703fa0a66f3dacb74dc3fa079f007e3ffe27
-						LastSwiftMigration = 0800;
-					};
-					D5DC59941C201BE1003BD79B = {
-						CreatedOnToolsVersion = 7.2;
-<<<<<<< HEAD
-=======
-						DevelopmentTeam = QQJ8AA32HJ;
->>>>>>> 456f703fa0a66f3dacb74dc3fa079f007e3ffe27
 						LastSwiftMigration = 0800;
 					};
 				};
