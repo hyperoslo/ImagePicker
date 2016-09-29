@@ -10,7 +10,6 @@
 		29D699DF1B70ABFC0021FA73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D699DE1B70ABFC0021FA73 /* AppDelegate.swift */; };
 		29D699E61B70ABFC0021FA73 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 29D699E51B70ABFC0021FA73 /* Images.xcassets */; };
 		29D699E91B70ABFC0021FA73 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29D699E71B70ABFC0021FA73 /* LaunchScreen.xib */; };
-		29D699FF1B70ACD50021FA73 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 29D699FE1B70ACD50021FA73 /* Podfile */; };
 		4221AE1F43A643A689082012 /* Pods_ImagePickerDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1148A4E4BFF9A0AAED07754 /* Pods_ImagePickerDemo.framework */; };
 		D20AA8A51D5330100085FF5B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AA8A41D5330100085FF5B /* ViewController.swift */; };
 /* End PBXBuildFile section */
@@ -21,9 +20,6 @@
 		29D699DE1B70ABFC0021FA73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		29D699E51B70ABFC0021FA73 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		29D699E81B70ABFC0021FA73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		29D699F31B70ABFC0021FA73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		29D699F41B70ABFC0021FA73 /* ImagePickerDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerDemoTests.swift; sourceTree = "<group>"; };
-		29D699FE1B70ACD50021FA73 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		6F9E1FF802198DC16F260795 /* Pods-ImagePickerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImagePickerDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImagePickerDemo/Pods-ImagePickerDemo.release.xcconfig"; sourceTree = "<group>"; };
 		733A7AD0105A657A80502E72 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4392341AC7391C01AD9F350 /* Pods-ImagePickerDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImagePickerDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ImagePickerDemo/Pods-ImagePickerDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -47,7 +43,6 @@
 			isa = PBXGroup;
 			children = (
 				29D699DB1B70ABFC0021FA73 /* ImagePickerDemo */,
-				29D699F11B70ABFC0021FA73 /* ImagePickerDemoTests */,
 				29D699DA1B70ABFC0021FA73 /* Products */,
 				DD112158CF9886DE925FED5E /* Frameworks */,
 				A067DFAD5749963FA2D2ADED /* Pods */,
@@ -79,25 +74,7 @@
 		29D699DC1B70ABFC0021FA73 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				29D699FE1B70ACD50021FA73 /* Podfile */,
 				29D699DD1B70ABFC0021FA73 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		29D699F11B70ABFC0021FA73 /* ImagePickerDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				29D699F41B70ABFC0021FA73 /* ImagePickerDemoTests.swift */,
-				29D699F21B70ABFC0021FA73 /* Supporting Files */,
-			);
-			path = ImagePickerDemoTests;
-			sourceTree = "<group>";
-		};
-		29D699F21B70ABFC0021FA73 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				29D699F31B70ABFC0021FA73 /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -184,7 +161,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				29D699E91B70ABFC0021FA73 /* LaunchScreen.xib in Resources */,
-				29D699FF1B70ACD50021FA73 /* Podfile in Resources */,
 				29D699E61B70ABFC0021FA73 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
