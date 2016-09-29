@@ -20,8 +20,6 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     return rhs < lhs
   }
 }
-
-
 open class AssetManager {
 
   open static func getImage(_ name: String) -> UIImage {
@@ -64,7 +62,7 @@ open class AssetManager {
     requestOptions.deliveryMode = .highQualityFormat
 
     imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
-      if info != nil {
+      if let info = info , info["PHImageFileUTIKey"] == nil {
         DispatchQueue.main.async(execute: {
           completion(image)
         })
