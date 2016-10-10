@@ -17,15 +17,16 @@ public class AssetManager {
 
   public static func fetch(completion: (assets: [PHAsset]) -> Void) {
     let fetchOptions = PHFetchOptions()
+    fetchOptions.sortDescriptors = [NSSortDescriptor(key:"creationDate", ascending: true)]
     let authorizationStatus = PHPhotoLibrary.authorizationStatus()
     var fetchResult: PHFetchResult?
-
+    
     guard authorizationStatus == .Authorized else { return }
-
+    
     if fetchResult == nil {
       fetchResult = PHAsset.fetchAssetsWithMediaType(.Image, options: fetchOptions)
     }
-
+    
     if fetchResult?.count > 0 {
       var assets = [PHAsset]()
       fetchResult?.enumerateObjectsUsingBlock { object, index, stop in
@@ -33,7 +34,7 @@ public class AssetManager {
           assets.insert(asset, atIndex: 0)
         }
       }
-
+      
       dispatch_async(dispatch_get_main_queue(), {
         completion(assets: assets)
       })

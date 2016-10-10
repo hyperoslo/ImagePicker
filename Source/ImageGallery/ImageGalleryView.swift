@@ -190,27 +190,23 @@ extension ImageGalleryView: UICollectionViewDelegate {
   public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
     guard let cell = collectionView.cellForItemAtIndexPath(indexPath)
       as? ImageGalleryViewCell else { return }
-
+    
     let asset = assets[indexPath.row]
-
-    AssetManager.resolveAsset(asset) { image in
-      guard let _ = image else { return }
-
-      if cell.selectedImageView.image != nil {
-        UIView.animateWithDuration(0.2, animations: {
-          cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
-          }) { _ in
-            cell.selectedImageView.image = nil
-        }
-        self.selectedStack.dropAsset(asset)
-      } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
-        cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
-        cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
-        UIView.animateWithDuration(0.2) { _ in
-          cell.selectedImageView.transform = CGAffineTransformIdentity
-        }
-        self.selectedStack.pushAsset(asset)
+    
+    if cell.selectedImageView.image != nil {
+      UIView.animateWithDuration(0.2, animations: {
+        cell.selectedImageView.transform = CGAffineTransformMakeScale(0.1, 0.1)
+      }) { _ in
+        cell.selectedImageView.image = nil
       }
+      self.selectedStack.dropAsset(asset)
+    } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
+      cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
+      cell.selectedImageView.transform = CGAffineTransformMakeScale(0, 0)
+      UIView.animateWithDuration(0.2) { _ in
+        cell.selectedImageView.transform = CGAffineTransformIdentity
+      }
+      self.selectedStack.pushAsset(asset)
     }
   }
 
