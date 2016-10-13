@@ -4,7 +4,7 @@ import PhotosUI
 
 protocol CameraViewDelegate: class {
 
-  func setFlashButtonHidden(hidden: Bool)
+  func setFlashButtonHidden(_ hidden: Bool)
   func imageToLibrary()
   func cameraNotAvailable()
 }
@@ -12,7 +12,7 @@ protocol CameraViewDelegate: class {
 class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
-    let effect = UIBlurEffect(style: .Dark)
+    let effect = UIBlurEffect(style: .dark)
     let blurView = UIVisualEffectView(effect: effect)
 
     return blurView
@@ -21,7 +21,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   lazy var focusImageView: UIImageView = { [unowned self] in
     let imageView = UIImageView()
     imageView.image = AssetManager.getImage("focusIcon")
-    imageView.backgroundColor = .clearColor()
+    imageView.backgroundColor = UIColor.clear
     imageView.frame = CGRect(x: 0, y: 0, width: 110, height: 110)
     imageView.alpha = 0
 
@@ -30,7 +30,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   lazy var capturedImageView: UIView = { [unowned self] in
     let view = UIView()
-    view.backgroundColor = .blackColor()
+    view.backgroundColor = UIColor.black
     view.alpha = 0
 
     return view
@@ -54,20 +54,20 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }()
 
   lazy var noCameraButton: UIButton = { [unowned self] in
-    let button = UIButton(type: .System)
+    let button = UIButton(type: .system)
     let title = NSAttributedString(string: Configuration.settingsTitle,
       attributes: [
         NSFontAttributeName : Configuration.settingsFont,
         NSForegroundColorAttributeName : Configuration.settingsColor,
       ])
 
-    button.setAttributedTitle(title, forState: .Normal)
+    button.setAttributedTitle(title, for: UIControlState())
     button.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
     button.sizeToFit()
-    button.layer.borderColor = Configuration.settingsColor.CGColor
+    button.layer.borderColor = Configuration.settingsColor.cgColor
     button.layer.borderWidth = 1
     button.layer.cornerRadius = 4
-    button.addTarget(self, action: #selector(settingsButtonDidTap), forControlEvents: .TouchUpInside)
+    button.addTarget(self, action: #selector(settingsButtonDidTap), for: .touchUpInside)
 
     return button
     }()
@@ -83,7 +83,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   var previewLayer: AVCaptureVideoPreviewLayer?
   weak var delegate: CameraViewDelegate?
-  var animationTimer: NSTimer?
+  var animationTimer: Timer?
   var locationManager: LocationManager?
 
   override func viewDidLoad() {
@@ -108,14 +108,14 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     cameraMan.setup()
   }
 
-  override func viewDidAppear(animated: Bool) {
+  override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
-    previewLayer?.connection.videoOrientation = .Portrait
+    previewLayer?.connection.videoOrientation = .portrait
     locationManager?.startUpdatingLocation()
   }
 
-  override func viewDidDisappear(animated: Bool) {
+  override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     locationManager?.stopUpdatingLocation()
   }
@@ -123,11 +123,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   func setupPreviewLayer() {
     guard let layer = AVCaptureVideoPreviewLayer(session: cameraMan.session) else { return }
 
-    layer.backgroundColor = Configuration.mainColor.CGColor
+    layer.backgroundColor = Configuration.mainColor.cgColor
     layer.autoreverses = true
     layer.videoGravity = AVLayerVideoGravityResizeAspectFill
 
-    view.layer.insertSublayer(layer, atIndex: 0)
+    view.layer.insertSublayer(layer, at: 0)
     layer.frame = view.layer.frame
     view.clipsToBounds = true
 
@@ -155,9 +155,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   // MARK: - Actions
 
   func settingsButtonDidTap() {
-    dispatch_async(dispatch_get_main_queue()) {
-      if let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString) {
-        UIApplication.sharedApplication().openURL(settingsURL)
+    DispatchQueue.main.async {
+      if let settingsURL = URL(string: UIApplicationOpenSettingsURLString) {
+        UIApplication.shared.openURL(settingsURL)
       }
     }
   }
@@ -165,35 +165,35 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   // MARK: - Camera actions
 
   func rotateCamera() {
-    UIView.animateWithDuration(0.3, animations: { _ in
+    UIView.animate(withDuration: 0.3, animations: { _ in
       self.containerView.alpha = 1
       }, completion: { _ in
         self.cameraMan.switchCamera {
-          UIView.animateWithDuration(0.7) {
+          UIView.animate(withDuration: 0.7, animations: {
             self.containerView.alpha = 0
-          }
+          }) 
         }
     })
   }
 
-  func flashCamera(title: String) {
+  func flashCamera(_ title: String) {
     let mapping: [String: AVCaptureFlashMode] = [
-      "ON": .On,
-      "OFF": .Off
+      "ON": .on,
+      "OFF": .off
     ]
 
-    cameraMan.flash(mapping[title] ?? .Auto)
+    cameraMan.flash(mapping[title] ?? .auto)
   }
 
-  func takePicture(completion: () -> ()) {
+  func takePicture(_ completion: @escaping () -> ()) {
     guard let previewLayer = previewLayer else { return }
 
-    UIView.animateWithDuration(0.1, animations: {
+    UIView.animate(withDuration: 0.1, animations: {
       self.capturedImageView.alpha = 1
       }, completion: { _ in
-        UIView.animateWithDuration(0.1) {
+        UIView.animate(withDuration: 0.1, animations: {
           self.capturedImageView.alpha = 0
-        }
+        }) 
     })
 
     cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation) {
@@ -205,61 +205,61 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   // MARK: - Timer methods
 
   func timerDidFire() {
-    UIView.animateWithDuration(0.3, animations: { [unowned self] in
+    UIView.animate(withDuration: 0.3, animations: { [unowned self] in
       self.focusImageView.alpha = 0
       }, completion: { _ in
-        self.focusImageView.transform = CGAffineTransformIdentity
+        self.focusImageView.transform = CGAffineTransform.identity
     })
   }
 
   // MARK: - Camera methods
 
-  func focusTo(point: CGPoint) {
-    let convertedPoint = CGPoint(x: point.x / UIScreen.mainScreen().bounds.width,
-                                 y:point.y / UIScreen.mainScreen().bounds.height)
+  func focusTo(_ point: CGPoint) {
+    let convertedPoint = CGPoint(x: point.x / UIScreen.main.bounds.width,
+                                 y:point.y / UIScreen.main.bounds.height)
 
     cameraMan.focus(convertedPoint)
 
     focusImageView.center = point
-    UIView.animateWithDuration(0.5, animations: { _ in
+    UIView.animate(withDuration: 0.5, animations: { _ in
       self.focusImageView.alpha = 1
-      self.focusImageView.transform = CGAffineTransformMakeScale(0.6, 0.6)
+      self.focusImageView.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
       }, completion: { _ in
-        self.animationTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self,
+        self.animationTimer = Timer.scheduledTimer(timeInterval: 1, target: self,
           selector: #selector(CameraView.timerDidFire), userInfo: nil, repeats: false)
     })
   }
 
   // MARK: - Tap
 
-  func tapGestureRecognizerHandler(gesture: UITapGestureRecognizer) {
-    let touch = gesture.locationInView(view)
+  func tapGestureRecognizerHandler(_ gesture: UITapGestureRecognizer) {
+    let touch = gesture.location(in: view)
 
-    focusImageView.transform = CGAffineTransformIdentity
+    focusImageView.transform = CGAffineTransform.identity
     animationTimer?.invalidate()
     focusTo(touch)
   }
 
   // MARK: - Private helpers
 
-  func showNoCamera(show: Bool) {
+  func showNoCamera(_ show: Bool) {
     [noCameraButton, noCameraLabel].forEach {
       show ? view.addSubview($0) : $0.removeFromSuperview()
     }
   }
 
   // CameraManDelegate
-  func cameraManNotAvailable(cameraMan: CameraMan) {
+  func cameraManNotAvailable(_ cameraMan: CameraMan) {
     showNoCamera(true)
-    focusImageView.hidden = true
+    focusImageView.isHidden = true
     delegate?.cameraNotAvailable()
   }
 
-  func cameraMan(cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput) {
+  func cameraMan(_ cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput) {
     delegate?.setFlashButtonHidden(!input.device.hasFlash)
   }
 
-  func cameraManDidStart(cameraMan: CameraMan) {
+  func cameraManDidStart(_ cameraMan: CameraMan) {
     setupPreviewLayer()
   }
 }

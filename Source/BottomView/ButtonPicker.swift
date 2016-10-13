@@ -36,23 +36,23 @@ class ButtonPicker: UIButton {
   }
 
   deinit {
-    NSNotificationCenter.defaultCenter().removeObserver(self)
+    NotificationCenter.default.removeObserver(self)
   }
 
   func subscribe() {
-    NSNotificationCenter.defaultCenter().addObserver(self,
+    NotificationCenter.default.addObserver(self,
       selector: #selector(recalculatePhotosCount(_:)),
-      name: ImageStack.Notifications.imageDidPush,
+      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
       object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self,
+    NotificationCenter.default.addObserver(self,
       selector: #selector(recalculatePhotosCount(_:)),
-      name: ImageStack.Notifications.imageDidDrop,
+      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
       object: nil)
 
-    NSNotificationCenter.defaultCenter().addObserver(self,
+    NotificationCenter.default.addObserver(self,
       selector: #selector(recalculatePhotosCount(_:)),
-      name: ImageStack.Notifications.stackDidReload,
+      name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
       object: nil)
   }
 
@@ -63,29 +63,29 @@ class ButtonPicker: UIButton {
   // MARK: - Configuration
 
   func setupButton() {
-    backgroundColor = .whiteColor()
+    backgroundColor = UIColor.white
     layer.cornerRadius = Dimensions.buttonSize / 2
     accessibilityLabel = "Take photo"
-    addTarget(self, action: #selector(pickerButtonDidPress(_:)), forControlEvents: .TouchUpInside)
-    addTarget(self, action: #selector(pickerButtonDidHighlight(_:)), forControlEvents: .TouchDown)
+    addTarget(self, action: #selector(pickerButtonDidPress(_:)), for: .touchUpInside)
+    addTarget(self, action: #selector(pickerButtonDidHighlight(_:)), for: .touchDown)
   }
 
   // MARK: - Actions
 
-  func recalculatePhotosCount(notification: NSNotification) {
+  func recalculatePhotosCount(_ notification: Notification) {
     guard let sender = notification.object as? ImageStack else { return }
     numberLabel.text = sender.assets.isEmpty ? "" : String(sender.assets.count)
   }
 
-  func pickerButtonDidPress(button: UIButton) {
-    backgroundColor = .whiteColor()
-    numberLabel.textColor = .blackColor()
+  func pickerButtonDidPress(_ button: UIButton) {
+    backgroundColor = UIColor.white
+    numberLabel.textColor = UIColor.black
     numberLabel.sizeToFit()
     delegate?.buttonDidPress()
   }
 
-  func pickerButtonDidHighlight(button: UIButton) {
-    numberLabel.textColor = .whiteColor()
+  func pickerButtonDidHighlight(_ button: UIButton) {
+    numberLabel.textColor = UIColor.white
     backgroundColor = UIColor(red:0.3, green:0.3, blue:0.3, alpha:1)
   }
 }
