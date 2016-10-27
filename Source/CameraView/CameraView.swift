@@ -85,6 +85,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   weak var delegate: CameraViewDelegate?
   var animationTimer: Timer?
   var locationManager: LocationManager?
+  var startOnFrontCamera: Bool = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -105,7 +106,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     view.addGestureRecognizer(tapGestureRecognizer)
 
     cameraMan.delegate = self
-    cameraMan.setup()
+    cameraMan.setup(self.startOnFrontCamera)
   }
 
   override func viewDidAppear(_ animated: Bool) {
