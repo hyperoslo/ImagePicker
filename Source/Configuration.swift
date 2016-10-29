@@ -43,13 +43,11 @@ public struct Configuration {
   public static var recordLocation = true
 
   // MARK: Images
-    
   public static var indicatorView: UIView = {
     let view = UIView()
     view.backgroundColor = UIColor.white.withAlphaComponent(0.6)
     view.layer.cornerRadius = 4
     view.translatesAutoresizingMaskIntoConstraints = false
-        
     return view
   }()
 }

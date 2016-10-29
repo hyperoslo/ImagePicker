@@ -187,7 +187,7 @@ class CameraMan {
   }
 
   func flash(_ mode: AVCaptureFlashMode) {
-    guard let device = currentInput?.device , device.isFlashModeSupported(mode) else { return }
+    guard let device = currentInput?.device, device.isFlashModeSupported(mode) else { return }
 
     queue.async {
       self.lock {
@@ -197,7 +197,7 @@ class CameraMan {
   }
 
   func focus(_ point: CGPoint) {
-    guard let device = currentInput?.device , device.isFocusModeSupported(AVCaptureFocusMode.locked) else { return }
+    guard let device = currentInput?.device, device.isFocusModeSupported(AVCaptureFocusMode.locked) else { return }
 
     queue.async {
       self.lock {
@@ -209,7 +209,7 @@ class CameraMan {
   // MARK: - Lock
 
   func lock(_ block: () -> Void) {
-    if let device = currentInput?.device , (try? device.lockForConfiguration()) != nil {
+    if let device = currentInput?.device, (try? device.lockForConfiguration()) != nil {
       block()
       device.unlockForConfiguration()
     }

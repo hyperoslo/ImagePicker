@@ -1,6 +1,6 @@
 import UIKit
 import Photos
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l < r
@@ -141,7 +141,7 @@ open class ImageGalleryView: UIView {
         self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: height / 2)
         self.noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
       }
-    }) 
+    })
   }
 
   // MARK: - Photos handler
@@ -212,14 +212,14 @@ extension ImageGalleryView: UICollectionViewDelegate {
           cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
           }, completion: { _ in
             cell.selectedImageView.image = nil
-        }) 
+        })
         self.selectedStack.dropAsset(asset)
       } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
         cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
         cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
         UIView.animate(withDuration: 0.2, animations: { _ in
           cell.selectedImageView.transform = CGAffineTransform.identity
-        }) 
+        })
         self.selectedStack.pushAsset(asset)
       }
     }

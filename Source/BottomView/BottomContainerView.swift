@@ -103,8 +103,8 @@ open class BottomContainerView: UIView {
       }, completion: { _ in
         UIView.animate(withDuration: 0.2, animations: { _ in
           imageView.transform = CGAffineTransform.identity
-        }) 
-    }) 
+        })
+    })
   }
 }
 

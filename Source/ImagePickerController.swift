@@ -236,8 +236,7 @@ open class ImagePickerController: UIViewController {
   func volumeChanged(_ notification: Notification) {
     guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
       let userInfo = (notification as NSNotification).userInfo,
-      let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String
-      , changeReason == "ExplicitVolumeChange" else { return }
+      let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String, changeReason == "ExplicitVolumeChange" else { return }
 
     slider.setValue(volume, animated: false)
     takePicture()
@@ -253,7 +252,7 @@ open class ImagePickerController: UIViewController {
 
   // MARK: - Helpers
 
-  open override var prefersStatusBarHidden : Bool {
+  open override var prefersStatusBarHidden: Bool {
     return true
   }
 
@@ -265,7 +264,7 @@ open class ImagePickerController: UIViewController {
       self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
       }, completion: { _ in
         completion?()
-    }) 
+    })
   }
 
   open func showGalleryView() {
@@ -381,7 +380,7 @@ extension ImagePickerController: CameraViewDelegate {
       self.galleryView.collectionView.transform = CGAffineTransform(translationX: collectionSize.width, y: 0)
       }, completion: { _ in
         self.galleryView.collectionView.transform = CGAffineTransform.identity
-    }) 
+    })
   }
 
   func cameraNotAvailable() {
@@ -392,7 +391,7 @@ extension ImagePickerController: CameraViewDelegate {
 
   // MARK: - Rotation
 
-  open override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+  open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
     return .portrait
   }
 
@@ -416,7 +415,7 @@ extension ImagePickerController: CameraViewDelegate {
       }
 
       self.topView.flashButton.transform = rotate.concatenating(translate)
-    }) 
+    })
   }
 }
 
@@ -467,9 +466,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
     if galleryHeight <= ImageGalleryView.Dimensions.galleryBarHeight {
       updateGalleryViewFrames(ImageGalleryView.Dimensions.galleryBarHeight)
-
     } else if galleryHeight >= GestureConstants.minimumHeight {
-
       let scale = (galleryHeight - ImageGalleryView.Dimensions.galleryBarHeight) / (GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight)
       galleryView.collectionView.transform = CGAffineTransform(scaleX: scale, y: scale)
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
@@ -477,9 +474,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
       let value = view.frame.width * (scale - 1) / scale
       galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right:  value)
-
     } else {
-
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y
     }
@@ -489,9 +484,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
   func panGestureDidEnd(_ translation: CGPoint, velocity: CGPoint) {
     guard let initialFrame = initialFrame else { return }
-
     let galleryHeight = initialFrame.height - translation.y
-
     if galleryView.frame.height < GestureConstants.minimumHeight && velocity.y < 0 {
       showGalleryView()
     } else if velocity.y < -GestureConstants.velocity {
