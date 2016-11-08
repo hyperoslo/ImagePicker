@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import Photos
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l < r
@@ -12,7 +12,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l > r
@@ -62,7 +62,7 @@ open class AssetManager {
     requestOptions.deliveryMode = .highQualityFormat
 
     imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
-      if let info = info , info["PHImageFileUTIKey"] == nil {
+      if let info = info, info["PHImageFileUTIKey"] == nil {
         DispatchQueue.main.async(execute: {
           completion(image)
         })
@@ -83,7 +83,6 @@ open class AssetManager {
         }
       }
     }
-    
     return images
   }
 }
