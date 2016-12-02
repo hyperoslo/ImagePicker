@@ -114,7 +114,9 @@ public class ImagePickerController: UIViewController {
     _ = try? AVAudioSession.sharedInstance().setActive(true)
 
     statusBarHidden = UIApplication.sharedApplication().statusBarHidden
-    UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Fade)
+    UIView.animateWithDuration(0.5) {
+      self.setNeedsStatusBarAppearanceUpdate()
+    }
   }
 
   public override func viewDidAppear(animated: Bool) {
