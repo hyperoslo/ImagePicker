@@ -17,6 +17,7 @@ class CameraMan {
   var backCamera: AVCaptureDeviceInput?
   var frontCamera: AVCaptureDeviceInput?
   var stillImageOutput: AVCaptureStillImageOutput?
+  var startOnFrontCamera: Bool = false
 
   deinit {
     stop()
@@ -24,7 +25,8 @@ class CameraMan {
 
   // MARK: - Setup
 
-  func setup() {
+  func setup(startOnFrontCamera: Bool = false) {
+    self.startOnFrontCamera = startOnFrontCamera
     checkPermission()
   }
 
@@ -100,7 +102,7 @@ class CameraMan {
     // Devices
     setupDevices()
 
-    guard let input = backCamera, output = stillImageOutput else { return }
+    guard let input = (self.startOnFrontCamera) ? frontCamera ?? backCamera : backCamera, output = stillImageOutput else { return }
 
     addInput(input)
 

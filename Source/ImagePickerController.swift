@@ -47,6 +47,7 @@ public class ImagePickerController: UIViewController {
   lazy var cameraController: CameraView = { [unowned self] in
     let controller = CameraView()
     controller.delegate = self
+    controller.startOnFrontCamera = self.startOnFrontCamera
 
     return controller
     }()
@@ -71,6 +72,7 @@ public class ImagePickerController: UIViewController {
   public var stack = ImageStack()
   public var imageLimit = 0
   public var preferredImageSize: CGSize?
+  public var startOnFrontCamera = false
   var totalSize: CGSize { return UIScreen.mainScreen().bounds.size }
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
