@@ -52,7 +52,7 @@ open class ImageGalleryView: UIView {
     let view = UIView()
     view.translatesAutoresizingMaskIntoConstraints = false
     view.addGestureRecognizer(self.panGestureRecognizer)
-    view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+    view.backgroundColor = Configuration.gallerySeparatorColor
 
     return view
     }()
