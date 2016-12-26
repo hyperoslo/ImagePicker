@@ -371,8 +371,12 @@ extension ImagePickerController: CameraViewDelegate {
 
     galleryView.fetchPhotos() {
       guard let asset = self.galleryView.assets.first else { return }
+      if Configuration.allowMultiplePhotoSelection == false {
+        self.stack.assets.removeAll()
+      }
       self.stack.pushAsset(asset)
     }
+    
     galleryView.shouldTransform = true
     bottomContainer.pickerButton.isEnabled = true
 
