@@ -201,6 +201,23 @@ extension ImageGalleryView: UICollectionViewDelegate {
   public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     guard let cell = collectionView.cellForItem(at: indexPath)
       as? ImageGalleryViewCell else { return }
+    if Configuration.allowMultiplePhotoSelection == false {
+      // Clear selected photos array
+      for asset in self.selectedStack.assets {
+        self.selectedStack.dropAsset(asset)
+      }
+      // Animate deselecting photos for any selected visible cells
+      guard let visibleCells = collectionView.visibleCells as? [ImageGalleryViewCell] else { return }
+      for cell in visibleCells {
+        if cell.selectedImageView.image != nil {
+          UIView.animate(withDuration: 0.2, animations: {
+            cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+          }, completion: { _ in
+            cell.selectedImageView.image = nil
+          })
+        }
+      }
+    }
 
     let asset = assets[(indexPath as NSIndexPath).row]
 
