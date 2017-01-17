@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
     :branch: swift3
     :git: https://github.com/hyperoslo/Hue.git
   ImagePicker:
-    :path: "../../"
+    :path: ../../
   Lightbox:
     :branch: swift-3
     :git: https://github.com/hyperoslo/Lightbox.git
@@ -27,10 +27,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Hue:
-    :commit: c21ca81d4fa002309f8f8f554317bf9ec3167365
+    :commit: 3303cbcdf0f771aea1a6d1a153e4b95eef8696eb
     :git: https://github.com/hyperoslo/Hue.git
   Lightbox:
-    :commit: a6119a3cc0b2b582849f7138637f837e817ee71e
+    :commit: 04437d8450a5ccc92af7e9bd08027bdced9fb589
     :git: https://github.com/hyperoslo/Lightbox.git
   Sugar:
     :commit: 08349d9b9b6d34bba0370be323fb096ee27ea129
@@ -39,7 +39,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Hue: 0705083b7aff40334033373e6293ec1215285ac2
   ImagePicker: 81175d36c2852cb543cb4f5d6c19e28f3e8d90eb
-  Lightbox: 6deb5fc2c51f353212631470c4c689bc5120598c
+  Lightbox: e4523e8cf3261cbc833d0e76ae4dae774731d115
   Sugar: 013db92ee417299586c93007ca2d91f09a29dae3
 
 PODFILE CHECKSUM: 47a31d1243de4e3ad14973e03ed0bba90dca43cc
