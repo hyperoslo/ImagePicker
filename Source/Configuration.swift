@@ -43,6 +43,7 @@ public struct Configuration {
   public static var canRotateCamera = true
   public static var collapseCollectionViewWhileShot = true
   public static var recordLocation = true
+  public static var allowMultiplePhotoSelection = true
 
   // MARK: Images
   public static var indicatorView: UIView = {
