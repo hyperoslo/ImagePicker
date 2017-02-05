@@ -44,6 +44,7 @@ public struct Configuration {
   public static var collapseCollectionViewWhileShot = true
   public static var recordLocation = true
   public static var allowMultiplePhotoSelection = true
+  public static var lockedOrientation = UIInterfaceOrientationMask.all
 
   // MARK: Images
   public static var indicatorView: UIView = {

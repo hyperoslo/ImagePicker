@@ -116,6 +116,8 @@ open class ImagePickerController: UIViewController {
 
     statusBarHidden = UIApplication.shared.isStatusBarHidden
     UIApplication.shared.setStatusBarHidden(true, with: .fade)
+
+    self.handleRotation(nil)
   }
 
   open override func viewDidAppear(_ animated: Bool) {
@@ -399,7 +401,7 @@ extension ImagePickerController: CameraViewDelegate {
     return .portrait
   }
 
-  public func handleRotation(_ note: Notification) {
+  public func handleRotation(_ note: Notification?) {
     let rotate = Helper.rotationTransform()
 
     UIView.animate(withDuration: 0.25, animations: {
@@ -411,8 +413,7 @@ extension ImagePickerController: CameraViewDelegate {
       self.galleryView.collectionViewLayout.invalidateLayout()
 
       let translate: CGAffineTransform
-      if [UIDeviceOrientation.landscapeLeft, UIDeviceOrientation.landscapeRight]
-        .contains(UIDevice.current.orientation) {
+      if Helper.previousOrientation.isLandscape {
         translate = CGAffineTransform(translationX: -20, y: 15)
       } else {
         translate = CGAffineTransform.identity
