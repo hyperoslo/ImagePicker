@@ -46,13 +46,28 @@ class TopView: UIView {
 
   // MARK: - Initializers
 
+  public init(configuration: Configuration?) {
+    if let configuration = configuration {
+      self.configuration = configuration
+    }
+    super.init(frame: .zero)
+    configure()
+  }
+
   override init(frame: CGRect) {
     super.init(frame: frame)
+    configure()
+  }
 
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  func configure() {
     var buttons: [UIButton] = [flashButton]
 
-    if Configuration.canRotateCamera {
-        buttons.append(rotateCamera)
+    if configuration.canRotateCamera {
+      buttons.append(rotateCamera)
     }
 
     for button in buttons {
@@ -65,10 +80,6 @@ class TopView: UIView {
     }
 
     setupConstraints()
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: - Action methods

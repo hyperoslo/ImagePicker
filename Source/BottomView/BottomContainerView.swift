@@ -64,9 +64,19 @@ open class BottomContainerView: UIView {
 
   // MARK: Initializers
 
-  public override init(frame: CGRect) {
-    super.init(frame: frame)
+  public init(configuration: Configuration?) {
+    if let configuration = configuration {
+      self.configuration = configuration
+    }
+    super.init(frame: .zero)
+    configure()
+  }
 
+  public required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  func configure() {
     [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].forEach {
       addSubview($0)
       $0.translatesAutoresizingMaskIntoConstraints = false

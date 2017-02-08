@@ -27,9 +27,20 @@ class ButtonPicker: UIButton {
 
   // MARK: - Initializers
 
+  public init(configuration: Configuration?) {
+    if let configuration = configuration {
+      self.configuration = configuration
+    }
+    super.init(frame: .zero)
+    configure()
+  }
+
   override init(frame: CGRect) {
     super.init(frame: frame)
+    configure()
+  }
 
+  func configure() {
     addSubview(numberLabel)
 
     subscribe()

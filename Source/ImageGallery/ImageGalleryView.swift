@@ -90,24 +90,35 @@ open class ImageGalleryView: UIView {
 
   // MARK: - Initializers
 
+  public init(configuration: Configuration?) {
+    if let configuration = configuration {
+      self.configuration = configuration
+    }
+    super.init(frame: .zero)
+    configure()
+  }
+
   override init(frame: CGRect) {
     super.init(frame: frame)
-
-    backgroundColor = Configuration.mainColor
-
-    collectionView.register(ImageGalleryViewCell.self,
-      forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
-
-    [collectionView, topSeparator].forEach { addSubview($0) }
-
-    topSeparator.addSubview(Configuration.indicatorView)
-
-    imagesBeforeLoading = 0
-    fetchPhotos()
+    configure()
   }
 
   required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  func configure() {
+    backgroundColor = configuration.mainColor
+
+    collectionView.register(ImageGalleryViewCell.self,
+                            forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
+
+    [collectionView, topSeparator].forEach { addSubview($0) }
+
+    topSeparator.addSubview(configuration.indicatorView)
+
+    imagesBeforeLoading = 0
+    fetchPhotos()
   }
 
   // MARK: - Layout

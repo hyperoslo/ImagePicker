@@ -89,6 +89,19 @@ open class ImagePickerController: UIViewController {
     }
   }
 
+  // MARK: - Initialization
+
+  public init(configuration: Configuration? = nil) {
+    if let configuration = configuration {
+      self.configuration = configuration
+    }
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required public init?(coder aDecoder: NSCoder) {
+    super.init(coder: aDecoder)
+  }
+
   // MARK: - View lifecycle
 
   open override func viewDidLoad() {
