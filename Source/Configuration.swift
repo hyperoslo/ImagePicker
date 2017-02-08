@@ -31,6 +31,7 @@ public struct Configuration {
   public static var settingsTitle = "Settings"
   public static var requestPermissionTitle = "Permission denied"
   public static var requestPermissionMessage = "Please, allow the application to access to your photo library."
+  
 
   // MARK: Dimensions
 
