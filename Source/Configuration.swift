@@ -54,4 +54,5 @@ public struct Configuration {
     return view
   }()
 
+  public init() {}
 }
