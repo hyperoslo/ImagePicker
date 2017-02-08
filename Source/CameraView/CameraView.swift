@@ -47,9 +47,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   lazy var noCameraLabel: UILabel = { [unowned self] in
     let label = UILabel()
-    label.font = Configuration.noCameraFont
-    label.textColor = Configuration.noCameraColor
-    label.text = Configuration.noCameraTitle
+    label.font = self.configuration.noCameraFont
+    label.textColor = self.configuration.noCameraColor
+    label.text = self.configuration.noCameraTitle
     label.sizeToFit()
 
     return label
@@ -57,16 +57,16 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   lazy var noCameraButton: UIButton = { [unowned self] in
     let button = UIButton(type: .system)
-    let title = NSAttributedString(string: Configuration.settingsTitle,
+    let title = NSAttributedString(string: self.configuration.settingsTitle,
       attributes: [
-        NSFontAttributeName : Configuration.settingsFont,
-        NSForegroundColorAttributeName : Configuration.settingsColor,
+        NSFontAttributeName : self.configuration.settingsFont,
+        NSForegroundColorAttributeName : self.configuration.settingsColor,
       ])
 
     button.setAttributedTitle(title, for: UIControlState())
     button.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
     button.sizeToFit()
-    button.layer.borderColor = Configuration.settingsColor.cgColor
+    button.layer.borderColor = self.configuration.settingsColor.cgColor
     button.layer.borderWidth = 1
     button.layer.cornerRadius = 4
     button.addTarget(self, action: #selector(settingsButtonDidTap), for: .touchUpInside)
@@ -104,11 +104,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    if Configuration.recordLocation {
+    if configuration.recordLocation {
       locationManager = LocationManager()
     }
 
-    view.backgroundColor = Configuration.mainColor
+    view.backgroundColor = configuration.mainColor
 
     view.addSubview(containerView)
     containerView.addSubview(blurView)
@@ -138,7 +138,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   func setupPreviewLayer() {
     guard let layer = AVCaptureVideoPreviewLayer(session: cameraMan.session) else { return }
 
-    layer.backgroundColor = Configuration.mainColor.cgColor
+    layer.backgroundColor = configuration.mainColor.cgColor
     layer.autoreverses = true
     layer.videoGravity = AVLayerVideoGravityResizeAspectFill
 

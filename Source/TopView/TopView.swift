@@ -26,7 +26,7 @@ class TopView: UIView {
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
     button.setTitleColor(UIColor.white, for: UIControlState())
     button.setTitleColor(UIColor.white, for: .highlighted)
-    button.titleLabel?.font = Configuration.flashButton
+    button.titleLabel?.font = self.configuration.flashButton
     button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
 
