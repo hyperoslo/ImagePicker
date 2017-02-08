@@ -84,7 +84,6 @@ open class ImageGalleryView: UIView {
   var shouldTransform = false
   var imagesBeforeLoading = 0
   var fetchResult: PHFetchResult<AnyObject>?
-  var canFetchImages = false
   var imageLimit = 0
 
   // MARK: - Initializers
@@ -240,15 +239,5 @@ extension ImageGalleryView: UICollectionViewDelegate {
         self.selectedStack.pushAsset(asset)
       }
     }
-  }
-
-  public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell,
-    forItemAt indexPath: IndexPath) {
-      guard (indexPath as NSIndexPath).row + 10 >= assets.count
-        && (indexPath as NSIndexPath).row < fetchResult?.count
-        && canFetchImages else { return }
-
-      fetchPhotos()
-      canFetchImages = false
   }
 }
