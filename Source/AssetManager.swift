@@ -18,17 +18,19 @@ open class AssetManager {
   open static func fetch(_ completion: @escaping (_ assets: [PHAsset]) -> Void) {
     guard PHPhotoLibrary.authorizationStatus() == .authorized else { return }
 
-    let fetchResult = PHAsset.fetchAssets(with: .image, options: PHFetchOptions())
+    DispatchQueue.global(qos: .background).async {
+      let fetchResult = PHAsset.fetchAssets(with: .image, options: PHFetchOptions())
 
-    if fetchResult.count > 0 {
-      var assets = [PHAsset]()
-      fetchResult.enumerateObjects({ object, index, stop in
-        assets.insert(object, at: 0)
-      })
+      if fetchResult.count > 0 {
+        var assets = [PHAsset]()
+        fetchResult.enumerateObjects({ object, index, stop in
+          assets.insert(object, at: 0)
+        })
 
-      DispatchQueue.main.async(execute: {
-        completion(assets)
-      })
+        DispatchQueue.main.async {
+          completion(assets)
+        }
+      }
     }
   }
 
