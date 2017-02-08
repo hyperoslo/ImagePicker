@@ -64,7 +64,7 @@ open class BottomContainerView: UIView {
 
   // MARK: Initializers
 
-  public init(configuration: Configuration?) {
+  public init(configuration: Configuration? = nil) {
     if let configuration = configuration {
       self.configuration = configuration
     }
