@@ -26,6 +26,8 @@ open class ImageGalleryView: UIView {
     static let galleryBarHeight: CGFloat = 24
   }
 
+  var configuration = Configuration()
+
   lazy open var collectionView: UICollectionView = { [unowned self] in
     let collectionView = UICollectionView(frame: CGRect.zero,
       collectionViewLayout: self.collectionViewLayout)

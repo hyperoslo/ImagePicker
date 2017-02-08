@@ -14,6 +14,8 @@ open class BottomContainerView: UIView {
     static let height: CGFloat = 101
   }
 
+  var configuration = Configuration()
+
   lazy var pickerButton: ButtonPicker = { [unowned self] in
     let pickerButton = ButtonPicker()
     pickerButton.setTitleColor(UIColor.white, for: UIControlState())

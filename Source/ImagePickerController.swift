@@ -11,6 +11,8 @@ import Photos
 
 open class ImagePickerController: UIViewController {
 
+  var configuration = Configuration()
+
   struct GestureConstants {
     static let maximumHeight: CGFloat = 200
     static let minimumHeight: CGFloat = 125

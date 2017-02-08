@@ -14,6 +14,8 @@ class TopView: UIView {
     static let height: CGFloat = 34
   }
 
+  var configuration = Configuration()
+
   var currentFlashIndex = 0
   let flashButtonTitles = ["AUTO", "ON", "OFF"]
 
