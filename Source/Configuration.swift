@@ -14,12 +14,12 @@ public struct Configuration {
 
   // MARK: Fonts
 
-  public var numberLabelFont = UIFont(name: "HelveticaNeue-Bold", size: 19)!
-  public var doneButton = UIFont(name: "HelveticaNeue-Medium", size: 19)!
-  public var flashButton = UIFont(name: "HelveticaNeue-Medium", size: 12)!
-  public var noImagesFont = UIFont(name: "HelveticaNeue-Medium", size: 18)!
-  public var noCameraFont = UIFont(name: "HelveticaNeue-Medium", size: 18)!
-  public var settingsFont = UIFont(name: "HelveticaNeue-Medium", size: 16)!
+  public var numberLabelFont = UIFont.systemFont(ofSize: 19, weight: UIFontWeightBold)
+  public var doneButton = UIFont.systemFont(ofSize: 19, weight: UIFontWeightMedium)
+  public var flashButton = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
+  public var noImagesFont = UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium)
+  public var noCameraFont = UIFont.systemFont(ofSize: 18, weight: UIFontWeightMedium)
+  public var settingsFont = UIFont.systemFont(ofSize: 16, weight: UIFontWeightMedium)
 
   // MARK: Titles
 
