@@ -14,6 +14,8 @@ open class BottomContainerView: UIView {
     static let height: CGFloat = 101
   }
 
+  var configuration = Configuration()
+
   lazy var pickerButton: ButtonPicker = { [unowned self] in
     let pickerButton = ButtonPicker()
     pickerButton.setTitleColor(UIColor.white, for: UIControlState())
@@ -34,8 +36,8 @@ open class BottomContainerView: UIView {
 
   open lazy var doneButton: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setTitle(Configuration.cancelButtonTitle, for: UIControlState())
-    button.titleLabel?.font = Configuration.doneButton
+    button.setTitle(self.configuration.cancelButtonTitle, for: UIControlState())
+    button.titleLabel?.font = self.configuration.doneButton
     button.addTarget(self, action: #selector(doneButtonDidPress(_:)), for: .touchUpInside)
 
     return button
@@ -45,7 +47,7 @@ open class BottomContainerView: UIView {
 
   lazy var topSeparator: UIView = { [unowned self] in
     let view = UIView()
-    view.backgroundColor = Configuration.backgroundColor
+    view.backgroundColor = self.configuration.backgroundColor
 
     return view
     }()
@@ -62,29 +64,35 @@ open class BottomContainerView: UIView {
 
   // MARK: Initializers
 
-  public override init(frame: CGRect) {
-    super.init(frame: frame)
-
-    [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].forEach {
-      addSubview($0)
-      $0.translatesAutoresizingMaskIntoConstraints = false
+  public init(configuration: Configuration? = nil) {
+    if let configuration = configuration {
+      self.configuration = configuration
     }
-
-    backgroundColor = Configuration.backgroundColor
-    stackView.accessibilityLabel = "Image stack"
-    stackView.addGestureRecognizer(tapGestureRecognizer)
-
-    setupConstraints()
+    super.init(frame: .zero)
+    configure()
   }
 
   public required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
+  func configure() {
+    [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].forEach {
+      addSubview($0)
+      $0.translatesAutoresizingMaskIntoConstraints = false
+    }
+
+    backgroundColor = configuration.backgroundColor
+    stackView.accessibilityLabel = "Image stack"
+    stackView.addGestureRecognizer(tapGestureRecognizer)
+
+    setupConstraints()
+  }
+
   // MARK: - Action methods
 
   func doneButtonDidPress(_ button: UIButton) {
-    if button.currentTitle == Configuration.cancelButtonTitle {
+    if button.currentTitle == configuration.cancelButtonTitle {
       delegate?.cancelButtonDidPress()
     } else {
       delegate?.doneButtonDidPress()

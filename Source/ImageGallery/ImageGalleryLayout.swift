@@ -2,12 +2,29 @@ import UIKit
 
 class ImageGalleryLayout: UICollectionViewFlowLayout {
 
-  override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-    let attributes = super.layoutAttributesForElements(in: rect)
-    attributes?.forEach {
-      $0.transform = Helper.rotationTransform()
-    }
+  let configuration: Configuration
 
-    return attributes
+  init(withConfiguration configuration: Configuration) {
+    self.configuration = configuration
+    super.init()
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    guard let attributes = super.layoutAttributesForElements(in: rect) else {
+      return super.layoutAttributesForElements(in: rect)
+    }
+    
+    var newAttributes = [UICollectionViewLayoutAttributes]()
+    for attribute in attributes {
+      let n = attribute.copy() as! UICollectionViewLayoutAttributes
+      n.transform = Helper.rotationTransform(configuration)
+      newAttributes.append(n)
+    }
+    
+    return newAttributes
   }
 }

@@ -14,6 +14,8 @@ class TopView: UIView {
     static let height: CGFloat = 34
   }
 
+  var configuration = Configuration()
+
   var currentFlashIndex = 0
   let flashButtonTitles = ["AUTO", "ON", "OFF"]
 
@@ -24,7 +26,7 @@ class TopView: UIView {
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
     button.setTitleColor(UIColor.white, for: UIControlState())
     button.setTitleColor(UIColor.white, for: .highlighted)
-    button.titleLabel?.font = Configuration.flashButton
+    button.titleLabel?.font = self.configuration.flashButton
     button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
 
@@ -44,13 +46,28 @@ class TopView: UIView {
 
   // MARK: - Initializers
 
+  public init(configuration: Configuration? = nil) {
+    if let configuration = configuration {
+      self.configuration = configuration
+    }
+    super.init(frame: .zero)
+    configure()
+  }
+
   override init(frame: CGRect) {
     super.init(frame: frame)
+    configure()
+  }
 
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  func configure() {
     var buttons: [UIButton] = [flashButton]
 
-    if Configuration.canRotateCamera {
-        buttons.append(rotateCamera)
+    if configuration.canRotateCamera {
+      buttons.append(rotateCamera)
     }
 
     for button in buttons {
@@ -63,10 +80,6 @@ class TopView: UIView {
     }
 
     setupConstraints()
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: - Action methods

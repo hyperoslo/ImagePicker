@@ -18,11 +18,11 @@ struct Helper {
     }
   }
 
-  static func rotationTransform() -> CGAffineTransform {
+  static func rotationTransform(_ configuration: Configuration) -> CGAffineTransform {
     let currentOrientation = UIDevice.current.orientation
     var result: CGAffineTransform
 
-    switch Configuration.lockedOrientation {
+    switch configuration.lockedOrientation {
     case UIInterfaceOrientationMask.allButUpsideDown:
       if currentOrientation == .portraitUpsideDown {
         result = getTransform(fromDeviceOrientation: previousOrientation)
@@ -71,11 +71,11 @@ struct Helper {
     }
   }
 
-  static func videoOrientation() -> AVCaptureVideoOrientation {
+  static func videoOrientation(_ configuration: Configuration) -> AVCaptureVideoOrientation {
     var result: AVCaptureVideoOrientation
     let currentOrientation = UIDevice.current.orientation
 
-    switch Configuration.lockedOrientation {
+    switch configuration.lockedOrientation {
     case UIInterfaceOrientationMask.allButUpsideDown:
       if currentOrientation == .portraitUpsideDown {
         result = getVideoOrientation(fromDeviceOrientation: previousOrientation)
