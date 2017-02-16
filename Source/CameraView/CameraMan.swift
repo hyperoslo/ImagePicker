@@ -11,7 +11,6 @@ protocol CameraManDelegate: class {
 class CameraMan {
   weak var delegate: CameraManDelegate?
 
-  let configuration: Configuration
   let session = AVCaptureSession()
   let queue = DispatchQueue(label: "no.hyper.ImagePicker.Camera.SessionQueue")
 
@@ -19,10 +18,6 @@ class CameraMan {
   var frontCamera: AVCaptureDeviceInput?
   var stillImageOutput: AVCaptureStillImageOutput?
   var startOnFrontCamera: Bool = false
-
-  init(withConfiguration configuration: Configuration) {
-    self.configuration = configuration
-  }
 
   deinit {
     stop()
@@ -158,7 +153,7 @@ class CameraMan {
   func takePhoto(_ previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?, completion: (() -> Void)? = nil) {
     guard let connection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo) else { return }
 
-    connection.videoOrientation = Helper.videoOrientation(configuration)
+    connection.videoOrientation = Helper.videoOrientation()
 
     queue.async {
       self.stillImageOutput?.captureStillImageAsynchronously(from: connection) {

@@ -4,11 +4,11 @@ class ImageGalleryLayout: UICollectionViewFlowLayout {
 
   let configuration: Configuration
 
-  init(withConfiguration configuration: Configuration) {
+  init(configuration: Configuration) {
     self.configuration = configuration
     super.init()
   }
-  
+
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -17,14 +17,14 @@ class ImageGalleryLayout: UICollectionViewFlowLayout {
     guard let attributes = super.layoutAttributesForElements(in: rect) else {
       return super.layoutAttributesForElements(in: rect)
     }
-    
+
     var newAttributes = [UICollectionViewLayoutAttributes]()
     for attribute in attributes {
       let n = attribute.copy() as! UICollectionViewLayoutAttributes
-      n.transform = Helper.rotationTransform(configuration)
+      n.transform = configuration.rotationTransform
       newAttributes.append(n)
     }
-    
+
     return newAttributes
   }
 }

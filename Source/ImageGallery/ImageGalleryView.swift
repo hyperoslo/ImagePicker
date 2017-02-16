@@ -11,7 +11,6 @@ fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-
 protocol ImageGalleryPanGestureDelegate: class {
 
   func panGestureDidStart()
@@ -41,7 +40,7 @@ open class ImageGalleryView: UIView {
     }()
 
   lazy var collectionViewLayout: UICollectionViewLayout = { [unowned self] in
-    let layout = ImageGalleryLayout(withConfiguration: self.configuration)
+    let layout = ImageGalleryLayout(configuration: self.configuration)
     layout.scrollDirection = .horizontal
     layout.minimumInteritemSpacing = self.configuration.cellSpacing
     layout.minimumLineSpacing = 2

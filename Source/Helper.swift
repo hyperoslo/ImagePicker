@@ -3,7 +3,7 @@ import AVFoundation
 
 struct Helper {
 
-  private(set) static var previousOrientation = UIDeviceOrientation.unknown
+  static var previousOrientation = UIDeviceOrientation.unknown
 
   static func getTransform(fromDeviceOrientation orientation: UIDeviceOrientation) -> CGAffineTransform {
     switch orientation {
@@ -16,46 +16,6 @@ struct Helper {
     default:
       return CGAffineTransform.identity
     }
-  }
-
-  static func rotationTransform(_ configuration: Configuration) -> CGAffineTransform {
-    let currentOrientation = UIDevice.current.orientation
-    var result: CGAffineTransform
-
-    switch configuration.lockedOrientation {
-    case UIInterfaceOrientationMask.allButUpsideDown:
-      if currentOrientation == .portraitUpsideDown {
-        result = getTransform(fromDeviceOrientation: previousOrientation)
-      } else {
-        result = getTransform(fromDeviceOrientation: currentOrientation)
-        previousOrientation = currentOrientation
-      }
-    case UIInterfaceOrientationMask.landscape:
-      if currentOrientation == .landscapeRight || (!currentOrientation.isLandscape && previousOrientation == .landscapeRight) {
-        result = getTransform(fromDeviceOrientation: .landscapeRight)
-        previousOrientation = .landscapeRight
-      } else {
-        result = getTransform(fromDeviceOrientation: .landscapeLeft)
-        previousOrientation = .landscapeLeft
-      }
-    case UIInterfaceOrientationMask.landscapeLeft:
-      result = getTransform(fromDeviceOrientation: .landscapeLeft)
-      previousOrientation = .landscapeLeft
-    case UIInterfaceOrientationMask.landscapeRight:
-      result = getTransform(fromDeviceOrientation: .landscapeRight)
-      previousOrientation = .landscapeRight
-    case UIInterfaceOrientationMask.portraitUpsideDown:
-      result = getTransform(fromDeviceOrientation: .portraitUpsideDown)
-      previousOrientation = .portraitUpsideDown
-    case UIInterfaceOrientationMask.portrait:
-      result = getTransform(fromDeviceOrientation: .portrait)
-      previousOrientation = .portrait
-    default:
-      result = getTransform(fromDeviceOrientation: currentOrientation)
-      previousOrientation = currentOrientation
-    }
-
-    return result
   }
 
   static func getVideoOrientation(fromDeviceOrientation orientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
@@ -71,36 +31,8 @@ struct Helper {
     }
   }
 
-  static func videoOrientation(_ configuration: Configuration) -> AVCaptureVideoOrientation {
-    var result: AVCaptureVideoOrientation
-    let currentOrientation = UIDevice.current.orientation
-
-    switch configuration.lockedOrientation {
-    case UIInterfaceOrientationMask.allButUpsideDown:
-      if currentOrientation == .portraitUpsideDown {
-        result = getVideoOrientation(fromDeviceOrientation: previousOrientation)
-      } else {
-        result = getVideoOrientation(fromDeviceOrientation: currentOrientation)
-      }
-    case UIInterfaceOrientationMask.landscape:
-      if currentOrientation == .landscapeRight || (!currentOrientation.isLandscape && previousOrientation == .landscapeRight) {
-        result = getVideoOrientation(fromDeviceOrientation: .landscapeRight)
-      } else {
-        result = getVideoOrientation(fromDeviceOrientation: .landscapeLeft)
-      }
-    case UIInterfaceOrientationMask.landscapeLeft:
-      result = getVideoOrientation(fromDeviceOrientation: .landscapeLeft)
-    case UIInterfaceOrientationMask.landscapeRight:
-      result = getVideoOrientation(fromDeviceOrientation: .landscapeRight)
-    case UIInterfaceOrientationMask.portraitUpsideDown:
-      result = getVideoOrientation(fromDeviceOrientation: .portraitUpsideDown)
-    case UIInterfaceOrientationMask.portrait:
-      result = getVideoOrientation(fromDeviceOrientation: .portrait)
-    default:
-      result = getVideoOrientation(fromDeviceOrientation: currentOrientation)
-    }
-
-    return result
+  static func videoOrientation() -> AVCaptureVideoOrientation {
+    return getVideoOrientation(fromDeviceOrientation: previousOrientation)
   }
 
 }

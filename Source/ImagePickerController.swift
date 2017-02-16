@@ -97,7 +97,7 @@ open class ImagePickerController: UIViewController {
     }
     super.init(nibName: nil, bundle: nil)
   }
-  
+
   required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
@@ -392,7 +392,7 @@ extension ImagePickerController: CameraViewDelegate {
       }
       self.stack.pushAsset(asset)
     }
-    
+
     galleryView.shouldTransform = true
     bottomContainer.pickerButton.isEnabled = true
 
@@ -416,7 +416,7 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   public func handleRotation(_ note: Notification?) {
-    let rotate = Helper.rotationTransform(configuration)
+    let rotate = configuration.rotationTransform
 
     UIView.animate(withDuration: 0.25, animations: {
       [self.topView.rotateCamera, self.bottomContainer.pickerButton,
