@@ -38,6 +38,7 @@ open class AssetManager {
     let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
     requestOptions.deliveryMode = .highQualityFormat
+    requestOptions.isNetworkAccessAllowed = true
 
     imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
       if let info = info, info["PHImageFileUTIKey"] == nil {
