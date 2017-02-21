@@ -386,7 +386,9 @@ extension ImagePickerController: CameraViewDelegate {
     galleryView.fetchPhotos() {
       guard let asset = self.galleryView.assets.first else { return }
       if self.configuration.allowMultiplePhotoSelection == false {
-        self.stack.assets.removeAll()
+        for asset in self.stack.assets {
+          self.stack.dropAsset(asset)
+        }
       }
       self.stack.pushAsset(asset)
     }
