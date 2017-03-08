@@ -71,6 +71,7 @@ public class ImagePickerController: UIViewController {
   public weak var delegate: ImagePickerDelegate?
   public var stack = ImageStack()
   public var imageLimit = 0
+  public var selectedImages = 0
   public var preferredImageSize: CGSize?
   public var startOnFrontCamera = false
   var totalSize: CGSize { return UIScreen.mainScreen().bounds.size }
@@ -92,8 +93,11 @@ public class ImagePickerController: UIViewController {
 
   public override func viewDidLoad() {
     super.viewDidLoad()
+    
+    bottomContainer.doneButton.setTitle("Add \(selectedImages)/\(imageLimit)", forState: .Normal)
 
-    for subview in [cameraController.view, galleryView, bottomContainer, topView] {
+    for subview in [cameraController.view, bottomContainer, topView] {
+//  for subview in [cameraController.view, galleryView, bottomContainer, topView] {
       view.addSubview(subview)
       subview.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -314,6 +318,8 @@ public class ImagePickerController: UIViewController {
   private func takePicture() {
     guard isBelowImageLimit() && !isTakingPicture else { return }
     isTakingPicture = true
+    selectedImages = selectedImages + 1
+    Configuration.doneButtonTitle = "Add \(selectedImages)/\(imageLimit)"
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     let action: Void -> Void = { [unowned self] in
@@ -433,6 +439,10 @@ extension ImagePickerController: TopViewDelegate {
 
   func rotateDeviceDidPress() {
     cameraController.rotateCamera()
+  }
+  
+  func cancelTapped() {
+    self.dismissViewControllerAnimated(true, completion: nil)
   }
 }
 

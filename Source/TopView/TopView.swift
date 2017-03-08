@@ -4,12 +4,13 @@ protocol TopViewDelegate: class {
 
   func flashButtonDidPress(title: String)
   func rotateDeviceDidPress()
+  func cancelTapped()
 }
 
 class TopView: UIView {
 
   struct Dimensions {
-    static let leftOffset: CGFloat = 11
+    static let leftOffset: CGFloat = UIScreen.mainScreen().bounds.width / 2 - 30
     static let rightOffset: CGFloat = 7
     static let height: CGFloat = 34
   }
@@ -39,7 +40,19 @@ class TopView: UIView {
 
     return button
     }()
-
+  
+  lazy var cancelButton: UIButton = { [unowned self] in
+    let button = UIButton()
+    button.setTitle("Cancel", forState: .Normal)
+    button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
+    button.setTitleColor(.whiteColor(), forState: .Normal)
+    button.setTitleColor(.whiteColor(), forState: .Highlighted)
+    button.addTarget(self, action: #selector(cancelButtonTapped), forControlEvents: .TouchUpInside)
+    button.contentHorizontalAlignment = .Left
+    
+    return button
+    }()
+  
   weak var delegate: TopViewDelegate?
 
   // MARK: - Initializers
@@ -47,7 +60,7 @@ class TopView: UIView {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    var buttons: [UIButton] = [flashButton]
+    var buttons: [UIButton] = [cancelButton, flashButton]
 
     if Configuration.canRotateCamera {
         buttons.append(rotateCamera)
@@ -67,6 +80,10 @@ class TopView: UIView {
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  func cancelButtonTapped() {
+    delegate?.cancelTapped()
   }
 
   // MARK: - Action methods

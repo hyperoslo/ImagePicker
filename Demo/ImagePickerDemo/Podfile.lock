@@ -12,7 +12,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   ImagePicker:
-    :path: "../../"
+    :path: ../../
   Lightbox:
     :git: https://github.com/hyperoslo/Lightbox.git
 
@@ -29,4 +29,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a71ec783dda324ec7860ef3ad95fd6d1d38e53c3
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.2.0

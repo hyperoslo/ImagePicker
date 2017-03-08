@@ -63,6 +63,9 @@ extension BottomContainerView {
 extension TopView {
 
   func setupConstraints() {
+    addConstraint(NSLayoutConstraint(item: cancelButton, attribute: .Width,
+      relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute,
+      multiplier: 1, constant: 120))
     addConstraint(NSLayoutConstraint(item: flashButton, attribute: .Left,
       relatedBy: .Equal, toItem: self, attribute: .Left,
       multiplier: 1, constant: Dimensions.leftOffset))
