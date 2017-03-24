@@ -53,8 +53,7 @@ configuration.doneButtonTitle = "Finish"
 configuration.noImagesTitle = "Sorry! There are no images here!"
 configuration.recordLocation = false
 
-let imagePicker = ImagePickerController()
-imagePicker.configuration = configuration
+let imagePicker = ImagePickerController(configuration: configuration)
 ```
 
 ##### Resolve assets
