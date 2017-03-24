@@ -36,7 +36,11 @@ class ViewController: UIViewController, ImagePickerDelegate {
   }
 
   func buttonTouched(button: UIButton) {
+    var configuration = Configuration()
+    configuration.recordLocation = false
+
     let imagePicker = ImagePickerController()
+    imagePicker.configuration = configuration
     imagePicker.delegate = self
 
     present(imagePicker, animated: true, completion: nil)
