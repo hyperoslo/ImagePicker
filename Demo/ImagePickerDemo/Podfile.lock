@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
     :branch: swift3
     :git: https://github.com/hyperoslo/Hue.git
   ImagePicker:
-    :path: ../../
+    :path: "../../"
   Lightbox:
     :branch: swift-3
     :git: https://github.com/hyperoslo/Lightbox.git
@@ -33,7 +33,7 @@ CHECKOUT OPTIONS:
     :commit: 04437d8450a5ccc92af7e9bd08027bdced9fb589
     :git: https://github.com/hyperoslo/Lightbox.git
   Sugar:
-    :commit: 9ab7edb15a436310ca38083cf5e25e7251541ddc
+    :commit: 41e0f1e92bfd29b805fa74f87444975ca2976887
     :git: https://github.com/hyperoslo/Sugar.git
 
 SPEC CHECKSUMS:

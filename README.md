@@ -45,11 +45,15 @@ imagePickerController.imageLimit = 5
 
 ##### Configuration
 
-Configure text, colors, fonts and camera features by just overriding the static variables in the ImagePicker [configuration](https://github.com/hyperoslo/ImagePicker/blob/master/Source/Configuration.swift) struct. As an example:
+You can inject `Configuration` instance to ImagePicker, which allows you to configure text, colors, fonts and camera features
 
 ```swift
-Configuration.doneButtonTitle = "Finish"
-Configuration.noImagesTitle = "Sorry! There are no images here!"
+var configuration = Configuration()
+configuration.doneButtonTitle = "Finish"
+configuration.noImagesTitle = "Sorry! There are no images here!"
+configuration.recordLocation = false
+
+let imagePicker = ImagePickerController(configuration: configuration)
 ```
 
 ##### Resolve assets
