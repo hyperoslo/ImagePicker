@@ -323,7 +323,11 @@ public class ImagePickerController: UIViewController {
     guard isBelowImageLimit() && !isTakingPicture else { return }
     isTakingPicture = true
     selectedImages = selectedImages + 1
-    Configuration.doneButtonTitle = "Add \(selectedImages)/\(imageLimit)"
+    if imageLimit == 1 {
+      Configuration.doneButtonTitle = "Done"
+    } else {
+      Configuration.doneButtonTitle = "Add \(selectedImages)/\(imageLimit)"
+    }
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     let action: Void -> Void = { [unowned self] in
