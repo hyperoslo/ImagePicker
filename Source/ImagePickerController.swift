@@ -94,7 +94,11 @@ public class ImagePickerController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
     
-    bottomContainer.doneButton.setTitle("Add \(selectedImages)/\(imageLimit)", forState: .Normal)
+    if imageLimit == 1 {
+      bottomContainer.doneButton.setTitle("Done", forState: .Normal)
+    } else {
+      bottomContainer.doneButton.setTitle("Add \(selectedImages)/\(imageLimit)", forState: .Normal)
+    }
 
     for subview in [cameraController.view, bottomContainer, topView] {
 //  for subview in [cameraController.view, galleryView, bottomContainer, topView] {
