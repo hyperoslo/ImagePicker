@@ -4,16 +4,20 @@ class ImageGalleryViewCell: UICollectionViewCell {
 
   lazy var imageView = UIImageView()
   lazy var selectedImageView = UIImageView()
+  var videoInfoView: VideoInfoView?
   
   private let videoInfoBarHeight: CGFloat = 15
   var duration: TimeInterval? {
     didSet {
-        guard let duration = duration, duration > 0 else { return }
+        guard let duration = duration, duration > 0 else {
+            self.videoInfoView?.removeFromSuperview()
+            return
+        }
 
         let frame = CGRect(x: 0, y: self.bounds.height - self.videoInfoBarHeight,
                            width: self.bounds.width, height: self.videoInfoBarHeight)
-        let videoInfoView = VideoInfoView(frame: frame, duration: duration)
-        contentView.addSubview(videoInfoView)
+        videoInfoView = VideoInfoView(frame: frame, duration: duration)
+        contentView.addSubview(videoInfoView!)
     }
   }
   
