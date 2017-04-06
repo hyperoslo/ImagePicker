@@ -40,9 +40,10 @@ class ViewController: UIViewController, ImagePickerDelegate {
     config.doneButtonTitle = "Finish"
     config.noImagesTitle = "Sorry! There are no images here!"
     config.recordLocation = false
+    config.allowVideoSelection = true
 
     let imagePicker = ImagePickerController()
-    imagePicker.configuration = configuration
+    imagePicker.configuration = config
     imagePicker.delegate = self
 
     present(imagePicker, animated: true, completion: nil)

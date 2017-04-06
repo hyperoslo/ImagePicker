@@ -44,6 +44,7 @@ public struct Configuration {
   public var collapseCollectionViewWhileShot = true
   public var recordLocation = true
   public var allowMultiplePhotoSelection = true
+  public var allowVideoSelection = false
 
   // MARK: Images
   public var indicatorView: UIView = {
