@@ -4,7 +4,7 @@ class VideoInfoView: UIView {
   
   var duration: TimeInterval? {
     didSet {
-      setVideoInfoLabelDuration()
+      videoInfoLabel.text = dateFormatter.string(from: duration ?? 0)
     }
   }
   
@@ -26,7 +26,7 @@ class VideoInfoView: UIView {
     videoInfoLabel.font = UIFont.systemFont(ofSize: 10)
     videoInfoLabel.textColor = .white
     videoInfoLabel.textAlignment = .right
-    self.setVideoInfoLabelDuration()
+    videoInfoLabel.text = self.dateFormatter.string(from: self.duration ?? 0)
     return videoInfoLabel
   }()
   
@@ -48,9 +48,5 @@ class VideoInfoView: UIView {
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-  
-  private func setVideoInfoLabelDuration() {
-    videoInfoLabel.text = dateFormatter.string(from: duration ?? 0)
   }
 }
