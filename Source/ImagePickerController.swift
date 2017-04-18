@@ -94,11 +94,13 @@ public class ImagePickerController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
     
-    if imageLimit == 1 {
-      bottomContainer.doneButton.setTitle("Done", forState: .Normal)
-    } else {
-      bottomContainer.doneButton.setTitle("Add \(selectedImages)/\(imageLimit)", forState: .Normal)
-    }
+//    if imageLimit == 1 {
+//      bottomContainer.doneButton.setTitle("Done", forState: .Normal)
+//    } else {
+//      bottomContainer.doneButton.setTitle("Add \(selectedImages)/\(imageLimit)", forState: .Normal)
+//    }
+    bottomContainer.doneButton.setTitle("Done", forState: .Normal)
+    bottomContainer.pickerButton.numberLabel.text = "\(selectedImages)/\(imageLimit)"
 
     for subview in [cameraController.view, bottomContainer, topView] {
 //  for subview in [cameraController.view, galleryView, bottomContainer, topView] {
@@ -324,10 +326,12 @@ public class ImagePickerController: UIViewController {
     isTakingPicture = true
     selectedImages = selectedImages + 1
     if imageLimit == 1 {
-      Configuration.doneButtonTitle = "Done"
+//      Configuration.doneButtonTitle = "Done"
     } else {
-      Configuration.doneButtonTitle = "Add \(selectedImages)/\(imageLimit)"
+//      Configuration.doneButtonTitle = "Add \(selectedImages)/\(imageLimit)"
+      bottomContainer.pickerButton.numberLabel.text = "\(selectedImages)/\(imageLimit)"
     }
+    Configuration.doneButtonTitle = "Done"
     bottomContainer.pickerButton.enabled = false
     bottomContainer.stackView.startLoader()
     let action: Void -> Void = { [unowned self] in

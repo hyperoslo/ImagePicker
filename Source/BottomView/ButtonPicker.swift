@@ -74,7 +74,10 @@ class ButtonPicker: UIButton {
 
   func recalculatePhotosCount(notification: NSNotification) {
     guard let sender = notification.object as? ImageStack else { return }
-    numberLabel.text = sender.assets.isEmpty ? "" : String(sender.assets.count)
+    //numberLabel.text = sender.assets.isEmpty ? "" : String(sender.assets.count)
+    if sender.assets.isEmpty {
+      numberLabel.text = "0/5"
+    }
   }
 
   func pickerButtonDidPress(button: UIButton) {
