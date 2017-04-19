@@ -1,8 +1,12 @@
 import UIKit
 
 class VideoInfoView: UIView {
-    
-  private var duration: TimeInterval?
+
+  var duration: TimeInterval? {
+    didSet {
+      videoInfoLabel.text = dateFormatter.string(from: duration ?? 0)
+    }
+  }
 
   private lazy var videoIcon: UIImageView = {
     var videoIcon = UIImageView(image: AssetManager.getImage("video"))
@@ -34,19 +38,14 @@ class VideoInfoView: UIView {
     return formatter
   }()
 
-  init(frame: CGRect, duration: TimeInterval) {
+  override init(frame: CGRect) {
     super.init(frame: frame)
 
-    self.duration = duration
     backgroundColor = UIColor(white: 0, alpha: 0.5)
     addSubview(self.videoIcon)
     addSubview(self.videoInfoLabel)
   }
 
-  override init(frame: CGRect) {
-    fatalError("init(frame:) has not been implemented")
-  }
-    
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
