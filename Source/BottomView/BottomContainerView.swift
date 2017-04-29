@@ -20,6 +20,7 @@ open class BottomContainerView: UIView {
     let pickerButton = ButtonPicker()
     pickerButton.setTitleColor(UIColor.white, for: UIControlState())
     pickerButton.delegate = self
+    pickerButton.numberLabel.isHidden = !self.configuration.showsImageCountLabel
 
     return pickerButton
     }()
