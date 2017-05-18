@@ -21,8 +21,8 @@ class TopView: UIView {
 
   lazy var flashButton: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setImage(AssetManager.getImage("AUTO"), for: UIControlState())
-    button.setTitle("AUTO", for: UIControlState())
+    button.setImage(AssetManager.getImage("ON"), for: UIControlState())
+    button.setTitle("ON", for: UIControlState())
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
     button.setTitleColor(UIColor.white, for: UIControlState())
     button.setTitleColor(UIColor.white, for: .highlighted)
