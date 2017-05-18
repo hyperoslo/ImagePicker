@@ -158,7 +158,7 @@ open class ImageGalleryView: UIView {
   // MARK: - Photos handler
 
   func fetchPhotos(_ completion: (() -> Void)? = nil) {
-    AssetManager.fetch { assets in
+    AssetManager.fetch(withConfiguration: configuration) { assets in
       self.assets.removeAll()
       self.assets.append(contentsOf: assets)
       self.collectionView.reloadData()

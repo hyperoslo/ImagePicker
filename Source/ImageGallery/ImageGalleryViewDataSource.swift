@@ -38,6 +38,7 @@ extension ImageGalleryView: UICollectionViewDataSource {
         } else {
           cell.selectedImageView.image = nil
         }
+        cell.duration = asset.duration
       }
     }
 
