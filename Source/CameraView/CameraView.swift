@@ -197,7 +197,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
       "OFF": .off
     ]
 
-    cameraMan.flash(mapping[title] ?? .auto)
+    cameraMan.flash(mapping[title] ?? .on)
   }
 
   func takePicture(_ completion: @escaping () -> ()) {
