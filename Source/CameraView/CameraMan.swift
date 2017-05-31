@@ -234,26 +234,11 @@ class CameraMan {
   }
   
   func preferredPresets() -> [String] {
-    if #available(iOS 9.0, *) {
-      return [
-        AVCaptureSessionPreset3840x2160,
-        AVCaptureSessionPreset1920x1080,
-        AVCaptureSessionPreset1280x720,
+    return [
         AVCaptureSessionPresetPhoto,
         AVCaptureSessionPresetHigh,
         AVCaptureSessionPresetMedium,
         AVCaptureSessionPresetLow
       ]
-    } else {
-      // Fallback on earlier versions
-      return [
-        AVCaptureSessionPreset1920x1080,
-        AVCaptureSessionPreset1280x720,
-        AVCaptureSessionPresetPhoto,
-        AVCaptureSessionPresetHigh,
-        AVCaptureSessionPresetMedium,
-        AVCaptureSessionPresetLow
-      ]
-    }
   }
 }

@@ -89,7 +89,7 @@ open class ImagePickerController: UIViewController {
   open override func viewDidLoad() {
     super.viewDidLoad()
 
-    for subview in [cameraController.view, bottomContainer, topView] {
+    for subview in [cameraController.view, galleryView, bottomContainer, topView] {
       view.addSubview(subview!)
       subview?.translatesAutoresizingMaskIntoConstraints = false
     }
