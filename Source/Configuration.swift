@@ -46,6 +46,7 @@ public struct Configuration {
   public var allowMultiplePhotoSelection = true
   public var allowVideoSelection = false
   public var showsImageCountLabel = true
+  public var flashButtonAlwaysHidden = false
 
   // MARK: Images
   public var indicatorView: UIView = {
