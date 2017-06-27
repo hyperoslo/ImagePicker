@@ -37,7 +37,7 @@ open class ImagePickerController: UIViewController {
     return view
     }()
 
-  lazy var topView: TopView = { [unowned self] in
+  open lazy var topView: TopView = { [unowned self] in
     let view = TopView(configuration: self.configuration)
     view.backgroundColor = UIColor.clear
     view.delegate = self
