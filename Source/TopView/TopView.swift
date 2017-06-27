@@ -79,6 +79,8 @@ class TopView: UIView {
       addSubview(button)
     }
 
+    flashButton.isHidden = configuration.flashButtonAlwaysHidden
+
     setupConstraints()
   }
 

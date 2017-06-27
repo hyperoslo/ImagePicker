@@ -386,7 +386,9 @@ extension ImagePickerController: BottomContainerViewDelegate {
 extension ImagePickerController: CameraViewDelegate {
 
   func setFlashButtonHidden(_ hidden: Bool) {
-    topView.flashButton.isHidden = hidden
+    if configuration.flashButtonAlwaysHidden {
+      topView.flashButton.isHidden = hidden
+    }
   }
 
   func imageToLibrary() {
