@@ -3,31 +3,41 @@ import Photos
 
 open class ImageStack {
 
-  public struct Notifications {
-    public static let imageDidPush = "imageDidPush"
-    public static let imageDidDrop = "imageDidDrop"
-    public static let stackDidReload = "stackDidReload"
-  }
-
   open var assets = [PHAsset]()
   fileprivate let imageKey = "image"
 
   open func pushAsset(_ asset: PHAsset) {
     assets.append(asset)
-    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.imageDidPush), object: self, userInfo: [imageKey: asset])
+    NotificationCenter.post(notification: .imageDidPush, object: self, userInfo: [imageKey: asset])
   }
 
   open func dropAsset(_ asset: PHAsset) {
     assets = assets.filter() {$0 != asset}
-    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.imageDidDrop), object: self, userInfo: [imageKey: asset])
+    NotificationCenter.post(notification: .imageDidDrop, object: self, userInfo: [imageKey: asset])
   }
 
   open func resetAssets(_ assetsArray: [PHAsset]) {
     assets = assetsArray
-    NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.stackDidReload), object: self, userInfo: nil)
+    NotificationCenter.post(notification: .stackDidReload, object: self)
   }
 
   open func containsAsset(_ asset: PHAsset) -> Bool {
     return assets.contains(asset)
+  }
+}
+
+extension NotificationCenter {
+  enum Notifications: String {
+    case imageDidPush
+    case imageDidDrop
+    case stackDidReload
+  }
+
+  class func post(notification: Notifications, object: Any?, userInfo: [AnyHashable : Any]? = .none) {
+    NotificationCenter.default.post(name: Notification.Name(rawValue: notification.rawValue), object: object, userInfo: userInfo)
+  }
+  
+  class func addObserver(_ observer: AnyObject, selector: Selector, notification: Notifications, object: AnyObject? = .none) {
+    NotificationCenter.default.addObserver(observer, selector: selector, name: Notification.Name(rawValue: notification.rawValue), object: object)
   }
 }

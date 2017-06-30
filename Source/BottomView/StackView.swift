@@ -58,20 +58,9 @@ class ImageStackView: UIView {
   // MARK: - Helpers
 
   func subscribe() {
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(imageDidPush(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
-      object: nil)
-
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(imageStackDidChangeContent(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
-      object: nil)
-
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(imageStackDidChangeContent(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
-      object: nil)
+    NotificationCenter.addObserver(self, selector: #selector(imageDidPush(_:)), notification: .imageDidPush)
+    NotificationCenter.addObserver(self, selector: #selector(imageStackDidChangeContent(_:)), notification: .imageDidDrop)
+    NotificationCenter.addObserver(self, selector: #selector(imageStackDidChangeContent(_:)), notification: .stackDidReload)
   }
 
   override func layoutSubviews() {

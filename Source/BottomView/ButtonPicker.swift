@@ -53,20 +53,9 @@ class ButtonPicker: UIButton {
   }
 
   func subscribe() {
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(recalculatePhotosCount(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
-      object: nil)
-
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(recalculatePhotosCount(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
-      object: nil)
-
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(recalculatePhotosCount(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
-      object: nil)
+    NotificationCenter.addObserver(self, selector: #selector(recalculatePhotosCount(_:)), notification: .imageDidPush)
+    NotificationCenter.addObserver(self, selector: #selector(recalculatePhotosCount(_:)), notification: .imageDidDrop)
+    NotificationCenter.addObserver(self, selector: #selector(recalculatePhotosCount(_:)), notification: .stackDidReload)
   }
 
   required init?(coder aDecoder: NSCoder) {

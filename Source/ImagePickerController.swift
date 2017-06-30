@@ -224,20 +224,9 @@ open class ImagePickerController: UIViewController {
   }
 
   func subscribe() {
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(adjustButtonTitle(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
-      object: nil)
-
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(adjustButtonTitle(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
-      object: nil)
-
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(didReloadAssets(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
-      object: nil)
+    NotificationCenter.addObserver(self, selector: #selector(adjustButtonTitle(_:)), notification: .imageDidPush)
+    NotificationCenter.addObserver(self, selector: #selector(adjustButtonTitle(_:)), notification: .imageDidDrop)
+    NotificationCenter.addObserver(self, selector: #selector(didReloadAssets(_:)), notification: .stackDidReload)
 
     NotificationCenter.default.addObserver(self,
       selector: #selector(volumeChanged(_:)),
