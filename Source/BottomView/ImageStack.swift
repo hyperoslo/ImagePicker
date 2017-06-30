@@ -25,19 +25,3 @@ open class ImageStack {
     return assets.contains(asset)
   }
 }
-
-extension NotificationCenter {
-  enum Notifications: String {
-    case imageDidPush
-    case imageDidDrop
-    case stackDidReload
-  }
-
-  class func post(notification: Notifications, object: Any?, userInfo: [AnyHashable : Any]? = .none) {
-    NotificationCenter.default.post(name: Notification.Name(rawValue: notification.rawValue), object: object, userInfo: userInfo)
-  }
-  
-  class func addObserver(_ observer: AnyObject, selector: Selector, notification: Notifications, object: AnyObject? = .none) {
-    NotificationCenter.default.addObserver(observer, selector: selector, name: Notification.Name(rawValue: notification.rawValue), object: object)
-  }
-}
