@@ -6,7 +6,7 @@ protocol TopViewDelegate: class {
   func rotateDeviceDidPress()
 }
 
-class TopView: UIView {
+open class TopView: UIView {
 
   struct Dimensions {
     static let leftOffset: CGFloat = 11
@@ -19,7 +19,7 @@ class TopView: UIView {
   var currentFlashIndex = 0
   let flashButtonTitles = ["AUTO", "ON", "OFF"]
 
-  lazy var flashButton: UIButton = { [unowned self] in
+  open lazy var flashButton: UIButton = { [unowned self] in
     let button = UIButton()
     button.setImage(AssetManager.getImage("AUTO"), for: UIControlState())
     button.setTitle("AUTO", for: UIControlState())
@@ -33,7 +33,7 @@ class TopView: UIView {
     return button
     }()
 
-  lazy var rotateCamera: UIButton = { [unowned self] in
+  open lazy var rotateCamera: UIButton = { [unowned self] in
     let button = UIButton()
     button.setImage(AssetManager.getImage("cameraIcon"), for: UIControlState())
     button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), for: .touchUpInside)
@@ -54,12 +54,12 @@ class TopView: UIView {
     configure()
   }
 
-  override init(frame: CGRect) {
+  override public init(frame: CGRect) {
     super.init(frame: frame)
     configure()
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  required public init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
