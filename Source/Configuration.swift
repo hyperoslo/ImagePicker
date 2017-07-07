@@ -46,6 +46,8 @@ public struct Configuration {
   public var allowMultiplePhotoSelection = true
   public var allowVideoSelection = false
   public var showsImageCountLabel = true
+  public var flashButtonAlwaysHidden = false
+  public var managesAudioSession = true
   public var useLowResolutionPreviewImage = false
 
   // MARK: Images

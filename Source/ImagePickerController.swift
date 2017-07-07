@@ -37,7 +37,7 @@ open class ImagePickerController: UIViewController {
     return view
     }()
 
-  lazy var topView: TopView = { [unowned self] in
+  open lazy var topView: TopView = { [unowned self] in
     let view = TopView(configuration: self.configuration)
     view.backgroundColor = UIColor.clear
     view.delegate = self
@@ -131,7 +131,9 @@ open class ImagePickerController: UIViewController {
   open override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
-    _ = try? AVAudioSession.sharedInstance().setActive(true)
+    if configuration.managesAudioSession {
+      _ = try? AVAudioSession.sharedInstance().setActive(true)
+    }
 
     statusBarHidden = UIApplication.shared.isStatusBarHidden
     UIApplication.shared.setStatusBarHidden(true, with: .fade)
@@ -214,7 +216,10 @@ open class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
-    _ = try? AVAudioSession.sharedInstance().setActive(false)
+    if configuration.managesAudioSession {
+      _ = try? AVAudioSession.sharedInstance().setActive(false)
+    }
+
     NotificationCenter.default.removeObserver(self)
   }
 
@@ -381,7 +386,9 @@ extension ImagePickerController: BottomContainerViewDelegate {
 extension ImagePickerController: CameraViewDelegate {
 
   func setFlashButtonHidden(_ hidden: Bool) {
-    topView.flashButton.isHidden = hidden
+    if configuration.flashButtonAlwaysHidden {
+      topView.flashButton.isHidden = hidden
+    }
   }
 
   func imageToLibrary() {
