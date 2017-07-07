@@ -222,11 +222,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
       guard let visibleCells = collectionView.visibleCells as? [ImageGalleryViewCell] else { return }
       for cell in visibleCells {
         if cell.selectedImageView.image != nil {
-          UIView.animate(withDuration: 0.2, animations: {
-            cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-          }, completion: { _ in
-            cell.selectedImageView.image = nil
-          })
+          cell.changeSelectedStatus(selected: false)
         }
       }
     }
@@ -237,18 +233,10 @@ extension ImageGalleryView: UICollectionViewDelegate {
       guard let _ = image else { return }
 
       if cell.selectedImageView.image != nil {
-        UIView.animate(withDuration: 0.2, animations: {
-          cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-          }, completion: { _ in
-            cell.selectedImageView.image = nil
-        })
+        cell.changeSelectedStatus(selected: false)
         self.selectedStack.dropAsset(asset)
       } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
-        cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
-        cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
-        UIView.animate(withDuration: 0.2, animations: { _ in
-          cell.selectedImageView.transform = CGAffineTransform.identity
-        })
+        cell.changeSelectedStatus(selected: true)
         self.selectedStack.pushAsset(asset)
       }
     }

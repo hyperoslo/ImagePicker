@@ -47,3 +47,22 @@ class ImageGalleryViewCell: UICollectionViewCell {
     imageView.image = image
   }
 }
+
+extension ImageGalleryViewCell {
+  func changeSelectedStatus(selected: Bool? = false, ani: Bool? = true) {
+    if selected! {
+      self.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
+      self.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
+      UIView.animate(withDuration: 0.2, animations: { _ in
+        self.selectedImageView.transform = CGAffineTransform.identity
+      })
+    }
+    else {
+      UIView.animate(withDuration: 0.2, animations: {
+        self.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+      }, completion: { _ in
+        self.selectedImageView.image = nil
+      })
+    }
+  }
+}
