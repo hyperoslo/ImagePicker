@@ -421,7 +421,7 @@ extension ImagePickerController: CameraViewDelegate {
   // MARK: - Rotation
 
   open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-    return .portrait
+    return .landscape
   }
 
   public func handleRotation(_ note: Notification) {
