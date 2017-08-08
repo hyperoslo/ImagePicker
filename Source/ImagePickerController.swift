@@ -97,11 +97,11 @@ open class ImagePickerController: UIViewController {
     }
     super.init(nibName: nil, bundle: nil)
   }
-  
+
   public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
   }
-  
+
   required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
@@ -401,7 +401,7 @@ extension ImagePickerController: CameraViewDelegate {
       }
       self.stack.pushAsset(asset)
     }
-    
+
     galleryView.shouldTransform = true
     bottomContainer.pickerButton.isEnabled = true
 

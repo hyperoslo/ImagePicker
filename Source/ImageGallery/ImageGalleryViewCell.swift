@@ -5,7 +5,7 @@ class ImageGalleryViewCell: UICollectionViewCell {
   lazy var imageView = UIImageView()
   lazy var selectedImageView = UIImageView()
   private var videoInfoView: VideoInfoView
-  
+
   private let videoInfoBarHeight: CGFloat = 15
   var duration: TimeInterval? {
     didSet {
@@ -17,7 +17,7 @@ class ImageGalleryViewCell: UICollectionViewCell {
       }
     }
   }
-  
+
   override init(frame: CGRect) {
     let videoBarFrame = CGRect(x: 0, y: frame.height - self.videoInfoBarHeight,
                                width: frame.width, height: self.videoInfoBarHeight)

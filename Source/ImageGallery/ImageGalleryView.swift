@@ -11,7 +11,6 @@ fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-
 protocol ImageGalleryPanGestureDelegate: class {
 
   func panGestureDidStart()

@@ -22,7 +22,7 @@ open class AssetManager {
       let fetchResult = configuration.allowVideoSelection
         ? PHAsset.fetchAssets(with: PHFetchOptions())
         : PHAsset.fetchAssets(with: .image, options: PHFetchOptions())
-        
+
       if fetchResult.count > 0 {
         var assets = [PHAsset]()
         fetchResult.enumerateObjects({ object, index, stop in
