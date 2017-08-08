@@ -1,6 +1,6 @@
 import UIKit
 import Photos
-fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
+private func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l < r
@@ -197,8 +197,8 @@ open class ImageGalleryView: UIView {
 extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 
   public func collectionView(_ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemAt indexPath: IndexPath) -> CGSize {
+                             layout collectionViewLayout: UICollectionViewLayout,
+                             sizeForItemAt indexPath: IndexPath) -> CGSize {
       guard let collectionSize = collectionSize else { return CGSize.zero }
 
       return collectionSize
@@ -219,21 +219,19 @@ extension ImageGalleryView: UICollectionViewDelegate {
       }
       // Animate deselecting photos for any selected visible cells
       guard let visibleCells = collectionView.visibleCells as? [ImageGalleryViewCell] else { return }
-      for cell in visibleCells {
-        if cell.selectedImageView.image != nil {
-          UIView.animate(withDuration: 0.2, animations: {
-            cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-          }, completion: { _ in
-            cell.selectedImageView.image = nil
-          })
-        }
+      for cell in visibleCells where cell.selectedImageView.image != nil {
+        UIView.animate(withDuration: 0.2, animations: {
+          cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        }, completion: { _ in
+          cell.selectedImageView.image = nil
+        })
       }
     }
 
     let asset = assets[(indexPath as NSIndexPath).row]
 
     AssetManager.resolveAsset(asset, size: CGSize(width: 100, height: 100)) { image in
-      guard let _ = image else { return }
+      guard image != nil else { return }
 
       if cell.selectedImageView.image != nil {
         UIView.animate(withDuration: 0.2, animations: {
