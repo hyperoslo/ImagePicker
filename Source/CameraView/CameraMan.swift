@@ -156,9 +156,7 @@ class CameraMan {
     connection.videoOrientation = Helper.videoOrientation()
 
     queue.async {
-      self.stillImageOutput?.captureStillImageAsynchronously(from: connection) {
-        buffer, error in
-
+      self.stillImageOutput?.captureStillImageAsynchronously(from: connection) { buffer, error in
         guard let buffer = buffer, error == nil && CMSampleBufferIsValid(buffer),
           let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),
           let image = UIImage(data: imageData)

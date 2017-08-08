@@ -97,11 +97,11 @@ open class ImagePickerController: UIViewController {
     }
     super.init(nibName: nil, bundle: nil)
   }
-  
+
   public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
   }
-  
+
   required public init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
@@ -157,6 +157,8 @@ open class ImagePickerController: UIViewController {
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
+
+    applyOrientationTransforms()
   }
 
   open override func viewWillDisappear(_ animated: Bool) {
@@ -335,7 +337,7 @@ open class ImagePickerController: UIViewController {
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false
     bottomContainer.stackView.startLoader()
-    let action: (Void) -> Void = { [unowned self] in
+    let action: () -> Void = { [unowned self] in
       self.cameraController.takePicture { self.isTakingPicture = false }
     }
 
@@ -394,14 +396,14 @@ extension ImagePickerController: CameraViewDelegate {
   func imageToLibrary() {
     guard let collectionSize = galleryView.collectionSize else { return }
 
-    galleryView.fetchPhotos() {
+    galleryView.fetchPhotos {
       guard let asset = self.galleryView.assets.first else { return }
       if self.configuration.allowMultiplePhotoSelection == false {
         self.stack.assets.removeAll()
       }
       self.stack.pushAsset(asset)
     }
-    
+
     galleryView.shouldTransform = true
     bottomContainer.pickerButton.isEnabled = true
 
@@ -425,11 +427,15 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   public func handleRotation(_ note: Notification) {
+    applyOrientationTransforms()
+  }
+
+  func applyOrientationTransforms() {
     let rotate = Helper.rotationTransform()
 
     UIView.animate(withDuration: 0.25, animations: {
       [self.topView.rotateCamera, self.bottomContainer.pickerButton,
-        self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
+       self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
         $0.transform = rotate
       }
 

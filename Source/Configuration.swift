@@ -49,7 +49,6 @@ public struct Configuration {
   public var flashButtonAlwaysHidden = false
   public var managesAudioSession = true
 
-
   // MARK: Images
   public var indicatorView: UIView = {
     let view = UIView()
