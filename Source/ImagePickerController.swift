@@ -157,6 +157,8 @@ open class ImagePickerController: UIViewController {
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
+
+    applyOrientationTransforms()
   }
 
   open override func viewWillDisappear(_ animated: Bool) {
@@ -425,11 +427,15 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   public func handleRotation(_ note: Notification) {
+    applyOrientationTransforms()
+  }
+
+  func applyOrientationTransforms() {
     let rotate = Helper.rotationTransform()
 
     UIView.animate(withDuration: 0.25, animations: {
       [self.topView.rotateCamera, self.bottomContainer.pickerButton,
-        self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
+       self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
         $0.transform = rotate
       }
 
