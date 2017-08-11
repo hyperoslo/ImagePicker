@@ -137,6 +137,7 @@ open class ImageGalleryView: UIView {
       width: configuration.indicatorWidth, height: configuration.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
+    noImagesLabel.center = CGPoint(x: bounds.width / 2, y: (bounds.height + Dimensions.galleryBarHeight) / 2)
 
     collectionView.reloadData()
   }
@@ -149,7 +150,7 @@ open class ImageGalleryView: UIView {
       if threshold > height || self.collectionView.alpha != 0 {
         self.noImagesLabel.alpha = 0
       } else {
-        self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: height / 2)
+        self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: (height + Dimensions.galleryBarHeight) / 2)
         self.noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
       }
     })
