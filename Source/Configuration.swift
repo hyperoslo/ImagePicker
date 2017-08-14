@@ -48,6 +48,7 @@ public struct Configuration {
   public var showsImageCountLabel = true
   public var flashButtonAlwaysHidden = false
   public var managesAudioSession = true
+  public var allowPinchToZoom = true
 
   // MARK: Images
   public var indicatorView: UIView = {
