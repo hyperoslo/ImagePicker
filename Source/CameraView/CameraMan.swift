@@ -204,6 +204,16 @@ class CameraMan {
     }
   }
 
+  func zoom(_ zoomFactor: CGFloat) {
+    guard let device = currentInput?.device, device.position == .back else { return }
+
+    queue.async {
+      self.lock {
+        device.videoZoomFactor = zoomFactor
+      }
+    }
+  }
+
   // MARK: - Lock
 
   func lock(_ block: () -> Void) {
