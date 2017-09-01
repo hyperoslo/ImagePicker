@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24CCFA861F59F8BF00C3D36B /* SoundEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CCFA851F59F8BF00C3D36B /* SoundEffect.swift */; };
 		39D134101CAC4B4E00EA2ECE /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */; };
 		39E3C3311CAFD79200340DAD /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E3C3301CAFD79200340DAD /* LocationManager.swift */; };
 		D20FF6361CD23426000F3BFE /* CameraMan.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20FF6351CD23426000F3BFE /* CameraMan.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		24CCFA851F59F8BF00C3D36B /* SoundEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundEffect.swift; sourceTree = "<group>"; };
 		39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		39E3C3301CAFD79200340DAD /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		D20FF6351CD23426000F3BFE /* CameraMan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraMan.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				D5DC59BC1C201CC4003BD79B /* TopView */,
 				39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */,
 				39E3C3301CAFD79200340DAD /* LocationManager.swift */,
+				24CCFA851F59F8BF00C3D36B /* SoundEffect.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				D5DC59C31C201CC4003BD79B /* ButtonPicker.swift in Sources */,
 				D5DC59C51C201CC4003BD79B /* StackView.swift in Sources */,
 				D20FF6361CD23426000F3BFE /* CameraMan.swift in Sources */,
+				24CCFA861F59F8BF00C3D36B /* SoundEffect.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
