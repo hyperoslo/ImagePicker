@@ -37,7 +37,7 @@ open class ImagePickerController: UIViewController {
     return view
     }()
 
-  lazy var topView: TopView = { [unowned self] in
+  open lazy var topView: TopView = { [unowned self] in
     let view = TopView(configuration: self.configuration)
     view.backgroundColor = UIColor.clear
     view.delegate = self
@@ -131,7 +131,9 @@ open class ImagePickerController: UIViewController {
   open override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
-    _ = try? AVAudioSession.sharedInstance().setActive(true)
+    if configuration.managesAudioSession {
+      _ = try? AVAudioSession.sharedInstance().setActive(true)
+    }
 
     statusBarHidden = UIApplication.shared.isStatusBarHidden
     UIApplication.shared.setStatusBarHidden(true, with: .fade)
@@ -157,6 +159,8 @@ open class ImagePickerController: UIViewController {
 
     initialFrame = galleryView.frame
     initialContentOffset = galleryView.collectionView.contentOffset
+
+    applyOrientationTransforms()
   }
 
   open override func viewWillDisappear(_ animated: Bool) {
@@ -216,7 +220,10 @@ open class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
-    _ = try? AVAudioSession.sharedInstance().setActive(false)
+    if configuration.managesAudioSession {
+      _ = try? AVAudioSession.sharedInstance().setActive(false)
+    }
+
     NotificationCenter.default.removeObserver(self)
   }
 
@@ -332,7 +339,7 @@ open class ImagePickerController: UIViewController {
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false
     bottomContainer.stackView.startLoader()
-    let action: (Void) -> Void = { [unowned self] in
+    let action: () -> Void = { [unowned self] in
       self.cameraController.takePicture { self.isTakingPicture = false }
     }
 
@@ -383,13 +390,15 @@ extension ImagePickerController: BottomContainerViewDelegate {
 extension ImagePickerController: CameraViewDelegate {
 
   func setFlashButtonHidden(_ hidden: Bool) {
-    topView.flashButton.isHidden = hidden
+    if configuration.flashButtonAlwaysHidden {
+      topView.flashButton.isHidden = hidden
+    }
   }
 
   func imageToLibrary() {
     guard let collectionSize = galleryView.collectionSize else { return }
 
-    galleryView.fetchPhotos() {
+    galleryView.fetchPhotos {
       guard let asset = self.galleryView.assets.first else { return }
       if self.configuration.allowMultiplePhotoSelection == false {
         self.stack.assets.removeAll()
@@ -420,11 +429,15 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   public func handleRotation(_ note: Notification?) {
+    applyOrientationTransforms()
+  }
+
+  func applyOrientationTransforms() {
     let rotate = configuration.rotationTransform
 
     UIView.animate(withDuration: 0.25, animations: {
       [self.topView.rotateCamera, self.bottomContainer.pickerButton,
-        self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
+       self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
         $0.transform = rotate
       }
 

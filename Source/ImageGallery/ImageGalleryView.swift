@@ -1,6 +1,6 @@
 import UIKit
 import Photos
-fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
+private func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l < r
@@ -137,6 +137,7 @@ open class ImageGalleryView: UIView {
       width: configuration.indicatorWidth, height: configuration.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
+    noImagesLabel.center = CGPoint(x: bounds.width / 2, y: (bounds.height + Dimensions.galleryBarHeight) / 2)
 
     collectionView.reloadData()
   }
@@ -149,7 +150,7 @@ open class ImageGalleryView: UIView {
       if threshold > height || self.collectionView.alpha != 0 {
         self.noImagesLabel.alpha = 0
       } else {
-        self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: height / 2)
+        self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: (height + Dimensions.galleryBarHeight) / 2)
         self.noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
       }
     })
@@ -197,8 +198,8 @@ open class ImageGalleryView: UIView {
 extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 
   public func collectionView(_ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemAt indexPath: IndexPath) -> CGSize {
+                             layout collectionViewLayout: UICollectionViewLayout,
+                             sizeForItemAt indexPath: IndexPath) -> CGSize {
       guard let collectionSize = collectionSize else { return CGSize.zero }
 
       return collectionSize
@@ -219,21 +220,19 @@ extension ImageGalleryView: UICollectionViewDelegate {
       }
       // Animate deselecting photos for any selected visible cells
       guard let visibleCells = collectionView.visibleCells as? [ImageGalleryViewCell] else { return }
-      for cell in visibleCells {
-        if cell.selectedImageView.image != nil {
-          UIView.animate(withDuration: 0.2, animations: {
-            cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-          }, completion: { _ in
-            cell.selectedImageView.image = nil
-          })
-        }
+      for cell in visibleCells where cell.selectedImageView.image != nil {
+        UIView.animate(withDuration: 0.2, animations: {
+          cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        }, completion: { _ in
+          cell.selectedImageView.image = nil
+        })
       }
     }
 
     let asset = assets[(indexPath as NSIndexPath).row]
 
     AssetManager.resolveAsset(asset, size: CGSize(width: 100, height: 100)) { image in
-      guard let _ = image else { return }
+      guard image != nil else { return }
 
       if cell.selectedImageView.image != nil {
         UIView.animate(withDuration: 0.2, animations: {
