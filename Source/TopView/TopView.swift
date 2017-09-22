@@ -27,7 +27,7 @@ open class TopView: UIView {
     button.setTitleColor(UIColor.white, for: UIControlState())
     button.setTitleColor(UIColor.white, for: .highlighted)
     button.titleLabel?.font = self.configuration.flashButton
-    button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
+    button.addTarget(self, action: #selector(flashButtonDidPress), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
 
     return button
@@ -36,7 +36,7 @@ open class TopView: UIView {
   open lazy var rotateCamera: UIButton = { [unowned self] in
     let button = UIButton()
     button.setImage(AssetManager.getImage("cameraIcon"), for: UIControlState())
-    button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), for: .touchUpInside)
+    button.addTarget(self, action: #selector(rotateCameraButtonDidPress), for: .touchUpInside)
     button.imageView?.contentMode = .center
 
     return button
@@ -86,7 +86,7 @@ open class TopView: UIView {
 
   // MARK: - Action methods
 
-  func flashButtonDidPress(_ button: UIButton) {
+   @objc func flashButtonDidPress(_ button: UIButton) {
     currentFlashIndex += 1
     currentFlashIndex = currentFlashIndex % flashButtonTitles.count
 
@@ -107,7 +107,7 @@ open class TopView: UIView {
     delegate?.flashButtonDidPress(newTitle)
   }
 
-  func rotateCameraButtonDidPress(_ button: UIButton) {
+   @objc func rotateCameraButtonDidPress(_ button: UIButton) {
     delegate?.rotateDeviceDidPress()
   }
 }
