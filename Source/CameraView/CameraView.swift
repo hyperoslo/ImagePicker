@@ -233,6 +233,22 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }
   }
 
+  func takePictureWithoutSavingToCameraRoll(_ completion: @escaping (_ image: UIImage?) -> Void) {
+    guard let previewLayer = previewLayer else { return }
+    
+    UIView.animate(withDuration: 0.1, animations: {
+      self.capturedImageView.alpha = 1
+    }, completion: { _ in
+      UIView.animate(withDuration: 0.1, animations: {
+        self.capturedImageView.alpha = 0
+      })
+    })
+    
+    cameraMan.takePhotoWithoutSaving(previewLayer) { image in
+      completion(image)
+    }
+  }
+  
   // MARK: - Timer methods
 
   func timerDidFire() {

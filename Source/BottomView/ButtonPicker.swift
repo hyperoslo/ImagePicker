@@ -14,12 +14,13 @@ class ButtonPicker: UIButton {
   }
 
   var configuration = Configuration()
-
+  var photosTakenWithoutSavingToCameraRoll : Int = 0
+  
   lazy var numberLabel: UILabel = { [unowned self] in
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.font = self.configuration.numberLabelFont
-
+    label.text = ""
     return label
     }()
 
@@ -86,14 +87,22 @@ class ButtonPicker: UIButton {
   // MARK: - Actions
 
   func recalculatePhotosCount(_ notification: Notification) {
-    guard let sender = notification.object as? ImageStack else { return }
-    numberLabel.text = sender.assets.isEmpty ? "" : String(sender.assets.count)
+    if let sender = notification.object as? ImageStack {
+      numberLabel.text = (sender.assets.isEmpty && photosTakenWithoutSavingToCameraRoll == 0) ? "" : String(sender.assets.count + photosTakenWithoutSavingToCameraRoll)
+    }
   }
 
   func pickerButtonDidPress(_ button: UIButton) {
     backgroundColor = UIColor.white
     numberLabel.textColor = UIColor.black
     numberLabel.sizeToFit()
+    
+    if (configuration.savePhotosToCameraRoll == false) {
+      numberLabel.text = numberLabel.text!.isEmpty ? "1" : String(Int(numberLabel.text ?? "0")! + 1)
+    NotificationCenter.default.post(name: Notification.Name(rawValue: "PickerButtonDidPressNotification"), object: self, userInfo: nil)
+      photosTakenWithoutSavingToCameraRoll += 1
+    }
+    
     delegate?.buttonDidPress()
   }
 

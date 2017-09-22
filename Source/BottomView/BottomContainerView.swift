@@ -88,6 +88,8 @@ open class BottomContainerView: UIView {
     stackView.addGestureRecognizer(tapGestureRecognizer)
 
     setupConstraints()
+    
+    if configuration.savePhotosToCameraRoll == false { stackView.removeFromSuperview() }
   }
 
   // MARK: - Action methods

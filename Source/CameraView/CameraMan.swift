@@ -172,6 +172,34 @@ class CameraMan {
     }
   }
 
+  func takePhotoWithoutSaving(_ previewLayer: AVCaptureVideoPreviewLayer, completion: ((_ image:UIImage?) -> Void)? = nil) {
+    guard let connection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo) else { return }
+    
+    connection.videoOrientation = AVCaptureVideoOrientation(rawValue: UIDevice.current.orientation.rawValue)!
+    
+    queue.async {
+      self.stillImageOutput?.captureStillImageAsynchronously(from: connection) { buffer, error in
+        guard let buffer = buffer, error == nil && CMSampleBufferIsValid(buffer),
+          let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),
+          let image = UIImage(data: imageData)
+          else {
+            DispatchQueue.main.async {
+              completion?(nil)
+            }
+            return
+        }
+        
+        DispatchQueue.main.async {
+          let dataProvider = CGDataProvider(data: imageData as CFData)
+          let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
+          
+          // Set proper orientation for photo
+          completion?(UIImage(cgImage: cgImageRef!, scale: image.scale, orientation: image.imageOrientation))
+        }
+      }
+    }
+  }
+  
   func savePhoto(_ image: UIImage, location: CLLocation?, completion: (() -> Void)? = nil) {
     PHPhotoLibrary.shared().performChanges({
       let request = PHAssetChangeRequest.creationRequestForAsset(from: image)

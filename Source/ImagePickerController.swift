@@ -7,6 +7,7 @@ import Photos
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
+  func pictureWasTaken(_ imagePicker: ImagePickerController, image: UIImage) // Only called when savePhotosToCameraRoll configuration option is set
 }
 
 open class ImagePickerController: UIViewController {
@@ -237,6 +238,11 @@ open class ImagePickerController: UIViewController {
       object: nil)
 
     NotificationCenter.default.addObserver(self,
+      selector: #selector(adjustButtonTitle(_:)),
+      name: NSNotification.Name(rawValue: "PickerButtonDidPressNotification"),
+      object: nil)
+    
+    NotificationCenter.default.addObserver(self,
       selector: #selector(didReloadAssets(_:)),
       name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
       object: nil)
@@ -268,11 +274,7 @@ open class ImagePickerController: UIViewController {
   }
 
   func adjustButtonTitle(_ notification: Notification) {
-    guard let sender = notification.object as? ImageStack else { return }
-
-    let title = !sender.assets.isEmpty ?
-      configuration.doneButtonTitle : configuration.cancelButtonTitle
-    bottomContainer.doneButton.setTitle(title, for: UIControlState())
+    bottomContainer.doneButton.setTitle(configuration.doneButtonTitle, for: UIControlState())
   }
 
   // MARK: - Helpers
@@ -337,8 +339,21 @@ open class ImagePickerController: UIViewController {
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false
     bottomContainer.stackView.startLoader()
-    let action: () -> Void = { [unowned self] in
-      self.cameraController.takePicture { self.isTakingPicture = false }
+    
+    var action: () -> Void
+    
+    if configuration.savePhotosToCameraRoll {
+      action = { [unowned self] in
+        self.cameraController.takePicture { self.isTakingPicture = false }
+      }
+    } else {
+      action = { [unowned self] in
+        self.cameraController.takePictureWithoutSavingToCameraRoll({ image in
+          self.isTakingPicture = false
+          self.bottomContainer.pickerButton.isEnabled = true
+          if let image = image { self.delegate?.pictureWasTaken(self, image: image) }
+        })
+      }
     }
 
     if configuration.collapseCollectionViewWhileShot {
