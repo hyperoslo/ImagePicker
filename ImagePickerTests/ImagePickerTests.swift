@@ -1,11 +1,3 @@
-//
-//  ImagePickerTests.swift
-//  ImagePickerTests
-//
-//  Created by Mohammad Alatrash on 9/22/17.
-//  Copyright © 2017 Hyper Interaktiv AS. All rights reserved.
-//
-
 import XCTest
 
 class ImagePickerTests: XCTestCase {
