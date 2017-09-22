@@ -59,17 +59,17 @@ class ImageStackView: UIView {
 
   func subscribe() {
     NotificationCenter.default.addObserver(self,
-      selector: #selector(imageDidPush(_:)),
+      selector: #selector(imageDidPush),
       name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
       object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(imageStackDidChangeContent(_:)),
+      selector: #selector(imageStackDidChangeContent),
       name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
       object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(imageStackDidChangeContent(_:)),
+      selector: #selector(imageStackDidChangeContent),
       name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
       object: nil)
   }
@@ -105,7 +105,7 @@ class ImageStackView: UIView {
 
 extension ImageStackView {
 
-  func imageDidPush(_ notification: Notification) {
+   @objc func imageDidPush(_ notification: Notification) {
     let emptyView = views.filter { $0.image == nil }.first
 
     if let emptyView = emptyView {
@@ -118,7 +118,7 @@ extension ImageStackView {
     }
   }
 
-  func imageStackDidChangeContent(_ notification: Notification) {
+   @objc func imageStackDidChangeContent(_ notification: Notification) {
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
       activityView.stopAnimating()

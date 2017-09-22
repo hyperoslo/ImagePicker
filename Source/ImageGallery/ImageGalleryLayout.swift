@@ -9,11 +9,10 @@ class ImageGalleryLayout: UICollectionViewFlowLayout {
 
     var newAttributes = [UICollectionViewLayoutAttributes]()
     for attribute in attributes {
-      let n = attribute.copy() as! UICollectionViewLayoutAttributes
+      guard let n = attribute.copy() as? UICollectionViewLayoutAttributes else { return newAttributes }
       n.transform = Helper.rotationTransform()
       newAttributes.append(n)
     }
-
     return newAttributes
   }
 }

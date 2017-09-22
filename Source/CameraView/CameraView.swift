@@ -59,8 +59,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     let button = UIButton(type: .system)
     let title = NSAttributedString(string: self.configuration.settingsTitle,
       attributes: [
-        NSFontAttributeName: self.configuration.settingsFont,
-        NSForegroundColorAttributeName: self.configuration.settingsColor
+        NSAttributedStringKey.font: self.configuration.settingsFont,
+        NSAttributedStringKey.foregroundColor: self.configuration.settingsColor
       ])
 
     button.setAttributedTitle(title, for: UIControlState())
@@ -76,14 +76,14 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   lazy var tapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
     let gesture = UITapGestureRecognizer()
-    gesture.addTarget(self, action: #selector(tapGestureRecognizerHandler(_:)))
+    gesture.addTarget(self, action: #selector(tapGestureRecognizerHandler))
 
     return gesture
     }()
 
   lazy var pinchGestureRecognizer: UIPinchGestureRecognizer = { [unowned self] in
     let gesture = UIPinchGestureRecognizer()
-    gesture.addTarget(self, action: #selector(pinchGestureRecognizerHandler(_:)))
+    gesture.addTarget(self, action: #selector(pinchGestureRecognizerHandler))
 
     return gesture
     }()
@@ -142,7 +142,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
-    previewLayer?.connection.videoOrientation = .portrait
+    previewLayer?.connection?.videoOrientation = .portrait
     locationManager?.startUpdatingLocation()
   }
 
@@ -152,11 +152,10 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   }
 
   func setupPreviewLayer() {
-    guard let layer = AVCaptureVideoPreviewLayer(session: cameraMan.session) else { return }
-
+    let layer = AVCaptureVideoPreviewLayer(session: cameraMan.session)
     layer.backgroundColor = configuration.mainColor.cgColor
     layer.autoreverses = true
-    layer.videoGravity = AVLayerVideoGravityResizeAspectFill
+    layer.videoGravity = AVLayerVideoGravity.resizeAspectFill
 
     view.layer.insertSublayer(layer, at: 0)
     layer.frame = view.layer.frame
@@ -185,7 +184,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   // MARK: - Actions
 
-  func settingsButtonDidTap() {
+   @objc func settingsButtonDidTap() {
     DispatchQueue.main.async {
       if let settingsURL = URL(string: UIApplicationOpenSettingsURLString) {
         UIApplication.shared.openURL(settingsURL)
@@ -196,7 +195,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   // MARK: - Camera actions
 
   func rotateCamera() {
-    UIView.animate(withDuration: 0.3, animations: { _ in
+    UIView.animate(withDuration: 0.3, animations: {
       self.containerView.alpha = 1
       }, completion: { _ in
         self.cameraMan.switchCamera {
@@ -208,7 +207,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   }
 
   func flashCamera(_ title: String) {
-    let mapping: [String: AVCaptureFlashMode] = [
+    let mapping: [String: AVCaptureDevice.FlashMode] = [
       "ON": .on,
       "OFF": .off
     ]
@@ -235,7 +234,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   // MARK: - Timer methods
 
-  func timerDidFire() {
+   @objc func timerDidFire() {
     UIView.animate(withDuration: 0.3, animations: { [unowned self] in
       self.focusImageView.alpha = 0
       }, completion: { _ in
@@ -252,7 +251,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     cameraMan.focus(convertedPoint)
 
     focusImageView.center = point
-    UIView.animate(withDuration: 0.5, animations: { _ in
+    UIView.animate(withDuration: 0.5, animations: {
       self.focusImageView.alpha = 1
       self.focusImageView.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
       }, completion: { _ in
@@ -273,7 +272,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   // MARK: - Tap
 
-  func tapGestureRecognizerHandler(_ gesture: UITapGestureRecognizer) {
+   @objc func tapGestureRecognizerHandler(_ gesture: UITapGestureRecognizer) {
     let touch = gesture.location(in: view)
 
     focusImageView.transform = CGAffineTransform.identity
@@ -283,7 +282,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   // MARK: - Pinch
 
-  func pinchGestureRecognizerHandler(_ gesture: UIPinchGestureRecognizer) {
+   @objc func pinchGestureRecognizerHandler(_ gesture: UIPinchGestureRecognizer) {
     switch gesture.state {
     case .began:
       fallthrough

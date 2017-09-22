@@ -39,7 +39,7 @@ open class BottomContainerView: UIView {
     let button = UIButton()
     button.setTitle(self.configuration.cancelButtonTitle, for: UIControlState())
     button.titleLabel?.font = self.configuration.doneButton
-    button.addTarget(self, action: #selector(doneButtonDidPress(_:)), for: .touchUpInside)
+    button.addTarget(self, action: #selector(doneButtonDidPress), for: .touchUpInside)
 
     return button
     }()
@@ -55,7 +55,7 @@ open class BottomContainerView: UIView {
 
   lazy var tapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
     let gesture = UITapGestureRecognizer()
-    gesture.addTarget(self, action: #selector(handleTapGestureRecognizer(_:)))
+    gesture.addTarget(self, action: #selector(handleTapGestureRecognizer))
 
     return gesture
     }()
@@ -92,7 +92,7 @@ open class BottomContainerView: UIView {
 
   // MARK: - Action methods
 
-  func doneButtonDidPress(_ button: UIButton) {
+  @objc func doneButtonDidPress(_ button: UIButton) {
     if button.currentTitle == configuration.cancelButtonTitle {
       delegate?.cancelButtonDidPress()
     } else {
@@ -100,7 +100,7 @@ open class BottomContainerView: UIView {
     }
   }
 
-  func handleTapGestureRecognizer(_ recognizer: UITapGestureRecognizer) {
+   @objc func handleTapGestureRecognizer(_ recognizer: UITapGestureRecognizer) {
     delegate?.imageStackViewDidPress()
   }
 
@@ -110,7 +110,7 @@ open class BottomContainerView: UIView {
     UIView.animate(withDuration: 0.3, animations: {
       imageView.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
       }, completion: { _ in
-        UIView.animate(withDuration: 0.2, animations: { _ in
+        UIView.animate(withDuration: 0.2, animations: {
           imageView.transform = CGAffineTransform.identity
         })
     })

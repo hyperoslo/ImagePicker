@@ -2,7 +2,7 @@ import UIKit
 import MediaPlayer
 import Photos
 
-@objc public protocol ImagePickerDelegate: class {
+ public protocol ImagePickerDelegate: class {
 
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
@@ -55,7 +55,7 @@ open class ImagePickerController: UIViewController {
 
   lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
     let gesture = UIPanGestureRecognizer()
-    gesture.addTarget(self, action: #selector(panGestureRecognizerHandler(_:)))
+    gesture.addTarget(self, action: #selector(panGestureRecognizerHandler))
 
     return gesture
     }()
@@ -227,38 +227,38 @@ open class ImagePickerController: UIViewController {
 
   func subscribe() {
     NotificationCenter.default.addObserver(self,
-      selector: #selector(adjustButtonTitle(_:)),
+      selector: #selector(adjustButtonTitle),
       name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
       object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(adjustButtonTitle(_:)),
+      selector: #selector(adjustButtonTitle),
       name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
       object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(didReloadAssets(_:)),
+      selector: #selector(didReloadAssets),
       name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
       object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(volumeChanged(_:)),
+      selector: #selector(volumeChanged),
       name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
       object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(handleRotation(_:)),
+      selector: #selector(handleRotation),
       name: NSNotification.Name.UIDeviceOrientationDidChange,
       object: nil)
   }
 
-  func didReloadAssets(_ notification: Notification) {
+   @objc func didReloadAssets(_ notification: Notification) {
     adjustButtonTitle(notification)
     galleryView.collectionView.reloadData()
     galleryView.collectionView.setContentOffset(CGPoint.zero, animated: false)
   }
 
-  func volumeChanged(_ notification: Notification) {
+   @objc func volumeChanged(_ notification: Notification) {
     guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
       let userInfo = (notification as NSNotification).userInfo,
       let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String, changeReason == "ExplicitVolumeChange" else { return }
@@ -267,7 +267,7 @@ open class ImagePickerController: UIViewController {
     takePicture()
   }
 
-  func adjustButtonTitle(_ notification: Notification) {
+   @objc func adjustButtonTitle(_ notification: Notification) {
     guard let sender = notification.object as? ImageStack else { return }
 
     let title = !sender.assets.isEmpty ?
@@ -426,7 +426,7 @@ extension ImagePickerController: CameraViewDelegate {
     return .portrait
   }
 
-  public func handleRotation(_ note: Notification) {
+   @objc public func handleRotation(_ note: Notification) {
     applyOrientationTransforms()
   }
 
@@ -479,7 +479,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     if let contentOffset = initialContentOffset { numberOfCells = Int(contentOffset.x / collectionSize.width) }
   }
 
-  func panGestureRecognizerHandler(_ gesture: UIPanGestureRecognizer) {
+   @objc func panGestureRecognizerHandler(_ gesture: UIPanGestureRecognizer) {
     let translation = gesture.translation(in: view)
     let velocity = gesture.velocity(in: view)
 
