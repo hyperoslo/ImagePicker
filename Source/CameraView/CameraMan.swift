@@ -33,9 +33,8 @@ class CameraMan {
   func setupDevices() {
     // Input
     AVCaptureDevice
-    .devices().flatMap {
-      return $0 as? AVCaptureDevice
-    }.filter {
+    .devices()
+    .filter {
       return $0.hasMediaType(AVMediaType.video)
     }.forEach {
       switch $0.position {
@@ -177,7 +176,7 @@ class CameraMan {
       let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
       request.creationDate = Date()
       request.location = location
-      }, completionHandler: { (ok,error) in
+      }, completionHandler: { (_, _) in
         DispatchQueue.main.async {
           completion?()
         }
