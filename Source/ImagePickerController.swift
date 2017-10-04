@@ -11,7 +11,7 @@ import Photos
 
 open class ImagePickerController: UIViewController {
 
-  open var configuration = Configuration()
+  let configuration: Configuration
 
   struct GestureConstants {
     static let maximumHeight: CGFloat = 200
@@ -91,19 +91,13 @@ open class ImagePickerController: UIViewController {
 
   // MARK: - Initialization
 
-  public init(configuration: Configuration? = nil) {
-    if let configuration = configuration {
-      self.configuration = configuration
-    }
+  public required init(configuration: Configuration = Configuration()) {
+    self.configuration = configuration
     super.init(nibName: nil, bundle: nil)
   }
 
-  public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-  }
-
-  required public init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
+  public required init?(coder aDecoder: NSCoder) {
+    fatalError()
   }
 
   // MARK: - View lifecycle

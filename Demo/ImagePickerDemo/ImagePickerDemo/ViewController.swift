@@ -42,8 +42,7 @@ class ViewController: UIViewController, ImagePickerDelegate {
     config.recordLocation = false
     config.allowVideoSelection = true
 
-    let imagePicker = ImagePickerController()
-    imagePicker.configuration = config
+    let imagePicker = ImagePickerController(configuration: config)
     imagePicker.delegate = self
 
     present(imagePicker, animated: true, completion: nil)
