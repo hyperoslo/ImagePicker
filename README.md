@@ -1,11 +1,10 @@
 ![ImagePicker](https://github.com/hyperoslo/ImagePicker/blob/master/Resources/ImagePickerPresentation.png)
 
 [![Version](https://img.shields.io/cocoapods/v/ImagePicker.svg?style=flat)](http://cocoadocs.org/docsets/ImagePicker)
-[![CI Status](http://img.shields.io/travis/hyperoslo/ImagePicker.svg?style=flat)](https://travis-ci.org/hyperoslo/ImagePicker)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License](https://img.shields.io/cocoapods/l/ImagePicker.svg?style=flat)](http://cocoadocs.org/docsets/ImagePicker)
 [![Platform](https://img.shields.io/cocoapods/p/ImagePicker.svg?style=flat)](http://cocoadocs.org/docsets/ImagePicker)
-![Swift](https://img.shields.io/badge/%20in-swift%203.0-orange.svg)
+![Swift](https://img.shields.io/badge/%20in-swift%204.0-orange.svg)
 [![Join the chat at https://gitter.im/hyperoslo/ImagePicker](https://badges.gitter.im/hyperoslo/ImagePicker.svg)](https://gitter.im/hyperoslo/ImagePicker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Description
@@ -90,7 +89,7 @@ github "hyperoslo/ImagePicker"
 
 ## Author
 
-[Hyper](http://hyper.no) made this with ❤️. If you’re using this library we probably want to [hire you](https://github.com/hyperoslo/iOS-playbook/blob/master/HYPER_RECIPES.md)! Send us an email at ios@hyper.no.
+[Hyper](http://hyper.no) made this with ❤️
 
 ## Contribute
 
