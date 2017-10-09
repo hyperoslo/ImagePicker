@@ -218,7 +218,10 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   func takePicture(_ completion: @escaping () -> Void) {
     guard let previewLayer = previewLayer else { return }
-
+    if configuration.addCameraSoundEffect {
+      SoundEffect.cameraShutter.play()
+    }
+    
     UIView.animate(withDuration: 0.1, animations: {
       self.capturedImageView.alpha = 1
       }, completion: { _ in

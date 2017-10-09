@@ -49,6 +49,7 @@ public struct Configuration {
   public var flashButtonAlwaysHidden = false
   public var managesAudioSession = true
   public var allowPinchToZoom = true
+  public var addCameraSoundEffect = false
 
   // MARK: Images
   public var indicatorView: UIView = {
