@@ -1,5 +1,0 @@
-osx_image: xcode8
-language: objective-c
-
-script:
-- xcodebuild clean build -project ImagePicker.xcodeproj -scheme "ImagePicker-iOS" -sdk iphonesimulator
