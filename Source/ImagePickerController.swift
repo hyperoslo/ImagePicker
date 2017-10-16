@@ -436,7 +436,10 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   @objc public func handleRotation(_ note: Notification) {
-    applyOrientationTransforms()
+    // Only transform when orientation is portrait or landscape
+    if UIDevice.current.orientation.isPortrait || UIDevice.current.orientation.isLandscape {
+      applyOrientationTransforms()
+    }
   }
 
   func applyOrientationTransforms() {
