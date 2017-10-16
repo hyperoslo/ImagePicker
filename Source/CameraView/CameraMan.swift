@@ -172,7 +172,7 @@ class CameraMan {
   }
 
   func takePhotoWithoutSaving(_ previewLayer: AVCaptureVideoPreviewLayer, completion: ((_ image:UIImage?) -> Void)? = nil) {
-    guard let connection = stillImageOutput?.connection(withMediaType: AVMediaTypeVideo) else { return }
+    guard let connection = stillImageOutput?.connection(with: AVMediaType.video) else { return }
     
     connection.videoOrientation = AVCaptureVideoOrientation(rawValue: UIDevice.current.orientation.rawValue)!
     
