@@ -94,7 +94,7 @@ open class BottomContainerView: UIView {
 
   // MARK: - Action methods
 
-  func doneButtonDidPress(_ button: UIButton) {
+  @objc func doneButtonDidPress(_ button: UIButton) {
     if button.currentTitle == configuration.cancelButtonTitle {
       delegate?.cancelButtonDidPress()
     } else {
@@ -102,7 +102,7 @@ open class BottomContainerView: UIView {
     }
   }
 
-  func handleTapGestureRecognizer(_ recognizer: UITapGestureRecognizer) {
+  @objc func handleTapGestureRecognizer(_ recognizer: UITapGestureRecognizer) {
     delegate?.imageStackViewDidPress()
   }
 
@@ -112,7 +112,7 @@ open class BottomContainerView: UIView {
     UIView.animate(withDuration: 0.3, animations: {
       imageView.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
       }, completion: { _ in
-        UIView.animate(withDuration: 0.2, animations: { _ in
+        UIView.animate(withDuration: 0.2, animations: {
           imageView.transform = CGAffineTransform.identity
         })
     })

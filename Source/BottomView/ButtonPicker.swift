@@ -86,13 +86,13 @@ class ButtonPicker: UIButton {
 
   // MARK: - Actions
 
-  func recalculatePhotosCount(_ notification: Notification) {
+  @objc func recalculatePhotosCount(_ notification: Notification) {
     if let sender = notification.object as? ImageStack {
       numberLabel.text = (sender.assets.isEmpty && photosTakenWithoutSavingToCameraRoll == 0) ? "" : String(sender.assets.count + photosTakenWithoutSavingToCameraRoll)
     }
   }
 
-  func pickerButtonDidPress(_ button: UIButton) {
+  @objc func pickerButtonDidPress(_ button: UIButton) {
     backgroundColor = UIColor.white
     numberLabel.textColor = UIColor.black
     numberLabel.sizeToFit()
@@ -106,7 +106,7 @@ class ButtonPicker: UIButton {
     delegate?.buttonDidPress()
   }
 
-  func pickerButtonDidHighlight(_ button: UIButton) {
+  @objc func pickerButtonDidHighlight(_ button: UIButton) {
     numberLabel.textColor = UIColor.white
     backgroundColor = UIColor(red:0.3, green:0.3, blue:0.3, alpha:1)
   }
