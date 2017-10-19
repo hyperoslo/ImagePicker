@@ -157,6 +157,7 @@ open class ImagePickerController: UIViewController {
 
   open override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+    NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     UIApplication.shared.setStatusBarHidden(statusBarHidden, with: .fade)
   }
 
