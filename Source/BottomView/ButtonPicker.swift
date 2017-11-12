@@ -99,6 +99,6 @@ class ButtonPicker: UIButton {
 
   @objc func pickerButtonDidHighlight(_ button: UIButton) {
     numberLabel.textColor = UIColor.white
-    backgroundColor = UIColor(red:0.3, green:0.3, blue:0.3, alpha:1)
+    backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
   }
 }

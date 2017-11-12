@@ -1,3 +1,4 @@
+import AVFoundation
 import UIKit
 
 public struct Configuration {
@@ -49,6 +50,7 @@ public struct Configuration {
   public var flashButtonAlwaysHidden = false
   public var managesAudioSession = true
   public var allowPinchToZoom = true
+  public var allowedOrientations = UIInterfaceOrientationMask.all
 
   // MARK: Images
   public var indicatorView: UIView = {
@@ -60,4 +62,49 @@ public struct Configuration {
   }()
 
   public init() {}
+}
+
+// MARK: - Orientation
+extension Configuration {
+
+  public var rotationTransform: CGAffineTransform {
+    let currentOrientation = UIDevice.current.orientation
+
+    // check if current orientation is allowed
+    switch currentOrientation {
+    case .portrait:
+      if allowedOrientations.contains(.portrait) {
+        Helper.previousOrientation = currentOrientation
+      }
+    case .portraitUpsideDown:
+      if allowedOrientations.contains(.portraitUpsideDown) {
+        Helper.previousOrientation = currentOrientation
+      }
+    case .landscapeLeft:
+      if allowedOrientations.contains(.landscapeLeft) {
+        Helper.previousOrientation = currentOrientation
+      }
+    case .landscapeRight:
+      if allowedOrientations.contains(.landscapeRight) {
+        Helper.previousOrientation = currentOrientation
+      }
+    default: break
+    }
+
+    // set default orientation if current orientation is not allowed
+    if Helper.previousOrientation == .unknown {
+      if allowedOrientations.contains(.portrait) {
+        Helper.previousOrientation = .portrait
+      } else if allowedOrientations.contains(.landscapeLeft) {
+        Helper.previousOrientation = .landscapeLeft
+      } else if allowedOrientations.contains(.landscapeRight) {
+        Helper.previousOrientation = .landscapeRight
+      } else if allowedOrientations.contains(.portraitUpsideDown) {
+        Helper.previousOrientation = .portraitUpsideDown
+      }
+    }
+
+    return Helper.getTransform(fromDeviceOrientation: Helper.previousOrientation)
+}
+
 }

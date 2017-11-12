@@ -131,6 +131,8 @@ open class ImagePickerController: UIViewController {
 
     statusBarHidden = UIApplication.shared.isStatusBarHidden
     UIApplication.shared.setStatusBarHidden(true, with: .fade)
+
+    self.handleRotation(nil)
   }
 
   open override func viewDidAppear(_ animated: Bool) {
@@ -305,7 +307,7 @@ open class ImagePickerController: UIViewController {
       self.galleryView.collectionView.transform = CGAffineTransform(scaleX: scale, y: scale)
 
       let value = self.view.frame.width * (scale - 1) / scale
-      self.galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right:  value)
+      self.galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: value)
     })
   }
 
@@ -419,12 +421,12 @@ extension ImagePickerController: CameraViewDelegate {
     return .portrait
   }
 
-  @objc public func handleRotation(_ note: Notification) {
+  @objc public func handleRotation(_ note: Notification?) {
     applyOrientationTransforms()
   }
 
   func applyOrientationTransforms() {
-    let rotate = Helper.rotationTransform()
+    let rotate = configuration.rotationTransform
 
     UIView.animate(withDuration: 0.25, animations: {
       [self.topView.rotateCamera, self.bottomContainer.pickerButton,
@@ -435,8 +437,7 @@ extension ImagePickerController: CameraViewDelegate {
       self.galleryView.collectionViewLayout.invalidateLayout()
 
       let translate: CGAffineTransform
-      if [UIDeviceOrientation.landscapeLeft, UIDeviceOrientation.landscapeRight]
-        .contains(UIDevice.current.orientation) {
+      if Helper.previousOrientation.isLandscape {
         translate = CGAffineTransform(translationX: -20, y: 15)
       } else {
         translate = CGAffineTransform.identity
@@ -501,7 +502,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.frame.size.height = initialFrame.height - translation.y
 
       let value = view.frame.width * (scale - 1) / scale
-      galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right:  value)
+      galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: value)
     } else {
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y

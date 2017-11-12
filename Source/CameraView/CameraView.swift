@@ -247,7 +247,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   func focusTo(_ point: CGPoint) {
     let convertedPoint = CGPoint(x: point.x / UIScreen.main.bounds.width,
-                                 y:point.y / UIScreen.main.bounds.height)
+                                 y: point.y / UIScreen.main.bounds.height)
 
     cameraMan.focus(convertedPoint)
 
