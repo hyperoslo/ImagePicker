@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  ImagePicker
+
+  Created by white on 2017/11/20.
+  Copyright © 2017年 Hyper Interaktiv AS. All rights reserved.
+*/
+
+"OK" = "确定";
+"Cancel" = "取消";
+"Done" = "完成";
+"No images available" = "无图片可用";
+"Camera is not available" = "相机不可用";
+"Settings" = "设置";
+"Permission denied" = "权限被拒绝";
+"Please, allow the application to access to your photo library." = "CodeIn需要使用相机权限";
