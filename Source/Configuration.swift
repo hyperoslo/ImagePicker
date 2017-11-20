@@ -24,14 +24,14 @@ public struct Configuration {
 
   // MARK: Titles
 
-  public var OKButtonTitle = "OK"
-  public var cancelButtonTitle = "Cancel"
-  public var doneButtonTitle = "Done"
-  public var noImagesTitle = "No images available"
-  public var noCameraTitle = "Camera is not available"
-  public var settingsTitle = "Settings"
-  public var requestPermissionTitle = "Permission denied"
-  public var requestPermissionMessage = "Please, allow the application to access to your photo library."
+  public var OKButtonTitle = "OK".ip_localized
+  public var cancelButtonTitle = "Cancel".ip_localized
+  public var doneButtonTitle = "Done".ip_localized
+  public var noImagesTitle = "No images available".ip_localized
+  public var noCameraTitle = "Camera is not available".ip_localized
+  public var settingsTitle = "Settings".ip_localized
+  public var requestPermissionTitle = "Permission denied".ip_localized
+  public var requestPermissionMessage = "Please, allow the application to access to your photo library.".ip_localized
 
   // MARK: Dimensions
 

@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  ImagePicker
+
+  Created by white on 2017/11/20.
+  Copyright © 2017年 Hyper Interaktiv AS. All rights reserved.
+*/
+
+"OK" = "OK";
+"Cancel" = "Cancel";
+"Done" = "Done";
+"No images available" = "No images available";
+"Camera is not available" = "Camera is not available";
+"Settings" = "Settings";
+"Permission denied" = "Permission denied";
+"Please, allow the application to access to your photo library." = "Please, allow the application to access to your photo library.";

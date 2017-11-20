@@ -22,7 +22,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Cache: 363b6899cee63c82ccbd291e64a6c202abc17a88
   Hue: b8fe1e43eef13631331eebecb2198b68e2622f95
-  ImagePicker: f8a3ce52e587b55f58aef2d83d894ed6f7820f51
+  ImagePicker: 88f56ff8a87d591c271710e174f65eead70301ff
   Imaginary: 2765d293d425cbed3b07fa11642554cbaebe913d
   Lightbox: 83ec9f4aba4c79fc7bb9bcd263386df9969f09bb
   SwiftHash: d2e09b13495447178cdfb8e46e54a5c46f15f5a9

@@ -165,3 +165,13 @@ extension ButtonPicker {
     }
   }
 }
+
+internal extension String {
+  
+  var ip_localized: String {
+    guard let path = Bundle(for: ImagePickerController.self).path(forResource: "", ofType: "bundle"), let bundle = Bundle(path: path) else {
+      return self
+    }
+    return NSLocalizedString(self, bundle: bundle, comment: self)
+  }
+}

@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '9.0'
   s.requires_arc = true
   s.source_files = 'Source/**/*'
-  s.resource_bundles = { 'ImagePicker' => ['Images/*.{png}'] }
+  s.resource_bundles = { 'ImagePicker' => ['Images/*.{png}','local/*.lproj/*'] }
   s.frameworks = 'AVFoundation'
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
 end
