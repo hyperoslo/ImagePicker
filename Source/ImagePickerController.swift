@@ -136,7 +136,6 @@ open class ImagePickerController: UIViewController {
     }
 
     statusBarHidden = UIApplication.shared.isStatusBarHidden
-    UIApplication.shared.setStatusBarHidden(true, with: .fade)
 
     self.handleRotation(nil)
   }
@@ -161,11 +160,6 @@ open class ImagePickerController: UIViewController {
     initialContentOffset = galleryView.collectionView.contentOffset
 
     applyOrientationTransforms()
-  }
-
-  open override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-    UIApplication.shared.setStatusBarHidden(statusBarHidden, with: .fade)
   }
 
   open func resetAssets() {
@@ -280,7 +274,7 @@ open class ImagePickerController: UIViewController {
   // MARK: - Helpers
 
   open override var prefersStatusBarHidden: Bool {
-    return true
+    return statusBarHidden
   }
 
   open func collapseGalleryView(_ completion: (() -> Void)?) {
