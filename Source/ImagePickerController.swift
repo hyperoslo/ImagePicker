@@ -2,7 +2,7 @@ import UIKit
 import MediaPlayer
 import Photos
 
-@objc public protocol ImagePickerDelegate: class {
+@objc public protocol ImagePickerDelegate: NSObjectProtocol {
 
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
@@ -69,7 +69,7 @@ open class ImagePickerController: UIViewController {
 
   var volume = AVAudioSession.sharedInstance().outputVolume
 
-  open weak var delegate: ImagePickerDelegate?
+  @objc open weak var delegate: ImagePickerDelegate?
   open var stack = ImageStack()
   open var imageLimit = 0
   open var preferredImageSize: CGSize?
@@ -91,13 +91,19 @@ open class ImagePickerController: UIViewController {
 
   // MARK: - Initialization
 
-  public required init(configuration: Configuration = Configuration()) {
+  @objc public required init(configuration: Configuration = Configuration()) {
     self.configuration = configuration
     super.init(nibName: nil, bundle: nil)
   }
 
+  public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    self.configuration = Configuration()
+    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+  }
+  
   public required init?(coder aDecoder: NSCoder) {
-    fatalError()
+    self.configuration = Configuration()
+    super.init(coder: aDecoder)
   }
 
   // MARK: - View lifecycle
