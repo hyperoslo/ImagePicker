@@ -333,7 +333,8 @@ open class ImagePickerController: UIViewController {
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false
     bottomContainer.stackView.startLoader()
-    let action: () -> Void = { [unowned self] in
+    let action: () -> Void = { [weak self] in
+      guard let `self` = self else { return }
       self.cameraController.takePicture { self.isTakingPicture = false }
     }
 
