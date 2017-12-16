@@ -51,6 +51,7 @@ import UIKit
   @objc public var managesAudioSession = true
   @objc public var allowPinchToZoom = true
   @objc public var allowedOrientations = UIInterfaceOrientationMask.all
+  @objc public var allowVolumeButtonsToTakePicture = true
 
   // MARK: Images
   @objc public var indicatorView: UIView = {
