@@ -30,7 +30,6 @@ open class ImageGalleryView: UIView {
   lazy open var collectionView: UICollectionView = { [unowned self] in
     let collectionView = UICollectionView(frame: CGRect.zero,
       collectionViewLayout: self.collectionViewLayout)
-    collectionView.translatesAutoresizingMaskIntoConstraints = false
     collectionView.backgroundColor = self.configuration.mainColor
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.dataSource = self

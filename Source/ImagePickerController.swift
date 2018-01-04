@@ -113,7 +113,9 @@ open class ImagePickerController: UIViewController {
 
     for subview in [cameraController.view, galleryView, bottomContainer, topView] {
       view.addSubview(subview!)
-      subview?.translatesAutoresizingMaskIntoConstraints = false
+      if subview != galleryView {
+        subview?.translatesAutoresizingMaskIntoConstraints = false
+      }
     }
 
     view.addSubview(volumeView)
