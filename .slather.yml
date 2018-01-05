@@ -1,4 +1,0 @@
-ci_service: travis_ci
-coverage_service: coveralls
-xcodeproj: Tests/Tests.xcodeproj
-source_directory: Source

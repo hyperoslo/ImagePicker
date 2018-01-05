@@ -86,7 +86,7 @@ open class TopView: UIView {
 
   // MARK: - Action methods
 
-  func flashButtonDidPress(_ button: UIButton) {
+  @objc func flashButtonDidPress(_ button: UIButton) {
     currentFlashIndex += 1
     currentFlashIndex = currentFlashIndex % flashButtonTitles.count
 
@@ -107,7 +107,7 @@ open class TopView: UIView {
     delegate?.flashButtonDidPress(newTitle)
   }
 
-  func rotateCameraButtonDidPress(_ button: UIButton) {
+  @objc func rotateCameraButtonDidPress(_ button: UIButton) {
     delegate?.rotateDeviceDidPress()
   }
 }

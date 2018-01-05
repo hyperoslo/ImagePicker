@@ -17,7 +17,7 @@ class VideoInfoView: UIView {
     videoIcon.contentMode = .scaleAspectFit
     return videoIcon
   }()
-    
+
   private lazy var videoInfoLabel: UILabel = {
     let videoInfoLabel = UILabel(frame: CGRect(x: 0,
                                                y: 0,
@@ -29,7 +29,7 @@ class VideoInfoView: UIView {
     videoInfoLabel.text = self.dateFormatter.string(from: self.duration ?? 0)
     return videoInfoLabel
   }()
-    
+
   private lazy var dateFormatter: DateComponentsFormatter = {
     let formatter = DateComponentsFormatter()
     formatter.zeroFormattingBehavior = .pad

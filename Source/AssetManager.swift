@@ -22,10 +22,10 @@ open class AssetManager {
       let fetchResult = configuration.allowVideoSelection
         ? PHAsset.fetchAssets(with: PHFetchOptions())
         : PHAsset.fetchAssets(with: .image, options: PHFetchOptions())
-        
+
       if fetchResult.count > 0 {
         var assets = [PHAsset]()
-        fetchResult.enumerateObjects({ object, index, stop in
+        fetchResult.enumerateObjects({ object, _, _ in
           assets.insert(object, at: 0)
         })
 
@@ -58,7 +58,7 @@ open class AssetManager {
 
     var images = [UIImage]()
     for asset in assets {
-      imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
+      imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, _ in
         if let image = image {
           images.append(image)
         }

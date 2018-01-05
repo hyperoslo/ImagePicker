@@ -18,7 +18,7 @@ open class ImageStack {
   }
 
   open func dropAsset(_ asset: PHAsset) {
-    assets = assets.filter() {$0 != asset}
+    assets = assets.filter {$0 != asset}
     NotificationCenter.default.post(name: Notification.Name(rawValue: Notifications.imageDidDrop), object: self, userInfo: [imageKey: asset])
   }
 

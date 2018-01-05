@@ -35,15 +35,14 @@ class ViewController: UIViewController, ImagePickerDelegate {
     return button
   }
 
-  func buttonTouched(button: UIButton) {
+  @objc func buttonTouched(button: UIButton) {
     var config = Configuration()
     config.doneButtonTitle = "Finish"
     config.noImagesTitle = "Sorry! There are no images here!"
     config.recordLocation = false
     config.allowVideoSelection = true
 
-    let imagePicker = ImagePickerController()
-    imagePicker.configuration = config
+    let imagePicker = ImagePickerController(configuration: config)
     imagePicker.delegate = self
 
     present(imagePicker, animated: true, completion: nil)
