@@ -17,7 +17,7 @@ extension ImageGalleryView: UICollectionViewDataSource {
 
     let asset = assets[(indexPath as NSIndexPath).row]
 
-    AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in
+    AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240), shouldPreferLowRes: configuration.useLowResolutionPreviewImage) { image in
       if let image = image {
         cell.configureCell(image)
 
