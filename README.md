@@ -41,6 +41,19 @@ let imagePickerController = ImagePickerController()
 imagePickerController.imageLimit = 5
 ```
 
+### Permissions
+
+In order to use **ImagePicker**, one must grant permission to use the camera app and photo library by adding a string to the Info.plist file. To do this, right click the Info.plist file and choose Open As > Source Code.
+
+Then, add these lines to the dict tag
+  
+```plist
+<key>NSCameraUsageDescription</key>
+<string>${PRODUCT_NAME} camera usage</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>${PRODUCT_NAME} photo library usage</string>
+```
+
 ### Optional bonus
 
 ##### Configuration
