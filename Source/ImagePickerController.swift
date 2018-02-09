@@ -358,14 +358,22 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    var images: [UIImage]
+    cameraController.downloadingProgressView.isHidden = false
     if let preferredImageSize = preferredImageSize {
-      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+      AssetManager.resolveAssets(stack.assets, size: preferredImageSize, completion: { (images) in
+        DispatchQueue.main.async {
+          self.cameraController.downloadingProgressView.isHidden = true
+          self.delegate?.doneButtonDidPress(self, images: images)
+        }
+      })
     } else {
-      images = AssetManager.resolveAssets(stack.assets)
+      AssetManager.resolveAssets(stack.assets, completion: { (images) in
+        DispatchQueue.main.async {
+          self.cameraController.downloadingProgressView.isHidden = true
+          self.delegate?.doneButtonDidPress(self, images: images)
+        }
+      })
     }
-
-    delegate?.doneButtonDidPress(self, images: images)
   }
 
   func cancelButtonDidPress() {
