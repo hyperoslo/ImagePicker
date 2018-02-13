@@ -245,11 +245,6 @@ open class ImagePickerController: UIViewController {
       selector: #selector(volumeChanged(_:)),
       name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
       object: nil)
-
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(handleRotation(_:)),
-      name: NSNotification.Name.UIDeviceOrientationDidChange,
-      object: nil)
   }
 
   @objc func didReloadAssets(_ notification: Notification) {
@@ -431,7 +426,18 @@ extension ImagePickerController: CameraViewDelegate {
   // MARK: - Rotation
 
   open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-    return .portrait
+    switch UIApplication.shared.statusBarOrientation {
+    case .landscapeLeft:
+        return UIInterfaceOrientationMask.landscapeLeft
+    case .landscapeRight:
+        return UIInterfaceOrientationMask.landscapeRight
+    case .portrait:
+        return UIInterfaceOrientationMask.portrait
+    case .portraitUpsideDown:
+        return UIInterfaceOrientationMask.portraitUpsideDown
+    default:
+        return UIInterfaceOrientationMask.all
+    }
   }
 
   @objc public func handleRotation(_ note: Notification) {
