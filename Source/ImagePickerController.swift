@@ -160,6 +160,9 @@ open class ImagePickerController: UIViewController {
     initialContentOffset = galleryView.collectionView.contentOffset
 
     applyOrientationTransforms()
+
+    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+                                    bottomContainer);
   }
 
   open func resetAssets() {
