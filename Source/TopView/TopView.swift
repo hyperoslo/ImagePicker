@@ -30,6 +30,7 @@ open class TopView: UIView {
     button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
     button.accessibilityLabel = "Flash mode is auto"
+    button.accessibilityHint = "Double-tap to change flash mode"
 
     return button
     }()
