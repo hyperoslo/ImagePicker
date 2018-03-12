@@ -84,6 +84,7 @@ open class BottomContainerView: UIView {
     }
 
     backgroundColor = configuration.backgroundColor
+    stackView.isAccessibilityElement = true
     stackView.accessibilityLabel = "Image stack"
     stackView.addGestureRecognizer(tapGestureRecognizer)
 
