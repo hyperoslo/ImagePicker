@@ -294,6 +294,9 @@ open class ImagePickerController: UIViewController {
   }
 
   open func collapseGalleryView(_ completion: (() -> Void)?) {
+    galleryView.isAccessibilityElement = true
+    galleryView.accessibilityLabel = "Image gallery"
+    galleryView.accessibilityHint = "Swipe up to open"
     galleryView.collectionViewLayout.invalidateLayout()
     UIView.animate(withDuration: 0.3, animations: {
       self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
@@ -305,6 +308,7 @@ open class ImagePickerController: UIViewController {
   }
 
   open func showGalleryView() {
+    galleryView.isAccessibilityElement = false
     galleryView.collectionViewLayout.invalidateLayout()
     UIView.animate(withDuration: 0.3, animations: {
       self.updateGalleryViewFrames(GestureConstants.minimumHeight)
@@ -314,6 +318,7 @@ open class ImagePickerController: UIViewController {
   }
 
   open func expandGalleryView() {
+    galleryView.isAccessibilityElement = false
     galleryView.collectionViewLayout.invalidateLayout()
 
     UIView.animate(withDuration: 0.3, animations: {
