@@ -38,3 +38,4 @@ variable_name:
     - URL
     - GlobalAPIKey
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle)
+identifier_name: warning
