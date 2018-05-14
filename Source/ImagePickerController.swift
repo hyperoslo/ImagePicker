@@ -4,8 +4,8 @@ import Photos
 
 public protocol ImagePickerDelegate: class {
 
-  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)])
-  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [(image: UIImage,location: CLLocation?)])
+  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data,location: CLLocation?)])
+  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data,location: CLLocation?)])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
 }
 
@@ -66,6 +66,9 @@ open class ImagePickerController: UIViewController {
 
   var volume = AVAudioSession.sharedInstance().outputVolume
 
+  //Set to true, if we need to compress photos quality
+  open static var isCompressQuality = false
+
   open weak var delegate: ImagePickerDelegate?
   open var stack = ImageStack()
   open var imageLimit = 0
@@ -101,7 +104,6 @@ open class ImagePickerController: UIViewController {
     view.backgroundColor = Configuration.mainColor
 
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
-
     subscribe()
     setupConstraints()
   }
@@ -199,29 +201,29 @@ open class ImagePickerController: UIViewController {
 
   func subscribe() {
     NotificationCenter.default.addObserver(self,
-      selector: #selector(adjustButtonTitle(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
-      object: nil)
+                                           selector: #selector(adjustButtonTitle(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(adjustButtonTitle(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
-      object: nil)
+                                           selector: #selector(adjustButtonTitle(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(didReloadAssets(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
-      object: nil)
+                                           selector: #selector(didReloadAssets(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(volumeChanged(_:)),
-      name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
-      object: nil)
+                                           selector: #selector(volumeChanged(_:)),
+                                           name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(handleRotation(_:)),
-      name: NSNotification.Name.UIDeviceOrientationDidChange,
-      object: nil)
+                                           selector: #selector(handleRotation(_:)),
+                                           name: NSNotification.Name.UIDeviceOrientationDidChange,
+                                           object: nil)
   }
 
   func didReloadAssets(_ notification: Notification) {
@@ -260,9 +262,9 @@ open class ImagePickerController: UIViewController {
       self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
       self.galleryView.collectionView.transform = CGAffineTransform.identity
       self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
-      }, completion: { _ in
-        completion?()
-    }) 
+    }, completion: { _ in
+      completion?()
+    })
   }
 
   open func showGalleryView() {
@@ -303,15 +305,15 @@ open class ImagePickerController: UIViewController {
 
   fileprivate func isBelowImageLimit() -> Bool {
     return (imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count)
-    }
+  }
 
   fileprivate func takePicture() {
     guard isBelowImageLimit() && !isTakingPicture else { return }
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false
     bottomContainer.stackView.startLoader()
-    let action: (Void) -> Void = { [unowned self] in
-      self.cameraController.takePicture { self.isTakingPicture = false }
+    let action: (Void) -> Void = { [weak self] in
+      self?.cameraController.takePicture { self?.isTakingPicture = false }
     }
 
     if Configuration.collapseCollectionViewWhileShot {
@@ -332,10 +334,10 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func doneButtonDidPress() {
     AssetManager.resolveAssets(stack.assets, imagesClosers: {
-        (images: [(image: UIImage,location: CLLocation?)]) in
-        self.delegate?.doneButtonDidPress(self, images: images)
+      (images: [(imageData: Data,location: CLLocation?)]) in
+      self.delegate?.doneButtonDidPress(self, images: images)
     })
-    
+
   }
 
   func cancelButtonDidPress() {
@@ -345,9 +347,9 @@ extension ImagePickerController: BottomContainerViewDelegate {
 
   func imageStackViewDidPress() {
     AssetManager.resolveAssets(stack.assets, imagesClosers: {
-        (images: [(image: UIImage,location: CLLocation?)]) in
-        self.delegate?.wrapperDidPress(self, images: images)
-    }) 
+      (images: [(imageData: Data,location: CLLocation?)]) in
+      self.delegate?.wrapperDidPress(self, images: images)
+    })
   }
 }
 
@@ -369,9 +371,9 @@ extension ImagePickerController: CameraViewDelegate {
 
     UIView.animate(withDuration: 0.3, animations: {
       self.galleryView.collectionView.transform = CGAffineTransform(translationX: collectionSize.width, y: 0)
-      }, completion: { _ in
-        self.galleryView.collectionView.transform = CGAffineTransform.identity
-    }) 
+    }, completion: { _ in
+      self.galleryView.collectionView.transform = CGAffineTransform.identity
+    })
   }
 
   func cameraNotAvailable() {
@@ -391,7 +393,7 @@ extension ImagePickerController: CameraViewDelegate {
 
     UIView.animate(withDuration: 0.25, animations: {
       [self.topView.rotateCamera, self.bottomContainer.pickerButton,
-        self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
+       self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
         $0.transform = rotate
       }
 
@@ -406,7 +408,7 @@ extension ImagePickerController: CameraViewDelegate {
       }
 
       self.topView.flashButton.transform = rotate.concatenating(translate)
-    }) 
+    })
   }
 }
 
