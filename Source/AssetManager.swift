@@ -66,4 +66,32 @@ open class AssetManager {
     }
     return images
   }
+
+  open static func resolveAssets(_ assets: [PHAsset],imagesClosers: @escaping ([(imageData: Data, location: CLLocation?)])->()) {
+    let imageManager = PHImageManager.default()
+    let requestOptions = PHImageRequestOptions()
+    requestOptions.isSynchronous = true
+
+    var imagesData = [(imageData: Data,location: CLLocation?)]()
+
+    for asset in assets {
+      let options = PHContentEditingInputRequestOptions()
+      options.isNetworkAccessAllowed = true
+      asset.requestContentEditingInput(with: options) { (contentEditingInput: PHContentEditingInput?, _) -> Void in
+
+        let optionsRequest = PHImageRequestOptions()
+        optionsRequest.version = .original
+        optionsRequest.isSynchronous = true
+        imageManager.requestImageData(for: asset, options: optionsRequest, resultHandler: { (data, string, orientation, info) in
+          if let data = data {
+            imagesData.append((data, contentEditingInput!.location))
+            if (imagesData.count == assets.count) {
+              imagesClosers(imagesData)
+            }
+          }
+        })
+      }
+    }
+  }
+
 }

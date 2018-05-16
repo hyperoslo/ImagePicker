@@ -54,19 +54,19 @@ class ButtonPicker: UIButton {
 
   func subscribe() {
     NotificationCenter.default.addObserver(self,
-      selector: #selector(recalculatePhotosCount(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
-      object: nil)
+                                           selector: #selector(recalculatePhotosCount(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(recalculatePhotosCount(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
-      object: nil)
+                                           selector: #selector(recalculatePhotosCount(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(recalculatePhotosCount(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
-      object: nil)
+                                           selector: #selector(recalculatePhotosCount(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
+                                           object: nil)
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -81,6 +81,8 @@ class ButtonPicker: UIButton {
     accessibilityLabel = "Take photo"
     addTarget(self, action: #selector(pickerButtonDidPress(_:)), for: .touchUpInside)
     addTarget(self, action: #selector(pickerButtonDidHighlight(_:)), for: .touchDown)
+    addTarget(self, action: #selector(pickerButtonDidDragOutside(_:)), for: .touchDragOutside)
+
   }
 
   // MARK: - Actions
@@ -99,6 +101,11 @@ class ButtonPicker: UIButton {
 
   @objc func pickerButtonDidHighlight(_ button: UIButton) {
     numberLabel.textColor = UIColor.white
-    backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
+    backgroundColor = UIColor(red:0.3, green:0.3, blue:0.3, alpha:1)
+  }
+
+  @objc func pickerButtonDidDragOutside(_ button: UIButton) {
+    numberLabel.textColor = UIColor.black
+    backgroundColor = UIColor.white
   }
 }

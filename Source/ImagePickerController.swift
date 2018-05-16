@@ -2,12 +2,21 @@ import UIKit
 import MediaPlayer
 import Photos
 
+
+
 @objc public protocol ImagePickerDelegate: NSObjectProtocol {
 
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
+
 }
+
+extension ImagePickerDelegate {
+  func wrapperDidPress(images: [(imageData: Data,location: CLLocation?)]) {}
+  func doneButtonDidPress(images: [(imageData: Data,location: CLLocation?)]) {}
+}
+
 
 open class ImagePickerController: UIViewController {
 
@@ -70,6 +79,7 @@ open class ImagePickerController: UIViewController {
   var volume = AVAudioSession.sharedInstance().outputVolume
 
   @objc open weak var delegate: ImagePickerDelegate?
+  open static var photoQuality: AVCaptureSession.Preset?
   open var stack = ImageStack()
   open var imageLimit = 0
   open var preferredImageSize: CGSize?
@@ -100,7 +110,7 @@ open class ImagePickerController: UIViewController {
     self.configuration = Configuration()
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
   }
-  
+
   public required init?(coder aDecoder: NSCoder) {
     self.configuration = Configuration()
     super.init(coder: aDecoder)
@@ -226,34 +236,34 @@ open class ImagePickerController: UIViewController {
 
   func subscribe() {
     NotificationCenter.default.addObserver(self,
-      selector: #selector(adjustButtonTitle(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
-      object: nil)
+                                           selector: #selector(adjustButtonTitle(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidPush),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(adjustButtonTitle(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
-      object: nil)
-    
+                                           selector: #selector(adjustButtonTitle(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
+                                           object: nil)
+
     NotificationCenter.default.addObserver(self,
                                            selector: #selector(dismissIfNeeded),
                                            name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
                                            object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(didReloadAssets(_:)),
-      name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
-      object: nil)
+                                           selector: #selector(didReloadAssets(_:)),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.stackDidReload),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(volumeChanged(_:)),
-      name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
-      object: nil)
+                                           selector: #selector(volumeChanged(_:)),
+                                           name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(handleRotation(_:)),
-      name: NSNotification.Name.UIDeviceOrientationDidChange,
-      object: nil)
+                                           selector: #selector(handleRotation(_:)),
+                                           name: NSNotification.Name.UIDeviceOrientationDidChange,
+                                           object: nil)
   }
 
   @objc func didReloadAssets(_ notification: Notification) {
@@ -279,7 +289,7 @@ open class ImagePickerController: UIViewController {
       configuration.doneButtonTitle : configuration.cancelButtonTitle
     bottomContainer.doneButton.setTitle(title, for: UIControlState())
   }
-  
+
   @objc func dismissIfNeeded() {
     // If only one image is requested and a push occures, automatically dismiss the ImagePicker
     if imageLimit == 1 {
@@ -299,8 +309,8 @@ open class ImagePickerController: UIViewController {
       self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
       self.galleryView.collectionView.transform = CGAffineTransform.identity
       self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
-      }, completion: { _ in
-        completion?()
+    }, completion: { _ in
+      completion?()
     })
   }
 
@@ -342,7 +352,7 @@ open class ImagePickerController: UIViewController {
 
   fileprivate func isBelowImageLimit() -> Bool {
     return (imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count)
-    }
+  }
 
   fileprivate func takePicture() {
     guard isBelowImageLimit() && !isTakingPicture else { return }
@@ -371,14 +381,23 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    var images: [UIImage]
-    if let preferredImageSize = preferredImageSize {
-      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
-    } else {
-      images = AssetManager.resolveAssets(stack.assets)
-    }
+    if ImagePickerController.photoQuality != nil {
+      AssetManager.resolveAssets(stack.assets, imagesClosers: { [weak self]
+        (images: [(imageData: Data,location: CLLocation?)]) in
 
-    delegate?.doneButtonDidPress(self, images: images)
+        self?.clearTempData()
+        self?.delegate?.doneButtonDidPress(images: images)
+      })
+    } else {
+      var images: [UIImage]
+      if let preferredImageSize = preferredImageSize {
+        images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+      } else {
+        images = AssetManager.resolveAssets(stack.assets)
+      }
+      clearTempData()
+      delegate?.doneButtonDidPress(self, images: images)
+    }
   }
 
   func cancelButtonDidPress() {
@@ -386,14 +405,40 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    var images: [UIImage]
-    if let preferredImageSize = preferredImageSize {
-        images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
-    } else {
-        images = AssetManager.resolveAssets(stack.assets)
-    }
 
-    delegate?.wrapperDidPress(self, images: images)
+    if ImagePickerController.photoQuality != nil {
+      AssetManager.resolveAssets(stack.assets, imagesClosers: { [weak self]
+        (images: [(imageData: Data,location: CLLocation?)]) in
+        self?.clearTempData()
+        self?.delegate?.wrapperDidPress(images: images)
+      })
+    } else {
+      var images: [UIImage]
+      if let preferredImageSize = preferredImageSize {
+        images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+      } else {
+        images = AssetManager.resolveAssets(stack.assets)
+      }
+      clearTempData()
+      delegate?.wrapperDidPress(self, images: images)
+    }
+  }
+
+  private func clearTempData() {
+    let fileManager = FileManager.default
+    let documentsURL = URL(string: NSTemporaryDirectory())!
+    do {
+      let fileURLs = try fileManager.contentsOfDirectory(atPath: NSTemporaryDirectory())
+      for file in fileURLs {
+        if file.contains("imagePicker.jpg") {
+          if let urlFile = NSURL.fileURL(withPathComponents: [NSTemporaryDirectory(), file]) {
+            try! fileManager.removeItem(at:urlFile)
+          }
+        }
+      }
+    } catch {
+      print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
+    }
   }
 }
 
@@ -421,8 +466,8 @@ extension ImagePickerController: CameraViewDelegate {
 
     UIView.animate(withDuration: 0.3, animations: {
       self.galleryView.collectionView.transform = CGAffineTransform(translationX: collectionSize.width, y: 0)
-      }, completion: { _ in
-        self.galleryView.collectionView.transform = CGAffineTransform.identity
+    }, completion: { _ in
+      self.galleryView.collectionView.transform = CGAffineTransform.identity
     })
   }
 
