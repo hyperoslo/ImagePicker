@@ -4,18 +4,15 @@ import Photos
 
 
 
-@objc public protocol ImagePickerDelegate: NSObjectProtocol {
+public protocol ImagePickerDelegate: NSObjectProtocol {
 
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
-
+  func wrapperDidPress(images: [(imageData: Data,location: CLLocation?)])
+  func doneButtonDidPress(images: [(imageData: Data,location: CLLocation?)])
 }
 
-extension ImagePickerDelegate {
-  func wrapperDidPress(images: [(imageData: Data,location: CLLocation?)]) {}
-  func doneButtonDidPress(images: [(imageData: Data,location: CLLocation?)]) {}
-}
 
 
 open class ImagePickerController: UIViewController {
@@ -78,7 +75,7 @@ open class ImagePickerController: UIViewController {
 
   var volume = AVAudioSession.sharedInstance().outputVolume
 
-  @objc open weak var delegate: ImagePickerDelegate?
+  open weak var delegate: ImagePickerDelegate?
   open static var photoQuality: AVCaptureSession.Preset?
   open var stack = ImageStack()
   open var imageLimit = 0
