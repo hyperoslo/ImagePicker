@@ -210,12 +210,10 @@ class CameraMan {
         }
         if let attached = self.attachEXIFtoImage(image: imageData, EXIF: currentProperties) {
           do {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "Y-M-dd_HH-mm-ss"
-            let time = formatter.string(from: Date())
+
             let fileName = NSUUID().uuidString + "imagePicker.jpg"
             if let fullURL = NSURL.fileURL(withPathComponents: [NSTemporaryDirectory(), fileName]) {
-              try! attached.write(to: fullURL)
+              try attached.write(to: fullURL)
               let request = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fullURL)
               request?.creationDate = Date()
               request?.location = location
