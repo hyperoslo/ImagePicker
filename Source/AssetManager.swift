@@ -36,13 +36,12 @@ open class AssetManager {
     }
   }
 
-  open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), completion: @escaping (_ image: UIImage?) -> Void) {
+  open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), shouldPreferLowRes: Bool = false, completion: @escaping (_ image: UIImage?) -> Void) {
     let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
-    requestOptions.deliveryMode = .highQualityFormat
+    requestOptions.deliveryMode = shouldPreferLowRes ? .fastFormat : .highQualityFormat
     requestOptions.isNetworkAccessAllowed = true
 
-    print("in image picker")
     imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
       if let info = info, info["PHImageFileUTIKey"] == nil {
         DispatchQueue.main.async(execute: {
