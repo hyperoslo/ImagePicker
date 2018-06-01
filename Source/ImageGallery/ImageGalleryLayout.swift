@@ -18,13 +18,12 @@ class ImageGalleryLayout: UICollectionViewFlowLayout {
       return super.layoutAttributesForElements(in: rect)
     }
 
-    var newAttributes = [UICollectionViewLayoutAttributes]()
-    for attribute in attributes {
+    let newAttributes = attributes.map({ (attribute) -> UICollectionViewLayoutAttributes in
       // swiftlint:disable force_cast
-      let n = attribute.copy() as! UICollectionViewLayoutAttributes
-      n.transform = configuration.rotationTransform
-      newAttributes.append(n)
-    }
+      let newAttribute = attribute.copy() as! UICollectionViewLayoutAttributes
+      newAttribute.transform = configuration.rotationTransform
+      return newAttribute
+    })
 
     return newAttributes
   }
