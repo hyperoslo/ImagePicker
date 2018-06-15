@@ -49,7 +49,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     let label = UILabel()
     label.font = self.configuration.noCameraFont
     label.textColor = self.configuration.noCameraColor
+    label.textAlignment = .center
     label.text = self.configuration.noCameraTitle
+    label.numberOfLines = 0
     label.sizeToFit()
 
     return label
