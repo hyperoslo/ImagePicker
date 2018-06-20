@@ -9,8 +9,8 @@ public protocol ImagePickerDelegate: NSObjectProtocol {
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
-  func wrapperDidPress(images: [(imageData: Data,location: CLLocation?)])
-  func doneButtonDidPress(images: [(imageData: Data,location: CLLocation?)])
+  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data,location: CLLocation?)])
+  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data,location: CLLocation?)])
 }
 
 
@@ -383,7 +383,9 @@ extension ImagePickerController: BottomContainerViewDelegate {
         (images: [(imageData: Data,location: CLLocation?)]) in
 
         self?.clearTempData()
-        self?.delegate?.doneButtonDidPress(images: images)
+        if let self_ = self {
+          self?.delegate?.doneButtonDidPress(self_, images: images)
+        }
       })
     } else {
       var images: [UIImage]
@@ -407,7 +409,9 @@ extension ImagePickerController: BottomContainerViewDelegate {
       AssetManager.resolveAssets(stack.assets, imagesClosers: { [weak self]
         (images: [(imageData: Data,location: CLLocation?)]) in
         self?.clearTempData()
-        self?.delegate?.wrapperDidPress(images: images)
+        if let self_ = self {
+          self?.delegate?.wrapperDidPress(self_, images: images)
+        }
       })
     } else {
       var images: [UIImage]

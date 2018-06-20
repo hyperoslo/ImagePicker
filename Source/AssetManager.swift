@@ -74,23 +74,43 @@ open class AssetManager {
 
     var imagesData = [(imageData: Data,location: CLLocation?)]()
 
-    for asset in assets {
-      let options = PHContentEditingInputRequestOptions()
-      options.isNetworkAccessAllowed = true
-      asset.requestContentEditingInput(with: options) { (contentEditingInput: PHContentEditingInput?, _) -> Void in
+    if !assets.isEmpty {
+      for asset in assets {
 
-        let optionsRequest = PHImageRequestOptions()
-        optionsRequest.version = .original
-        optionsRequest.isSynchronous = true
-        imageManager.requestImageData(for: asset, options: optionsRequest, resultHandler: { (data, string, orientation, info) in
-          if let data = data {
-            imagesData.append((data, contentEditingInput!.location))
-            if (imagesData.count == assets.count) {
-              imagesClosers(imagesData)
+        let options = PHContentEditingInputRequestOptions()
+        options.isNetworkAccessAllowed = true
+        asset.requestContentEditingInput(with: options) { (contentEditingInput: PHContentEditingInput?, _) -> Void in
+
+          let optionsRequest = PHImageRequestOptions()
+          optionsRequest.version = .original
+          optionsRequest.isSynchronous = true
+
+          if asset.location == nil {
+            //Image without location and exif data (like screenshots)
+            let targetSize = ImagePickerController.photoQuality == AVCaptureSession.Preset.photo ? PHImageManagerMaximumSize : CGSize(width: 720, height: 1280)
+            imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: optionsRequest) { image, _ in
+              if let image = image, let data = UIImageJPEGRepresentation(image, 1.0) {
+                imagesData.append((data, asset.location))
+                if (imagesData.count == assets.count) {
+                  imagesClosers(imagesData)
+                }
+              }
             }
+          } else {
+            ////Image with location and exif data
+            imageManager.requestImageData(for: asset, options: optionsRequest, resultHandler: { (data, string, orientation, info) in
+              if let data = data {
+                imagesData.append((data, contentEditingInput!.location))
+                if (imagesData.count == assets.count) {
+                  imagesClosers(imagesData)
+                }
+              }
+            })
           }
-        })
+        }
       }
+    } else {
+      imagesClosers(imagesData)
     }
   }
 
