@@ -6,14 +6,21 @@ import Photos
 
 public protocol ImagePickerDelegate: NSObjectProtocol {
 
+
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
+
+  /// Called only if set value to ImagePickerController.photoQuality
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data,location: CLLocation?)])
+  /// Called only if set value to ImagePickerController.photoQuality
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data,location: CLLocation?)])
 }
 
-
+public extension ImagePickerDelegate {
+  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data,location: CLLocation?)]) {}
+  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data,location: CLLocation?)]) {}
+}
 
 open class ImagePickerController: UIViewController {
 
