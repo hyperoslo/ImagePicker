@@ -1,6 +1,9 @@
 import UIKit
 import ImagePicker
 import Lightbox
+import CoreLocation
+import AVFoundation
+
 
 class ViewController: UIViewController, ImagePickerDelegate {
 
@@ -36,7 +39,7 @@ class ViewController: UIViewController, ImagePickerDelegate {
   }
 
   @objc func buttonTouched(button: UIButton) {
-    var config = Configuration()
+    let config = Configuration()
     config.doneButtonTitle = "Finish"
     config.noImagesTitle = "Sorry! There are no images here!"
     config.recordLocation = false
@@ -44,6 +47,8 @@ class ViewController: UIViewController, ImagePickerDelegate {
 
     let imagePicker = ImagePickerController(configuration: config)
     imagePicker.delegate = self
+    ImagePickerController.photoQuality = AVCaptureSession.Preset.photo
+
 
     present(imagePicker, animated: true, completion: nil)
   }
@@ -68,4 +73,32 @@ class ViewController: UIViewController, ImagePickerDelegate {
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
     imagePicker.dismiss(animated: true, completion: nil)
   }
+
+  // Called only if set value to ImagePickerController.photoQuality
+  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data, location: CLLocation?)]) {
+    guard images.count > 0 else { return }
+
+    self.parseImageData(imagePicker: imagePicker, images: images)
+  }
+  // Called only if set value to ImagePickerController.photoQuality
+  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [(imageData: Data, location: CLLocation?)]) {
+    guard images.count > 0 else { return }
+
+    self.parseImageData(imagePicker: imagePicker, images: images)
+  }
+
+  private func parseImageData(imagePicker: ImagePickerController, images: [(imageData: Data, location: CLLocation?)]) {
+
+    var lightboxImages = [LightboxImage]()
+
+    images.forEach { (image) in
+      print(image.location as Any)
+      if let image = UIImage(data: image.imageData, scale: 1.0) {
+        lightboxImages.append(LightboxImage(image: image))
+      }
+      let lightbox = LightboxController(images: lightboxImages, startIndex: 0)
+      imagePicker.present(lightbox, animated: true, completion: nil)
+    }
+  }
+
 }
