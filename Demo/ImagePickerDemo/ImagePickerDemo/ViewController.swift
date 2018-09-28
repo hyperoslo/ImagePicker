@@ -35,7 +35,7 @@ class ViewController: UIViewController, ImagePickerDelegate {
     return button
   }
 
-  func buttonTouched(button: UIButton) {
+  @objc func buttonTouched(button: UIButton) {
     let imagePicker = ImagePickerController()
     imagePicker.delegate = self
 

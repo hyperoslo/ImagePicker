@@ -1,47 +1,53 @@
 PODS:
-  - Hue (1.2.0)
-  - ImagePicker (1.4.1)
-  - Lightbox (1.0.0):
-    - Hue
-    - Sugar
-  - Sugar (1.2.0)
+  - Cache (5.2.0)
+  - Hue (3.0.1)
+  - ImagePicker (3.0.0)
+  - Imaginary (4.2.0):
+    - Cache (~> 5.0)
+  - Lightbox (2.3.0):
+    - Imaginary (~> 4.0)
+  - Sugar (4.0.0)
 
 DEPENDENCIES:
-  - Hue (from `https://github.com/hyperoslo/Hue.git`, branch `swift3`)
+  - Hue (from `https://github.com/hyperoslo/Hue.git`)
   - ImagePicker (from `../../`)
-  - Lightbox (from `https://github.com/hyperoslo/Lightbox.git`, branch `swift-3`)
-  - Sugar (from `https://github.com/hyperoslo/Sugar.git`, branch `swift-3`)
+  - Lightbox (from `https://github.com/hyperoslo/Lightbox.git`)
+  - Sugar (from `https://github.com/hyperoslo/Sugar.git`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Cache
+    - Imaginary
 
 EXTERNAL SOURCES:
   Hue:
-    :branch: swift3
     :git: https://github.com/hyperoslo/Hue.git
   ImagePicker:
     :path: "../../"
   Lightbox:
-    :branch: swift-3
     :git: https://github.com/hyperoslo/Lightbox.git
   Sugar:
-    :branch: swift-3
     :git: https://github.com/hyperoslo/Sugar.git
 
 CHECKOUT OPTIONS:
   Hue:
-    :commit: c21ca81d4fa002309f8f8f554317bf9ec3167365
+    :commit: d2250b593d903c892b47659c1c2d95755c8c4bfe
     :git: https://github.com/hyperoslo/Hue.git
   Lightbox:
-    :commit: a6119a3cc0b2b582849f7138637f837e817ee71e
+    :commit: 1b16b2bb74f2a12005df1a05d042ff1bc5fee9a5
     :git: https://github.com/hyperoslo/Lightbox.git
   Sugar:
-    :commit: d35ee6d26729cdedf4c1bc87f086c59d9e6fb279
+    :commit: 8eaa4062e6f8262fb67e0bbe51c088281d3df768
     :git: https://github.com/hyperoslo/Sugar.git
 
 SPEC CHECKSUMS:
-  Hue: 0705083b7aff40334033373e6293ec1215285ac2
-  ImagePicker: c2b43f5201f34efb3459ac6af39992fdd802c2d4
-  Lightbox: 6deb5fc2c51f353212631470c4c689bc5120598c
-  Sugar: 556b623f0f8846cf08de7302701892f11d567419
+  Cache: 807c5d86d01a177f06ede9865add3aea269bbfd4
+  Hue: 7ee65b3bf787c84990edd6877339a8d280b67427
+  ImagePicker: ccf0f26f6cd9c197aba478c06072b33ed63c7ce5
+  Imaginary: dae33d06dbc2ada22f98afef5eb45cc061311a2c
+  Lightbox: d317750e4132bfb871a5307cfe0a2c7d6a583c65
+  Sugar: a3e81d9148af06d251074a7bec982d751c07af97
 
-PODFILE CHECKSUM: 862923f408ecd3189d99edd15056d3971d80db4c
+PODFILE CHECKSUM: 97adef809ca42dbb64ca51a7009552f2396e128b
 
-COCOAPODS: 1.1.0.rc.2
+COCOAPODS: 1.5.3

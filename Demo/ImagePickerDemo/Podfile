@@ -1,11 +1,11 @@
-platform :ios, '8.0'
+platform :ios, '9.0'
 
 use_frameworks!
 inhibit_all_warnings!
 
 target 'ImagePickerDemo' do
 	pod 'ImagePicker', path: '../../'
-	pod 'Lightbox', git: 'https://github.com/hyperoslo/Lightbox.git', branch: 'swift-3'
-	pod 'Sugar', git: 'https://github.com/hyperoslo/Sugar.git', branch: 'swift-3'
-	pod 'Hue', git: 'https://github.com/hyperoslo/Hue.git', branch: 'swift3'
+    pod 'Lightbox', git: 'https://github.com/hyperoslo/Lightbox.git'#, branch: 'swift-3'
+    pod 'Sugar', git: 'https://github.com/hyperoslo/Sugar.git'# branch: 'swift-3'
+    pod 'Hue', git: 'https://github.com/hyperoslo/Hue.git' #, branch: 'swift3'
 end
