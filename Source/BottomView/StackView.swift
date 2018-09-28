@@ -105,7 +105,7 @@ class ImageStackView: UIView {
 
 extension ImageStackView {
 
-  func imageDidPush(_ notification: Notification) {
+  @objc func imageDidPush(_ notification: Notification) {
     let emptyView = views.filter { $0.image == nil }.first
 
     if let emptyView = emptyView {
@@ -118,7 +118,7 @@ extension ImageStackView {
     }
   }
 
-  func imageStackDidChangeContent(_ notification: Notification) {
+  @objc func imageStackDidChangeContent(_ notification: Notification) {
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
       activityView.stopAnimating()

@@ -76,13 +76,19 @@ open class ImagePickerController: UIViewController {
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
   var numberOfCells: Int?
-  var statusBarHidden = true
+  var statusBarHidden = true {
+    didSet {
+      UIView.animate(withDuration: 0.5) { () -> Void in
+        self.setNeedsStatusBarAppearanceUpdate()
+      }
+    }
+  }
 
   fileprivate var isTakingPicture = false
   open var doneButtonTitle: String? {
     didSet {
       if let doneButtonTitle = doneButtonTitle {
-        bottomContainer.doneButton.setTitle(doneButtonTitle, for: UIControlState())
+        bottomContainer.doneButton.setTitle(doneButtonTitle, for: UIControl.State())
       }
     }
   }
@@ -98,7 +104,7 @@ open class ImagePickerController: UIViewController {
     }
 
     view.addSubview(volumeView)
-    view.sendSubview(toBack: volumeView)
+    view.sendSubviewToBack(volumeView)
 
     view.backgroundColor = UIColor.white
     view.backgroundColor = Configuration.mainColor
@@ -115,9 +121,16 @@ open class ImagePickerController: UIViewController {
     _ = try? AVAudioSession.sharedInstance().setActive(true)
 
     statusBarHidden = UIApplication.shared.isStatusBarHidden
-    UIApplication.shared.setStatusBarHidden(true, with: .fade)
   }
 
+  open override var prefersStatusBarHidden: Bool {
+    return statusBarHidden //FIX: return true always?
+  }
+  
+  open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+    return .slide
+  }
+  
   open override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
@@ -140,7 +153,6 @@ open class ImagePickerController: UIViewController {
 
   open override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-    UIApplication.shared.setStatusBarHidden(statusBarHidden, with: .fade)
   }
 
   open func resetAssets() {
@@ -168,7 +180,7 @@ open class ImagePickerController: UIViewController {
     let alertController = UIAlertController(title: Configuration.requestPermissionTitle, message: Configuration.requestPermissionMessage, preferredStyle: .alert)
 
     let alertAction = UIAlertAction(title: Configuration.OKButtonTitle, style: .default) { _ in
-      if let settingsURL = URL(string: UIApplicationOpenSettingsURLString) {
+      if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
         UIApplication.shared.openURL(settingsURL)
       }
     }
@@ -223,17 +235,17 @@ open class ImagePickerController: UIViewController {
 
     NotificationCenter.default.addObserver(self,
       selector: #selector(handleRotation(_:)),
-      name: NSNotification.Name.UIDeviceOrientationDidChange,
+      name: UIDevice.orientationDidChangeNotification,
       object: nil)
   }
 
-  func didReloadAssets(_ notification: Notification) {
+  @objc func didReloadAssets(_ notification: Notification) {
     adjustButtonTitle(notification)
     galleryView.collectionView.reloadData()
     galleryView.collectionView.setContentOffset(CGPoint.zero, animated: false)
   }
 
-  func volumeChanged(_ notification: Notification) {
+  @objc func volumeChanged(_ notification: Notification) {
     guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
       let userInfo = (notification as NSNotification).userInfo,
       let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String, changeReason == "ExplicitVolumeChange" else { return }
@@ -242,19 +254,15 @@ open class ImagePickerController: UIViewController {
     takePicture()
   }
 
-  func adjustButtonTitle(_ notification: Notification) {
+  @objc func adjustButtonTitle(_ notification: Notification) {
     guard let sender = notification.object as? ImageStack else { return }
 
     let title = !sender.assets.isEmpty ?
       Configuration.doneButtonTitle : Configuration.cancelButtonTitle
-    bottomContainer.doneButton.setTitle(title, for: UIControlState())
+    bottomContainer.doneButton.setTitle(title, for: UIControl.State())
   }
 
   // MARK: - Helpers
-
-  open override var prefersStatusBarHidden: Bool {
-    return true
-  }
 
   open func collapseGalleryView(_ completion: (() -> Void)?) {
     galleryView.collectionViewLayout.invalidateLayout()
@@ -312,7 +320,7 @@ open class ImagePickerController: UIViewController {
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false
     bottomContainer.stackView.startLoader()
-    let action: (Void) -> Void = { [unowned self] in
+    let action: () -> Void = { [unowned self] in
       self.cameraController.takePicture { self.isTakingPicture = false }
     }
 
@@ -395,7 +403,7 @@ extension ImagePickerController: CameraViewDelegate {
     return .portrait
   }
 
-  public func handleRotation(_ note: Notification) {
+  @objc public func handleRotation(_ note: Notification) {
     let rotate = Helper.rotationTransform()
 
     UIView.animate(withDuration: 0.25, animations: {
@@ -444,7 +452,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
     if let contentOffset = initialContentOffset { numberOfCells = Int(contentOffset.x / collectionSize.width) }
   }
 
-  func panGestureRecognizerHandler(_ gesture: UIPanGestureRecognizer) {
+  @objc func panGestureRecognizerHandler(_ gesture: UIPanGestureRecognizer) {
     let translation = gesture.translation(in: view)
     let velocity = gesture.velocity(in: view)
 
