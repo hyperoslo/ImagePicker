@@ -161,8 +161,8 @@ open class ImagePickerController: UIViewController {
 
     applyOrientationTransforms()
 
-    UIAccessibility.post(UIAccessibility.Notification.screenChanged,
-                                    bottomContainer);
+    UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged,
+                         argument: bottomContainer);
   }
 
   open func resetAssets() {
