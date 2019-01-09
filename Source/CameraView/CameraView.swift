@@ -63,7 +63,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
         NSAttributedString.Key.foregroundColor: self.configuration.settingsColor
       ])
 
-    button.setAttributedTitle(title, for: UIControlState())
+    button.setAttributedTitle(title, for: UIControl.State())
     button.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
     button.sizeToFit()
     button.layer.borderColor = self.configuration.settingsColor.cgColor
