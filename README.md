@@ -1,3 +1,5 @@
+⚠️ DEPRECATED, NO LONGER MAINTAINED
+
 ![ImagePicker](https://github.com/hyperoslo/ImagePicker/blob/master/Resources/ImagePickerPresentation.png)
 
 [![Version](https://img.shields.io/cocoapods/v/ImagePicker.svg?style=flat)](http://cocoadocs.org/docsets/ImagePicker)

@@ -2,7 +2,7 @@ import UIKit
 import MediaPlayer
 import Photos
 
-@objc public protocol ImagePickerDelegate: class {
+@objc public protocol ImagePickerDelegate: NSObjectProtocol {
 
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
@@ -70,7 +70,7 @@ open class ImagePickerController: UIViewController {
 
   var volume = AVAudioSession.sharedInstance().outputVolume
 
-  open weak var delegate: ImagePickerDelegate?
+  @objc open weak var delegate: ImagePickerDelegate?
   open var stack = ImageStack()
   open var imageLimit = 0
   open var preferredImageSize: CGSize?
@@ -92,13 +92,19 @@ open class ImagePickerController: UIViewController {
 
   // MARK: - Initialization
 
-  public required init(configuration: Configuration = Configuration()) {
+  @objc public required init(configuration: Configuration = Configuration()) {
     self.configuration = configuration
     super.init(nibName: nil, bundle: nil)
   }
 
+  public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    self.configuration = Configuration()
+    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+  }
+  
   public required init?(coder aDecoder: NSCoder) {
-    fatalError()
+    self.configuration = Configuration()
+    super.init(coder: aDecoder)
   }
 
   // MARK: - View lifecycle
@@ -131,7 +137,8 @@ open class ImagePickerController: UIViewController {
     }
 
     statusBarHidden = UIApplication.shared.isStatusBarHidden
-    UIApplication.shared.setStatusBarHidden(true, with: .fade)
+
+    self.handleRotation(nil)
   }
 
   open override func viewDidAppear(_ animated: Bool) {
@@ -154,11 +161,9 @@ open class ImagePickerController: UIViewController {
     initialContentOffset = galleryView.collectionView.contentOffset
 
     applyOrientationTransforms()
-  }
 
-  open override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-    UIApplication.shared.setStatusBarHidden(statusBarHidden, with: .fade)
+    UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification,
+                                    bottomContainer);
   }
 
   open func resetAssets() {
@@ -230,6 +235,11 @@ open class ImagePickerController: UIViewController {
       selector: #selector(adjustButtonTitle(_:)),
       name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
       object: nil)
+    
+    NotificationCenter.default.addObserver(self,
+                                           selector: #selector(dismissIfNeeded),
+                                           name: NSNotification.Name(rawValue: ImageStack.Notifications.imageDidDrop),
+                                           object: nil)
 
     NotificationCenter.default.addObserver(self,
       selector: #selector(adjustButtonTitle(_:)),
@@ -259,7 +269,8 @@ open class ImagePickerController: UIViewController {
   }
 
   @objc func volumeChanged(_ notification: Notification) {
-    guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
+    guard configuration.allowVolumeButtonsToTakePicture,
+      let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
       let userInfo = (notification as NSNotification).userInfo,
       let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String, changeReason == "ExplicitVolumeChange" else { return }
 
@@ -271,11 +282,18 @@ open class ImagePickerController: UIViewController {
   @objc func adjustButtonTitle(_ notification: Notification) {
     bottomContainer.doneButton.setTitle(configuration.doneButtonTitle, for: UIControlState())
   }
+  
+  @objc func dismissIfNeeded() {
+    // If only one image is requested and a push occures, automatically dismiss the ImagePicker
+    if imageLimit == 1 {
+      doneButtonDidPress()
+    }
+  }
 
   // MARK: - Helpers
 
   open override var prefersStatusBarHidden: Bool {
-    return true
+    return statusBarHidden
   }
 
   open func collapseGalleryView(_ completion: (() -> Void)?) {
@@ -308,7 +326,7 @@ open class ImagePickerController: UIViewController {
       self.galleryView.collectionView.transform = CGAffineTransform(scaleX: scale, y: scale)
 
       let value = self.view.frame.width * (scale - 1) / scale
-      self.galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right:  value)
+      self.galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: value)
     })
   }
 
@@ -443,7 +461,7 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   func applyOrientationTransforms() {
-    let rotate = Helper.rotationTransform()
+    let rotate = configuration.rotationTransform
 
     UIView.animate(withDuration: 0.25, animations: {
       [self.topView.rotateCamera, self.bottomContainer.pickerButton,
@@ -454,8 +472,7 @@ extension ImagePickerController: CameraViewDelegate {
       self.galleryView.collectionViewLayout.invalidateLayout()
 
       let translate: CGAffineTransform
-      if [UIDeviceOrientation.landscapeLeft, UIDeviceOrientation.landscapeRight]
-        .contains(UIDevice.current.orientation) {
+      if Helper.previousOrientation.isLandscape {
         translate = CGAffineTransform(translationX: -20, y: 15)
       } else {
         translate = CGAffineTransform.identity
@@ -520,7 +537,7 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
       galleryView.frame.size.height = initialFrame.height - translation.y
 
       let value = view.frame.width * (scale - 1) / scale
-      galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right:  value)
+      galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: value)
     } else {
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y

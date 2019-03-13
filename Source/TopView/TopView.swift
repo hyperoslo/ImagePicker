@@ -29,12 +29,16 @@ open class TopView: UIView {
     button.titleLabel?.font = self.configuration.flashButton
     button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
+    button.accessibilityLabel = "Flash mode is auto"
+    button.accessibilityHint = "Double-tap to change flash mode"
 
     return button
     }()
 
   open lazy var rotateCamera: UIButton = { [unowned self] in
     let button = UIButton()
+    button.accessibilityLabel = ""
+    button.accessibilityHint = "Double-tap to rotate camera"
     button.setImage(AssetManager.getImage("cameraIcon"), for: UIControlState())
     button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), for: .touchUpInside)
     button.imageView?.contentMode = .center
@@ -94,6 +98,7 @@ open class TopView: UIView {
     case 1:
       button.setTitleColor(UIColor(red: 0.98, green: 0.98, blue: 0.45, alpha: 1), for: UIControlState())
       button.setTitleColor(UIColor(red: 0.52, green: 0.52, blue: 0.24, alpha: 1), for: .highlighted)
+
     default:
       button.setTitleColor(UIColor.white, for: UIControlState())
       button.setTitleColor(UIColor.white, for: .highlighted)
@@ -103,6 +108,7 @@ open class TopView: UIView {
 
     button.setImage(AssetManager.getImage(newTitle), for: UIControlState())
     button.setTitle(newTitle, for: UIControlState())
+    button.accessibilityLabel = "Flash mode is \(newTitle)"
 
     delegate?.flashButtonDidPress(newTitle)
   }
