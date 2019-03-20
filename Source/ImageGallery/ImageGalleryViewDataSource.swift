@@ -26,7 +26,7 @@ extension ImageGalleryView: UICollectionViewDataSource {
 
           UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIView.AnimationOptions(), animations: {
             cell.transform = CGAffineTransform.identity
-            }) { _ in }
+          }, completion: nil)
 
           self.shouldTransform = false
         }
