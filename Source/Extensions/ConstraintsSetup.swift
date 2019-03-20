@@ -6,7 +6,7 @@ extension BottomContainerView {
 
   func setupConstraints() {
 
-    for attribute: NSLayoutAttribute in [.centerX, .centerY] {
+    for attribute: NSLayoutConstraint.Attribute in [.centerX, .centerY] {
       addConstraint(NSLayoutConstraint(item: pickerButton, attribute: attribute,
         relatedBy: .equal, toItem: self, attribute: attribute,
         multiplier: 1, constant: 0))
@@ -16,13 +16,13 @@ extension BottomContainerView {
         multiplier: 1, constant: 0))
     }
 
-    for attribute: NSLayoutAttribute in [.width, .left, .top] {
+    for attribute: NSLayoutConstraint.Attribute in [.width, .left, .top] {
       addConstraint(NSLayoutConstraint(item: topSeparator, attribute: attribute,
         relatedBy: .equal, toItem: self, attribute: attribute,
         multiplier: 1, constant: 0))
     }
 
-    for attribute: NSLayoutAttribute in [.width, .height] {
+    for attribute: NSLayoutConstraint.Attribute in [.width, .height] {
       addConstraint(NSLayoutConstraint(item: pickerButton, attribute: attribute,
         relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
         multiplier: 1, constant: ButtonPicker.Dimensions.buttonSize))
@@ -102,8 +102,8 @@ extension TopView {
 extension ImagePickerController {
 
   func setupConstraints() {
-    let attributes: [NSLayoutAttribute] = [.bottom, .right, .width]
-    let topViewAttributes: [NSLayoutAttribute] = [.left, .width]
+    let attributes: [NSLayoutConstraint.Attribute] = [.bottom, .right, .width]
+    let topViewAttributes: [NSLayoutConstraint.Attribute] = [.left, .width]
 
     for attribute in attributes {
       view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: attribute,
@@ -111,7 +111,7 @@ extension ImagePickerController {
         multiplier: 1, constant: 0))
     }
 
-    for attribute: NSLayoutAttribute in [.left, .top, .width] {
+    for attribute: NSLayoutConstraint.Attribute in [.left, .top, .width] {
       view.addConstraint(NSLayoutConstraint(item: cameraController.view, attribute: attribute,
         relatedBy: .equal, toItem: view, attribute: attribute,
         multiplier: 1, constant: 0))
@@ -164,7 +164,7 @@ extension ImageGalleryViewCell {
 
   func setupConstraints() {
 
-    for attribute: NSLayoutAttribute in [.width, .height, .centerX, .centerY] {
+    for attribute: NSLayoutConstraint.Attribute in [.width, .height, .centerX, .centerY] {
       addConstraint(NSLayoutConstraint(item: imageView, attribute: attribute,
         relatedBy: .equal, toItem: self, attribute: attribute,
         multiplier: 1, constant: 0))
@@ -179,7 +179,7 @@ extension ImageGalleryViewCell {
 extension ButtonPicker {
 
   func setupConstraints() {
-    let attributes: [NSLayoutAttribute] = [.centerX, .centerY]
+    let attributes: [NSLayoutConstraint.Attribute] = [.centerX, .centerY]
 
     for attribute in attributes {
       addConstraint(NSLayoutConstraint(item: numberLabel, attribute: attribute,
