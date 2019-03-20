@@ -285,8 +285,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   @objc func pinchGestureRecognizerHandler(_ gesture: UIPinchGestureRecognizer) {
     switch gesture.state {
-    case .began:
-      fallthrough
     case .changed:
       zoomTo(gesture.scale)
     case .ended:
