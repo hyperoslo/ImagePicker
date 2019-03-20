@@ -134,7 +134,7 @@ extension ImagePickerController {
                                             attribute: .top,
                                             multiplier: 1, constant: 0))
     }
-    
+
     if #available(iOS 11.0, *) {
       let heightPadding = UIApplication.shared.keyWindow!.safeAreaInsets.bottom
       view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .height,
