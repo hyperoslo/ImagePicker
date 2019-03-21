@@ -59,11 +59,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     let button = UIButton(type: .system)
     let title = NSAttributedString(string: self.configuration.settingsTitle,
       attributes: [
-        NSAttributedStringKey.font: self.configuration.settingsFont,
-        NSAttributedStringKey.foregroundColor: self.configuration.settingsColor
+        NSAttributedString.Key.font: self.configuration.settingsFont,
+        NSAttributedString.Key.foregroundColor: self.configuration.settingsColor
       ])
 
-    button.setAttributedTitle(title, for: UIControlState())
+    button.setAttributedTitle(title, for: UIControl.State())
     button.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
     button.sizeToFit()
     button.layer.borderColor = self.configuration.settingsColor.cgColor
@@ -187,7 +187,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   @objc func settingsButtonDidTap() {
     DispatchQueue.main.async {
-      if let settingsURL = URL(string: UIApplicationOpenSettingsURLString) {
+      if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
         UIApplication.shared.openURL(settingsURL)
       }
     }
