@@ -277,7 +277,7 @@ open class ImagePickerController: UIViewController {
 
     let title = !sender.assets.isEmpty ?
       configuration.doneButtonTitle : configuration.cancelButtonTitle
-    bottomContainer.doneButton.setTitle(title, for: UIControl.State())
+    bottomContainer.doneButton.setTitle(title, for: [])
   }
   
   @objc func dismissIfNeeded() {
