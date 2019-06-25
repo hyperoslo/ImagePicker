@@ -2,7 +2,9 @@ import UIKit
 import AVFoundation
 
 struct Helper {
-
+  
+  static var previousOrientation = UIDeviceOrientation.unknown
+  
   static func rotationTransform() -> CGAffineTransform {
     switch UIApplication.shared.statusBarOrientation {
     case .landscapeLeft:
@@ -13,6 +15,52 @@ struct Helper {
       return CGAffineTransform(rotationAngle: CGFloat.pi)
     default:
       return CGAffineTransform.identity
+    }
+  }
+  
+  static func getOrientation() -> UIDeviceOrientation {
+    let currentOrientation = UIDevice.current.orientation
+    
+    switch currentOrientation {
+    case .portrait:
+      previousOrientation = currentOrientation
+      return currentOrientation
+    case .portraitUpsideDown:
+      previousOrientation = currentOrientation
+      return currentOrientation
+    case .landscapeLeft:
+      previousOrientation = currentOrientation
+      return currentOrientation
+    case .landscapeRight:
+      previousOrientation = currentOrientation
+      return currentOrientation
+    default:
+      break
+    }
+    
+    if previousOrientation == .unknown {
+      previousOrientation = .portrait
+      return previousOrientation
+    }
+    return previousOrientation
+  }
+
+  static func getVideoOrientation(fromDeviceOrientation orientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
+    switch orientation {
+    case .landscapeLeft:
+      return .landscapeRight
+    case .landscapeRight:
+      return .landscapeLeft
+    case .portraitUpsideDown:
+      return .portraitUpsideDown
+    case .portrait:
+      return .portrait
+    default:
+      if previousOrientation == .unknown {
+        return .portrait
+      } else {
+        return getVideoOrientation(fromDeviceOrientation: previousOrientation)
+      }
     }
   }
 
