@@ -147,6 +147,8 @@ open class ImageGalleryView: UIView {
     let threshold = Dimensions.galleryBarHeight * 2
 
     UIView.animate(withDuration: 0.25, animations: {
+      self.updateGalleryLayout()
+
       if threshold > height || self.collectionView.alpha != 0 {
         self.noImagesLabel.alpha = 0
       } else {
@@ -154,6 +156,17 @@ open class ImageGalleryView: UIView {
         self.noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
       }
     })
+  }
+  
+  func updateGalleryLayout() {
+    let totalWidth = UIScreen.main.bounds.width
+    frame.size.width = totalWidth
+    let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
+    topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
+    configuration.indicatorView.frame = CGRect(x: (totalWidth - configuration.indicatorWidth) / 2, y: (topSeparator.frame.height - configuration.indicatorHeight) / 2,
+                                               width: configuration.indicatorWidth, height: configuration.indicatorHeight)
+    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
+    collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
   }
 
   // MARK: - Photos handler

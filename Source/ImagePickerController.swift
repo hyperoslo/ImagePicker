@@ -245,6 +245,11 @@ open class ImagePickerController: UIViewController {
       selector: #selector(volumeChanged(_:)),
       name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
       object: nil)
+    
+    NotificationCenter.default.addObserver(self,
+      selector: #selector(handleRotation(_:)),
+      name: NSNotification.Name.UIDeviceOrientationDidChange,
+      object: nil)
   }
 
   @objc func didReloadAssets(_ notification: Notification) {
@@ -426,44 +431,20 @@ extension ImagePickerController: CameraViewDelegate {
   // MARK: - Rotation
 
   open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-    switch UIApplication.shared.statusBarOrientation {
-    case .landscapeLeft:
-        return UIInterfaceOrientationMask.landscapeLeft
-    case .landscapeRight:
-        return UIInterfaceOrientationMask.landscapeRight
-    case .portrait:
-        return UIInterfaceOrientationMask.portrait
-    case .portraitUpsideDown:
-        return UIInterfaceOrientationMask.portraitUpsideDown
-    default:
-        return UIInterfaceOrientationMask.all
-    }
+    return .all
   }
-
-  @objc public func handleRotation(_ note: Notification) {
+  
+  @objc public func handleRotation(_ note: Notification?) {
     applyOrientationTransforms()
   }
 
   func applyOrientationTransforms() {
-    let rotate = Helper.rotationTransform()
+    _ = Helper.getOrientation()
+    cameraController.setPreviewLayerOrientation()
 
     UIView.animate(withDuration: 0.25, animations: {
-      [self.topView.rotateCamera, self.bottomContainer.pickerButton,
-       self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
-        $0.transform = rotate
-      }
-
       self.galleryView.collectionViewLayout.invalidateLayout()
-
-      let translate: CGAffineTransform
-      if [UIDeviceOrientation.landscapeLeft, UIDeviceOrientation.landscapeRight]
-        .contains(UIDevice.current.orientation) {
-        translate = CGAffineTransform(translationX: -20, y: 15)
-      } else {
-        translate = CGAffineTransform.identity
-      }
-
-      self.topView.flashButton.transform = rotate.concatenating(translate)
+      self.galleryView.updateFrames()
     })
   }
 }

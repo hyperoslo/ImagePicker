@@ -104,6 +104,12 @@ extension ImagePickerController {
   func setupConstraints() {
     let attributes: [NSLayoutAttribute] = [.bottom, .right, .width]
     let topViewAttributes: [NSLayoutAttribute] = [.left, .top, .width]
+    
+    for attribute: NSLayoutAttribute in [.leading, .trailing] {
+      view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: attribute,
+       relatedBy: .equal, toItem: view, attribute: attribute,
+       multiplier: 1, constant: 0))
+    }
 
     for attribute in attributes {
       view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: attribute,
@@ -122,11 +128,22 @@ extension ImagePickerController {
         relatedBy: .equal, toItem: self.view, attribute: attribute,
         multiplier: 1, constant: 0))
     }
+    
+    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .bottom,
+     relatedBy: .equal, toItem: bottomContainer, attribute: .top,
+     multiplier: 1, constant: 0))
+    
+    let galleryHeight: CGFloat = UIScreen.main.nativeBounds.height == 960
+      ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
 
+    view.addConstraint(NSLayoutConstraint(item: galleryView, attribute: .height,
+     relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
+     multiplier: 1, constant: galleryHeight))
+    
     view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .height,
       relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
       multiplier: 1, constant: BottomContainerView.Dimensions.height))
-
+    
     view.addConstraint(NSLayoutConstraint(item: topView, attribute: .height,
       relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
       multiplier: 1, constant: TopView.Dimensions.height))

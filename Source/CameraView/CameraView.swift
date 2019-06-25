@@ -151,17 +151,21 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     cameraMan.delegate = self
     cameraMan.setup(self.startOnFrontCamera)
   }
+  
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-
-    previewLayer?.connection?.videoOrientation = Helper.videoOrientation()
+    previewLayer?.connection?.videoOrientation = Helper.getVideoOrientation(fromDeviceOrientation: UIDevice.current.orientation)
     locationManager?.startUpdatingLocation()
   }
 
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     locationManager?.stopUpdatingLocation()
+  }
+  
+  func setPreviewLayerOrientation() {
+    previewLayer?.connection?.videoOrientation = Helper.getVideoOrientation(fromDeviceOrientation: UIDevice.current.orientation)
   }
 
   func setupPreviewLayer() {
@@ -195,6 +199,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     blurView.frame = view.bounds
     containerView.frame = view.bounds
     capturedImageView.frame = view.bounds
+    previewLayer?.frame = view.bounds
   }
 
   // MARK: - Actions
