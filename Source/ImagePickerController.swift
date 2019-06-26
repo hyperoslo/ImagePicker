@@ -439,7 +439,7 @@ extension ImagePickerController: CameraViewDelegate {
   }
 
   func applyOrientationTransforms() {
-    _ = Helper.getOrientation()
+    Helper.setOrientation()
     cameraController.setPreviewLayerOrientation()
 
     UIView.animate(withDuration: 0.25, animations: {
