@@ -155,7 +155,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    previewLayer?.connection?.videoOrientation = Helper.getVideoOrientation(fromDeviceOrientation: UIDevice.current.orientation)
+    setPreviewLayerOrientation()
     locationManager?.startUpdatingLocation()
   }
 
