@@ -17,6 +17,33 @@ struct Helper {
       return CGAffineTransform.identity
     }
   }
+  
+  static func getOrientation() -> UIDeviceOrientation {
+    let currentOrientation = UIDevice.current.orientation
+    
+    switch currentOrientation {
+    case .portrait:
+      previousOrientation = currentOrientation
+      return currentOrientation
+    case .portraitUpsideDown:
+      previousOrientation = currentOrientation
+      return currentOrientation
+    case .landscapeLeft:
+      previousOrientation = currentOrientation
+      return currentOrientation
+    case .landscapeRight:
+      previousOrientation = currentOrientation
+      return currentOrientation
+    default:
+      break
+    }
+    
+    if previousOrientation == .unknown {
+      previousOrientation = .portrait
+      return previousOrientation
+    }
+    return previousOrientation
+  }
 
   static func getVideoOrientation(fromDeviceOrientation orientation: UIDeviceOrientation) -> AVCaptureVideoOrientation {
     switch orientation {
