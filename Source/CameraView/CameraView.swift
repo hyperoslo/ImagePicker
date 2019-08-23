@@ -49,7 +49,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     let progressView = UIView()
     progressView.frame = CGRect(x: self.view.frame.size.width / 2 - progressView.frame.size.width / 2, y: self.view.frame.size.width / 2 - progressView.frame.size.width / 2, width: 50, height: 50)
     progressView.backgroundColor = UIColor.blue
-    let indicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let indicator = UIActivityIndicatorView(style: .whiteLarge)
     indicator.frame = CGRect(x: progressView.frame.size.width/2 - indicator.frame.size.width/2, y: progressView.frame.size.width/2 - indicator.frame.size.width/2, width: indicator.frame.size.width, height: indicator.frame.size.height)
     indicator.startAnimating()
     progressView.addSubview(indicator)
@@ -71,11 +71,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     let button = UIButton(type: .system)
     let title = NSAttributedString(string: self.configuration.settingsTitle,
       attributes: [
-        NSAttributedStringKey.font: self.configuration.settingsFont,
-        NSAttributedStringKey.foregroundColor: self.configuration.settingsColor
+        NSAttributedString.Key.font: self.configuration.settingsFont,
+        NSAttributedString.Key.foregroundColor: self.configuration.settingsColor
       ])
 
-    button.setAttributedTitle(title, for: UIControlState())
+    button.setAttributedTitle(title, for: UIControl.State())
     button.contentEdgeInsets = UIEdgeInsets(top: 5.0, left: 10.0, bottom: 5.0, right: 10.0)
     button.sizeToFit()
     button.layer.borderColor = self.configuration.settingsColor.cgColor
@@ -206,7 +206,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   @objc func settingsButtonDidTap() {
     DispatchQueue.main.async {
-      if let settingsURL = URL(string: UIApplicationOpenSettingsURLString) {
+      if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
         UIApplication.shared.openURL(settingsURL)
       }
     }

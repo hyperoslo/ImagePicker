@@ -34,7 +34,7 @@ class CameraMan {
     // Input
     AVCaptureDevice
     .devices().flatMap {
-      return $0 as? AVCaptureDevice
+      return $0 as AVCaptureDevice
     }.filter {
       return $0.hasMediaType(AVMediaType.video)
     }.forEach {
