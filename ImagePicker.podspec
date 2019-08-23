@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "ImagePicker"
   s.summary          = "Reinventing the way ImagePicker works."
-  s.version          = "2.1.1"
+  s.version          = "3.0.0.5"
   s.homepage         = "https://github.com/hyperoslo/ImagePicker"
   s.license          = 'MIT'
   s.author           = { "Hyper Interaktiv AS" => "ios@hyper.no" }
@@ -12,5 +12,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Source/**/*'
   s.resource_bundles = { 'ImagePicker' => ['Images/*.{png}'] }
   s.frameworks = 'AVFoundation'
-  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
 end
