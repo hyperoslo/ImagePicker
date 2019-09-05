@@ -413,6 +413,13 @@ extension ImagePickerController: CameraViewDelegate {
       if self.configuration.allowMultiplePhotoSelection == false {
         self.stack.assets.removeAll()
       }
+      if self.imageLimit == 1 {
+        for asset in self.stack.assets {
+          self.stack.dropAsset(asset)
+        }
+        
+        self.stack.resetAssets([])
+      }
       self.stack.pushAsset(asset)
     }
 
