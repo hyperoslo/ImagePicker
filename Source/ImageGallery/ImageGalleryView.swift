@@ -249,6 +249,23 @@ extension ImageGalleryView: UICollectionViewDelegate {
           cell.selectedImageView.transform = CGAffineTransform.identity
         })
         self.selectedStack.pushAsset(asset)
+      } else if self.imageLimit == 1 {
+        UIView.animate(withDuration: 0.2, animations: {
+          cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        }, completion: { _ in
+          cell.selectedImageView.image = nil
+        })
+        for asset in self.selectedStack.assets {
+          self.selectedStack.dropAsset(asset)
+        }
+        
+        self.selectedStack.resetAssets([])
+        cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
+        cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        UIView.animate(withDuration: 0.2, animations: {
+          cell.selectedImageView.transform = CGAffineTransform.identity
+        })
+        self.selectedStack.pushAsset(asset)
       }
     }
   }
