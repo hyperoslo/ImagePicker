@@ -17,9 +17,9 @@ extension ImageGalleryView: UICollectionViewDataSource {
 
     let asset = assets[(indexPath as NSIndexPath).row]
 
-    AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in
-      if let image = image {
-        cell.configureCell(image)
+    AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { asset in
+        if let asset = asset, let thumbnail = asset.thumbnailImage {
+        cell.configureCell(thumbnail)
 
         if (indexPath as NSIndexPath).row == 0 && self.shouldTransform {
           cell.transform = CGAffineTransform(scaleX: 0, y: 0)
@@ -31,14 +31,18 @@ extension ImageGalleryView: UICollectionViewDataSource {
           self.shouldTransform = false
         }
 
-        if self.selectedStack.containsAsset(asset) {
+        if self.selectedStack.containsAsset(asset) && (!asset.cameraPicture || asset.isSelected) {
           cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
           cell.selectedImageView.alpha = 1
           cell.selectedImageView.transform = CGAffineTransform.identity
         } else {
           cell.selectedImageView.image = nil
         }
-        cell.duration = asset.duration
+        if let phAsset = asset.phAsset{
+            cell.duration = phAsset.duration
+        } else {
+            cell.duration = 0
+        }
       }
     }
 

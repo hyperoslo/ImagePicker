@@ -4,9 +4,9 @@ import PhotosUI
 
 protocol CameraViewDelegate: class {
 
-  func setFlashButtonHidden(_ hidden: Bool)
-  func imageToLibrary()
-  func cameraNotAvailable()
+    func setFlashButtonHidden(_ hidden: Bool)
+    func imageToLibrary(fromCamera: Bool, asset: IPAsset?)
+    func cameraNotAvailable()
 }
 
 class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
@@ -169,7 +169,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   }
 
   func setupPreviewLayer() {
-    let layer = AVCaptureVideoPreviewLayer(session: cameraMan.session) 
+    let layer = AVCaptureVideoPreviewLayer(session: cameraMan.session)
 
     layer.backgroundColor = configuration.mainColor.cgColor
     layer.autoreverses = true
@@ -215,7 +215,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   // MARK: - Camera actions
 
   func rotateCamera() {
-    UIView.animate(withDuration: 0.3, animations: { 
+    UIView.animate(withDuration: 0.3, animations: {
       self.containerView.alpha = 1
       }, completion: { _ in
         self.cameraMan.switchCamera {
@@ -246,9 +246,16 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
         })
     })
 
-    cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation) {
+    cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation) { image in
       completion()
-      self.delegate?.imageToLibrary()
+        var ipAsset: IPAsset? = nil
+        if let image = image {
+            ipAsset = IPAsset()
+            ipAsset!.image = image
+            ipAsset!.cameraPicture = true
+            ipAsset!.isSelected = true
+        }
+        self.delegate?.imageToLibrary(fromCamera: true, asset: ipAsset)
     }
   }
 
@@ -271,7 +278,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     cameraMan.focus(convertedPoint)
 
     focusImageView.center = point
-    UIView.animate(withDuration: 0.5, animations: { 
+    UIView.animate(withDuration: 0.5, animations: {
       self.focusImageView.alpha = 1
       self.focusImageView.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
       }, completion: { _ in

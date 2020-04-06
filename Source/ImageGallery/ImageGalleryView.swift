@@ -78,7 +78,7 @@ open class ImageGalleryView: UIView {
     }()
 
   open lazy var selectedStack = ImageStack()
-  lazy var assets = [PHAsset]()
+  lazy var assets = [IPAsset]()
 
   weak var delegate: ImageGalleryPanGestureDelegate?
   var collectionSize: CGSize?
@@ -96,10 +96,20 @@ open class ImageGalleryView: UIView {
     super.init(frame: .zero)
     configure()
   }
+    
+  public init(configuration: Configuration? = nil, selectedStack: ImageStack) {
+      if let configuration = configuration {
+        self.configuration = configuration
+      }
+      
+      super.init(frame: .zero)
+      self.selectedStack = selectedStack
+      self.assets = selectedStack.assets
+      configure()
+  }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    configure()
   }
 
   required public init?(coder aDecoder: NSCoder) {
@@ -117,7 +127,11 @@ open class ImageGalleryView: UIView {
     topSeparator.addSubview(configuration.indicatorView)
 
     imagesBeforeLoading = 0
-    fetchPhotos()
+    fetchPhotos(withAssets: assets) {
+        if let selectedAsset = self.selectedStack.assets.filter({ $0.cameraPicture && $0.isSelected }).first {
+            self.selectedStack.pushAsset(selectedAsset)
+        }
+    }
   }
 
   // MARK: - Layout
@@ -139,7 +153,6 @@ open class ImageGalleryView: UIView {
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
     noImagesLabel.center = CGPoint(x: bounds.width / 2, y: (bounds.height + Dimensions.galleryBarHeight) / 2)
 
-    collectionView.reloadData()
   }
 
   func updateNoImagesLabel() {
@@ -171,14 +184,17 @@ open class ImageGalleryView: UIView {
 
   // MARK: - Photos handler
 
-  func fetchPhotos(_ completion: (() -> Void)? = nil) {
-    AssetManager.fetch(withConfiguration: configuration) { assets in
-      self.assets.removeAll()
-      self.assets.append(contentsOf: assets)
-      self.collectionView.reloadData()
+    func fetchPhotos(withAssets iPAssets:[IPAsset], _ completion: (() -> Void)? = nil) {
+        AssetManager.fetch(withConfiguration: configuration) { assets in
+            self.assets.removeAll()
+            if iPAssets.count > 0 {
+                self.assets.append(contentsOf: iPAssets.filter({ $0.cameraPicture == true }))
+            }
+            self.assets.append(contentsOf: assets)
+            self.collectionView.reloadData()
 
-      completion?()
-    }
+            completion?()
+        }
   }
 
   // MARK: - Pan gesture recognizer
@@ -257,7 +273,7 @@ extension ImageGalleryView: UICollectionViewDelegate {
       } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
         cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
         cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
-        UIView.animate(withDuration: 0.2, animations: { 
+        UIView.animate(withDuration: 0.2, animations: {
           cell.selectedImageView.transform = CGAffineTransform.identity
         })
         self.selectedStack.pushAsset(asset)
