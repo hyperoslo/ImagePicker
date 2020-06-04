@@ -1,6 +1,5 @@
 import UIKit
 import ImagePicker
-import Lightbox
 
 class ViewController: UIViewController, ImagePickerDelegate {
 
@@ -36,7 +35,7 @@ class ViewController: UIViewController, ImagePickerDelegate {
   }
 
   @objc func buttonTouched(button: UIButton) {
-    var config = Configuration()
+    let config = Configuration()
     config.doneButtonTitle = "Finish"
     config.noImagesTitle = "Sorry! There are no images here!"
     config.recordLocation = false
@@ -55,6 +54,7 @@ class ViewController: UIViewController, ImagePickerDelegate {
   }
 
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+    /*
     guard images.count > 0 else { return }
 
     let lightboxImages = images.map {
@@ -63,6 +63,7 @@ class ViewController: UIViewController, ImagePickerDelegate {
 
     let lightbox = LightboxController(images: lightboxImages, startIndex: 0)
     imagePicker.present(lightbox, animated: true, completion: nil)
+     */
   }
 
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
