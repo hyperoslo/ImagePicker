@@ -2,13 +2,22 @@ import Foundation
 import UIKit
 import Photos
 
+extension Bundle {
+    static func myResourceBundle() -> Bundle? {
+        let bundles = Bundle.allBundles
+        let bundlePaths = bundles.compactMap { $0.resourceURL?.appendingPathComponent("ImagePicker", isDirectory: false).appendingPathExtension("bundle") }
+
+        return bundlePaths.compactMap({ Bundle(url: $0) }).first
+    }
+}
+
 open class AssetManager {
 
   public static func getImage(_ name: String) -> UIImage {
     let traitCollection = UITraitCollection(displayScale: 3)
-    var bundle = Bundle(for: AssetManager.self)
+    var bundle = Bundle.myResourceBundle()
 
-    if let resource = bundle.resourcePath, let resourceBundle = Bundle(path: resource + "/ImagePicker.bundle") {
+    if let resource = bundle?.resourcePath, let resourceBundle = Bundle(path: resource + "/ImagePicker.bundle") {
       bundle = resourceBundle
     }
 
