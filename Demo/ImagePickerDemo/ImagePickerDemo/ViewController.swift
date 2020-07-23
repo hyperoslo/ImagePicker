@@ -40,10 +40,12 @@ class ViewController: UIViewController, ImagePickerDelegate {
     config.noImagesTitle = "Sorry! There are no images here!"
     config.recordLocation = false
     config.allowVideoSelection = true
+    config.photoQuality = .low
 
     let imagePicker = ImagePickerController(configuration: config)
     imagePicker.delegate = self
 
+    imagePicker.modalPresentationStyle = .fullScreen
     present(imagePicker, animated: true, completion: nil)
   }
 

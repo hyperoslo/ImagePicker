@@ -50,7 +50,7 @@ open class AssetManager {
       }
     }
   }
-
+ 
   public static func resolveAssets(_ assets: [PHAsset]) -> [Data] {
     let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()

@@ -18,6 +18,7 @@ class CameraMan {
   var frontCamera: AVCaptureDeviceInput?
   var stillImageOutput: AVCaptureStillImageOutput?
   var startOnFrontCamera: Bool = false
+  var photoQuality: AVCaptureSession.Preset = .photo
 
   deinit {
     stop()
@@ -25,8 +26,9 @@ class CameraMan {
 
   // MARK: - Setup
 
-  func setup(_ startOnFrontCamera: Bool = false) {
+  func setup(_ startOnFrontCamera: Bool = false, photoQuality: AVCaptureSession.Preset) {
     self.startOnFrontCamera = startOnFrontCamera
+    self.photoQuality = photoQuality
     checkPermission()
   }
 
@@ -242,7 +244,7 @@ class CameraMan {
 
   func preferredPresets() -> [String] {
     return [
-      AVCaptureSession.Preset.high.rawValue,
+      self.photoQuality.rawValue,
       AVCaptureSession.Preset.high.rawValue,
       AVCaptureSession.Preset.low.rawValue
     ]
