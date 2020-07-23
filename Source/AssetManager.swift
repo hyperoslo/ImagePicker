@@ -51,7 +51,7 @@ open class AssetManager {
     }
   }
 
-  public static func resolveAssets(_ assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280)) -> [UIImage] {
+  public static func resolveAssets(_ assets: [PHAsset], size: CGSize = PHImageManagerMaximumSize) -> [UIImage] {
     let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
     requestOptions.isSynchronous = true

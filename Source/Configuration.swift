@@ -53,6 +53,7 @@ import UIKit
   @objc public var allowedOrientations = UIInterfaceOrientationMask.all
   @objc public var allowVolumeButtonsToTakePicture = true
   @objc public var useLowResolutionPreviewImage = false
+  @objc public var photoQuality: AVCaptureSession.Preset = .high
 
   // MARK: Images
   @objc public var indicatorView: UIView = {

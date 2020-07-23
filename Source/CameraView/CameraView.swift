@@ -136,7 +136,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }
 
     cameraMan.delegate = self
-    cameraMan.setup(self.startOnFrontCamera)
+    cameraMan.setup(self.startOnFrontCamera, photoQuality: self.configuration.photoQuality)
   }
 
   override func viewDidAppear(_ animated: Bool) {
