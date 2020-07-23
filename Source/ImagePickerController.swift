@@ -2,10 +2,20 @@ import UIKit
 import MediaPlayer
 import Photos
 
+@objc public class Image: NSObject {
+
+  public let data: Data
+  var image: UIImage? { UIImage(data: data) }
+
+  fileprivate init(data: Data) {
+    self.data = data
+  }
+}
+
 @objc public protocol ImagePickerDelegate: NSObjectProtocol {
 
-  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
-  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
+  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [Image])
+  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [Image])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
 }
 
@@ -72,7 +82,6 @@ open class ImagePickerController: UIViewController {
   @objc open weak var delegate: ImagePickerDelegate?
   open var stack = ImageStack()
   open var imageLimit = 0
-  open var preferredImageSize: CGSize?
   open var startOnFrontCamera = false
   var totalSize: CGSize { return UIScreen.main.bounds.size }
   var initialFrame: CGRect?
@@ -370,13 +379,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    var images: [UIImage]
-    if let preferredImageSize = preferredImageSize {
-      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
-    } else {
-      images = AssetManager.resolveAssets(stack.assets)
-    }
-
+    let images = AssetManager.resolveAssets(stack.assets).map { Image(data: $0) }
     delegate?.doneButtonDidPress(self, images: images)
   }
 
@@ -385,13 +388,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    var images: [UIImage]
-    if let preferredImageSize = preferredImageSize {
-        images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
-    } else {
-        images = AssetManager.resolveAssets(stack.assets)
-    }
-
+    let images = AssetManager.resolveAssets(stack.assets).map { Image(data: $0) }
     delegate?.wrapperDidPress(self, images: images)
   }
 }
