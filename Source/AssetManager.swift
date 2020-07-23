@@ -50,18 +50,17 @@ open class AssetManager {
       }
     }
   }
-
-  public static func resolveAssets(_ assets: [PHAsset], size: CGSize = PHImageManagerMaximumSize) -> [UIImage] {
+ 
+  public static func resolveAssets(_ assets: [PHAsset]) -> [Data] {
     let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
     requestOptions.isSynchronous = true
 
-    var images = [UIImage]()
+    var images = [Data]()
     for asset in assets {
-      imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, _ in
-        if let image = image {
-          images.append(image)
-        }
+      imageManager.requestImageData(for: asset, options: requestOptions) { data, _, _, _ in
+        guard let data = data else { return }
+        images.append(data)
       }
     }
     return images
