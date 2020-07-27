@@ -4,6 +4,7 @@ import CoreLocation
 class LocationManager: NSObject, CLLocationManagerDelegate {
   var locationManager = CLLocationManager()
   var latestLocation: CLLocation?
+  var latestHeading: CLHeading?
 
   override init() {
     super.init()
@@ -14,10 +15,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
 
   func startUpdatingLocation() {
     locationManager.startUpdatingLocation()
+    locationManager.startUpdatingHeading()
   }
 
   func stopUpdatingLocation() {
     locationManager.stopUpdatingLocation()
+    locationManager.stopUpdatingHeading()
   }
 
   // MARK: - CLLocationManagerDelegate
@@ -27,11 +30,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     latestLocation = locations.sorted { $0.horizontalAccuracy < $1.horizontalAccuracy }.first
   }
 
+  func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+    self.latestHeading = newHeading
+  }
+
   func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
     if status == .authorizedAlways || status == .authorizedWhenInUse {
-      locationManager.startUpdatingLocation()
+      startUpdatingLocation()
     } else {
-      locationManager.stopUpdatingLocation()
+      stopUpdatingLocation()
     }
   }
 }

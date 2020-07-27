@@ -1,6 +1,7 @@
 import Foundation
 import AVFoundation
 import PhotosUI
+import MobileCoreServices
 
 protocol CameraManDelegate: class {
   func cameraManNotAvailable(_ cameraMan: CameraMan)
@@ -151,7 +152,8 @@ class CameraMan {
     }
   }
 
-  func takePhoto(_ previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?, completion: (() -> Void)? = nil) {
+  func takePhoto(_ previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?,
+                 heading: CLHeading?, completion: (() -> Void)? = nil) {
     guard let connection = stillImageOutput?.connection(with: AVMediaType.video) else { return }
 
     connection.videoOrientation = Helper.videoOrientation()
@@ -159,16 +161,14 @@ class CameraMan {
     queue.async {
       self.stillImageOutput?.captureStillImageAsynchronously(from: connection) { buffer, error in
         guard let buffer = buffer, error == nil && CMSampleBufferIsValid(buffer),
-          let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer),
-          let image = UIImage(data: imageData)
-          else {
+          let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer) else {
             DispatchQueue.main.async {
               completion?()
             }
             return
         }
 
-        self.savePhoto(image, location: location, completion: completion)
+        self.savePhoto(imageData, location: location, heading: heading, completion: completion)
       }
     }
   }
@@ -182,6 +182,127 @@ class CameraMan {
         DispatchQueue.main.async {
           completion?()
         }
+    })
+  }
+
+  private func attachEXIF(to image: Data, exif: [String: Any]) -> Data? {
+    if
+    let imageDataProvider = CGDataProvider(data: image as CFData),
+    let imageRef = CGImage(jpegDataProviderSource: imageDataProvider, decode: nil, shouldInterpolate: true, intent: .defaultIntent),
+    let newImageData = CFDataCreateMutable(nil, 0),
+    let type = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, "image/jpeg" as CFString, kUTTypeImage),
+    let destination = CGImageDestinationCreateWithData(newImageData, type.takeRetainedValue(), 1, nil) {
+
+      CGImageDestinationAddImage(destination, imageRef, exif as CFDictionary)
+      CGImageDestinationFinalize(destination)
+      return newImageData as Data
+    }
+    return nil
+  }
+
+  private func getGPSDictionary(for location: CLLocation, and heading: CLHeading?) -> [String: Any] {
+    var dictionary = [String: Any]()
+
+    // Time and date must be provided as strings, not as an Date object
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm:ss.SSSSSS"
+    dictionary[kCGImagePropertyGPSTimeStamp as String] = formatter.string(from: location.timestamp)
+    formatter.dateFormat = "yyyy:MM:dd"
+    dictionary[kCGImagePropertyGPSDateStamp as String] = formatter.string(from: location.timestamp)
+
+    // Latitude
+    let latitude = location.coordinate.latitude
+    dictionary[kCGImagePropertyGPSLatitudeRef as String] = (latitude < 0) ? "S" : "N"
+    dictionary[kCGImagePropertyGPSLatitude as String] = fabs(latitude)
+
+    // Longitude
+    let longitude = location.coordinate.longitude
+    dictionary[kCGImagePropertyGPSLongitudeRef as String] = (longitude < 0) ? "W" : "E"
+    dictionary[kCGImagePropertyGPSLongitude as String] = fabs(longitude)
+
+    // Degree of Precision
+    dictionary[kCGImagePropertyGPSDOP as String] = location.horizontalAccuracy
+
+    // Altitude
+    let altitude = location.altitude
+    if !altitude.isNaN {
+      dictionary[kCGImagePropertyGPSAltitudeRef as String] = altitude < 0 ? 1 : 0
+      dictionary[kCGImagePropertyGPSAltitude as String] = fabs(altitude)
+    }
+
+    // Speed, must be converted from m/s to km/h
+    if location.speed >= 0 {
+      dictionary[kCGImagePropertyGPSSpeedRef as String] = "K"
+      dictionary[kCGImagePropertyGPSSpeed as String] = location.speed * (3600.0 / 1000.0)
+    }
+
+    // Direction of movement
+    if location.course >= 0 {
+      dictionary[kCGImagePropertyGPSTrackRef as String] = "T"
+      dictionary[kCGImagePropertyGPSTrack as String] = location.course
+    }
+
+    // Direction the device is pointing
+    if let heading = heading, heading.headingAccuracy >= 0.0 {
+      if heading.trueHeading >= 0.0 {
+        dictionary[kCGImagePropertyGPSImgDirectionRef as String] = "T"
+        dictionary[kCGImagePropertyGPSImgDirection as String] = heading.trueHeading
+      } else {
+        // Only magnetic heading is available
+        dictionary[kCGImagePropertyGPSImgDirectionRef as String] = "M"
+        dictionary[kCGImagePropertyGPSImgDirection as String] = heading.magneticHeading
+      }
+    }
+
+    return dictionary
+  }
+
+  func savePhoto(_ image: Data, location: CLLocation?, heading: CLHeading?, completion: (() -> Void)? = nil) {
+
+    func complite() {
+      DispatchQueue.main.async {
+        completion?()
+      }
+    }
+
+    let path = NSTemporaryDirectory() + "file-\(arc4random()).jpg"
+    let url = URL(fileURLWithPath: path)
+    guard let imageSource = CGImageSourceCreateWithData(image as CFData, nil) else {
+      complite()
+      return
+    }
+    guard var properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [String: Any] else {
+     complite()
+     return
+    }
+    if let location = location {
+        properties[kCGImagePropertyGPSDictionary as String] = self.getGPSDictionary(for: location, and: heading)
+    }
+    guard let data = self.attachEXIF(to: image, exif: properties) else {
+      complite()
+      return
+    }
+
+    PHPhotoLibrary.shared().performChanges({
+      let request: PHAssetChangeRequest?
+      do {
+        try data.write(to: url)
+        request = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: url)
+      } catch {
+        request = UIImage(data: image).flatMap {
+          PHAssetChangeRequest.creationRequestForAsset(from: $0)
+        }
+      }
+
+      guard let _request = request else {
+        complite()
+        return
+      }
+
+      _request.creationDate = Date()
+      _request.location = location
+    }, completionHandler: { (_, _) in
+      complite()
     })
   }
 
