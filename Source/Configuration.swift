@@ -1,7 +1,7 @@
 import AVFoundation
 import UIKit
 
-@objc public class Configuration: NSObject {
+@objc public class ImagePickerConfiguration: NSObject {
 
   // MARK: Colors
 
@@ -67,7 +67,7 @@ import UIKit
 }
 
 // MARK: - Orientation
-extension Configuration {
+extension ImagePickerConfiguration {
 
   @objc public var rotationTransform: CGAffineTransform {
     let currentOrientation = UIDevice.current.orientation
