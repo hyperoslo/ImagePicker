@@ -35,7 +35,7 @@ class ViewController: UIViewController, ImagePickerDelegate {
   }
 
   @objc func buttonTouched(button: UIButton) {
-    let config = Configuration()
+    let config = ImagePickerConfiguration()
     config.doneButtonTitle = "Finish"
     config.noImagesTitle = "Sorry! There are no images here!"
     config.recordLocation = false
