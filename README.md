@@ -69,6 +69,17 @@ And when you call any delegate method that returns images, add in the first line
 let images = imageAssets
 ```
 
+## FAQ
+
+### Limiting selection to 1 item
+
+```swift
+let config = Configuration()
+config.allowMultiplePhotoSelection = false
+let imagePicker = ImagePickerController(configuration: config)
+imagePicker.delegate = self
+```
+
 ## Installation
 
 **ImagePicker** is available through [CocoaPods](http://cocoapods.org). To install
