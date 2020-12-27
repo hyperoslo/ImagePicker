@@ -88,6 +88,13 @@ open class BottomContainerView: UIView {
     stackView.addGestureRecognizer(tapGestureRecognizer)
 
     setupConstraints()
+    if configuration.galleryOnly {
+      borderPickerButton.isHidden = true
+      pickerButton.isHidden = true
+    }
+    if !configuration.allowMultiplePhotoSelection {
+      stackView.isHidden = true
+    }
   }
 
   // MARK: - Action methods
