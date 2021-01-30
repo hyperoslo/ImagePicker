@@ -42,7 +42,7 @@ open class ImageGalleryView: UIView {
 
   lazy var collectionViewLayout: UICollectionViewLayout = { [unowned self] in
     let layout = ImageGalleryLayout(configuration: self.configuration)
-    layout.scrollDirection = .horizontal
+    layout.scrollDirection = configuration.galleryOnly ? .vertical : .horizontal
     layout.minimumInteritemSpacing = self.configuration.cellSpacing
     layout.minimumLineSpacing = 2
     layout.sectionInset = UIEdgeInsets.zero
@@ -113,7 +113,11 @@ open class ImageGalleryView: UIView {
     collectionView.register(ImageGalleryViewCell.self,
                             forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
 
-    [collectionView, topSeparator].forEach { addSubview($0) }
+    if configuration.galleryOnly {
+      addSubview(collectionView)
+    } else {
+      [collectionView, topSeparator].forEach { addSubview($0) }
+    }
 
     topSeparator.addSubview(configuration.indicatorView)
 
@@ -136,8 +140,19 @@ open class ImageGalleryView: UIView {
     topSeparator.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleWidth]
     configuration.indicatorView.frame = CGRect(x: (totalWidth - configuration.indicatorWidth) / 2, y: (topSeparator.frame.height - configuration.indicatorHeight) / 2,
       width: configuration.indicatorWidth, height: configuration.indicatorHeight)
-    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
-    collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
+    
+    collectionView.frame = CGRect(x: 0,
+                                  y: topSeparator.superview != nil ? topSeparator.frame.height : 0,
+                                  width: totalWidth,
+                                  height: collectionFrame - topSeparator.frame.height)
+    
+    if configuration.galleryOnly {
+      let cellSize = collectionView.bounds.width/3 - self.configuration.cellSpacing*2
+      collectionSize = CGSize(width: cellSize, height: cellSize)
+    } else {
+      collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
+    }
+    
     noImagesLabel.center = CGPoint(x: bounds.width / 2, y: (bounds.height + Dimensions.galleryBarHeight) / 2)
 
     collectionView.reloadData()
