@@ -54,6 +54,7 @@ import UIKit
   @objc public var allowVolumeButtonsToTakePicture = true
   @objc public var useLowResolutionPreviewImage = false
   @objc public var galleryOnly = false
+  @objc public var albumName : String? = nil
 
   // MARK: Images
   @objc public var indicatorView: UIView = {
