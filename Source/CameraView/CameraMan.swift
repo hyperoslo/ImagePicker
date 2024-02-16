@@ -46,7 +46,7 @@ class CameraMan {
     }
 
     AVCaptureDevice
-    .DiscoverySession(deviceTypes: [.builtInTripleCamera, .builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
+    .DiscoverySession(deviceTypes: [.builtInTripleCamera, .builtInDualCamera, .builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
     .devices
     .forEach {
       let backCamera = try? AVCaptureDeviceInput(device: $0)
@@ -255,9 +255,9 @@ class CameraMan {
 
   func preferredPresets() -> [String] {
     return [
-      AVCaptureSession.Preset.high.rawValue,
-      AVCaptureSession.Preset.high.rawValue,
-      AVCaptureSession.Preset.low.rawValue
+        AVCaptureSession.Preset.high.rawValue,
+        AVCaptureSession.Preset.medium.rawValue,
+        AVCaptureSession.Preset.low.rawValue,
     ]
   }
 }
