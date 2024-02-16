@@ -33,17 +33,26 @@ class CameraMan {
   func setupDevices() {
     // Input
     AVCaptureDevice
-    .devices()
-    .filter {
-      return $0.hasMediaType(AVMediaType.video)
-    }.forEach {
+    .DiscoverySession(deviceTypes: [.builtInTripleCamera,.builtInTelephotoCamera], mediaType: AVMediaType.video, position: .front)
+    .devices
+    .forEach {
       switch $0.position {
       case .front:
         self.frontCamera = try? AVCaptureDeviceInput(device: $0)
-      case .back:
-        self.backCamera = try? AVCaptureDeviceInput(device: $0)
+
       default:
         break
+      }
+    }
+
+    AVCaptureDevice
+    .DiscoverySession(deviceTypes: [.builtInTripleCamera, .builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
+    .devices
+    .forEach {
+      let backCamera = try? AVCaptureDeviceInput(device: $0)
+      if self.backCamera == nil
+      {
+        self.backCamera = backCamera
       }
     }
 
@@ -203,15 +212,19 @@ class CameraMan {
     }
   }
 
-  func zoom(_ zoomFactor: CGFloat) {
-    guard let device = currentInput?.device, device.position == .back else { return }
+    func zoom(_ zoomFactor: CGFloat) {
+        guard var device = currentInput?.device, device.position == .back else { return }
 
-    queue.async {
-      self.lock {
-        device.videoZoomFactor = zoomFactor
-      }
+        queue.async {
+          do
+          {
+            var newZoomFactor =  zoomFactor < 1.0 ? 1.0 : zoomFactor
+            self.lock {
+              device.ramp(toVideoZoomFactor: newZoomFactor, withRate: 4.0)
+            }
+          }
+        }
     }
-  }
 
   // MARK: - Lock
 
