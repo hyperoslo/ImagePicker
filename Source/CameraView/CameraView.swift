@@ -153,7 +153,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
     layer.backgroundColor = configuration.mainColor.cgColor
     layer.autoreverses = true
-    layer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+    layer.videoGravity = AVLayerVideoGravity.resizeAspect 
 
     view.layer.insertSublayer(layer, at: 0)
     layer.frame = view.layer.frame
