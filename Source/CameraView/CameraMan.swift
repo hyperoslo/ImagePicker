@@ -45,11 +45,11 @@ class CameraMan {
       }
     }
 
-    let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInUltraWideCamera, .builtInDualCamera, .builtInWideAngleCamera], mediaType: .video, position: .back)
+    let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTripleCamera, .builtInDualCamera, .builtInWideAngleCamera], mediaType: .video, position: .back)
     var selectedDevice: AVCaptureDevice?
 
     // Attempt to find a triple camera first
-    if let tripleCameraDevice = discoverySession.devices.first(where: { $0.deviceType == .builtInUltraWideCamera }) {
+    if let tripleCameraDevice = discoverySession.devices.first(where: { $0.deviceType == .builtInTripleCamera }) {
         selectedDevice = tripleCameraDevice
     } else if let dualCameraDevice = discoverySession.devices.first(where: { $0.deviceType == .builtInDualCamera }) {
         // Fallback to dual camera if no triple camera is found
