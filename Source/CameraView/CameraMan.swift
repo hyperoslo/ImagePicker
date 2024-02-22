@@ -33,18 +33,40 @@ class CameraMan {
   func setupDevices() {
     // Input
     AVCaptureDevice
-    .devices()
-    .filter {
-      return $0.hasMediaType(AVMediaType.video)
-    }.forEach {
+    .DiscoverySession(deviceTypes: [.builtInTripleCamera,.builtInTelephotoCamera], mediaType: AVMediaType.video, position: .front)
+    .devices
+    .forEach {
       switch $0.position {
       case .front:
         self.frontCamera = try? AVCaptureDeviceInput(device: $0)
-      case .back:
-        self.backCamera = try? AVCaptureDeviceInput(device: $0)
+
       default:
         break
       }
+    }
+
+    let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTripleCamera, .builtInDualCamera, .builtInWideAngleCamera], mediaType: .video, position: .back)
+    var selectedDevice: AVCaptureDevice?
+
+    // Attempt to find a triple camera first
+    if let tripleCameraDevice = discoverySession.devices.first(where: { $0.deviceType == .builtInTripleCamera }) {
+        selectedDevice = tripleCameraDevice
+    } else if let dualCameraDevice = discoverySession.devices.first(where: { $0.deviceType == .builtInDualCamera }) {
+        // Fallback to dual camera if no triple camera is found
+        selectedDevice = dualCameraDevice
+    } else if let wideAngleCameraDevice = discoverySession.devices.first(where: { $0.deviceType == .builtInWideAngleCamera }) {
+        // Fallback to wide angle camera if no dual camera is found
+        selectedDevice = wideAngleCameraDevice
+    }
+
+    // If a device was selected, create the AVCaptureDeviceInput
+    if let selectedDevice = selectedDevice {
+        do {
+            let backCameraInput = try AVCaptureDeviceInput(device: selectedDevice)
+            self.backCamera = backCameraInput
+        } catch {
+            print("Error creating AVCaptureDeviceInput for the selected device: \(error)")
+        }
     }
 
     // Output
@@ -53,7 +75,6 @@ class CameraMan {
   }
 
   func addInput(_ input: AVCaptureDeviceInput) {
-    configurePreset(input)
 
     if session.canAddInput(input) {
       session.addInput(input)
@@ -98,6 +119,10 @@ class CameraMan {
   }
 
   fileprivate func start() {
+    self.session.beginConfiguration()
+
+    session.sessionPreset = .photo
+
     // Devices
     setupDevices()
 
@@ -108,6 +133,8 @@ class CameraMan {
     if session.canAddOutput(output) {
       session.addOutput(output)
     }
+
+    self.session.commitConfiguration()
 
     queue.async {
       self.session.startRunning()
@@ -203,15 +230,19 @@ class CameraMan {
     }
   }
 
-  func zoom(_ zoomFactor: CGFloat) {
-    guard let device = currentInput?.device, device.position == .back else { return }
+    func zoom(_ zoomFactor: CGFloat) {
+        guard var device = currentInput?.device, device.position == .back else { return }
 
-    queue.async {
-      self.lock {
-        device.videoZoomFactor = zoomFactor
-      }
+        queue.async {
+          do
+          {
+            var newZoomFactor =  zoomFactor < 1.0 ? 1.0 : zoomFactor
+            self.lock {
+              device.ramp(toVideoZoomFactor: newZoomFactor, withRate: 4.0)
+            }
+          }
+        }
     }
-  }
 
   // MARK: - Lock
 
@@ -227,24 +258,5 @@ class CameraMan {
     session.beginConfiguration()
     block()
     session.commitConfiguration()
-  }
-
-  // MARK: - Preset
-
-  func configurePreset(_ input: AVCaptureDeviceInput) {
-    for asset in preferredPresets() {
-      if input.device.supportsSessionPreset(AVCaptureSession.Preset(rawValue: asset)) && self.session.canSetSessionPreset(AVCaptureSession.Preset(rawValue: asset)) {
-        self.session.sessionPreset = AVCaptureSession.Preset(rawValue: asset)
-        return
-      }
-    }
-  }
-
-  func preferredPresets() -> [String] {
-    return [
-      AVCaptureSession.Preset.high.rawValue,
-      AVCaptureSession.Preset.high.rawValue,
-      AVCaptureSession.Preset.low.rawValue
-    ]
   }
 }

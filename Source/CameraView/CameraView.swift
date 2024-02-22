@@ -96,9 +96,6 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   var locationManager: LocationManager?
   var startOnFrontCamera: Bool = false
 
-  private let minimumZoomFactor: CGFloat = 1.0
-  private let maximumZoomFactor: CGFloat = 3.0
-
   private var currentZoomFactor: CGFloat = 1.0
   private var previousZoomFactor: CGFloat = 1.0
 
@@ -156,7 +153,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
     layer.backgroundColor = configuration.mainColor.cgColor
     layer.autoreverses = true
-    layer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+    layer.videoGravity = AVLayerVideoGravity.resizeAspect 
 
     view.layer.insertSublayer(layer, at: 0)
     layer.frame = view.layer.frame
@@ -264,11 +261,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   func zoomTo(_ zoomFactor: CGFloat) {
     guard let device = cameraMan.currentInput?.device else { return }
 
-    let maximumDeviceZoomFactor = device.activeFormat.videoMaxZoomFactor
     let newZoomFactor = previousZoomFactor * zoomFactor
-    currentZoomFactor = min(maximumZoomFactor, max(minimumZoomFactor, min(newZoomFactor, maximumDeviceZoomFactor)))
 
-    cameraMan.zoom(currentZoomFactor)
+    cameraMan.zoom(newZoomFactor)
   }
 
   // MARK: - Tap
